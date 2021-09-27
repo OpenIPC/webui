@@ -1,0 +1,15 @@
+#!/bin/sh
+
+QUERY_STRING=$4
+
+IFS='&'
+for record in $QUERY_STRING; do
+  key=`echo $record | cut -d= -f1`
+  value=`echo $record | cut -d= -f2`
+
+  [ ${value} ]   && yaml-cli -s $key $value
+  [ ! ${value} ] && yaml-cli -d $key $value
+
+done
+
+killall -1 majestic

@@ -1,0 +1,37 @@
+#!/bin/sh
+
+if [ $# -ne 0 -a -f "$1" ];then
+	. "$1"
+else
+	. "/etc/tss/default.config"
+fi
+lockfile="/tmp/tss.$PORT.lck" 
+if [ -f "$lockfile" ];then
+	#[ $QUIET -eq 0 ] && 
+	echo "Tiny Sh Server is already running on port $PORT"
+	echo "Aborting."
+	exit 2
+fi 
+
+## lockfile == run/exec script for nc -e
+cat <<EOF >"$lockfile"
+#!/bin/sh
+## PID $$ started by $USER at `date`
+
+/usr/sbin/tinyshserver $DOCROOT $DEFAULT_INDEX
+EOF
+chmod a+x "$lockfile"
+
+while /bin/true;do
+	if [ -f "$lockfile" ];then
+		if [ $QUIET -eq 0 ];then
+			nc -lp "$PORT" -e "$lockfile"  
+		else
+			nc -lp "$PORT" -e "$lockfile" 2>&1 >/dev/null
+		fi
+	else
+		break;
+	fi
+done
+[ $QUIET -eq 0 ] && echo -e "\nBye Bye!"
+exit 0

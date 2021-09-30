@@ -1,15 +1,29 @@
-#!/bin/sh
+<?
 
-QUERY_STRING=$4
-
+HTTP_HOST=`echo $HTTP_HOST | xargs`
 IFS='&'
+
+echo "Applying settings..."
+
 for record in $QUERY_STRING; do
-  key=`echo $record | cut -d= -f1`
+    key=`echo $record | cut -d= -f1`
   value=`echo $record | cut -d= -f2`
 
-  [ ${value} ]   && yaml-cli -s $key $value
+  [   ${value} ] && yaml-cli -s $key $value
   [ ! ${value} ] && yaml-cli -d $key $value
 
 done
 
 killall -1 majestic
+
+?>
+
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+<?
+echo -n '        <meta http-equiv="refresh" content="0; url=http://'$HTTP_HOST; echo '/settings.sh">'
+?>
+    </head>
+</html>

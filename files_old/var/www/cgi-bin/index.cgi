@@ -6,7 +6,7 @@
 
 <html>
   <head>
-    <link rel="shortcut icon" href="/assets/img/favicon_octonix.ico">
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
   </head>
   <body>
     <div align=center>

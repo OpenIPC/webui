@@ -34,29 +34,14 @@
       uci set network.lan.netmask=${sense} && uci commit network
       echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',1000);</script>"
       ;;
-    community)
-      echo "<br><br><br><br><br><center><h1>We try to update...</h1></center>"
-      uci set snmpd.default.community=${sense} && uci commit snmpd
-      echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',1000);</script>"
-      ;;
-    priority)
-      echo "<br><br><br><br><br><center><h1>We try to update...</h1></center>"
-      uci set microbe.pinger.priority=${sense} && uci commit microbe
-      echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',1000);</script>"
-      ;;
-    checked)
-      echo "<br><br><br><br><br><center><h1>We try to update...</h1></center>"
-      uci set microbe.pinger.checked=${sense} && uci commit microbe
-      echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',1000);</script>"
-      ;;
     remote)
       echo "<br><br><br><br><br><center><h1>We try to update...</h1></center>"
       uci set openvpn.vpn1.remote=${sense} && uci commit openvpn
       echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',1000);</script>"
       ;;
     reboot)
-      echo "<br><br><br><br><br><center><h1>We try to reboot...</h1><p>Please wait 60 sec.</p></center>"
-      echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',60000);</script>"
+      echo "<br><br><br><br><br><center><h1>We try to reboot...</h1><p>Please wait 30 sec.</p></center>"
+      echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',30000);</script>"
       reboot
       ;;
     trace)

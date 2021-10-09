@@ -11,7 +11,7 @@
   echo "Probe write ${action} file" | logger -t microbe-web
   echo
   case $action in
-    ca)
+    kernel)
       if [ -r $upfile ]; then
         fsize="$(wc -c $upfile | awk '{print $1}')"
         if [ $fsize -gt "1500" ]; then
@@ -31,33 +31,13 @@
         echo "<br><br><br><br><br><center><h1>We try to upload...</h1></center>"
       fi
     ;;
-    cert)
+    rootfs)
       if [ -r $upfile ]; then
         fsize="$(wc -c $upfile | awk '{print $1}')"
         if [ $fsize -gt "5000" ]; then
           echo "<br><br><br><br><br><center><h1><font color="red">Error: file is so big !<font></h1></center>"
         else
           if cp $upfile /etc/openvpn/cert.crt 2>/dev/null; then
-            ok=1
-            rm $upfile
-          else
-            echo "<br><br><br><br><br><center><h1><font color="red">Error: file not writing to flash !<font></h1></center>"
-          fi
-        fi
-      else
-        echo "<br><br><br><br><br><center><h1><font color="red">Error: file not found !<font></h1></center>"
-      fi
-      if [ $ok ]; then
-        echo "<br><br><br><br><br><center><h1>We try to upload...</h1></center>"
-      fi
-    ;;
-    key)
-      if [ -r $upfile ]; then
-        fsize="$(wc -c $upfile | awk '{print $1}')"
-        if [ $fsize -gt "1200" ]; then
-          echo "<br><br><br><br><br><center><h1><font color="red">Error: file is so big !<font></h1></center>"
-        else
-          if cp $upfile /etc/openvpn/cert.key 2>/dev/null; then
             ok=1
             rm $upfile
           else

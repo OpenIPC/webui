@@ -122,6 +122,22 @@ it will be inferred from SENSOR environment variable">
             <td align=right>threadStackSize</td>
             <td><input type="text" name=".isp.threadStackSize" pattern="^[0-9]+$" value="<? yaml-cli -g .isp.threadStackSize ?>" placeholder="16" size="25"></td>
           </tr>
+          <tr title="Set exposition in ms, from 1 to 500000 or auto">
+            <td align=right>exposure</td>
+            <td><input type="text" name=".isp.exposure" pattern="^[auto0-9]+$" value="<? yaml-cli -g .isp.exposure ?>" placeholder="auto" size="25"></td>
+          </tr>
+          <tr>
+            <td align=right>aGain</td>
+            <td><input type="text" name=".isp.aGain" pattern="^[0-9]+$" value="<? yaml-cli -g .isp.aGain ?>" placeholder="1" size="25"></td>
+          </tr>
+          <tr>
+            <td align=right>dGain</td>
+            <td><input type="text" name=".isp.dGain" pattern="^[0-9]+$" value="<? yaml-cli -g .isp.dGain ?>" placeholder="1" size="25"></td>
+          </tr>
+          <tr>
+            <td align=right>ispGain</td>
+            <td><input type="text" name=".isp.ispGain" pattern="^[0-9]+$" value="<? yaml-cli -g .isp.ispGain ?>" placeholder="1" size="25"></td>
+          </tr>
           <tr title="Used to implement dynamic range compression">
             <td align=right>drc</td>
             <td><input type="text" name=".isp.drc" pattern="^[0-9]+$" value="<? yaml-cli -g .isp.drc ?>" placeholder="300" size="25"></td>
@@ -590,6 +606,15 @@ e.g. top upper quadrant">
               <select autocomplete="off" name=".netip.snapshots">
                 <option <? [ "$(yaml-cli -g .netip.snapshots)" == "false" ] && echo -n 'selected' ?> value="false">false</option>
                 <option <? [ "$(yaml-cli -g .netip.snapshots)" == "true"  ] && echo -n 'selected' ?> value="true">true</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td align=right>ignore_set_time</td>
+            <td>
+              <select autocomplete="off" name=".netip.ignore_set_time">
+                <option <? [ "$(yaml-cli -g .netip.ignore_set_time)" == "false" ] && echo -n 'selected' ?> value="false">false</option>
+                <option <? [ "$(yaml-cli -g .netip.ignore_set_time)" == "true"  ] && echo -n 'selected' ?> value="true">true</option>
               </select>
             </td>
           </tr>

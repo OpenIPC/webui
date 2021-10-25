@@ -16,12 +16,15 @@
   case $action in
     hostname)
       echo "<br><br><br><br><br><center><h1>We try to update...</h1></center>"
-      uci set system.@system[0].hostname=${sense} && uci commit system
+      oldhostname=$(cat /etc/hostname)
+      echo ${sense} > /etc/hostname
+      sed -i "s/127.0.1.1.*${oldhostname}/127.0.1.1\t${sense}/g" /etc/hosts
+#      sudo sed -i \"s/debian/new-lenny/g\" /etc/hosts
       echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',1000);</script>"
       ;;
     password)
       echo "<br><br><br><br><br><center><h1>We try to update...</h1></center>"
-      uci set microbe.webadmin.password=${sense} && uci commit microbe
+      sed -i "s/:admin:.*/:admin:${sense}/g" /etc/httpd.conf
       echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',1000);</script>"
       ;;
     ipaddr)

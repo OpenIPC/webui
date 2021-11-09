@@ -21,7 +21,7 @@
         echo "Probe change ${key} to ${value} at majestic.yaml" | logger -t microbe-web
         
         [   ${value} ] && yaml-cli -s $key $value
-        [ ! ${value} ] && yaml-cli -d $key $value
+        [ ! ${value} ] && yaml-cli -d $key
       done
       killall -1 majestic
       echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/majestic.cgi\"',1000);</script>"

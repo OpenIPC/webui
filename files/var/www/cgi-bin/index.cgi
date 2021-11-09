@@ -20,7 +20,7 @@
       <p><b>Interface Password</b></p>
       <form action="/cgi-bin/update.cgi" method="POST" enctype="multipart/form-data">
         <input type=hidden name="action" value="password">
-        <input type="password" required name="sense" pattern="^[a-zA-Z0-9]+$" value="<? awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf ?>" placeholder="You3Pass5Word" size="25">
+        <input type="password" required name="sense" pattern="^[a-zA-Z0-9!@#\$%\^\&*_=+-]+$" value="<? awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf ?>" placeholder="You3Pass5Word" size="25">
         <input type="submit" value="Save">
       </form>
       <p><b>IP Address</b></p>

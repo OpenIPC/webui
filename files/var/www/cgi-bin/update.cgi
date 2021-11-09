@@ -19,7 +19,6 @@
       oldhostname=$(cat /etc/hostname)
       echo ${sense} > /etc/hostname
       sed -i "s/127.0.1.1.*${oldhostname}/127.0.1.1\t${sense}/g" /etc/hosts
-#      sudo sed -i \"s/debian/new-lenny/g\" /etc/hosts
       echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',1000);</script>"
       ;;
     password)

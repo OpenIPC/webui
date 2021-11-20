@@ -14,8 +14,7 @@
   </style>    
   </head>
   <body>
-    <div align=center>
-      <img src="https://openipc.org/images/logo_openipc.png" width="256">
+    <div align=left>
       <form action="/cgi-bin/majestic-settings.cgi" method="POST" enctype="multipart/form-data">
 <!--          System       -->
         <p><b>System</b></p>

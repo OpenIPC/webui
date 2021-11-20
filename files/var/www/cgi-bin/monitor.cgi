@@ -9,8 +9,7 @@
     <link rel="shortcut icon" href="/assets/img/favicon.png">
   </head>
   <body>
-    <div align=center>
-      <img src="https://openipc.org/images/logo_openipc.png" width="256">
+    <div align=left>
       <p><b>Device Info</b></p>
       <pre><? echo "openipc-$(ipctool --chip_id)-$(ipctool --sensor_id | awk -F '_' '{print $1}')" ?></pre>
       <p><b>Uptime Device</b></p>

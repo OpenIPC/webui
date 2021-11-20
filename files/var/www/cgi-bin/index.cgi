@@ -10,7 +10,6 @@
   </head>
   <body>
     <div align=center>
-      <img src="https://openipc.org/images/logo_openipc.png" width="256">
       <p><b>Device Name</b></p>
       <form action="/cgi-bin/update.cgi" method="POST" enctype="multipart/form-data">
         <input type=hidden name="action" value="hostname">
@@ -58,11 +57,6 @@
       <form action="/cgi-bin/update.cgi" method="POST" enctype="multipart/form-data">
         <input type=hidden name="action" value="reboot">
         <input type="submit" value="Reboot Device" onclick="return confirm('Do you want to reboot the device ?')">
-      </form>
-      <form action="/cgi-bin/monitor.cgi" method="POST" enctype="multipart/form-data">
-        <input type="submit" value="Monitor Tool">
-      </form>      <form action="/cgi-bin/majestic.cgi" method="POST" enctype="multipart/form-data">
-        <input type="submit" value="Majestic">
       </form>
     </div>
   </body>

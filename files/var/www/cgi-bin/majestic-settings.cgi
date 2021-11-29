@@ -1,29 +1,25 @@
 #!/usr/bin/haserl
 content-type: text/html
 
-<%
-action=$FORM_action
-sense=$FORM_sense
-%>
 <%in _header.cgi %>
-
+<h1>Updating Majestic settings</h1>
+<pre>
 <%
-case $action in
-  Save)
-    echo "<h1>Trying to update...</h1>"
-    for name in "$(printenv | grep "FORM_\.")"; do
-      key=$(echo $name | cut -d= -f1 | cut -d_ -f2)
-      value=$(echo $name | cut -d= -f2)
-
-      echo "Probe change ${key} to ${value} at majestic.yaml" | logger -t microbe-web
-
-      [   ${value} ] && yaml-cli -s $key $value
-      [ ! ${value} ] && yaml-cli -d $key
-    done
-    killall -1 majestic
-
-    echo "<script>setTimeout('window.location=\"/cgi-bin/majestic.cgi\"', 3000);</script>"
-    ;;
-esac
+data=$(printenv|grep FORM_)
+for name in $data; do
+  key=".$(echo $name | sed 's/^FORM_//' | cut -d= -f1 | sed 's/_/./g')"
+  value=$(echo $name | cut -d= -f2)
+  if [ "${value}" ]; then
+    echo "yaml-cli -s \"$key\" \"$value\"" | logger -t microbe-web
+    yaml-cli -s "$key" "$value"
+  fi
+  if [ -z "${value}" ]; then
+    echo "yaml-cli -d \"$key\"" | logger -t microbe-web
+    yaml-cli -d "$key"
+  fi
+done
+killall -1 majestic
 %>
+</pre>
+<script>setTimeout('window.location="/cgi-bin/majestic.cgi"',3000);</script>
 <%in _footer.cgi %>

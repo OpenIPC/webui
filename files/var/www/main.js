@@ -9,12 +9,13 @@
             msg: 'can contain letters, digits, dots, and dashes, ' +
                  'should start and end only with a letter or a digit. e.g. test5.my-domain.home, or test5'
         },
-        n: {
+        nd: {
             rx: '^[0-9]+$',
             msg: 'can only contain digits'
         },
         nf: {
             rx: '^[0-9.]+$',
+            msg: 'can only contain digits and decimal separator'
         },
         p: {
             rx: '^[a-zA-Z0-9!@#$%^&*_=+-]{8,}$',
@@ -23,14 +24,11 @@
     }
 
     function initAll() {
-        // input=number
-        document.querySelectorAll('input.n').forEach(el => {
-            el.min = 0;
-            el.pattern = patterns.n.rx;
+        document.querySelectorAll('input[type=number].d').forEach(el => {
+            el.pattern = patterns.nd.rx;
             el.step = 1;
-            el.type = 'number';
         });
-        document.querySelectorAll('input.n.f').forEach(el => {
+        document.querySelectorAll('input[type=number].f').forEach(el => {
             el.pattern = patterns.nf.rx;
             el.step = 0.1;
         });
@@ -53,6 +51,13 @@
         document.querySelectorAll('input.t.h').forEach(el => {
             el.pattern = patterns.h.rx;
             el.title = patterns.h.msg;
+        });
+        // range
+        document.querySelectorAll('input[type=range]').forEach(el => {
+            el.addEventListener('input', function(event) {
+                const id = '#v-' + event.target.name.replace(/\./g, '');
+                document.querySelector(id).textContent = el.value;
+            });
         });
         // select
         document.querySelectorAll('select').forEach(el => {

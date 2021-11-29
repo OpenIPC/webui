@@ -21,8 +21,8 @@ number_field() {
 
 select() {
   echo -n "<select name=\"$1\">"
+  echo -n "<option></option>"
   for n in $(echo $2 | tr "|" " "); do
-    echo -n "<option></option>"
     echo -n "<option"
     [ "$(yaml-cli -g $1)" == "$n" ] && echo -n " selected"
     echo -n ">$n</option>"

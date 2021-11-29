@@ -29,10 +29,8 @@ text_field() {
 }
 
 range_field() {
-  name = $(norm_name $1)
-  value = $(get_value $1)
-  echo -n "<input type=\"range\" name=\"$name\" value=\"$value\" $2 $3>"
-  echo -n "(<span id=\"v-$name\" class=\"rval\">$value</span>)"
+  echo -n "<input type=\"range\" name=\"$(norm_name $1)\" value=\"$(get_value $1)\" $2 $3>"
+  echo -n "(<span id=\"v-$(norm_name $1)\" class=\"rval\">$(get_value $1)</span>)"
 }
 
 select_field() {

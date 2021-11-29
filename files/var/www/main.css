@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+* { box-sizing: border-box; }
+a { color: #4c60d8; }
+body { margin: 0; padding: 0; }
+body, input, pre, select, textarea, .code { font: 400 1rem 'IBM Plex Mono', monospace; }
+header, footer, body > nav a { background: #4c60d8; }
+header, footer, footer a, body > nav a { color: #ffffff; }
+footer { font-size: 0.8rem; text-align: center; }
+body > nav { display: flex; gap: 1rem; margin: 1rem 0; }
+body > nav a { padding: 0.5rem 1rem; border-radius: 3px; text-decoration: none; }
+ol { display: flex; gap: 0.5rem 1rem; flex-wrap: wrap; margin: 0 0 2rem; padding: 0; }
+ol li { display: inline; font-size: 0.9rem; }
+ol li:hover { background: #d5ffce; }
+header, footer, main, nav { padding: 1rem 3rem; }
+h4 { background: lightpink; color: darkred; padding: 1rem; text-align: center; }
+form { display: block; margin: 1rem 0 2rem; }
+form div { margin: 1rem 0 2rem; }
+form label { display: flex; margin-bottom: 1rem; align-items: baseline; }
+form label b { width: 15rem; border-bottom: solid 1px lightgray; font-weight: 400; }
+form label i { font-size: 0.8rem; color: gray; margin-left: 0.5rem; vertical-align: baseline; }
+form input[type=text] { width: 25rem; }
+form input[type=password] { width: 20rem; }
+form input[type=number] { width: 5rem; }
+form input[type=submit] { background: #663399; border: none; border-radius: 5px; color: #ffffff; padding: 0.5rem 1rem; }
+.red { color: #ff0000; }

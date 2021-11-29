@@ -1,69 +1,45 @@
 #!/usr/bin/haserl
-<?
-  export PATH=/bin:/sbin:/usr/bin:/usr/sbin
-  echo -e "Content-type: text/html\r\n\r\n"
-?>
+content-type: text/html
 
-<html>
-  <head>
-    <link rel="shortcut icon" href="/assets/img/favicon.png">
-  </head>
-  <body>
-    <div align=center>
-      <img src="https://openipc.org/images/logo_openipc.png" width="256">
-      <p><b>Device Name</b></p>
-      <form action="/cgi-bin/update.cgi" method="POST" enctype="multipart/form-data">
-        <input type=hidden name="action" value="hostname">
-        <input type="text" required name="sense" pattern="^[a-zA-Z0-9-_.]+$" value="<? cat /etc/hostname ?>" placeholder="DeviceName" size="25">
-        <input type="submit" value="Save">
-      </form>
-      <p><b>Interface Password</b></p>
-      <form action="/cgi-bin/update.cgi" method="POST" enctype="multipart/form-data">
-        <input type=hidden name="action" value="password">
-        <input type="password" required name="sense" pattern="^[a-zA-Z0-9!@#\$%\^\&*_=+-]+$" value="<? awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf ?>" placeholder="You3Pass5Word" size="25">
-        <input type="submit" value="Save">
-      </form>
-      <p><b>IP Address</b></p>
-      <form action="/cgi-bin/update.cgi" method="POST" enctype="multipart/form-data">
-        <input type=hidden name="action" value="ipaddr">
-        <input type="text" required name="sense" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" value="<? ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $3}' ?>" placeholder="192.168.1.10" size="25">
-        <input type="submit" value="Save">
-      </form>
-      <p><b>IP Netmask</b></p>
-      <form action="/cgi-bin/update.cgi" method="POST" enctype="multipart/form-data">
-        <input type=hidden name="action" value="netmask">
-        <input type="text" required name="sense" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" value="<? ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $7}' ?>" placeholder="255.255.255.0" size="25">
-        <input type="submit" value="Save">
-      </form>
-      <p><b>VTUNd Server</b></p>
-      <form action="/cgi-bin/update.cgi" method="POST" enctype="multipart/form-data">
-        <input type=hidden name="action" value="remote">
-        <input type="text" required name="sense" pattern="^[a-zA-Z0-9-.]+$" value="<? uci get openvpn.vpn1.remote ?>" placeholder="vtun.net" size="25">
-        <input type="submit" value="Save">
-      </form>
-      <p><b>Update kernel</b></p>
-      <form action="/cgi-bin/upload.cgi" method="POST" enctype="multipart/form-data">
-        <input type=hidden name="action" value="kernel">
-        <input type="file" required name="upfile">
-        <input type="submit" value="Upload">
-      </form>
-      <p><b>Update rootfs</b></p>
-      <form action="/cgi-bin/upload.cgi" method="POST" enctype="multipart/form-data">
-        <input type=hidden name="action" value="rootfs">
-        <input type="file" required name="upfile">
-        <input type="submit" value="Upload">
-      </form>
-      <br>
-      <p><font color="blue">All settings will be applied after rebooting the device !</p>
-      <form action="/cgi-bin/update.cgi" method="POST" enctype="multipart/form-data">
-        <input type=hidden name="action" value="reboot">
-        <input type="submit" value="Reboot Device" onclick="return confirm('Do you want to reboot the device ?')">
-      </form>
-      <form action="/cgi-bin/monitor.cgi" method="POST" enctype="multipart/form-data">
-        <input type="submit" value="Monitor Tool">
-      </form>      <form action="/cgi-bin/majestic.cgi" method="POST" enctype="multipart/form-data">
-        <input type="submit" value="Majestic">
-      </form>
-    </div>
-  </body>
-</html>
+<%
+f() { echo "<form action=\"/cgi-bin/$1.cgi\" method=\"post\">"; }
+fmp() { echo "<form action=\"/cgi-bin/$1.cgi\" method=\"post\" enctype=\"multipart/form-data\">"; }
+fif() { echo "<label><b>$1</b> <input type=\"file\" name=\"$2\"></label>"; }
+fih() { echo "<input type=\"hidden\" name=\"action\" value=\"$1\">"; }
+fis() { echo "<p><input type=\"submit\" value=\"$1\"></p>"; }
+%>
+<%in _header.cgi %>
+
+<h4>All changes will be applied on reboot!</h4>
+
+<h3>Camera Settings</h3>
+<% f "update" %>
+<% fih "update" %>
+<label><b>Device Name</b>
+ <input class="t h" name="hostname" placeholder="DeviceName" value="<% cat /etc/hostname %>"></label>
+<label><b>Interface Password</b>
+ <input class="p" name="password" placeholder="You3Pass5Word" value="<% awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf || echo "" %>"></label>
+<label><b>IP Address</b>
+  <input class="t a" name="ipaddr" placeholder="<% ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $3}' || echo "192.168.10.10" %>" value=""></label>
+<label><b>IP Netmask</b>
+  <input class="t a" name="netmask" placeholder="<% ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $7}' || echo "255.255.255.0" %>" value=""></label>
+<label><b>VTUNd Server</b>
+  <input class="t h" name="remote" placeholder="<% uci get openvpn.vpn1.remote || echo "vtun.net" %>" value=""></label>
+<% fis "Save Settings" %>
+</form>
+
+<h3>Update kernel</h3>
+<% fmp "upload" %>
+<% fih "kernel" %>
+<% fif "kernel file" "upfile" %>
+<% fis "Upload File" %>
+</form>
+
+<h3>Update rootfs</h3>
+<% fmp "upload" %>
+<% fih "rootfs" %>
+<% fif "rootfs file" "upfile" %>
+<% fis "Upload File" %>
+</form>
+
+<%in _footer.cgi %>

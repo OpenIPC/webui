@@ -1,74 +1,94 @@
 #!/usr/bin/haserl
-<?
-  export PATH=/bin:/sbin:/usr/bin:/usr/sbin
-  action=$FORM_action
-  sense=$FORM_sense
-  iface=$FORM_iface
-  project=$(uci get microbe.webadmin.project)
-  #
-  echo "Content-type: text/html"
-  echo
-  echo "<html><body><div align=center>"
-  echo "<img src=\"https://openipc.org/images/logo_openipc.png\" width=\"256\">"
-  echo
-  echo "Probe change ${action} to ${sense} on ${iface}" | logger -t microbe-web
-  echo
+content-type: text/html
+
+<%
+action=$FORM_action
+iface=$FORM_iface
+#project=$(uci get microbe.webadmin.project)
+#sense=$FORM_sense
+
+h1_ttu() { echo "<h1>Trying to update...</h1>"; }
+h1_ttr() { echo "<h1>Trying to reboot. Please wait...</h1>"; }
+gohome() { echo "<script>//setTimeout('window.location=\"/cgi-bin/index.cgi\"', $1);</script>"; }
+%>
+<%in _header.cgi %>
+
+<%
+  echo "Probe change $(printenv | grep FORM_)" | logger -t microbe-web
+
   case $action in
-    hostname)
-      echo "<br><br><br><br><br><center><h1>We try to update...</h1></center>"
-      oldhostname=$(cat /etc/hostname)
-      echo ${sense} > /etc/hostname
-      sed -i "s/127.0.1.1.*${oldhostname}/127.0.1.1\t${sense}/g" /etc/hosts
-      echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',1000);</script>"
-      ;;
-    password)
-      echo "<br><br><br><br><br><center><h1>We try to update...</h1></center>"
-      sed -i "s/:admin:.*/:admin:${sense}/g" /etc/httpd.conf
-      echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',1000);</script>"
-      ;;
-    ipaddr)
-      echo "<br><br><br><br><br><center><h1>We try to update...</h1></center>"
-      uci set network.lan.ipaddr=${sense} && uci commit network
-      echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',1000);</script>"
-      ;;
-    netmask)
-      echo "<br><br><br><br><br><center><h1>We try to update...</h1></center>"
-      uci set network.lan.netmask=${sense} && uci commit network
-      echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',1000);</script>"
-      ;;
-    remote)
-      echo "<br><br><br><br><br><center><h1>We try to update...</h1></center>"
-      uci set openvpn.vpn1.remote=${sense} && uci commit openvpn
-      echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',1000);</script>"
-      ;;
     reboot)
-      echo "<br><br><br><br><br><center><h1>We try to reboot...</h1><p>Please wait 30 sec.</p></center>"
-      echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',30000);</script>"
+      h1_ttr
+      gohome 30000;
       reboot
       ;;
     trace)
-      echo "<p><b>Trace Route</b></p>"
-      echo "<table><tr><td><pre>"
+      echo "<nav><a href=\"/cgi-bin/monitor.cgi\">Monitor Tool</a></nav>"
+      echo "<h2>Trace Route</h2>"
+      echo "<pre>"
       if [ ${iface} = "auto" ]; then
         traceroute ${sense}
       else
         traceroute -i ${iface} ${sense}
       fi
-      echo "</pre></td></tr></table>"
-      echo "<p><form action=\"/cgi-bin/monitor.cgi\" method=\"POST\" enctype=\"multipart/form-data\"><input type=\"submit\" value=\"Monitor Tool\"></form>"
+      echo "</pre>"
+      ;;
+    update)
+      echo "<h2>Updating settings</h2>"
+      if [ ! -z "$FORM_hostname" ]; then
+        oldhostname=$(cat /etc/hostname)
+        newhostname=$FORM_hostname
+        echo "<h3>Updating hostname</h3>"
+        echo "<pre>"
+        if [ "$newhostname" = "$oldhostname" ]; then
+          echo "Same hostname. Skipping."
+        else
+  #        ${newhostname} > /tmp/etc/hostname 2>&1
+          echo $(hostname $newhostname 2>&1 || true)
+          echo $(sed -i "s/127.0.1.1.*${oldhostname}/127.0.1.1\t${newhostname}/g" /tmp/etc/hosts 2>&1 || true)
+        fi
+        echo "</pre>"
+      fi
+      if [ ! -z "$FORM_password" ]; then
+        echo "<h3>Updating password</h3>"
+        echo "<pre>"
+        echo $(sed -i "s/:admin:.*/:admin:${FORM_password}/g" /etc/httpd.conf 2>&1 || true)
+        echo "</pre>"
+      fi
+      if [ ! -z "$FORM_ipaddr" ]; then
+        echo "<h3>Updating IP address</h3>"
+        echo "<pre>"
+        echo $(uci set network.lan.ipaddr=${FORM_ipaddr} 2>&1 && uci commit network 2>&1 || true)
+        echo "</pre>"
+    fi
+      if [ ! -z "$FORM_netmask" ]; then
+        echo "<h3>Updating IP netmask</h3>"
+        echo "<pre>"
+        echo $(uci set network.lan.netmask=${FORM_netmask} 2>&1 && uci commit network 2>&1 || true)
+        echo "</pre>"
+    fi
+      if [ ! -z "$FORM_remote" ]; then
+        echo "<h3>Updating VTUNd Server</h3>"
+        echo "<pre>"
+        echo $(uci set openvpn.vpn1.remote=${FORM_remote} 2>&1 && uci commit openvpn 2>&1 || true)
+        echo "</pre>"
+      fi
+      gohome 3000;
       ;;
     ping)
-      echo "<p><b>Ping Quality</b></p>"
-      echo "<table><tr><td><pre>"
+      echo "<nav><a href=\"/cgi-bin/monitor.cgi\">Monitor Tool</a></nav>"
+      echo "<h3>Ping Quality</h3>"
+      echo "<pre>"
       if [ ${iface} = "auto" ]; then
         ping -c 15 -s 1500 ${sense}
       else
         ping -c 15 -s 1500 -I ${iface} ${sense}
       fi
-      echo "</pre></td></tr></table>"
-      echo "<p><form action=\"/cgi-bin/monitor.cgi\" method=\"POST\" enctype=\"multipart/form-data\"><input type=\"submit\" value=\"Monitor Tool\"></form>"
+      echo "</pre>"
+      ;;
+    *)
+      echo "Unknown action!";
       ;;
   esac
-  echo
-  echo "</div></body></html>"
-?>
+%>
+<%in _footer.cgi %>

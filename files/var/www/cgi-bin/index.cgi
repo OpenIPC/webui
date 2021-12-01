@@ -2,44 +2,53 @@
 content-type: text/html
 
 <%
-f() { echo "<form action=\"/cgi-bin/$1.cgi\" method=\"post\">"; }
-fmp() { echo "<form action=\"/cgi-bin/$1.cgi\" method=\"post\" enctype=\"multipart/form-data\">"; }
-fif() { echo "<label><b>$1</b> <input type=\"file\" name=\"$2\"></label>"; }
-fih() { echo "<input type=\"hidden\" name=\"action\" value=\"$1\">"; }
-fis() { echo "<p><input type=\"submit\" value=\"$1\"></p>"; }
 %>
 <%in _header.cgi %>
 
 <h4>All changes will be applied on reboot!</h4>
 
 <h3>Camera Settings</h3>
-<% f "update" %>
-<% fih "update" %>
-<label><b>Device Name</b>
- <input class="t h" name="hostname" placeholder="DeviceName" value="<% cat /etc/hostname %>"></label>
-<label><b>Interface Password</b>
- <input class="p" name="password" placeholder="You3Pass5Word" value="<% awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf || echo "" %>"></label>
-<label><b>IP Address</b>
-  <input class="t a" name="ipaddr" placeholder="<% ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $3}' || echo "192.168.10.10" %>" value=""></label>
-<label><b>IP Netmask</b>
-  <input class="t a" name="netmask" placeholder="<% ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $7}' || echo "255.255.255.0" %>" value=""></label>
-<label><b>VTUNd Server</b>
-  <input class="t h" name="remote" placeholder="<% uci get openvpn.vpn1.remote || echo "vtun.net" %>" value=""></label>
-<% fis "Save Settings" %>
+<form action="/cgi-bin/update.cgi" method="post">
+<input type="hidden" name="action" value="update">
+<dl>
+<dt>Device Name</dt>
+<dd><input name="hostname" value="<% hostname -s %>"></dd>
+<dt>Interface Password</dt>
+<dd><input name="password" value="<% awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf %>"></dd>
+<dt>IP Address</dt>
+<dd><input name="ipaddr" value="<% yaml-cli -g .network.lan.ipaddr %>" data-real="<% ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $3}' %>"></dd>
+<dt>IP Netmask</dt>
+<dd><input name="netmask" value="<% yaml-cli -g .network.lan.netmask %>" data-real="<% ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $7}' %>"></dd>
+<dt>VTUNd Server</dt>
+<dd><input name="remote" value="<% yaml-cli -g .openvpn.vpn1.remote %>" placeholder="vtun.net"></dd>
+</dl>
+<p><input type="submit" value="Save Settings"></p>
 </form>
 
 <h3>Update kernel</h3>
-<% fmp "upload" %>
-<% fih "kernel" %>
-<% fif "kernel file" "upfile" %>
-<% fis "Upload File" %>
+<form action="/cgi-bin/upload.cgi" method="post" enctype="multipart/form-data">
+<input type="hidden" name="action" value="kernel">
+<dl>
+<dt>kernel file</dt>
+<dd><input type="file" name="upfile"></dd>
+</dl>
+<p><input type="submit" value="Upload File"></p>
 </form>
 
 <h3>Update rootfs</h3>
-<% fmp "upload" %>
-<% fih "rootfs" %>
-<% fif "rootfs file" "upfile" %>
-<% fis "Upload File" %>
+<form action="/cgi-bin/upload.cgi" method="post" enctype="multipart/form-data">
+<input type="hidden" name="action" value="rootfs">
+<dl>
+<dt>rootfs file</dt>
+<dd><input type="file" name="upfile"></dd>
+</dl>
+<p><input type="submit" value="Upload File"></p>
+</form>
+
+<h3>Reset configuration</h3>
+<form action="/cgi-bin/update.cgi" method="post" class="confirm">
+<input type="hidden" name="action" value="reset">
+<p><input type="submit" value="Reset Configuration"></p>
 </form>
 
 <%in _footer.cgi %>

@@ -9,19 +9,22 @@ content-type: text/html
 mj=$(echo "$mj"|sed "s/ /_/g")
 for line in $mj
 do
-  param=${line%%|*}   # .domain.subdomain.name
-  name=${param#.}     # subdomain.name
-  domain=${name%.*}   # domain
-  name=${name//./-}   # subdomain_name
-  line=${line#*|}     # trim line
-  label=${line%%|*}   # Module_name
-  line=${line#*|}     # trim line
-  units=${line%%|*}   # units
-  line=${line#*|}     # trim line
-  type=${line%%|*}    # type
-  line=${line#*|}     # trim line
-  options=${line%%|*} # options
-  line=${line#*|}     # trim line
+  param=${line%%|*}
+  name=${param#.}
+  domain=${name%.*}
+  name=${name//./-}
+  line=${line#*|}
+  label=${line%%|*}
+  line=${line#*|}
+  units=${line%%|*}
+  line=${line#*|}
+  type=${line%%|*}
+  line=${line#*|}
+  options=${line%%|*}
+  line=${line#*|}
+  placeholder=${line%%|*}
+  line=${line#*|}
+
   value=$(yaml-cli -g $param)
 
   if [ "$olddomain" != "$domain" ]; then
@@ -40,7 +43,11 @@ do
       echo ">"
       ;;
     number)
-      echo "<input type=\"number\" name=\"${name}\" value=\"${value}\">"
+      echo "<input type=\"number\" name=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\">"
+      ;;
+    range)
+      echo "<input type=\"range\" name=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\">"
+      echo "(<span id=\"v-${name}\" class=\"rval\">${value}</span>)"
       ;;
     select)
       echo "<select name=\"${name}\">"
@@ -54,7 +61,7 @@ do
       echo "</select>"
       ;;
     string)
-      echo "<input type=\"text\" name=\"${name}\" value=\"${value}\">"
+      echo "<input type=\"text\" name=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\">"
       ;;
     *)
       ;;

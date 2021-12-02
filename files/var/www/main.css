@@ -122,7 +122,7 @@ form input[type=password] {
 
 form input[type=range] {
     margin-right: 1rem;
-    width: 20rem;
+    width: 15rem;
 }
 
 form input[type=submit] {
@@ -134,7 +134,7 @@ form input[type=submit] {
 }
 
 form input[type=text] {
-    width: 20rem;
+    width: 23rem;
 }
 
 .red {

@@ -55,7 +55,7 @@
         // range
         document.querySelectorAll('input[type=range]').forEach(el => {
             el.addEventListener('input', function(event) {
-                const id = '#v-' + event.target.name.replace(/\./g, '');
+                const id = '#v-' + event.target.name;
                 document.querySelector(id).textContent = el.value;
             });
         });

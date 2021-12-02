@@ -1,0 +1,504 @@
+#!/usr/bin/haserl
+content-type: text/html
+
+<%
+mj="
+.system.buffer|System buffer|KB
+.system.httpsCertificate
+.system.httpsCertificateKey
+.system.httpsPort
+.system.logLevel
+.system.sensorConfig
+.system.sensorConfigDir
+.system.staticDir
+.system.updateChannel
+.system.webPort
+
+.isp.aGain
+.isp.alignWidth
+.isp.antiFlicker
+.isp.blkCnt
+.isp.dGain
+.isp.drc
+.isp.exposure
+.isp.ispGain
+.isp.memMode
+.isp.slowShutter
+.isp.threadStackSize
+
+.image.contrast
+.image.flip
+.image.hue
+.image.luminance
+.image.mirror
+.image.rotate
+.image.saturation
+
+.osd.enabled
+.osd.font
+.osd.template
+.osd.posX
+.osd.posY
+
+.nightmode.enabled
+.nightmode.irCutPin1
+.nightmode.irCutPin2
+.nightmode.irSensorPin
+.nightmode.irSensorPinInvert
+.nightmode.pinSwitchDelayUs
+.nightmode.backlightPin
+.nightmode.nightAPI
+.nightmode.drcOverride
+
+.records.enabled
+.records.path
+.records.maxUsage
+
+.video0.enabled
+.video0.codec
+.video0.size
+.video0.fps
+.video0.bitrate
+.video0.gopSize
+.video0.gopMode
+.video0.rcMode
+.video0.crop
+
+.video1.enabled
+.video1.codec
+.video1.size
+.video1.fps
+.video1.bitrate
+.video1.gopSize
+.video1.gopMode
+.video1.rcMode
+.video1.crop
+
+.jpeg.enabled
+.jpeg.size
+.jpeg.qfactor
+.jpeg.toProgressive
+
+.mjpeg.size
+.mjpeg.fps
+.mjpeg.bitrate
+
+.audio.enabled
+.audio.volume
+.audio.srate
+.audio.codec
+.audio.outputEnabled
+
+.rtsp.enabled
+
+.hls.enabled
+
+.youtube.enabled
+.youtube.key
+
+.ipeye.enabled
+
+.netip.enabled
+.netip.user
+.netip.password
+.netip.snapshots
+.netip.ignore_set_time
+
+.onvif.enabled
+
+.raw.enabled
+
+.watchdog.enabled
+.watchdog.timeout
+"
+
+norm_name() {
+  echo -n $(echo $1 | sed 's/\./_/g')
+}
+
+get_value() {
+  echo -n $(yaml-cli -g ".$1")
+}
+
+to_top() {
+  echo -n "<p class=\"small\"><a href=\"#top\">Go to top</a></p>"
+}
+
+checkbox() {
+  echo -n "<input type=\"checkbox\" name=\"$(norm_name $1)\" value=\"true\""
+  [ $(get_value $1) = "true" ] && echo -n " checked"
+  echo -n ">"
+}
+
+number_field() {
+  echo "<dt>$1</dt>"
+  echo "<dd><input type=\"number\" name=\"$(norm_name $1)\" value=\"$(get_value $1)\" $2 $3></dd>"
+}
+
+text_field() {
+  echo "<dt>$1 yaml-cli -g .$2</dt>"
+  echo "<dd><input type=\"text\" name=\"$(norm_name $2)\" value=\"$(get_value $2)\" $3></dd>"
+}
+
+range_field() {
+  echo -n "<input type=\"range\" name=\"$(norm_name $1)\" value=\"$(get_value $1)\" $2 $3>"
+  echo -n "(<span id=\"v-$(norm_name $1)\" class=\"rval\">$(get_value $1)</span>)"
+}
+
+select_field() {
+  echo "<dt>$1</dt>"
+  echo "<dd><select name=\"$(norm_name $2)\">"
+  echo -n "<option value=\"\">-- options --</option>"
+  for x in $(echo $3 | tr "|" " "); do
+    echo -n "<option"
+    [ $(get_value $2) = "$x" ] && echo -n " selected"
+    echo -n ">$x</option>"
+  done
+  echo -n "</select>"
+}
+%>
+<%in _header.cgi %>
+<ol><% for i in System ISP Image OSD Nightmode Records Video0 Video1 JPEG MJPEG Audio RTSP HSL Youtube motionDetect IPEYE NETIP ONVIF RAW Watchdog; do
+  echo "<li><a href=\"#$(echo "$i" | tr '[:upper:]' '[:lower:]')\">$i</a></li>"; done %></ol>
+
+<form action="/cgi-bin/majestic-settings.cgi" method="post">
+<div>
+<%
+for line in $mj
+do
+	param=${line%%|*}
+
+	line=${line// /~}
+	line=${line//|/ }
+	for n in $line
+	do
+		#n=${n//~/ }
+		echo "(" $n ")"
+	done
+
+        name=${param/./}
+	name=${name//./-}
+
+	value=$(yaml-cli -g $param)
+
+	echo "<dt>" $name "</dt>"
+	echo "<dd><input name=\"" $name "\" value=\"" $value "\"></dd>"
+done
+%>
+
+
+<h3 id="system">System</h3>
+<dl>
+<% select_field "logLevel"            "system.logLevel"            "ERROR|WARN|INFO|DEBUG|TRACE" %>
+<% text_field   "sensorConfig"        "system.sensorConfig"        "pattern=\"^[a-zA-Z0-9-_./]+$\" placeholder=\"/etc/sensors/imx222_1080p_line.ini\""   "If not set, uses SENSOR environment variable."  %>
+<% text_field   "sensorConfigDir"     "system.sensorConfigDir"     pattern=\"^[a-zA-Z0-9-_./]+$\" placeholder=\"/etc/sensors\" "<i>Path to sensor configs.</i>" %>
+<% number_field "webPort"             "system.webPort"                                         placeholder=\"80\" min=\"1\" max=\"65535\" %>
+<% text_field   "staticDir"           "system.staticDir"           pattern=\"^[a-zA-Z0-9-_./]+$\" placeholder=\"/var/www/html\" %>
+<% number_field "httpsPort"           "system.httpsPort"           placeholder=\"443\" min=\"1\" max=\"65535\" %>
+<% text_field   "httpsCertificate"    "system.httpsCertificate"    pattern=\"^[a-zA-Z0-9-_./]+$\" placeholder=\"/etc/ssl/certs/www.example.com.crt\" %>
+<% text_field   "httpsCertificateKey" "system.httpsCertificateKey" pattern=\"^[a-zA-Z0-9-_./]+$\" placeholder=\"/etc/ssl/certs/www.example.com.key\" %>
+<% select_field "updateChannel"       "system.updateChannel"       "testing|beta|stable|none" %>
+<% number_field "buffer"              "system.buffer"              placeholder=\"1024\" min=\"0\" "KB. Maximum buffer size for each client." %>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="isp">ISP</h3>
+<dl>
+<dt>memMode</dt>
+<dd><% select_field "isp.memMode" "normal|reduction" %></dd>
+<dt>slowShutter</dt>
+<dd><% select_field "isp.slowShutter" "disabled|low|medium|high" %> <i>Automatic frame rate reduction mode.</i></dd>
+<dt>antiFlicker</dt>
+<dd><% select_field "isp.antiFlicker" "disabled|50|60" %> <i>Hz. For indoor camera, depends on power grid standard.</i></dd>
+<dt>alignWidth</dt>
+<dd><% number_field "isp.alignWidth" placeholder=\"8\" min=\"0\" %></dd>
+<dt>blkCnt</dt>
+<dd><% number_field "isp.blkCnt" placeholder=\"4\" min=\"0\" %> <i>4 for small memory systems, 10 and more for performant SoCs</i></dd>
+<dt>threadStackSize</dt>
+<dd><% number_field "isp.threadStackSize" placeholder=\"16\" min=\"0\" %> <i>KB</i></dd>
+<dt title="Set exposition in ms, from 1 to 500000 or auto">exposure</dt>
+<dd><% number_field "isp.exposure" placeholder=\"auto\" min=\"0\" max=\"500000\" %><i>set 0 for auto</i></dd>
+<dt>aGain</dt>
+<dd><% range_field "isp.aGain" placeholder=\"1\" min=\"0\" max=\"100\" %></dd>
+<dt>dGain</dt>
+<dd><% range_field "isp.dGain" placeholder=\"1\" min=\"0\" max=\"100\" %></dd>
+<dt>ispGain</dt>
+<dd><% range_field "isp.ispGain" placeholder=\"1\" min=\"0\" max=\"100\" %></dd>
+<dt>drc</dt>
+<dd><% number_field "isp.drc" placeholder=\"300\" min=\"0\" %> <i>:1</i></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="image">Image</h3>
+<dl>
+<dt>mirror</dt>
+<dd><% checkbox "image.mirror" %></dd>
+<dt title="turn image upside down">flip</dt>
+<dd><% checkbox "image.flip" %></dd>
+<dt title="rotate image by none, 90 or 270 degrees">rotate</dt>
+<dd><% select_field "image.rotate" "none|90|270" %></dd>
+<dt>contrast</dt>
+<dd><% range_field "image.contrast" placeholder=\"auto\" min=\"0\" max=\"99\" %> <i>set 0 for auto</i></dd>
+<dt>hue</dt>
+<dd><% range_field "image.hue" placeholder=\"50\" min=\"1\" max=\"99\" %></dd>
+<dt>saturation</dt>
+<dd><% range_field "image.saturation" placeholder=\"50\" min=\"1\" max=\"99\" %></dd>
+<dt>luminance</dt>
+<dd><% range_field "image.luminance" placeholder=\"auto\" min=\"0\" max=\"99\" %> <i>set 0 for auto</i></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="osd">OSD</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "osd.enabled" %></dd>
+<dt>font</dt>
+<dd><% text_field "osd.font" pattern=\"^[a-zA-Z0-9-_./]+$\" placeholder=\"/usr/lib/fonts/fonts.bin\" %></dd>
+<dt>template</dt>
+<dd><% text_field "osd.template" pattern=\"^[a-zA-Z0-9%: ]+$\" placeholder=\"%a %e %B %Y %H:%M:%S %Z\" %> <i>use %f for milliseconds (consumes more resources)</i></dd>
+<dt>posX</dt>
+<dd><% number_field "osd.posX" placeholder=\"-100\" min=\"-5000\" max=\"5000\" %> <i>+ from top/left, - from bottom/right</i></dd>
+<dt>posY</dt>
+<dd><% number_field "osd.posY" placeholder=\"-100\" min=\"-5000\" max=\"5000\" %> <i>+ from top/left, - from bottom/right</i></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="nightmode">Nightmode</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "nightMode.enabled" %></dd>
+<dt>irSensorPin</dt>
+<dd><% number_field "nightMode.irSensorPin" placeholder=\"62\" min=\"1\" %></dd>
+<dt>irSensorPinInvert</dt>
+<dd><% checkbox "nightMode.irSensorPinInvert" %></dd>
+<dt>irCutPin1</dt>
+<dd><% number_field "nightMode.irCutPin1" placeholder=\"1\" min=\"1\" %></dd>
+<dt>irCutPin2</dt>
+<dd><% number_field "nightMode.irCutPin2" placeholder=\"2\" min=\"1\" %></dd>
+<dt>pinSwitchDelayUs</dt>
+<dd><% number_field "nightMode.pinSwitchDelayUs" placeholder=\"150\" min=\"0\" max=\"1000\" %> <i>IRcut filter pin switch delay in μs </i></dd>
+<h5 class="red">WARNING! Very long delay can damage IRcut filter!</h5>
+<dt title="turn on backlight illumination when night mode is on">backlightPin</dt>
+<dd><% number_field "nightMode.backlightPin" placeholder=\"65\" min=\"1\" max=\"100\" %></dd>
+<dt title="use /night/{invert,on,off} endpoints to change mode by API for remote callers">nightAPI</dt>
+<dd><% checkbox "nightMode.nightAPI" %></dd>
+<dt title="use special value for drc parameter in night mode">drcOverride</dt>
+<dd><% number_field "nightMode.drcOverride" placeholder=\"300\" min=\"1\" %></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="records">Records</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "records.enabled" %></dd>
+<dt>path</dt>
+<dd><% text_field "records.path" pattern=\"^[a-zA-Z0-9-_./%]+$\" placeholder=\"/mnt/mmc/%Y/%m/%d/%H.mp4\" %></dd>
+<dt>maxUsage</dt>
+<dd><% number_field "records.maxUsage" placeholder=\"95\" min=\"1\" max=\"100\" %></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="video0">Video0</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "video0.enabled" %></dd>
+<dt>codec</dt>
+<dd><% select_field "video0.codec" "h265|h264" %></dd>
+<dt>size</dt>
+<dd><% text_field "video0.size" pattern=\"^[xX0-9]+$\" placeholder=\"1920x1080\" %></dd>
+<dt>fps</dt>
+<dd><% number_field "video0.fps" placeholder=\"25\" min=\"1\" max=\"60\" %></dd>
+<dt>bitrate</dt>
+<dd><% number_field "video0.bitrate" placeholder=\"4096\" min=\"1\" max=\"115200\" %> <i>kbps</i></dd>
+<dt>gopSize</dt>
+<dd><% number_field "video0.gopSize" placeholder=\"1\" min=\"1\" max=\"180\" %> <i>send I-frame every second</i></dd>
+<dt>gopMode</dt>
+<dd><% select_field "video0.gopMode" "normal|dual|smart" %></dd>
+<dt>rcMode</dt>
+<dd><% select_field "video0.rcMode" "avbr" %></dd>
+<dt>crop</dt>
+<dd><% text_field "video0.crop" pattern=\"^[xX0-9]+$\" placeholder=\"0x0x960x540\" %></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="video1">Video1</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "video1.enabled" %></dd>
+<dt>codec</dt>
+<dd><% select_field "video1.codec" "h265|h264" %></dd>
+<dt>size</dt>
+<dd><% text_field "video1.size" pattern=\"^[xX0-9]+$\" placeholder=\"704x576\" %></dd>
+<dt>fps</dt>
+<dd><% number_field "video1.fps" placeholder=\"15\" min=\"1\" max=\"60\" %></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="jpeg">JPEG</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "jpeg.enabled" %></dd>
+<dt>size</dt>
+<dd><% text_field "jpeg.size" pattern=\"^[xX0-9]+$\" placeholder=\"1920x1080\" %></dd>
+<dt>qfactor</dt>
+<dd><% number_field "jpeg.qfactor" placeholder=\"50\" min=\"1\" max=\"99\" %> <i>JPEG quality</i></dd>
+<dt>toProgressive</dt>
+<dd><% checkbox "jpeg.toProgressive" %> <i>transform snapshot to Progressive JPEG</i></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="mjpeg">MJPEG</h3>
+<dl>
+<dt>size</dt>
+<dd><% text_field "mjpeg.size" pattern=\"^[xX0-9]+$\" placeholder=\"640x360\" %></dd>
+<dt>fps</dt>
+<dd><% number_field "mjpeg.fps" placeholder=\"5\" min=\"1\" max=\"60\" %></dd>
+<dt>bitrate</dt>
+<dd><% number_field "mjpeg.bitrate" placeholder=\"1024\" min=\"1\" max=\"2048\" %></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="audio">Audio</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "audio.enabled" %></dd>
+<dt>volume</dt>
+<dd><% number_field "audio.volume" placeholder=\"auto\" min=\"0\" max=\"100\" %><i>set 0 for auto</i></dd>
+<dt>srate</dt>
+<dd><% number_field "audio.srate" placeholder=\"8000\" min=\"1\" max=\"44100\" %></dd>
+<dt>codec</dt>
+<dd><% select_field "audio.codec" "aac|mp3|opus|pcm" %> <i>default codec for RTSP and MP4 encoding</i></dd>
+<dt>outputEnabled</dt>
+<dd><% checkbox "audio.outputEnabled" %></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="rtsp">RTSP</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "rtsp.enabled" %></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="hsl">HLS</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "hls.enabled" %></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="youtube">Youtube</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "youtube.enabled" %></dd>
+<dt>key</dt>
+<dd><% text_field "youtube.key" pattern=\"^[a-zA-Z0-9-]+$\" placeholder=\"xxxx-xxxx-xxxx-xxxx-xxxx\" %></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="motiondetect">motionDetect</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "motionDetect.enabled" %></dd>
+<dt>profile</dt>
+<dd><% select_field "motionDetect.profile" "outdoor|indoor" %></dd>
+<dt>visualize</dt>
+<dd><% checkbox "motionDetect.visualize" %></dd>
+<dt>debug</dt>
+<dd><% checkbox "motionDetect.debug" %></dd>
+<dt title="ROI for motion detection algorithm e.g. top upper quadrant">constraints</dt>
+<dd><% text_field "motionDetect.constraints" pattern=\"^[xX0-9]+$\" placeholder=\"0x0x1296x760\" %></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="ipeye">IPEYE</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "ipeye.enabled" %></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="netip">NETIP</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "netip.enabled" %></dd>
+<dt>user</dt>
+<dd><% text_field "netip.user" placeholder=\"admin\" %></dd>
+<dt>password</dt>
+<dd><% text_field "netip.password" placeholder=\"6V0Y4HLF\" %></dd>
+<dt>port</dt>
+<dd><% number_field "netip.port" placeholder=\"34567\" min=\"1\" max=\"65535\" %></dd>
+<dt>snapshots</dt>
+<dd><% checkbox "netip.snapshots" %></dd>
+<dt>ignore_set_time</dt>
+<dd><% checkbox "netip.ignore_set_time" %></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="onvif">ONVIF</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "onvif.enabled" %></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="raw">RAW</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "raw.enabled" %></dd>
+</dl>
+<% to_top %>
+</div>
+
+<div>
+<h3 id="watchdog">Watchdog</h3>
+<dl>
+<dt>enabled</dt>
+<dd><% checkbox "watchdog.enabled" %></dd>
+<dt>timeout</dt>
+<dd><% number_field "watchdog.timeout" placeholder=\"10\" min=\"1\" max=\"100\" %> <i>sec</i></dd>
+</dl>
+<% to_top %>
+</div>
+
+<input type="submit" value="Save">
+<input type="submit" value="Debug" onclick="javascript:document.querySelector('form').action='http://phphome.lan/info.php';">
+</form>
+
+<%in _footer.cgi %>

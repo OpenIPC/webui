@@ -33,8 +33,8 @@ gohome() {
       ;;
     reset)
       echo "<h2>Resetting Majestic configuration<h2>"
-      echo "# cp ${PWD}/../majestic-mini.yaml /etc/majestic.yaml"
-      echo "$(cp ${PWD}/../majestic-mini.yaml /etc/majestic.yaml 2>&1)"
+      echo "# cp /rom/etc/majestic.yaml /etc/majestic.yaml"
+      echo "$(cp /rom/etc/majestic.yaml /etc/majestic.yaml 2>&1)"
       gohome 3000;
       ;;
     trace)
@@ -61,16 +61,21 @@ gohome() {
           echo "# echo \"${FORM_hostname}\" > /etc/hostname"
           echo "$(echo \"${FORM_hostname}\" > /etc/hostname 2>&1)"
 
-          echo "# sed -i \"s/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g\" /etc/hosts"
-          echo "$(sed -i \"s/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g\" /etc/hosts 2>&1)"
+          echo "# sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts"
+          echo "$(sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts 2>&1)"
         fi
         echo "</pre>"
       fi
       if [ ! -z "$FORM_password" ]; then
         echo "<h3>Updating password</h3>"
         echo "<pre>"
-        echo "# sed -i \"s/:admin:.*/:admin:${FORM_password}/g\" /etc/httpd.conf"
-        echo "$(sed -i \"s/:admin:.*/:admin:${FORM_password}/g\" /etc/httpd.conf 2>&1)"
+        if [[ ! -z "$(echo "$FORM_password" | grep " ")" ]]
+	then
+	  echo "Password cannot have a space!"
+	else
+          echo "# sed -i s/:admin:.*/:admin:${FORM_password}/ /etc/httpd.conf"
+          echo "$(sed -i s/:admin:.*/:admin:${FORM_password}/ /etc/httpd.conf 2>&1)"
+	fi
         echo "</pre>"
       fi
       if [ ! -z "$FORM_ipaddr" ]; then
@@ -106,4 +111,5 @@ gohome() {
       ;;
   esac
 %>
+<h4>All changes will be applied on reboot!</h4>
 <%in _footer.cgi %>

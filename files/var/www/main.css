@@ -63,32 +63,46 @@ h4 {
     text-align: center;
 }
 
-form {
-    display: block;
-    margin: 1rem 0 2rem;
+div.cards {
+    align-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
 }
 
-form div {
-    margin: 1rem 0 2rem;
+div.cards > div {
+    flex: 25rem 1;
+    background: #4c60d811;
+    padding: 1rem 2rem;
 }
 
-form h3 {
+div.cards > div.danger {
+    border: solid 2px red;
+}
+
+div.cards h3 {
+    border-bottom: solid 1px #4c60d8;
+    color: #4c60d8;
+    margin: 0;
+    text-align: right;
     text-transform: uppercase;
 }
 
-form label {
-    cursor: pointer;
-    display: flex;
-    margin-bottom: 1rem;
+div.cards dl {
+    padding: 0;
+    margin: 0;
 }
 
-form dl dt {
-    flex: 1;
-    margin-top: 1rem;
+div.cards dt {
+    border-top: solid 1px white;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.5rem 0 0;
 }
 
-form input, form select {
-    flex: 2;
+div.cards dd {
+    padding: 0.5rem 0 1rem;
+    margin: 0;
 }
 
 form i {
@@ -103,7 +117,7 @@ form input[type=number] {
 }
 
 form input[type=password] {
-    width: 25rem;
+    width: 20rem;
 }
 
 form input[type=range] {
@@ -120,7 +134,7 @@ form input[type=submit] {
 }
 
 form input[type=text] {
-    width: 25rem;
+    width: 20rem;
 }
 
 .red {

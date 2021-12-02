@@ -1,0 +1,68 @@
+system:
+  logLevel: TRACE
+  updateChannel: stable
+  buffer: 1024
+isp:
+image:
+  mirror: false
+  flip: false
+  rotate: none
+  contrast: auto
+  hue: 50
+  saturation: 50
+  luminance: auto
+osd:
+  enabled: false
+  font: /usr/lib/fonts/fonts.bin
+  template: "%a %e %B %Y %H:%M:%S %Z"
+nightMode:
+  enabled: false
+  pinSwitchDelayUs: 150
+records:
+  enabled: false
+  path: /mnt/mmc/%Y/%m/%d/%H.mp4
+  maxUsage: 95
+video0:
+  enabled: true
+video1:
+  enabled: false
+jpeg:
+  enabled: true
+mjpeg:
+  size: 640x360
+  fps: 5
+  bitrate: 1024
+audio:
+  enabled: false
+  volume: auto
+  srate: 8000
+rtsp:
+  enabled: true
+  port: 554
+hls:
+  enabled: true
+youtube:
+  enabled: false
+motionDetect:
+  enabled: false
+  profile: outdoor
+  visualize: true
+  debug: true
+ipeye:
+  enabled: false
+netip:
+  enabled: false
+  user: admin
+  password: 6V0Y4HLF
+  port: 34567
+  snapshots: true
+  ignore_set_time: false
+onvif:
+  enabled: false
+raw:
+  mode: slow
+watchdog:
+  enabled: true
+  timeout: 10
+cloud:
+  enabled: false

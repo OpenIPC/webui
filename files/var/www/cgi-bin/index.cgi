@@ -2,14 +2,21 @@
 content-type: text/html
 
 <%
+# [
+# {name: 'hostname', placeholder: 'device-name'},
+# {name: 'password', placeholder: 'K0oLHaZk3R!'},
+# {name: 'ipaddr', placeholder: '192.168.10.10'},
+# {name: 'netmask', placeholder: '255.255.255.0'},
+# {name: 'remote', placeholder: 'vtun.net'},
+# ]
 %>
 <%in _header.cgi %>
 
-<h4>All changes will be applied on reboot!</h4>
-
-<h3>Camera Settings</h3>
+<div class="cards">
+<div>
 <form action="/cgi-bin/update.cgi" method="post">
 <input type="hidden" name="action" value="update">
+<h3>Camera Settings</h3>
 <dl>
 <dt>Device Name</dt>
 <dd><input name="hostname" value="<% hostname -s %>"></dd>
@@ -24,10 +31,12 @@ content-type: text/html
 </dl>
 <p><input type="submit" value="Save Settings"></p>
 </form>
+</div>
 
-<h3>Update kernel</h3>
+<div class="danger">
 <form action="/cgi-bin/upload.cgi" method="post" enctype="multipart/form-data">
 <input type="hidden" name="action" value="kernel">
+<h3>Update kernel</h3>
 <dl>
 <dt>kernel file</dt>
 <dd><input type="file" name="upfile"></dd>
@@ -50,5 +59,7 @@ content-type: text/html
 <input type="hidden" name="action" value="reset">
 <p><input type="submit" value="Reset Configuration"></p>
 </form>
+</div>
+</div>
 
 <%in _footer.cgi %>

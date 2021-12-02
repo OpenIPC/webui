@@ -18,7 +18,7 @@ export PATH=/bin:/sbin:/usr/bin:/usr/sbin
 <nav>
 <a href="/cgi-bin/index.cgi">Global Settings</a>
 <a href="/cgi-bin/monitor.cgi">Monitor Tool</a>
-<a href="/cgi-bin/majestic.cgi">Majestic</a>
+<a href="/cgi-bin/majestic.cgi">Majestic Settings</a>
 <a href="/cgi-bin/reboot.cgi" class="confirm">Reboot Device</a>
 </nav>
 <main>

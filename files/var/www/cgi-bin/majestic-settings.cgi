@@ -10,6 +10,9 @@ for name in $data; do
   key=".$(echo $name | sed 's/^FORM_//' | cut -d= -f1 | sed 's/-/./g')"
   value="$(echo $name | cut -d= -f2)"
   oldvalue=$(yaml-cli -g "$key")
+
+  [ "$key" = ".image.rotate" ] && value=${value//°/}
+
   if [ -z "$value" ]
   then
     if [ -z "$oldvalue" ]

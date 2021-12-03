@@ -15,5 +15,4 @@ function tick() {
 window.onload = setTimeout(tick, 1000);
 </script>
 <%in _footer.cgi %>
-
-<% [ -z "$FORM_reset" ] && sysupgrade || sysupgrade -n %>
+<% [ -z "$FORM_reset" ] && (sysupgrade > /dev/null) || (sysupgrade -n > /dev/null) %>

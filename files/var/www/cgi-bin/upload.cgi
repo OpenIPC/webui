@@ -31,7 +31,7 @@ else
     if [ $fsize -gt $maxsize ]
     then
       echo "<div class=\"alert alert-danger\">" \
-        "<b>Error: file \"${FORM_upfile_name}\" is so big!</b><br>" \
+        "<b>Error: file \"${FORM_upfile_name}\" is too large!</b><br>" \
         "Its size is ${fsize} bytes, while it should be ${maxsize} bytes or less." \
         "</div>"
     else

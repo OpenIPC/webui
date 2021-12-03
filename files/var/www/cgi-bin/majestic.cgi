@@ -99,9 +99,6 @@ done
 echo "</div></div></div>"
 %>
 </div>
-<p>
-<input type="submit" class="btn btn-primary" value="Save">
-<input type="submit" class="btn btn-warning" value="Debug" onclick="javascript:document.querySelector('form').action='http://phphome.lan/info.php';">
-</p>
+<p><input type="submit" class="btn btn-primary" value="Save"></p>
 </form>
 <%in _footer.cgi %>

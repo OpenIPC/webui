@@ -2,35 +2,29 @@
 content-type: text/html
 
 <%in _header.cgi %>
-<% interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | grep -v 'lo') %>
+<% interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'}) %>
 <h2>Monitoring Tools</h2>
-
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-4">
-
 <div class="col"><div class="card h-100 mb-3">
 <h5 class="card-header">Device Info</h5>
 <div class="card-body">
 <pre><% echo "openipc-$(ipctool --chip_id)-$(ipctool --sensor_id | awk -F '_' '{print $1}')" %></pre>
 </div></div></div>
-
 <div class="col"><div class="card h-100 mb-3">
 <h5 class="card-header">Device Uptime</h5>
 <div class="card-body">
 <pre><% /usr/bin/uptime %></pre>
 </div></div></div>
-
 <div class="col"><div class="card h-100 mb-3">
 <h5 class="card-header">Routing Table</h5>
 <div class="card-body">
 <pre><% ip r %></pre>
 </div></div></div>
-
 <div class="col"><div class="card h-100 mb-3">
 <h5 class="card-header">Network Status</h5>
 <div class="card-body">
 <pre><% ip a %></pre>
 </div></div></div>
-
 <div class="col"><div class="card h-100 mb-3">
 <h5 class="card-header">Ping Quality</h5>
 <div class="card-body">
@@ -43,14 +37,13 @@ content-type: text/html
 <div class="row mb-3">
 <div class="col-md-6"><label for="iface">Use network interface</label></div>
 <div class="col-md-6">
-<input type="radio" name="iface" value="auto" checked="checked"> auto
-<% for i in $interfaces; do echo "<input type=\"radio\" name=\"iface\" value=\"${i}\"> ${i}"; done %>
-</div>
-</div>
+<select name="iface">
+<option>auto</option>
+<% for i in $interfaces; do echo "<option>${i}</option>"; done %>
+</select>
+</div></div>
 <p class="mb-0"><input type="submit" value="Run" class="btn btn-primary"></p>
-</form>
-</div></div></div>
-
+</form></div></div></div>
 <div class="col"><div class="card h-100 mb-3">
 <h5 class="card-header">Trace Route</h5>
 <div class="card-body">
@@ -63,13 +56,12 @@ content-type: text/html
 <div class="row mb-3">
 <div class="col-md-6"><label for="">Use network interface</label></div>
 <div class="col-md-6">
-<input type="radio" name="iface" value="auto" checked="checked"> auto
-<% for i in $interfaces; do echo "<input type=\"radio\" name=\"iface\" value=\"${i}\"> ${i}"; done %>
+<select name="iface">
+<option>auto</option>
+<% for i in $interfaces; do echo "<option>${i}</option>"; done %>
+</select>
 </div></div>
 <p class="mb-0"><input type="submit" value="Run" class="btn btn-primary"></p>
-</form>
-</div></div></div>
-
+</form></div></div></div>
 </div>
-
 <%in _footer.cgi %>

@@ -1,115 +1,91 @@
 #!/usr/bin/haserl
 content-type: text/html
 
-<%
-#project=$(uci get microbe.webadmin.project)
-gohome() {
-  echo "<script>"
-  echo "//setTimeout('window.location=\"/\"', $1);"
-  echo "</script>"
-}
-%>
 <%in _header.cgi %>
+<h2>Updating settings</h2>
 <%
-  echo "Probe change $(printenv | grep FORM_)" | logger -t microbe-web
-
-  case $FORM_action in
-    ping)
-      echo "<h3>Ping Quality</h3>"
-      echo "<pre>"
-      if [ "$FORM_iface" = "auto" ]; then
-        echo "# ping -c 15 -s 1500 ${FORM_target}"
-        echo "$(ping -c 15 -s 1500 ${FORM_target} 2>&1)"
-      else
-        echo "# ping -c 15 -s 1500 -I ${FORM_iface} ${FORM_target}"
-        echo "$(ping -c 15 -s 1500 -I ${FORM_iface} ${FORM_target} 2>&1)"
-      fi
-      echo "</pre>"
-      ;;
-    reboot)
-      echo "<h1>Trying to reboot. Please wait...</h1>"
-      gohome 30000;
-      reboot
-      ;;
-    reset)
-      echo "<h2>Resetting Majestic configuration<h2>"
-      echo "# cp /rom/etc/majestic.yaml /etc/majestic.yaml"
-      echo "$(cp /rom/etc/majestic.yaml /etc/majestic.yaml 2>&1)"
-      gohome 3000;
-      ;;
-    trace)
-      echo "<h2>Trace Route</h2>"
-      echo "<pre>"
-      if [ "$FORM_iface" = "auto" ]; then
-        echo "# traceroute $FORM_target"
-        echo "$(traceroute $FORM_target 2>&1)"
-      else
-        echo "# traceroute -i $FORM_iface $FORM_target"
-        echo "$(traceroute -i $FORM_iface $FORM_target 2>&1)"
-      fi
-      echo "</pre>"
-      ;;
-    update)
-      echo "<h2>Updating settings</h2>"
-      if [ ! -z "$FORM_hostname" ]; then
-        oldhostname=$(cat /etc/hostname)
-        echo "<h3>Updating hostname</h3>"
-        echo "<pre>"
-        if [ "$FORM_hostname" = "$oldhostname" ]; then
+echo "Probe change $(printenv | grep FORM_)" | logger -t microbe-web
+case $FORM_action in
+  update)
+    if [ ! -z "$FORM_hostname" ]; then
+      oldhostname=$(cat /etc/hostname)
+      echo "<h5>Updating hostname</h5>"
+      if [ "$FORM_hostname" = "$oldhostname" ]; then
+          echo "<div class=\"alert alert-warning mb-3\">"
           echo "Same hostname. Skipping."
-        else
-          echo "# echo \"${FORM_hostname}\" > /etc/hostname"
-          echo "$(echo \"${FORM_hostname}\" > /etc/hostname 2>&1)"
-
-          echo "# sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts"
-          echo "$(sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts 2>&1)"
-        fi
-        echo "</pre>"
+          echo "</div>"
+      else
+        echo -n "<div class=\"alert alert-success mb-3 pre\">"
+        echo "<b># echo \"${FORM_hostname}\" > /etc/hostname</b><br>"
+        echo "$(echo \"${FORM_hostname}\" > /etc/hostname 2>&1)"
+        echo "<b># sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts</b><br>"
+        echo "$(sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts 2>&1)"
+        echo "</div>"
       fi
-      if [ ! -z "$FORM_password" ]; then
-        echo "<h3>Updating password</h3>"
-        echo "<pre>"
-        if [[ ! -z "$(echo "$FORM_password" | grep " ")" ]]
-	then
-	  echo "Password cannot have a space!"
-	else
-          echo "# sed -i s/:admin:.*/:admin:${FORM_password}/ /etc/httpd.conf"
-          echo "$(sed -i s/:admin:.*/:admin:${FORM_password}/ /etc/httpd.conf 2>&1)"
-	fi
-        echo "</pre>"
+    fi
+    if [ ! -z "$FORM_password" ]; then
+      echo "<h5>Updating password</h5>"
+      if [[ ! -z "$(echo "$FORM_password" | grep " ")" ]]
+      then
+        echo "<div class=\"alert alert-danger mb-3\">"
+        echo "Password cannot have spaces!"
+        echo "</div>"
+      else
+        echo -n "<div class=\"alert alert-secondary mb-3 pre\">"
+        echo "<b># sed -i s/:admin:.*/:admin:${FORM_password}/ /etc/httpd.conf</b><br>"
+        echo "$(sed -i s/:admin:.*/:admin:${FORM_password}/ /etc/httpd.conf 2>&1)"
+        echo "</div>"
       fi
-      if [ ! -z "$FORM_ipaddr" ]; then
-        echo "<h3>Updating IP address</h3>"
-        echo "<pre>"
-        echo "# yaml-cli -s .network.lan.ipaddr ${FORM_ipaddr}"
+    fi
+    if [ ! -z "$FORM_ipaddr" ]; then
+      echo "<h5>Updating IP address</h5>"
+      if [ "$(yaml-cli -g .network.lan.ipaddr)" = "$FORM_ipaddr" ]
+      then
+        echo "<div class=\"alert alert-warning mb-3\">"
+        echo "Same IP address. Skipping."
+        echo "</div>"
+      else
+        echo -n "<div class=\"alert alert-success mb-3 pre\">"
+        echo "<b># yaml-cli -s .network.lan.ipaddr ${FORM_ipaddr}</b><br>"
         echo "$(yaml-cli -s .network.lan.ipaddr ${FORM_ipaddr} 2>&1)"
-        echo "</pre>"
-    fi
-      if [ ! -z "$FORM_netmask" ]; then
-        echo "<h3>Updating IP netmask</h3>"
-        echo "<pre>"
-        echo "# yaml-cli -s .network.lan.netmask ${FORM_netmask}"
-        echo "$(yaml-cli -s .network.lan.netmask ${FORM_netmask} 2>&1)"
-        echo "</pre>"
-    fi
-      if [ ! -z "$FORM_remote" ]; then
-        echo "<h3>Updating VTUNd Server</h3>"
-        echo "<pre>"
-	if [ "$FORM_remote" = "__delete" ]; then
-          echo "# yaml-cli -d .openvpn.vpn1.remote"
-          echo "$(yaml-cli -d .openvpn.vpn1.remote)"
-	else
-          echo "# yaml-cli -s .openvpn.vpn1.remote ${FORM_remote}"
-          echo "$(yaml-cli -s .openvpn.vpn1.remote ${FORM_remote} 2>&1)"
-        fi
-        echo "</pre>"
+        echo "</div>"
       fi
-      gohome 3000;
-      ;;
-    *)
-      echo "Unknown action \"${FORM_action}\".";
-      ;;
-  esac
+    fi
+    if [ ! -z "$FORM_netmask" ]; then
+      echo "<h5>Updating IP netmask</h5>"
+      if [ "$(yaml-cli -g .network.lan.netmask)" = "$FORM_netmask" ]
+      then
+        echo "<div class=\"alert alert-warning mb-3\">"
+        echo "Same IP network mask. Skipping."
+        echo "</div>"
+      else
+        echo -n "<div class=\"alert alert-success mb-3 pre\">"
+        echo "<b># yaml-cli -s .network.lan.netmask ${FORM_netmask}</b><br>"
+        echo "$(yaml-cli -s .network.lan.netmask ${FORM_netmask} 2>&1)"
+        echo "</div>"
+      fi
+    fi
+    if [ ! -z "$FORM_remote" ]; then
+      echo "<h5>Updating VTUNd Server</h5>"
+      echo -n "<div class=\"alert alert-success mb-3 pre\">"
+      if [ "$FORM_remote" = "__delete" ]; then
+        echo "<b># yaml-cli -d .openvpn.vpn1.remote</b><br>"
+        echo "$(yaml-cli -d .openvpn.vpn1.remote)"
+      else
+        echo "<b># yaml-cli -s .openvpn.vpn1.remote ${FORM_remote}</b><br>"
+        echo "$(yaml-cli -s .openvpn.vpn1.remote ${FORM_remote} 2>&1)"
+      fi
+      echo "</div>"
+    fi
+    echo "<div class=\"alert alert-danger mt-5 mb-3\">" \
+      "<p>Restart needed to apply changes.</p>" \
+      "<p class=\"mb-0\"><a href=\"/cgi-bin/reboot.cgi\" class=\"btn btn-danger\">Reboot the camera now</a></p>" \
+      "</div>"
+    ;;
+  *)
+    echo "<div class=\"alert alert-warning mb-3\">Unknown action \"${FORM_action}\".</div>";
+    ;;
+esac
 %>
-<h4>All changes will be applied on reboot!</h4>
+<p><a href="/cgi-bin/index.cgi">Go back to settings</a></p>
 <%in _footer.cgi %>

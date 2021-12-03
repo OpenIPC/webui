@@ -6,11 +6,11 @@ content-type: text/html
 <%
 case $FORM_action in
   kernel)
-    maxsize=1500
+    maxsize=2097152
     target="/etc/openvpn/ca.crt"
     ;;
   rootfs)
-    maxsize=5000
+    maxsize=5242880
     target="/etc/openvpn/cert.crt"
     ;;
 esac

@@ -40,7 +40,8 @@ content-type: text/html
 
 <div class="col">
 <div class="alert alert-danger mb-0">
-<h5 class="mb-3">Attention: Destructive Actions!</h5>
+<a class="btn btn-danger float-end" href="/cgi-bin/reboot.cgi">Reboot</a>
+<h5 class="mb-4">Attention: Destructive Actions!</h5>
 
 <div class="card mb-3 danger">
 <h5 class="card-header">Update kernel</h5>

@@ -28,7 +28,6 @@
 <li class="nav-item"><a class="nav-link" href="/cgi-bin/index.cgi">Global Settings</a></li>
 <li class="nav-item"><a class="nav-link" href="/cgi-bin/majestic.cgi">Majestic Settings</a></li>
 <li class="nav-item"><a class="nav-link" href="/cgi-bin/monitor.cgi">Monitoring Tools</a></li>
-<li class="nav-item"><a class="nav-link confirm" href="/cgi-bin/reboot.cgi">Reboot Device</a></li>
 </ul>
 </div>
 </div>

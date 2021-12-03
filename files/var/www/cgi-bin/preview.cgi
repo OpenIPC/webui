@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 content-type: text/html
 
-<% ipaddr=$(yaml-cli -g .network.lan.ipaddr) %>
+<% ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1) %>
 <%in _header.cgi %>
 <h2>Camera preview</h2>
 

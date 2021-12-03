@@ -23,9 +23,11 @@
 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
 <ul class="navbar-nav">
+<li class="nav-item"><a class="nav-link" href="/cgi-bin/firmware.cgi">Firmware</a></li>
 <li class="nav-item"><a class="nav-link" href="/cgi-bin/index.cgi">Global Settings</a></li>
 <li class="nav-item"><a class="nav-link" href="/cgi-bin/majestic.cgi">Majestic Settings</a></li>
 <li class="nav-item"><a class="nav-link" href="/cgi-bin/monitor.cgi">Monitoring Tools</a></li>
+<li class="nav-item"><a class="nav-link" href="/cgi-bin/preview.cgi">Preview</a></li>
 </ul>
 </div>
 </div>

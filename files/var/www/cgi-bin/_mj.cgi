@@ -20,7 +20,7 @@ mj="
 .isp.exposure|Sensor exposure time|ms|range|auto,1-500000|auto|From 1 to 500000.
 .isp.aGain|Sensor analog gain||number|0.1-1.0|1|
 .isp.dGain|Sensor digital gain||number|0.1-1.0|1|
-.isp.ispGain|ISP digital gain||number|0.1-1.0|1|
+.isp.ispGain|ISP gain||number|0.1-1.0|1|
 .isp.drc|Dynamic Range Compression (DRC) rate|:1|number|1-1000|300|
 .image.mirror|Flip image horizontally||boolean|true,false|false|
 .image.flip|Flip image vertically||boolean|true,false|false|

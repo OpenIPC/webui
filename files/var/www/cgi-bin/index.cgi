@@ -4,6 +4,7 @@ content-type: text/html
 <%in _header.cgi %>
 <h2>Global Settings</h2>
 <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+
 <div class="col">
 <div class="card h-100 mb-3">
 <h5 class="card-header">Camera Settings</h5>
@@ -39,44 +40,14 @@ content-type: text/html
 </div>
 
 <div class="col">
-<div class="alert alert-danger mb-0">
-<a class="btn btn-danger float-end" href="/cgi-bin/reboot.cgi">Reboot</a>
-<h5 class="mb-4">Attention: Destructive Actions!</h5>
-
-<div class="card mb-3 danger">
-<h5 class="card-header">Update kernel</h5>
-<div class="card-body">
-<form action="/cgi-bin/upload.cgi" method="post" enctype="multipart/form-data">
-<input type="hidden" name="action" value="kernel">
-<div class="row">
-<div class="col-12 mb-3"><label for="upfile">kernel file</label></div>
-<div class="col-12 mb-3"><input type="file" name="upfile"></div>
+  <div class="card mb-0 danger">
+    <h5 class="card-header">Reboot camera</h5>
+      <div class="card-body">
+      <p><a class="btn btn-danger" href="/cgi-bin/reboot.cgi">Reboot</a></p>
+    </div>
+  </div>
 </div>
-<p><input type="submit" class="btn btn-danger" value="Upload File"></p>
-</form></div></div>
 
-<div class="card mb-3 danger">
-<h5 class="card-header">Update rootfs</h5>
-<div class="card-body">
-<form action="/cgi-bin/upload.cgi" method="post" enctype="multipart/form-data">
-<input type="hidden" name="action" value="rootfs">
-<div class="row">
-<div class="col-12 mb-3"><label for="upfile">rootfs file</div>
-<div class="col-12 mb-3"><input type="file" name="upfile"></div>
-</div>
-<p><input type="submit" class="btn btn-danger" value="Upload File"></p>
-</form></div></div>
-
-<div class="card mb-0 danger">
-<h5 class="card-header">Reset configuration</h5>
-<div class="card-body">
-<form action="/cgi-bin/reset.cgi" method="post">
-<input type="hidden" name="action" value="reset">
-<p><input type="submit" class="btn btn-danger" value="Reset Configuration"></p>
-</form></div></div>
-
-</div>
-</div>
 </div>
 
 <%in _footer.cgi %>

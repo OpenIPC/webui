@@ -2,7 +2,7 @@
 content-type: text/html
 
 <%in _header.cgi %>
-
+<% interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | grep -v 'lo') %>
 <h2>Monitoring Tools</h2>
 
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-4">
@@ -44,8 +44,7 @@ content-type: text/html
 <div class="col-md-6"><label for="iface">Use network interface</label></div>
 <div class="col-md-6">
 <input type="radio" name="iface" value="auto" checked="checked"> auto
-<input type="radio" name="iface" value="eth0"> eth0
-<input type="radio" name="iface" value="wlan0"> wlan0
+<% for i in $interfaces; do echo "<input type=\"radio\" name=\"iface\" value=\"${i}\"> ${i}"; done %>
 </div>
 </div>
 <p class="mb-0"><input type="submit" value="Run" class="btn btn-primary"></p>
@@ -65,8 +64,7 @@ content-type: text/html
 <div class="col-md-6"><label for="">Use network interface</label></div>
 <div class="col-md-6">
 <input type="radio" name="iface" value="auto" checked="checked"> auto
-<input type="radio" name="iface" value="eth0"> eth0
-<input type="radio" name="iface" value="wlan0"> wlan0
+<% for i in $interfaces; do echo "<input type=\"radio\" name=\"iface\" value=\"${i}\"> ${i}"; done %>
 </div></div>
 <p class="mb-0"><input type="submit" value="Run" class="btn btn-primary"></p>
 </form>

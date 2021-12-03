@@ -53,9 +53,7 @@ content-type: text/html
 <div class="col-12 mb-3"><input type="file" name="upfile"></div>
 </div>
 <p><input type="submit" class="btn btn-danger" value="Upload File"></p>
-</form>
-</div>
-</div>
+</form></div></div>
 
 <div class="card mb-3 danger">
 <h5 class="card-header">Update rootfs</h5>
@@ -67,9 +65,7 @@ content-type: text/html
 <div class="col-12 mb-3"><input type="file" name="upfile"></div>
 </div>
 <p><input type="submit" class="btn btn-danger" value="Upload File"></p>
-</form>
-</div>
-</div>
+</form></div></div>
 
 <div class="card mb-0 danger">
 <h5 class="card-header">Reset configuration</h5>
@@ -77,11 +73,10 @@ content-type: text/html
 <form action="/cgi-bin/reset.cgi" method="post">
 <input type="hidden" name="action" value="reset">
 <p><input type="submit" class="btn btn-danger" value="Reset Configuration"></p>
-</form>
-</div>
-</div>
+</form></div></div>
 
 </div>
 </div>
 </div>
+
 <%in _footer.cgi %>

@@ -16,4 +16,4 @@ window.onload = setTimeout(tick, 1000);
 </script>
 <%in _footer.cgi %>
 
-<% [ -z "$FORM_reset" ] && echo sysupgrade || sysupgrade -n %>
+<% [ -z "$FORM_reset" ] && sysupgrade || sysupgrade -n %>

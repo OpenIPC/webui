@@ -55,10 +55,11 @@ do
         "<div class=\"col-lg-6\"><div class=\"input-group\">"
       if [ ! -z $(echo "${options}" | grep -E auto) ]
       then
-        [ "auto" = "$value" ] && checked=" checked" && value="" || checked=""
+        [ "auto" = "$value" ] && checked=" checked" || checked=""
         echo "<span class=\"input-group-text\"><label><input type=\"checkbox\" class=\"form-check-input auto-value\" data-for=\"${name}\" data-value=\"${default}\"${checked}> auto</label></span>"
       fi
-      echo "<input type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\" class=\"form-control text-end range\" data-units=\"${units}\">"
+      [ "auto" = "$value" ] && readonly=" readonly" || readonly=""
+      echo "<input type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\" class=\"form-control text-end range\" data-units=\"${units}\"${readonly}>"
       [ ! -z "$units" ] && echo "<span class=\"input-group-text\">${units}</span>"
       echo "</div></div>"
       [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"

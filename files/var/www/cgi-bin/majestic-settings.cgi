@@ -11,7 +11,13 @@ for name in $data; do
   value="$(echo $name | cut -d= -f2)"
   oldvalue=$(yaml-cli -g "$key")
 
-  [ "$key" = ".image.rotate" ] && value=${value//°/}
+  if [ "$key" = ".image.rotate" ]; then
+    if [ "$value" = "0°" ]; then
+      value="none"
+    else
+      value=${value//°/}
+    fi
+  fi
 
   if [ -z "$value" ]
   then
@@ -22,7 +28,7 @@ for name in $data; do
       echo "</div>"
     else
       echo "<div class=\"alert alert-danger mb-3\">"
-      echo "Empty value for ${key}. Existing value is not empty. Deleting."
+      echo "Empty value for ${key}. Existing value is '${oldvalue}'. Deleting."
       echo "<br><b># yaml-cli -d \"$key\"</b>"
       echo "</div>"
       yaml-cli -d "$key"
@@ -35,7 +41,7 @@ for name in $data; do
       echo "</div>"
     else
       echo "<div class=\"alert alert-info mb-3\">"
-      echo "Updated value for ${key}. Saving."
+      echo "Updated value for ${key}. Existing value is '${oldvalue}'. Saving."
       echo "<br><b># yaml-cli -s \"$key\" \"$value\"</b>"
       echo "</div>"
       yaml-cli -s "$key" "$value"

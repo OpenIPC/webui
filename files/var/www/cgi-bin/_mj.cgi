@@ -25,10 +25,10 @@ mj="
 .image.mirror|Flip image horizontally||boolean|true,false|false|
 .image.flip|Flip image vertically||boolean|true,false|false|
 .image.rotate|Rotate image clockwise||select|0°,90°,270°|0|
-.image.contrast|Image contrast|%|range|auto,1-100|0|
+.image.contrast|Image contrast|%|range|auto,1-100|auto|
 .image.hue|Image hue|%|range|1-100|50|
 .image.saturation|Image saturation|%|range|1-100|50|
-.image.luminance|Image luminance|%|range|auto,1-100|0|
+.image.luminance|Image luminance|%|range|auto,1-100|auto|
 .osd.enabled|Enable On-Screen Display (OSD)||boolean|true,false|false|
 .osd.font|Path to font file used in OSD||string||/usr/lib/fonts/fonts.bin|
 .osd.template|OSD template||string||%a %e %B %Y %H:%M:%S %Z|Supports strftime() format.
@@ -73,7 +73,7 @@ mj="
 .mjpeg.fps|Video framerate|fps|number|1-30|5|
 .mjpeg.bitrate|Video bitrate|kbps|number|1-4096|1024|
 .audio.enabled|Enable audio||boolean|true,false|false|
-.audio.volume|Audio volume level|%|range|auto,1-100|100|
+.audio.volume|Audio volume level|%|range|auto,1-100|auto|
 .audio.srate|Audio sampling rate|kHz|number|1-44100|8000|
 .audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,aac,pcm|opus|
 .audio.outputEnabled|Audio card||boolean||hw:3|

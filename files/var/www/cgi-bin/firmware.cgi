@@ -21,6 +21,7 @@ content-type: text/html
 </form>
 </div>
 </div>
+
 <div class="card mb-3 danger">
 <h5 class="card-header">Reset configuration</h5>
 <div class="card-body">
@@ -44,6 +45,7 @@ content-type: text/html
 <p><input type="submit" class="btn btn-danger" value="Upload File"></p>
 </form>
 </div>
+<div class="card-footer bg-black text-white">Sorry, some things aren't working yet.</div>
 </div>
 
 <div class="card mb-3 danger">
@@ -58,6 +60,7 @@ content-type: text/html
 <p><input type="submit" class="btn btn-danger" value="Upload File"></p>
 </form>
 </div>
+<div class="card-footer bg-black text-white">Sorry, some things aren't working yet.</div>
 </div>
 </div>
 </div>

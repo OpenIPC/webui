@@ -48,7 +48,10 @@ for name in $data; do
     fi
   fi
 done
-
-killall -1 majestic
 %>
+
+<p><a href="/cgi-bin/majestic.cgi">Go back to Majestic settings page.</a></p>
+
 <%in _footer.cgi %>
+
+<% killall -1 majestic %>

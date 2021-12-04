@@ -106,4 +106,6 @@ echo "</div></div></div>"
 <p class="mb-0">If you ever need to restore the original configuration, you can do it <a href="/cgi-bin/firmware.cgi">from this page</a>.</p>
 </div>
 
+<p><a href="/cgi-bin/majestic-diff.cgi">See how recent configuration differs from default one.</a></p>
+
 <%in _footer.cgi %>

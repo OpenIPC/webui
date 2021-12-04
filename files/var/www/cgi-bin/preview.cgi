@@ -8,12 +8,12 @@ content-type: text/html
 <img id="preview" src="http://<%= $ipaddr %>/image.jpg" alt="" class="img-fluid border" width="1600" height="900">
 
 <ul class="nav nav-pills justify-content-center">
- <li class="nav-item"><a class="nav-link" href="">🡄</a></li>
- <li class="nav-item"><a class="nav-link" href="">🡆</a></li>
- <li class="nav-item"><a class="nav-link" href="">🡅</a></li>
- <li class="nav-item"><a class="nav-link" href="">🡇</a></li>
- <li class="nav-item"><a class="nav-link" href="">+</a></li>
- <li class="nav-item"><a class="nav-link" href="">-</a></li>
+ <li class="nav-item"><a class="nav-link" href=""><img src="/img/arrow-up-square.svg" alt="Pan up" width="32" height="32"></a></li>
+ <li class="nav-item"><a class="nav-link" href=""><img src="/img/arrow-down-square.svg" alt="Pan down" width="32" height="32"></i></a></li>
+ <li class="nav-item"><a class="nav-link" href=""><img src="/img/arrow-left-square.svg" alt="Pan left" width="32" height="32"></a></li>
+ <li class="nav-item"><a class="nav-link" href=""><img src="/img/arrow-right-square.svg" alt="Pan right" width="32" height="32"></i></a></li>
+ <li class="nav-item"><a class="nav-link" href=""><img src="/img/dash-square.svg" alt="Zoom out" width="32" height="32"></a></li>
+ <li class="nav-item"><a class="nav-link" href=""><img src="/img/plus-square.svg" alt="Zoom in" width="32" height="32"></a></li>
 </ul>
 
 <script>

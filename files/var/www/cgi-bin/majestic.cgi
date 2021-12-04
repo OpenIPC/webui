@@ -102,7 +102,7 @@ echo "</div></div></div>"
 <p><input type="submit" class="btn btn-primary" value="Save Changes"></p>
 </form>
 
-<div class="alert alert-danger">
+<div class="alert alert-warning">
 <p class="mb-0">If you ever need to restore the original configuration, you can do it <a href="/cgi-bin/firmware.cgi">from this page</a>.</p>
 </div>
 

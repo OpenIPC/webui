@@ -6,6 +6,15 @@ content-type: text/html
 <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
 
 <div class="col">
+
+<div class="card mb-0">
+<h5 class="card-header">Reboot camera</h5>
+<div class="card-body"><p><a class="btn btn-danger" href="/cgi-bin/reboot.cgi">Reboot</a></p></div>
+</div>
+
+</div>
+<div class="col">
+
 <div class="card h-100 mb-3">
 <h5 class="card-header">Camera Settings</h5>
 <div class="card-body">
@@ -37,15 +46,6 @@ content-type: text/html
 </form>
 </div>
 </div>
-</div>
-
-<div class="col">
-  <div class="card mb-0 danger">
-    <h5 class="card-header">Reboot camera</h5>
-      <div class="card-body">
-      <p><a class="btn btn-danger" href="/cgi-bin/reboot.cgi">Reboot</a></p>
-    </div>
-  </div>
 </div>
 
 </div>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap");
 
 :root {
     --bs-font-monospace: "IBM Plex Mono",SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
@@ -6,37 +6,43 @@
     --bs-blue: #4c60d8;
 }
 body > nav.navbar {
-    background: var(--bs-blue);
-    color: #ffffff;
+	background: var(--bs-blue);
+	color: #ffffff;
 }
 .navbar-brand {
-    font-weight: 700;
+	font-weight: 700;
 }
 body > footer > .container {
-    border-top: solid 1px lightgray;
-    font-size: 0.8rem;
-    padding-top: 1rem;
-    text-align: right;
+	border-top: solid 1px #d3d3d3;
+	font-size: 0.8rem;
+	padding-top: 1rem;
 }
 body > main > .container > h2 {
-    font-weight: 700;
-    color: var(--bs-blue);
-    margin: 1rem 0 1.5rem;
+	font-weight: 700;
+	color: var(--bs-blue);
+	margin: 1rem 0 1.5rem;
 }
 .card-header {
-    border-bottom: solid 1px var(--bs-blue);
-    color: var(--bs-blue);
-    /*font-size: 1rem;*/
-    font-weight: 700;
-    text-align: right;
-    text-transform: uppercase;
+	border-bottom: solid 1px var(--bs-blue);
+	color: var(--bs-blue);
+	/*font-size: 1rem;*/
+	font-weight: 700;
+	text-align: right;
+	text-transform: uppercase;
 }
 .card:not(.danger) .card-body {
-    background: #4c60d811;
+	background: #4c60d811;
 }
 .card-body > div.row {
     font-size: 0.9rem;
     padding: 0.5rem 0 0;
+}
+.card-body pre {
+    background: #4c60d812;
+    font-size: 0.86rem;
+    margin: 0.5rem 0 1rem;
+    max-height: 10rem;
+    padding: 0.5rem 1rem;
 }
 .card.danger .card-header {
     border-bottom-color: var(--bs-danger);
@@ -49,11 +55,14 @@ form label {
     font-weight: 500;
 }
 form .row:not(:first-of-type) {
-    border-top: solid 1px white;
+    border-top: solid 1px #ffffff;
     padding-top: 0.5rem;
 }
 form .input-group-text {
     min-width: 4rem;
+}
+form .form-control::placeholder {
+    color: #c2c2d9;
 }
 form .hint {
     font-size: 0.8rem;

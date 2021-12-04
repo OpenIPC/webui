@@ -5,7 +5,7 @@ content-type: text/html
 <%in _header.cgi %>
 <h2>Camera preview</h2>
 
-<img id="preview" src="http://<%= $ipaddr %>/image.jpg" alt="" class="img-fluid border" width="640" height="480">
+<img id="preview" src="http://<%= $ipaddr %>/image.jpg" alt="" class="img-fluid mb-3" width="1280" height="720">
 
 <ul class="nav nav-pills justify-content-center">
  <li class="nav-item"><a class="nav-link" href=""><img src="/img/arrow-up-square.svg" alt="Pan up" width="32" height="32"></a></li>
@@ -18,12 +18,10 @@ content-type: text/html
 
 <script>
 function updatePreview() {
-  let img = new Image();
-  img.addEventListener('ready', () => document.getElementById('preview').src = img.src);
-  img.src = "http://<%= $ipaddr %>/image.jpg?" + Date.now();
-  console.log('Reading image from ' + img.src);
+  document.getElementById('preview').src = "http://<%= $ipaddr %>/image.jpg?t=" + Date.now();
   setTimeout(updatePreview, 3500);
 }
+
 window.onload = updatePreview;
 </script>
 

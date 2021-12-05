@@ -7,4 +7,3 @@ content-type: text/html
 <% echo "$(diff /rom/etc/majestic.yaml /etc/majestic.yaml 2>&1)" %>
 </pre>
 <%in _footer.cgi %>
-

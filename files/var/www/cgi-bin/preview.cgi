@@ -1,19 +1,24 @@
 #!/usr/bin/haserl
 content-type: text/html
 
-<% ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1) %>
+<%
+button() {
+  img=$1 ; alt=$2
+  echo "<li class=\"nav-item\"><a class=\"nav-link\" href=\"\"><img src=\"/img/${img}\" alt=\"${alt}\" width=\"32\" height=\"32\"></a></li>"
+}
+%>
 <%in _header.cgi %>
 <h2>Camera preview</h2>
 
 <img id="preview" src="http://<%= $ipaddr %>/image.jpg" alt="" class="img-fluid mb-3" width="1280" height="720">
 
-<ul class="nav nav-pills justify-content-center">
- <li class="nav-item"><a class="nav-link" href=""><img src="/img/arrow-up-square.svg" alt="Pan up" width="32" height="32"></a></li>
- <li class="nav-item"><a class="nav-link" href=""><img src="/img/arrow-down-square.svg" alt="Pan down" width="32" height="32"></i></a></li>
- <li class="nav-item"><a class="nav-link" href=""><img src="/img/arrow-left-square.svg" alt="Pan left" width="32" height="32"></a></li>
- <li class="nav-item"><a class="nav-link" href=""><img src="/img/arrow-right-square.svg" alt="Pan right" width="32" height="32"></i></a></li>
- <li class="nav-item"><a class="nav-link" href=""><img src="/img/dash-square.svg" alt="Zoom out" width="32" height="32"></a></li>
- <li class="nav-item"><a class="nav-link" href=""><img src="/img/plus-square.svg" alt="Zoom in" width="32" height="32"></a></li>
+<ul class="nav nav-pills justify-content-center mb-4">
+<% button "arrow-up-square.svg" "Pan up" %>
+<% button "arrow-down-square.svg" "Pan down" %>
+<% button "arrow-left-square.svg" "Pan left" %>
+<% button "arrow-right-square.svg" "Pan right" %>
+<% button "dash-square.svg" "Zoom out" %>
+<% button "plus-square.svg" "Zoom in" %>
 </ul>
 
 <script>

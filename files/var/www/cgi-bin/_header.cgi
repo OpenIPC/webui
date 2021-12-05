@@ -1,4 +1,7 @@
-<% export PATH=/bin:/sbin:/usr/bin:/usr/sbin %>
+<%
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>

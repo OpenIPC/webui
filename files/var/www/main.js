@@ -6,6 +6,20 @@ function $$(n) {
     return document.querySelectorAll(n);
 }
 
+let tock = 0;
+let max = 0;
+
+function tick() {
+    tock += 1;
+    $('#timer').value = tock;
+    (tock === max) ? window.location.replace("/") : setTimeout(tick, 1000);
+}
+
+function engage() {
+    max = $('#timer').max;
+    setTimeout(tick, 1000);
+}
+
 (function () {
     // const patterns = {
     //     a: {

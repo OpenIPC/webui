@@ -4,7 +4,7 @@ content-type: text/html
 <%
 interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
-hostname="Hostname: openipc-$(ipctool --chip_id)-$(ipctool --sensor_id | awk -F '_' '{print $1}')"
+hostname="Hostname: $(hostname -s)"
 openipc_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 2>&1)
 [ ! -z "$openipc_version" ] && openipc_version="<br>Version: ${openipc_version}"
 soc=$(ipcinfo --chip_id 2>&1)

@@ -14,10 +14,12 @@ if [ ! -z "$FORM_hostname" ]; then
       echo "</div>"
   else
     echo -n "<div class=\"alert alert-success mb-3 pre\">"
-    echo "<b># echo \"${FORM_hostname}\" > /etc/hostname</b><br>"
-    echo "$(echo ${FORM_hostname} > /etc/hostname 2>&1)"
-    echo "<b># sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts</b><br>"
-    echo "$(sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts 2>&1)"
+    echo "<b># echo ${FORM_hostname} > /etc/hostname</b>"
+    echo "$(echo ${FORM_hostname} > /etc/hostname 2>&1 && echo "OK")"
+    echo "<b># echo hostname ${FORM_hostname}</b>"
+    echo "$(hostname ${FORM_hostname} 2>&1 && echo "OK")"
+    echo "<b># sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts</b>"
+    echo "$(sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts 2>&1 && echo "OK")"
     echo "</div>"
   fi
 fi
@@ -30,8 +32,8 @@ if [ ! -z "$FORM_password" ]; then
     echo "</div>"
   else
     echo -n "<div class=\"alert alert-secondary mb-3 pre\">"
-    echo "<b># sed -i s/:admin:.*/:admin:${FORM_password}/ /etc/httpd.conf</b><br>"
-    echo "$(sed -i s/:admin:.*/:admin:${FORM_password}/ /etc/httpd.conf 2>&1)"
+    echo "<b># sed -i s/:admin:.*/:admin:${FORM_password}/ /etc/httpd.conf</b>"
+    echo "$(sed -i s/:admin:.*/:admin:${FORM_password}/ /etc/httpd.conf 2>&1 && echo "OK")"
     echo "</div>"
   fi
 fi
@@ -44,8 +46,8 @@ if [ ! -z "$FORM_ipaddr" ]; then
     echo "</div>"
   else
     echo -n "<div class=\"alert alert-success mb-3 pre\">"
-    echo "<b># yaml-cli -s .network.lan.ipaddr ${FORM_ipaddr}</b><br>"
-    echo "$(yaml-cli -s .network.lan.ipaddr ${FORM_ipaddr} 2>&1)"
+    echo "<b># yaml-cli -s .network.lan.ipaddr ${FORM_ipaddr}</b>"
+    echo "$(yaml-cli -s .network.lan.ipaddr ${FORM_ipaddr} 2>&1 && echo "OK")"
     echo "</div>"
   fi
 fi
@@ -58,8 +60,8 @@ if [ ! -z "$FORM_netmask" ]; then
     echo "</div>"
   else
     echo -n "<div class=\"alert alert-success mb-3 pre\">"
-    echo "<b># yaml-cli -s .network.lan.netmask ${FORM_netmask}</b><br>"
-    echo "$(yaml-cli -s .network.lan.netmask ${FORM_netmask} 2>&1)"
+    echo "<b># yaml-cli -s .network.lan.netmask ${FORM_netmask}</b>"
+    echo "$(yaml-cli -s .network.lan.netmask ${FORM_netmask} 2>&1 && echo "OK")"
     echo "</div>"
   fi
 fi
@@ -67,11 +69,11 @@ if [ ! -z "$FORM_remote" ]; then
   echo "<h5>Updating VTUNd Server</h5>"
   echo -n "<div class=\"alert alert-success mb-3 pre\">"
   if [ "$FORM_remote" = "__delete" ]; then
-    echo "<b># yaml-cli -d .openvpn.vpn1.remote</b><br>"
-    echo "$(yaml-cli -d .openvpn.vpn1.remote)"
+    echo "<b># yaml-cli -d .openvpn.vpn1.remote</b>"
+    echo "$(yaml-cli -d .openvpn.vpn1.remote && echo "OK")"
   else
-    echo "<b># yaml-cli -s .openvpn.vpn1.remote ${FORM_remote}</b><br>"
-    echo "$(yaml-cli -s .openvpn.vpn1.remote ${FORM_remote} 2>&1)"
+    echo "<b># yaml-cli -s .openvpn.vpn1.remote ${FORM_remote}</b>"
+    echo "$(yaml-cli -s .openvpn.vpn1.remote ${FORM_remote} 2>&1 && echo "OK")"
   fi
   echo "</div>"
 fi

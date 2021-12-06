@@ -15,6 +15,7 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
 <h2>Network Administration</h2>
 
 <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+
   <div class="col">
     <div class="card h-100 mb-3">
       <div class="card-header">Settings</div>
@@ -38,6 +39,22 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
               <input type="password" class="form-control" name="password" id="password" value="<%= $password %>" placeholder="K3wLHaZk3R!">
             </div>
           </div>
+          <div class="row">
+            <div class="col mt-3 mb-0">
+              <input type="submit" class="btn btn-primary" value="Save Settings">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card h-100 mb-3">
+      <div class="card-header">Settings</div>
+      <div class="card-body">
+        <form action="/cgi-bin/network-update.cgi" method="post">
+          <input type="hidden" name="action" value="update">
             <div class="row">
               <div class="col-md-5"><label for="ipaddr" class="form-label">IP Address</label>
             </div>
@@ -68,10 +85,13 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
           </div>
         </form>
       </div>
+      <div class="card-footer bg-black text-white">Sorry, some things aren't working yet.</div>
     </div>
   </div>
+</div>
 
-  <div class="col">
+<div class="row">
+  <div class="col-12 mb-3">
     <div class="card h-100 mb-3">
       <div class="card-header">Network Address</div>
       <div class="card-body">
@@ -80,9 +100,7 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
       </div>
     </div>
   </div>
-</div>
 
-<div class="row">
   <div class="col-12 mb-3">
     <div class="card h-100 mb-3">
       <div class="card-header">Network Routing</div>

@@ -5,7 +5,7 @@ content-type: text/html
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 button() {
   img=$1; alt=$2; id=$(echo "${alt// /-}" | tr '[:upper:]' '[:lower:]')
-  echo "<li class=\"nav-item\"><a class=\"nav-link\" id=\"${id}\" href=\"\"><img src=\"/img/${img}\" alt=\"${alt}\" width=\"32\" height=\"32\"></a></li>"
+  echo "<a id=\"${id}\" href=\"\"><img src=\"/img/${img}\" alt=\"${alt}\" width=\"32\" height=\"32\"></a>"
 }
 snapshot() {
   echo "<img src=\"http://${ipaddr}/image.jpg\" class=\"img-fluid\" width=\"1280\" height=\"720\" alt=\"\">"
@@ -17,20 +17,20 @@ videomp4() {
 <%in _header.cgi %>
 <h2>Camera Preview</h2>
 
-<div class="row">
-  <div class="col"><% snapshot %></div>
+<div class="row preview">
+  <div class="col position-relative">
+    <% snapshot %>
+    <div class="control">
+      <% button "arrow-up-square.svg" "Pan up" %>
+      <% button "dash-square.svg" "Zoom out" %>
+      <% button "arrow-left-square.svg" "Pan left" %>
+      <% button "camera.svg" "Source" %>
+      <% button "arrow-right-square.svg" "Pan right" %>
+      <% button "arrow-down-square.svg" "Pan down" %>
+      <% button "plus-square.svg" "Zoom in" %>
+    </div>
+  </div>
 </div>
-
-<ul class="nav nav-pills justify-content-center mb-4">
-  <%# button "camera.svg" "Snapshot" %>
-  <%# button "camera-reels.svg" "Video" %>
-  <% button "arrow-up-square.svg" "Pan up" %>
-  <% button "arrow-down-square.svg" "Pan down" %>
-  <% button "arrow-left-square.svg" "Pan left" %>
-  <% button "arrow-right-square.svg" "Pan right" %>
-  <% button "dash-square.svg" "Zoom out" %>
-  <% button "plus-square.svg" "Zoom in" %>
-</ul>
 
 <h3>Available Endpoints</h3>
 <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">

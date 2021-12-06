@@ -1,6 +1,4 @@
-<%
-export PATH=/bin:/sbin:/usr/bin:/usr/sbin
-%>
+<% export PATH=/bin:/sbin:/usr/bin:/usr/sbin %>
 <!DOCTYPE html>
 <html lang="en">
 <head>

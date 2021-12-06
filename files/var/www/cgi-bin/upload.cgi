@@ -1,60 +1,45 @@
-#!/usr/bin/haserl --upload-limit=4096 --upload-target=/tmp/ --upload-dir=/tmp/
-<?
-  export PATH=/bin:/sbin:/usr/bin:/usr/sbin
-  action=$FORM_action
-  upfile=$FORM_upfile
-  #
-  echo "Content-type: text/html"
-  echo
-  echo "<html><body>"
-  echo
-  echo "Probe write ${action} file" | logger -t microbe-web
-  echo
-  case $action in
-    kernel)
-      if [ -r $upfile ]; then
-        fsize="$(wc -c $upfile | awk '{print $1}')"
-        if [ $fsize -gt "1500" ]; then
-          echo "<br><br><br><br><br><center><h1><font color="red">Error: file is so big !<font></h1></center>"
-        else
-          if cp $upfile /etc/openvpn/ca.crt 2>/dev/null; then
-            ok=1
-            rm $upfile
-          else
-            echo "<br><br><br><br><br><center><h1><font color="red">Error: file not writing to flash !<font></h1></center>"
-          fi
-        fi
-      else
-        echo "<br><br><br><br><br><center><h1><font color="red">Error: file not found !<font></h1></center>"
-      fi
-      if [ $ok ]; then
-        echo "<br><br><br><br><br><center><h1>We try to upload...</h1></center>"
-      fi
+#!/usr/bin/haserl --upload-limit=6810 --upload-dir=/tmp
+content-type: text/html
+
+<%in _header.cgi %>
+<h2>Uploading <%= $FORM_action %> file</h2>
+<%
+case $FORM_action in
+  kernel)
+    maxsize=2097152
+    target="/etc/openvpn/ca.crt"
+    magicnum="27051956"
     ;;
-    rootfs)
-      if [ -r $upfile ]; then
-        fsize="$(wc -c $upfile | awk '{print $1}')"
-        if [ $fsize -gt "5000" ]; then
-          echo "<br><br><br><br><br><center><h1><font color="red">Error: file is so big !<font></h1></center>"
-        else
-          if cp $upfile /etc/openvpn/cert.crt 2>/dev/null; then
-            ok=1
-            rm $upfile
-          else
-            echo "<br><br><br><br><br><center><h1><font color="red">Error: file not writing to flash !<font></h1></center>"
-          fi
-        fi
-      else
-        echo "<br><br><br><br><br><center><h1><font color="red">Error: file not found !<font></h1></center>"
-      fi
-      if [ $ok ]; then
-        echo "<br><br><br><br><br><center><h1>We try to upload...</h1></center>"
-      fi
+  rootfs)
+    maxsize=5242880
+    target="/etc/openvpn/cert.crt"
+    magicnum="68737173"
     ;;
-  esac
-  echo
-  echo "<script language=javascript>setTimeout('window.location=\"/cgi-bin/index.cgi\"',1000);</script>"
-  echo
-  echo "</body>"
-  echo "</html>"
-?>
+esac
+
+err=""
+if [ -z "$FORM_upfile_name"  ]; then
+  err="no file found! Did you forget to upload?"
+elif [ ! -r "$FORM_upfile" ]; then
+  err="cannot read file \"${FORM_upfile_name}\" from \"${FORM_upfile}\"!"
+elif [ "$(wc -c "$FORM_upfile" | awk '{print $1}')" -gt "$maxsize" ]; then
+  err="file \"${FORM_upfile_name}\" is too large! Its size is $(wc -c "$FORM_upfile" | awk '{print $1}') bytes, but it should be ${maxsize} bytes or less."
+elif [ "$magicnum" -ne "$(xxd -p -l 4 "$FORM_upfile")" ]; then
+  err="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 4 "$FORM_upfile") != $magicnum"
+fi
+
+if [ -z "$err" ]; then
+  echo "<pre># cp \"$FORM_upfile\" \"$target\" 2>&1</pre>"
+  if cp "$FORM_upfile" "$target" 2>&1
+  then
+    rm "$FORM_upfile"
+    echo "<h3>Trying to upload...</h3>"
+  else
+    echo "<div class=\"alert alert-danger\"><b>Error: unable to write file \"${FORM_upfile_name}\" to flash!</b></div>"
+  fi
+else
+  echo "<div class=\"alert alert-danger\"><b>Error: ${err}</b></div>"
+fi
+%>
+<p><a href="/cgi-bin/firmware.cgi">Go back to firmware page</a></p>
+<%in _footer.cgi %>

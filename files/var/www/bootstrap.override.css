@@ -1,0 +1,99 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap");
+
+:root {
+    --bs-font-monospace: "IBM Plex Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --bs-body-font-family: var(--bs-font-monospace);
+    --bs-blue: #4c60d8;
+}
+body > nav.navbar {
+    background: var(--bs-blue);
+    color: #ffffff;
+}
+body > header {
+    background: var(--bs-blue);
+}
+.navbar-brand {
+    font-weight: 700;
+}
+body > footer > .container {
+    border-top: solid 1px #d3d3d3;
+    font-size: 0.8rem;
+    padding-top: 1rem;
+}
+body > main > .container > h2 {
+    font-weight: 700;
+    color: var(--bs-blue);
+    margin: 1rem 0 1.5rem;
+}
+.card-header {
+    border-bottom: solid 1px var(--bs-blue);
+    color: var(--bs-blue);
+    /*font-size: 1rem;*/
+    font-weight: 700;
+    text-align: right;
+    text-transform: uppercase;
+}
+.card:not(.danger) .card-body {
+    background: #4c60d811;
+}
+.card-body > div.row {
+    font-size: 0.9rem;
+    padding: 0.5rem 0 0;
+}
+.card-body pre {
+    background: #4c60d812;
+    font-size: 0.86rem;
+    margin: 0.5rem 0 1rem;
+    /*max-height: 10rem;*/
+    padding: 0.5rem 1rem;
+}
+.card.danger .card-header {
+    border-bottom-color: var(--bs-danger);
+    color: var(--bs-danger);
+}
+.pre {
+    white-space: pre;
+}
+form label {
+    font-weight: 500;
+}
+form .row:not(:first-of-type) {
+    border-top: solid 1px #ffffff;
+    padding-top: 0.5rem;
+}
+form .input-group-text {
+    min-width: 4rem;
+}
+form .form-control::placeholder {
+    color: #c2c2d9;
+}
+form .hint {
+    font-size: 0.8rem;
+    font-style: italic;
+    margin-bottom: 0;
+}
+form .range-value {
+    text-align: right;
+}
+.x-small {
+    font-size: 0.75em;
+}
+.preview .control {
+    display: grid;
+    width: 10rem;
+    margin: 2rem auto;
+    gap: 1rem;
+    align-self: center;
+}
+.preview a img {
+    filter: sepia(50%) hue-rotate(231deg) saturate(800%) invert(75%) brightness(100%) contrast(100%) drop-shadow(1px 1px 3px rgb(255,255,255));
+    height: 2.5rem;
+    width: 2.5rem;
+}
+.preview #pan-up    { grid-column-start: 2; grid-column-end: 2; grid-row-start: 1; grid-row-end: 1; }
+.preview #pan-left  { grid-column-start: 1; grid-column-end: 1; grid-row-start: 2; grid-row-end: 2; }
+.preview #pan-right { grid-column-start: 3; grid-column-end: 3; grid-row-start: 2; grid-row-end: 2; }
+.preview #pan-down  { grid-column-start: 2; grid-column-end: 3; grid-row-start: 3; grid-row-end: 3; }
+.preview #source    { grid-column-start: 2; grid-column-end: 2; grid-row-start: 2; grid-row-end: 2; }
+.preview #zoom-in   { grid-column-start: 5; grid-column-end: 5; grid-row-start: 1; grid-row-end: 1; }
+.preview #zoom-out  { grid-column-start: 5; grid-column-end: 5; grid-row-start: 3; grid-row-end: 3; }

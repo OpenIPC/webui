@@ -10,6 +10,7 @@ netmask=$(yaml-cli -g .network.lan.netmask)
 netmask_eth0=$(ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $7}')
 password=$(awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf)
 vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
+timezone=$(cat /etc/TZ)
 %>
 <%in _header.cgi %>
 <h2>Network Administration</h2>
@@ -37,6 +38,14 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
             </div>
             <div class="col-md-7 mb-3">
               <input type="password" class="form-control" name="password" id="password" value="<%= $password %>" placeholder="K3wLHaZk3R!">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5">
+              <label for="timezone" class="form-label">Timezone</label>
+            </div>
+            <div class="col-md-7 mb-3">
+              <input type="text" class="form-control" name="timezone" id="timezone" value="<%= $timezone %>" placeholder="GMT+2">
             </div>
           </div>
           <div class="row">

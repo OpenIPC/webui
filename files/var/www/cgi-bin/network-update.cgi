@@ -77,6 +77,20 @@ if [ ! -z "$FORM_remote" ]; then
   fi
   echo "</div>"
 fi
+if [ ! -z "$FORM_timezone" ]; then
+  echo "<h5>Updating Timezone</h5>"
+  if [ "$(cat /etc/TZ)" = "$FORM_timezone" ]
+  then
+    echo "<div class=\"alert alert-warning mb-3\">"
+    echo "Same Timezone. Skipping."
+    echo "</div>"
+  else
+    echo -n "<div class=\"alert alert-success mb-3 pre\">"
+    echo "<b># echo ${FORM_timezone} > /etc/TZ</b>"
+    echo "$(echo ${FORM_timezone} > /etc/TZ 2>&1 && echo "OK")"
+    echo "</div>"
+  fi
+fi
 %>
 <div class="alert alert-danger mt-5 mb-3">
   <p>Restart needed to apply changes.</p>

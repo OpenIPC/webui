@@ -15,7 +15,7 @@ if [ ! -z "$FORM_hostname" ]; then
   else
     echo -n "<div class=\"alert alert-success mb-3 pre\">"
     echo "<b># echo \"${FORM_hostname}\" > /etc/hostname</b><br>"
-    echo "$(echo \"${FORM_hostname}\" > /etc/hostname 2>&1)"
+    echo "$(echo ${FORM_hostname} > /etc/hostname 2>&1)"
     echo "<b># sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts</b><br>"
     echo "$(sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts 2>&1)"
     echo "</div>"

@@ -17,11 +17,11 @@ if [ "$etag" = "$gh_etag" ]; then
 <script>window.onload = engage;</script>
 <pre>
 <%
-curl -k -L -o /tmp/microbe-dev.zip https://github.com/OpenIPC/microbe-web/archive/refs/heads/themactep-dev.zip 2>&1
-unzip -o -d /tmp /tmp/microbe-dev.zip 2>&1
-cp -av /tmp/microbe-web-themactep-dev/files/var/www /var/ 2>&1
-rm -rf /tmp/microbe-dev.zip /tmp/microbe-web-themactep-dev 2>&1
-echo "$gh_etag" > "$etag_file" 2>&1
+curl -k -L -o /tmp/microbe-dev.zip https://github.com/OpenIPC/microbe-web/archive/refs/heads/themactep-dev.zip
+unzip -o -d /tmp /tmp/microbe-dev.zip
+cp -av /tmp/microbe-web-themactep-dev/files/var/www /var/
+rm -rf /tmp/microbe-dev.zip /tmp/microbe-web-themactep-dev
+echo "$gh_etag" > "$etag_file"
 fi
 %>
 </pre>

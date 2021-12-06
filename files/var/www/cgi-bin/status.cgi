@@ -4,7 +4,15 @@ content-type: text/html
 <%
 interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
-top=$(top -n1)
+hostname="Hostname: openipc-$(ipctool --chip_id)-$(ipctool --sensor_id | awk -F '_' '{print $1}')"
+openipc_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 2>&1)
+[ ! -z "$openipc_version" ] && openipc_version="<br>Version: ${openipc_version}"
+soc=$(ipcinfo --chip_id 2>&1)
+[ ! -z "$soc" ] && soc="<br>SoC: ${soc}"
+sensor=$(ipcinfo --long_sensor 2>&1)
+[ ! -z "$sensor" ] && sensor="<br>Sensor: ${sensor}"
+soc_temp=$(ipcinfo --temp 2>&1)
+[ ! -z "$soc_temp" ] && soc_temp="<br>Temp.: $soc_temp°C"
 %>
 <%in _header.cgi %>
 <h2>Device Status</h2>
@@ -14,12 +22,8 @@ top=$(top -n1)
     <div class="card h-100">
       <div class="card-header">Device Info</div>
       <div class="card-body">
-        <h3 class="mb-3"><% echo "openipc-$(ipctool --chip_id)-$(ipctool --sensor_id | awk -F '_' '{print $1}')" %></h3>
         <b># ipcinfo</b>
-        <pre>Version: <%= $(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2) %>
-SoC: <%= $(ipcinfo --chip_id) %>
-Temperature: <%= $(ipcinfo --temp) %>°C
-Sensor: <%= $(ipcinfo --long_sensor) %></pre>
+        <pre><%= $hostname %><% echo -n "$openipc_version" %><% echo -n "$soc" %><% echo -n "$sensor" %><% echo -n "$soc_temp" %></pre>
       </div>
     </div>
   </div>
@@ -32,17 +36,6 @@ Sensor: <%= $(ipcinfo --long_sensor) %></pre>
         <pre><% /usr/bin/uptime %></pre>
         <b># cat /proc/meminfo | grep Mem</b>
         <pre><% cat /proc/meminfo | grep Mem %></pre>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col">
-    <div class="card mb-3">
-      <div class="card-header">Top Processes</div>
-      <div class="card-body">
-        <pre><%= "$(echo "$top" | sed 's/\x1b\[[0-9;]*[a-zA-Z]//g')" %></pre>
       </div>
     </div>
   </div>

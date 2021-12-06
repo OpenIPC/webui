@@ -1,6 +1,9 @@
 #!/usr/bin/haserl
 content-type: text/html
 
+<%
+mac=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | uniq)
+%>
 <%in _header.cgi %>
 <h2>Global Settings</h2>
 
@@ -25,6 +28,7 @@ content-type: text/html
 </div>
 <div class="col-md-7">
 <input type="text" class="form-control" name="hostname" id="hostname" value="<% hostname -s %>" placeholder="device-name">
+<i class="hint">Make hostname unique using MAC address information (<%= $mac %>).</i>
 </div>
 </div>
 <div class="row mb-3">

@@ -20,6 +20,10 @@ if [ ! -z "$FORM_hostname" ]; then
     echo "$(hostname ${FORM_hostname} 2>&1 && echo "OK")"
     echo "<b># sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts</b>"
     echo "$(sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts 2>&1 && echo "OK")"
+    echo "<b># killall udhcpc</b>"
+    echo "$(killall udhcpc && echo "OK")"
+    echo "<b># udhcpc -x hostname:${FORM_hostname} -T 1 -t 5 -R -b -O search</b>"
+    echo "$(udhcpc -x hostname:${FORM_hostname} -T 1 -t 5 -R -b -O search > /dev/null 2>&1 && echo "OK")"
     echo "</div>"
   fi
 fi

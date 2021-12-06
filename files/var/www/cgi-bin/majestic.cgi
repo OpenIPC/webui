@@ -6,7 +6,7 @@ content-type: text/html
 <h2>Majestic Settings</h2>
 
 <div class="alert alert-warning">
-<p class="mb-0">If you ever need to restore the original configuration, you can do it <a href="/cgi-bin/firmware.cgi">from this page</a>.</p>
+<p class="mb-0">If you ever need to restore the original configuration, you can do it <a href="/cgi-bin/updates.cgi">from this page</a>.</p>
 </div>
 
 <form action="/cgi-bin/majestic-update.cgi" method="post">

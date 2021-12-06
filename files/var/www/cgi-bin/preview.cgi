@@ -8,7 +8,7 @@ button() {
   echo "<a id=\"${id}\" href=\"\"><img src=\"/img/${img}\" alt=\"${alt}\"></a>"
 }
 snapshot() {
-  echo "<img src=\"http://${ipaddr}/image.jpg\" class=\"img-fluid\" width=\"1280\" height=\"720\" alt=\"\">"
+  echo "<img id=\"snapshot\" src=\"http://${ipaddr}/image.jpg\" class=\"img-fluid\" width=\"1280\" height=\"720\" alt=\"\">"
 }
 videomp4() {
   echo "<video src=\"http://${ipaddr}/video.mp4\" class=\"img-fluid\" width=\"1280\" height=\"720\"></video>"
@@ -148,24 +148,11 @@ videomp4() {
 </div>
 
 <script>
-function updatePreview() {
-  document.getElementById('preview').src = "http://<%= $ipaddr %>/image.jpg?t=" + Date.now();
-  setTimeout(updatePreview, 3500);
+function updateSnapshot() {
+  document.getElementById('snapshot').src = "http://<%= $ipaddr %>/image.jpg?t=" + Date.now();
+  setTimeout(updateSnapshot, 3500);
 }
-
-#window.onload = () => {
-#  $('#snapshot').addEventListener('click', function(ev) {
-#    $$('.video').forEach(el => el.classList.add('d-none'));
-#    $$('.snapshot').forEach(el => el.classList.remove('d-none'));
-#    ev.preventDefault();
-#  });
-#  $('#video').addEventListener('click', function(ev) {
-#    $$('.snapshot').forEach(el => el.classList.add('d-none'));
-#    $$('.video').forEach(el => el.classList.remove('d-none'));
-#    ev.preventDefault();
-#  });
-#}
-window.onload = updatePreview;
+window.onload = updateSnapshot;
 </script>
 
 <%in _footer.cgi %>

@@ -29,7 +29,8 @@ ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 <li class="nav-item"><a class="nav-link" href="/cgi-bin/firmware.cgi">Firmware</a></li>
 <li class="nav-item"><a class="nav-link" href="/cgi-bin/index.cgi">Global Settings</a></li>
 <li class="nav-item"><a class="nav-link" href="/cgi-bin/majestic.cgi">Majestic Settings</a></li>
-<li class="nav-item"><a class="nav-link" href="/cgi-bin/monitor.cgi">Monitoring Tools</a></li>
+<li class="nav-item"><a class="nav-link" href="/cgi-bin/status.cgi">Information</a></li>
+<li class="nav-item"><a class="nav-link" href="/cgi-bin/tools.cgi">Monitoring Tools</a></li>
 <li class="nav-item"><a class="nav-link" href="/cgi-bin/preview.cgi">Preview</a></li>
 </ul>
 </div>

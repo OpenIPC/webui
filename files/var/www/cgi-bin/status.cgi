@@ -16,7 +16,7 @@ top=$(top -n1)
       <div class="card-body">
         <h3 class="mb-3"><% echo "openipc-$(ipctool --chip_id)-$(ipctool --sensor_id | awk -F '_' '{print $1}')" %></h3>
         <b># ipcinfo</b>
-        <pre>Version: <%= $(cat /etc/os-release | grep "VERSION_ID" | cut -d= -f2) %>
+        <pre>Version: <%= $(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2) %>
 SoC: <%= $(ipcinfo --chip_id) %>
 Temperature: <%= $(ipcinfo --temp) %>°C
 Sensor: <%= $(ipcinfo --long_sensor) %></pre>

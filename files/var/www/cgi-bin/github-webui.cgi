@@ -13,7 +13,7 @@ if [ "$etag" = "$gh_etag" ]; then
 <h2>It is the same version. Nothing to update.</h2>
 <% else %>
 <h2>Downloading latest Web UI. Please wait...</h2>
-<progress id="timer" max="120" value="0" class="w-100"></progress>
+<progress id="timer" max="90" value="0" class="w-100"></progress>
 <script>window.onload = engage;</script>
 <%
   debug_microbe

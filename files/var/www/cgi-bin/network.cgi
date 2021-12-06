@@ -76,7 +76,7 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
       <div class="card-header">Network Address</div>
       <div class="card-body">
         <b># ip address</b>
-        <pre><% ip address %></pre>
+        <pre><% ip address | sed "s/</\&lt;/g" | sed "s/>/\&gt;/g" %></pre>
       </div>
     </div>
   </div>

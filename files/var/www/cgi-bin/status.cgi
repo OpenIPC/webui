@@ -41,4 +41,15 @@ soc_temp=$(ipcinfo --temp 2>&1)
   </div>
 </div>
 
+<div class="row">
+  <div class="col">
+    <div class="card mb-3">
+      <div class="card-header">Top 20 Processes</div>
+      <div class="card-body">
+        <pre><%= "$(ps aux | sort -nrk 3,3 | head -n 20)" %></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
 <%in _footer.cgi %>

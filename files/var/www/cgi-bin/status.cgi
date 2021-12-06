@@ -7,7 +7,7 @@ ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 top=$(top -n1)
 %>
 <%in _header.cgi %>
-<h2>Camera Information and Status</h2>
+<h2>Device Status</h2>
 
 <div class="row">
   <div class="col mb-3">

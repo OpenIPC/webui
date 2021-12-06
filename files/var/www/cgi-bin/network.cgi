@@ -55,8 +55,9 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
       <div class="card-body">
         <form action="/cgi-bin/network-update.cgi" method="post">
           <input type="hidden" name="action" value="update">
-            <div class="row">
-              <div class="col-md-5"><label for="ipaddr" class="form-label">IP Address</label>
+          <div class="row">
+            <div class="col-md-5">
+              <label for="ipaddr" class="form-label">IP Address</label>
             </div>
             <div class="col-md-7  mb-3">
               <input type="text" class="form-control" name="ipaddr" id="ipaddr" value="<%= $ipaddr %>" data-real="<%= $ipaddr_eth0 %>" placeholder="192.168.10.10">

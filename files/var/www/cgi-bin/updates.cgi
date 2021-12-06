@@ -9,7 +9,7 @@ webui_local_etag=$(cat /var/www/.etag)
 %>
 
 <%in _header.cgi %>
-<h2>Firmware</h2>
+<h2>Firmware Updates</h2>
 
 <div class="alert alert-danger">
 <b>Attention: Destructive Actions!</b>
@@ -19,9 +19,9 @@ webui_local_etag=$(cat /var/www/.etag)
 <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
 <div class="col">
 <div class="card mb-3 danger">
-<h5 class="card-header">Upgrade Firmware from GitHub</h5>
+<div class="card-header">Upgrade Firmware from GitHub</div>
 <div class="card-body">
-<form action="/cgi-bin/github.cgi" method="post">
+<form action="/cgi-bin/github-firmware.cgi" method="post">
 <input type="hidden" name="action" value="github">
 <p><input type="checkbox" name="reset" id="reset" value="true"> <label for="reset">Reset settings after upgrade.</label></p>
 <p><input type="submit" class="btn btn-danger" value="Upgrade Firmware"></p>
@@ -30,7 +30,7 @@ webui_local_etag=$(cat /var/www/.etag)
 </div>
 
 <div class="card mb-3 danger">
-<h5 class="card-header">Upgrade Web UI from GitHub</h5>
+<div class="card-header">Update Web UI from GitHub</div>
 <div class="card-body">
 <dl>
 <dt>Installed version</dt>
@@ -45,19 +45,28 @@ webui_local_etag=$(cat /var/www/.etag)
 </div>
 
 <div class="card mb-3 danger">
-<h5 class="card-header">Reset configuration</h5>
+<div class="card-header">Reset Majestic configuration</div>
 <div class="card-body">
+<p><a href="/cgi-bin/majestic-diff.cgi">See how recent configuration differs from the original one.</a></p>
 <form action="/cgi-bin/reset.cgi" method="post">
 <input type="hidden" name="action" value="reset">
-<p><input type="submit" class="btn btn-danger" value="Reset Configuration"></p>
+<p><input type="submit" class="btn btn-danger" value="Reset Majestic Configuration"></p>
 </form>
 </div>
 </div>
+
+</div>
+<div class="col">
+
+<div class="card mb-3 danger">
+<div class="card-header">Reboot camera</div>
+<div class="card-body">
+<p><a class="btn btn-danger" href="/cgi-bin/reboot.cgi">Reboot</a></p>
+</div>
 </div>
 
-<div class="col">
 <div class="card mb-3 danger">
-<h5 class="card-header">Upload kernel</h5>
+<div class="card-header">Upload kernel</div>
 <div class="card-body">
 <form action="/cgi-bin/upload.cgi" method="post" enctype="multipart/form-data">
 <input type="hidden" name="action" value="kernel">
@@ -72,7 +81,7 @@ webui_local_etag=$(cat /var/www/.etag)
 </div>
 
 <div class="card mb-3 danger">
-<h5 class="card-header">Upload rootfs</h5>
+<div class="card-header">Upload rootfs</div>
 <div class="card-body">
 <form action="/cgi-bin/upload.cgi" method="post" enctype="multipart/form-data">
 <input type="hidden" name="action" value="rootfs">

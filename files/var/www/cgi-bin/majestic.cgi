@@ -4,7 +4,12 @@ content-type: text/html
 <%in _mj.cgi %>
 <%in _header.cgi %>
 <h2>Majestic Settings</h2>
-<form action="/cgi-bin/majestic-settings.cgi" method="post">
+
+<div class="alert alert-warning">
+<p class="mb-0">If you ever need to restore the original configuration, you can do it <a href="/cgi-bin/firmware.cgi">from this page</a>.</p>
+</div>
+
+<form action="/cgi-bin/majestic-update.cgi" method="post">
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-4">
 <%
 mj=$(echo "$mj"|sed "s/ /_/g")
@@ -23,9 +28,9 @@ do
   if [ "$olddomain" != "$domain" ]; then
     [ ! -z "$olddomain" ] && echo '</div></div></div>'
     olddomain="$domain"
-    echo '<div class="col">'
-    echo '<div class="card h-100 mb-3">'
-    echo "<h5 class=\"card-header\">${domain}</h5>"
+    echo '<div class="col mb-3">'
+    echo '<div class="card h-100">'
+    echo "<div class=\"card-header\">${domain}</div>"
     echo '<div class="card-body">'
   fi
   case "$type" in
@@ -96,16 +101,11 @@ do
       ;;
   esac
 done
-echo "</div></div></div>"
 %>
-</div>
+</div></div></div></div>
 <p><input type="submit" class="btn btn-primary" value="Save Changes"></p>
 </form>
 
-<div class="alert alert-warning">
-<p class="mb-0">If you ever need to restore the original configuration, you can do it <a href="/cgi-bin/firmware.cgi">from this page</a>.</p>
-</div>
-
-<p><a href="/cgi-bin/majestic-diff.cgi">See how recent configuration differs from default one.</a></p>
+<p><a href="/cgi-bin/majestic-diff.cgi">See how recent configuration differs from the original one.</a></p>
 
 <%in _footer.cgi %>

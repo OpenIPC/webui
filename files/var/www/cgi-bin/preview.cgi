@@ -5,7 +5,7 @@ content-type: text/html
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 button() {
   img=$1; alt=$2; id=$(echo "${alt// /-}" | tr '[:upper:]' '[:lower:]')
-  echo "<a id=\"${id}\" href=\"\"><img src=\"/img/${img}\" alt=\"${alt}\" width=\"32\" height=\"32\"></a>"
+  echo "<a id=\"${id}\" href=\"\"><img src=\"/img/${img}\" alt=\"${alt}\"></a>"
 }
 snapshot() {
   echo "<img src=\"http://${ipaddr}/image.jpg\" class=\"img-fluid\" width=\"1280\" height=\"720\" alt=\"\">"
@@ -18,24 +18,24 @@ videomp4() {
 <h2>Camera Preview</h2>
 
 <div class="row preview">
-  <div class="col position-relative">
+  <div class="col position-relative mb-4">
     <% snapshot %>
     <div class="control">
-      <% button "arrow-up-square.svg" "Pan up" %>
-      <% button "dash-square.svg" "Zoom out" %>
-      <% button "arrow-left-square.svg" "Pan left" %>
-      <% button "camera.svg" "Source" %>
-      <% button "arrow-right-square.svg" "Pan right" %>
-      <% button "arrow-down-square.svg" "Pan down" %>
-      <% button "plus-square.svg" "Zoom in" %>
+      <% button "arrow-up-square-fill.svg" "Pan up" %>
+      <% button "dash-square-fill.svg" "Zoom out" %>
+      <% button "arrow-left-square-fill.svg" "Pan left" %>
+      <% button "camera-fill.svg" "Source" %>
+      <% button "arrow-right-square-fill.svg" "Pan right" %>
+      <% button "arrow-down-square-fill.svg" "Pan down" %>
+      <% button "plus-square-fill.svg" "Zoom in" %>
     </div>
   </div>
 </div>
 
 <h3>Available Endpoints</h3>
-<div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+<div class="row row-cols-1 row-cols-md-2 g-4">
   <div class="col">
-    <div class="card h-100">
+    <div class="card h-100 mb-3">
       <div class="card-header">Web Pages</div>
       <div class="card-body small">
         <dl>
@@ -49,7 +49,7 @@ videomp4() {
   </div>
 
   <div class="col">
-    <div class="card h-100">
+    <div class="card h-100 mb-3">
       <div class="card-header">Video Streams</div>
       <div class="card-body small">
         <dl>
@@ -67,7 +67,7 @@ videomp4() {
   </div>
 
   <div class="col">
-    <div class="card h-100">
+    <div class="card h-100 mb-3">
       <div class="card-header">Still Images</div>
       <div class="card-body small">
         <dl>
@@ -94,7 +94,7 @@ videomp4() {
   </div>
 
   <div class="col">
-    <div class="card h-100">
+    <div class="card h-100 mb-3">
       <div class="card-header">Audio Streams</div>
       <div class="card-body small">
         <dl>

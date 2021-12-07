@@ -4,6 +4,7 @@ gh_headers=$(curl --silent --head https://codeload.github.com/OpenIPC/microbe-we
 webui_github_etag=$(echo "$gh_headers" | grep "ETag:" | cut -d " " -f2 | sed 's/"//g')
 webui_local_etag=$(cat /var/www/.etag)
 [ -z "$webui_local_etag" ] && webui_local_etag="unknown"
+majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 %>
 <%in _header.cgi %>
 <h2>Firmware Updates</h2>
@@ -17,18 +18,18 @@ webui_local_etag=$(cat /var/www/.etag)
 
   <div class="col">
     <div class="card mb-3 danger">
-      <div class="card-header">Upgrade Firmware from GitHub</div>
+      <div class="card-header">Firmware</div>
       <div class="card-body">
-        <form action="/cgi-bin/github-firmware.cgi" method="post">
-          <input type="hidden" name="action" value="github">
+        <form action="/cgi-bin/firmware-update.cgi" method="post">
           <p><input type="checkbox" name="reset" id="reset" value="true"> <label for="reset">Reset settings after upgrade.</label></p>
-          <p><input type="submit" class="btn btn-danger" value="Upgrade Firmware"></p>
+          <a class="btn btn-danger float-end">Reset overlay</a>
+          <input type="submit" class="btn btn-danger" value="Upgrade Firmware from GitHub">
         </form>
       </div>
     </div>
 
     <div class="card mb-3 danger">
-      <div class="card-header">Update Web UI from GitHub</div>
+      <div class="card-header">Web UI</div>
       <div class="card-body">
         <dl>
           <dt>Installed version</dt>
@@ -37,19 +38,25 @@ webui_local_etag=$(cat /var/www/.etag)
           <dd class="small"><%= $webui_github_etag %></dd>
         </dl>
         <form action="/cgi-bin/github-webui.cgi" method="post">
-          <p><input type="submit" class="btn btn-danger" value="Update Web UI"></p>
+          <input type="submit" class="btn btn-danger" value="Update Web UI from GitHub">
         </form>
       </div>
     </div>
 
     <div class="card mb-3 danger">
-      <div class="card-header">Reset Majestic configuration</div>
+      <div class="card-header">Majestic</div>
       <div class="card-body">
-        <p><a href="/cgi-bin/majestic-diff.cgi">See how recent configuration differs from the original one.</a></p>
-        <form action="/cgi-bin/reset.cgi" method="post">
-          <input type="hidden" name="action" value="reset">
-          <p><input type="submit" class="btn btn-danger" value="Reset Majestic Configuration"></p>
-        </form>
+        <% if [ -z "$majestic_diff" ]; then %>
+          <p><b>Majestic uses the original configuration.</b> <a href="/cgi-bin/majestic.cgi">Change settings.</a></p>
+        <% else %>
+          <p><b>Majestic uses custom configuration.</b> <a href="/cgi-bin/majestic-diff.cgi">See changes.</a></p>
+        <% fi %>
+        <p class="mb-0">
+          <% if [ ! -z "$majestic_diff" ]; then %>
+            <a class="btn btn-danger float-end" href="/cgi-bin/majestic-reset.cgi">Reset configuration</a>
+          <% fi %>
+          <a class="btn btn-danger" href="/cgi-bin/github-majestic.cgi">Update Majestic from GitHub</a>
+        </p>
       </div>
     </div>
 
@@ -57,40 +64,36 @@ webui_local_etag=$(cat /var/www/.etag)
   <div class="col">
 
     <div class="card mb-3 danger">
-      <div class="card-header">Reboot camera</div>
+      <div class="card-header">Camera</div>
       <div class="card-body">
-        <p><a class="btn btn-danger" href="/cgi-bin/reboot.cgi">Reboot</a></p>
+        <p class="mb-0"><a class="btn btn-danger" href="/cgi-bin/reboot.cgi">Reboot camera</a></p>
       </div>
     </div>
 
     <div class="card mb-3 danger">
       <div class="card-header">Upload kernel</div>
       <div class="card-body">
-        <form action="/cgi-bin/upload.cgi" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="action" value="kernel">
+        <form action="/cgi-bin/firmware-upload-kernel.cgi" method="post" enctype="multipart/form-data">
           <div class="row">
             <div class="col-12 mb-3"><label for="upfile">kernel file</label></div>
             <div class="col-12 mb-3"><input type="file" name="upfile"></div>
           </div>
-          <p><input type="submit" class="btn btn-danger" value="Upload File"></p>
+          <p class="mb-0"><input type="submit" class="btn btn-danger" value="Upload kernel file"></p>
         </form>
       </div>
-      <div class="card-footer bg-black text-white">Sorry, some things aren't working yet.</div>
     </div>
 
     <div class="card mb-3 danger">
       <div class="card-header">Upload rootfs</div>
       <div class="card-body">
-        <form action="/cgi-bin/upload.cgi" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="action" value="rootfs">
+        <form action="/cgi-bin/firmware-upload-rootfs.cgi" method="post" enctype="multipart/form-data">
           <div class="row">
             <div class="col-12 mb-3"><label for="upfile">rootfs file</label></div>
             <div class="col-12 mb-3"><input type="file" name="upfile"></div>
           </div>
-          <p><input type="submit" class="btn btn-danger" value="Upload File"></p>
+          <p class="mb-0"><input type="submit" class="btn btn-danger" value="Upload rootfs file"></p>
         </form>
       </div>
-      <div class="card-footer bg-black text-white">Sorry, some things aren't working yet.</div>
     </div>
   </div>
 </div>

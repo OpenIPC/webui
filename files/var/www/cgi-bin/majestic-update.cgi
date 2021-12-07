@@ -17,7 +17,7 @@ for name in $data; do
       value=${value//°/}
     fi
   fi
-  
+
   if [ "$key" = ".track" ]; then
     continue
   fi
@@ -51,7 +51,7 @@ for name in $data; do
     fi
   fi
 done
- 
+
 settings_changed=$(diff -q /tmp/majestic.yaml /etc/majestic.yaml)
 if [ ! -z "${settings_changed}" ];
 then

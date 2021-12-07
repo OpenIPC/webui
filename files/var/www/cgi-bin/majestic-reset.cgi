@@ -1,6 +1,6 @@
 #!/usr/bin/haserl
 <%
-command="/usr/sbin/ntpd -q -d -n"
+command="cp /rom/etc/majestic.yaml /etc/majestic.yaml"
 output=$($command 2>&1)
 result=$?
 if [ "0" -ne "$result" ]; then %>
@@ -17,7 +17,7 @@ if [ "0" -ne "$result" ]; then %>
   echo "HTTP/1.1 302 Moved Temporarily"
   echo "Content-type: text/html; charset=UTF-8"
   echo "Date: $(TZ=GMT date +"%a, %d %b %Y %T %Z")"
-  echo "Location: /cgi-bin/status.cgi"
+  echo "Location: /cgi-bin/updates.cgi"
   echo "Server: httpd"
   echo "Status: 302 Moved Temporarily"
 fi

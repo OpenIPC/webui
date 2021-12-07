@@ -1,6 +1,6 @@
 #!/usr/bin/haserl
 <%
-command="curl --silent --head https://codeload.github.com/OpenIPC/microbe-web/zip/refs/heads/themactep-dev"
+command="curl --silent --insecure --head https://codeload.github.com/OpenIPC/microbe-web/zip/refs/heads/themactep-dev"
 output=$($command 2>&1)
 result=$?
 if [ "0" -ne "$result" ]; then
@@ -8,9 +8,11 @@ if [ "0" -ne "$result" ]; then
 else
   gh_headers="$output"
   gh_etag=$(echo "$gh_headers" | grep "ETag:" | cut -d " " -f2 | sed 's/"//g')
+
   etag_file=/var/www/.etag
   etag=""
   [ -f "$etag_file" ] && etag=$(cat $etag_file)
+
   [ "$etag" = "$gh_etag" ] && error="It is the same version. Nothing to update."
 fi
 
@@ -20,14 +22,17 @@ if [ ! -z "$error" ]; then %>
 <div class="alert alert-danger"><%= "$error" %></div>
 <%in _footer.cgi %>
 <% else
-  command="curl --verbose --silent --insecure --location --output /tmp/microbe-dev.zip https://github.com/OpenIPC/microbe-web/archive/refs/heads/themactep-dev.zip"
+  command="curl -skL -o /tmp/microbe-dev.zip https://github.com/OpenIPC/microbe-web/archive/refs/heads/themactep-dev.zip"
   output=$($command 2>&1)
   result=$?
   if [ "0" -ne "$result" ]; then %>
 <%in _header.cgi %>
 <h2 class="text-danger">Oops. Something happened.</h2>
 <div class="alert alert-danger">
-<pre><%= "$output" %></pre>
+<pre>
+<b># <%= $command %></b>
+<%= "$output" %>
+</pre>
 </div>
 <%in _footer.cgi %>
 <% else

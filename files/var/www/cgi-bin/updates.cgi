@@ -1,9 +1,18 @@
 #!/usr/bin/haserl
 <%
-gh_headers=$(curl --silent --head https://codeload.github.com/OpenIPC/microbe-web/zip/refs/heads/themactep-dev)
-webui_github_etag=$(echo "$gh_headers" | grep "ETag:" | cut -d " " -f2 | sed 's/"//g')
+command="curl -skI https://codeload.github.com/OpenIPC/microbe-web/zip/refs/heads/themactep-dev"
+output=$($command 2>&1)
+result=$?
+if [ "0" -ne "$result" ]; then
+  webui_gh_etag="[unknown]"
+else
+  webui_gh_headers="$output"
+  webui_gh_etag=$(echo "$webui_gh_headers" | grep "ETag:" | cut -d " " -f2 | sed 's/"//g')
+fi
+
 webui_local_etag=$(cat /var/www/.etag)
-[ -z "$webui_local_etag" ] && webui_local_etag="unknown"
+[ -z "$webui_local_etag" ] && webui_local_etag="[unknown]"
+
 majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 %>
 <%in _header.cgi %>
@@ -32,12 +41,12 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
       <div class="card-header">Web UI</div>
       <div class="card-body">
         <dl>
-          <dt>Installed version</dt>
+          <dt>Local version</dt>
           <dd class="small"><%= $webui_local_etag %></dd>
-          <dt>Available version</dt>
-          <dd class="small"><%= $webui_github_etag %></dd>
+          <dt>GitHub version</dt>
+          <dd class="small"><%= $webui_gh_etag %></dd>
         </dl>
-        <form action="/cgi-bin/github-webui.cgi" method="post">
+        <form action="/cgi-bin/web-ui-update.cgi" method="post">
           <input type="submit" class="btn btn-danger" value="Update Web UI from GitHub">
         </form>
       </div>

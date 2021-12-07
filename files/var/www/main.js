@@ -40,5 +40,5 @@ function engage() {
         $$('a[href^=http]').forEach(el => el.target = '_blank');
     }
 
-    window.onload = initAll;
+    window.addEventListener('load', initAll);
 })();

@@ -1,6 +1,4 @@
 #!/usr/bin/haserl
-content-type: text/html
-
 <%in _header.cgi %>
 <%
 case $FORM_action in

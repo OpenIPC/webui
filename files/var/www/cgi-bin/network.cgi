@@ -1,6 +1,4 @@
 #!/usr/bin/haserl
-content-type: text/html
-
 <%
 hostname=$(hostname -s)
 ipaddr=$(yaml-cli -g .network.lan.ipaddr)

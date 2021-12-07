@@ -1,6 +1,4 @@
 #!/usr/bin/haserl
-content-type: text/html
-
 <%in _header.cgi %>
 <% interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'}) %>
 <h2>Monitoring Tools</h2>

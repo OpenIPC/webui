@@ -1,6 +1,4 @@
 #!/usr/bin/haserl
-content-type: text/html
-
 <%in _header.cgi %>
 <h2>Resetting Majestic configuration</h2>
 <div class="alert alert-success mb-3 pre"><b># cp -v /rom/etc/majestic.yaml /etc/majestic.yaml</b><br>

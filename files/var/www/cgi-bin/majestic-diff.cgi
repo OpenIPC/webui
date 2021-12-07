@@ -1,6 +1,4 @@
 #!/usr/bin/haserl
-content-type: text/html
-
 <%
 result=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml 2>&1)
 %>

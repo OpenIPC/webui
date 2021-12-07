@@ -1,3 +1,5 @@
+content-type: text/html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

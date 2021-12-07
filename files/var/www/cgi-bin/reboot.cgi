@@ -1,6 +1,4 @@
 #!/usr/bin/haserl
-content-type: text/html
-
 <%in _header.cgi %>
 <h2>Trying to reboot. Please wait...</h2>
 <progress id="timer" max="60" value="0" class="w-100"></progress>

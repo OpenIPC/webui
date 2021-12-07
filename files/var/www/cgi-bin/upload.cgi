@@ -1,6 +1,4 @@
 #!/usr/bin/haserl --upload-limit=6810 --upload-dir=/tmp
-content-type: text/html
-
 <%in _header.cgi %>
 <h2>Uploading <%= $FORM_action %> file</h2>
 <%

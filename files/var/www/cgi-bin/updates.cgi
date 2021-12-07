@@ -1,13 +1,10 @@
 #!/usr/bin/haserl
-content-type: text/html
-
 <%
 gh_headers=$(curl --silent --head https://codeload.github.com/OpenIPC/microbe-web/zip/refs/heads/themactep-dev)
 webui_github_etag=$(echo "$gh_headers" | grep "ETag:" | cut -d " " -f2 | sed 's/"//g')
 webui_local_etag=$(cat /var/www/.etag)
 [ -z "$webui_local_etag" ] && webui_local_etag="unknown"
 %>
-
 <%in _header.cgi %>
 <h2>Firmware Updates</h2>
 

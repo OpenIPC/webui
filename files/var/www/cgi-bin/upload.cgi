@@ -18,8 +18,8 @@ case $FORM_action in
 esac
 
 sysupgrade_date=$(ls -lc --full-time /usr/sbin/sysupgrade | xargs | cut -d " " -f 6)
-sysupgrade_date=$(date --date="$sysupgrade_date")
-new_sysupgrade_date=$(date --date="2021-12-07")
+sysupgrade_date=$(date --date="$sysupgrade_date" +"%s")
+new_sysupgrade_date=$(date --date="2021-12-07" +"%s")
 
 err=""
 if [ -z "$FORM_upfile_name"  ]; then

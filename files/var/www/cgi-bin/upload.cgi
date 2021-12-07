@@ -41,5 +41,5 @@ else
   echo "<div class=\"alert alert-danger\"><b>Error: ${err}</b></div>"
 fi
 %>
-<p><a href="/cgi-bin/firmware.cgi">Go back to firmware page</a></p>
+<p><a href="/cgi-bin/updates.cgi">Go back to firmware updates page</a></p>
 <%in _footer.cgi %>

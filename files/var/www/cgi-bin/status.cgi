@@ -34,7 +34,10 @@ soc_temp=$(ipcinfo --temp 2>&1)
       <div class="card-body">
         <b># date</b>
         <pre><% date %></pre>
-        <p class="small"><a href="/cgi-bin/network.cgi">edit timezone</a></p>
+        <p class="small">
+          <a href="/cgi-bin/network.cgi">Edit timezone</a> |
+          <a href="/cgi-bin/ntp-update.cgi">Sync time with an NTP server</a>
+        </p>
         <b># uptime</b>
         <pre><% /usr/bin/uptime %></pre>
         <b># cat /proc/meminfo | grep Mem</b>

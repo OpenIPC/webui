@@ -144,6 +144,16 @@ timezone=$(cat /etc/TZ)
       </div>
     </div>
   </div>
+
+  <div class="col mb-3">
+    <div class="card h-100">
+      <div class="card-header">NTP Configuration</div>
+      <div class="card-body">
+        <b># cat /etc/ntp.conf</b>
+        <pre><% cat /etc/ntp.conf 2>&1 %></pre>
+      </div>
+    </div>
+  </div>
 </div>
 
 <%in _footer.cgi %>

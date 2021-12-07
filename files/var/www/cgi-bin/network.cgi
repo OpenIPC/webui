@@ -134,6 +134,16 @@ timezone=$(cat /etc/TZ)
       </div>
     </div>
   </div>
+
+  <div class="col mb-3">
+    <div class="card h-100">
+      <div class="card-header">DNS Resolver</div>
+      <div class="card-body">
+        <b># cat /etc/resolv.conf</b>
+        <pre><% cat /etc/resolv.conf 2>&1 %></pre>
+      </div>
+    </div>
+  </div>
 </div>
 
 <%in _footer.cgi %>

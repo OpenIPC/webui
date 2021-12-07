@@ -33,6 +33,7 @@ videomp4() {
 </div>
 
 <h3>Available Endpoints</h3>
+<p class="small">Detailed information available <a href="https://github.com/OpenIPC/firmware/wiki/majestic_streamer">in the wiki</a>.</p>
 <div class="row row-cols-1 row-cols-md-2 g-4">
   <div class="col">
     <div class="card h-100 mb-3">

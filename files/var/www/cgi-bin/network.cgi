@@ -17,14 +17,15 @@ timezone=$(cat /etc/TZ)
 
 <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
 
-  <div class="col">
-    <div class="card h-100 mb-3">
+  <div class="col mb-3">
+    <div class="card h-100">
       <div class="card-header">Settings</div>
       <div class="card-body">
         <form action="/cgi-bin/network-update.cgi" method="post">
           <input type="hidden" name="action" value="update">
+
           <div class="row">
-            <div class="col-md-5">
+            <div class="col-12 col-md-5">
               <label for="hostname" class="form-label">Device Name</label>
             </div>
             <div class="col-md-7 mb-3">
@@ -32,6 +33,7 @@ timezone=$(cat /etc/TZ)
               <i class="hint">Make hostname unique using MAC address information (<%= $macaddr %>).</i>
             </div>
           </div>
+
           <div class="row">
             <div class="col-md-5">
               <label for="password" class="form-label">Interface Password</label>
@@ -40,6 +42,7 @@ timezone=$(cat /etc/TZ)
               <input type="password" class="form-control" name="password" id="password" value="<%= $password %>" placeholder="K3wLHaZk3R!">
             </div>
           </div>
+
           <div class="row">
             <div class="col-md-5">
               <label for="timezone" class="form-label">Timezone</label>
@@ -48,8 +51,9 @@ timezone=$(cat /etc/TZ)
               <input type="text" class="form-control" name="timezone" id="timezone" value="<%= $timezone %>" placeholder="GMT+2">
             </div>
           </div>
+
           <div class="row">
-            <div class="col mt-3 mb-0">
+            <div class="col mb-0">
               <input type="submit" class="btn btn-primary" value="Save Settings">
             </div>
           </div>
@@ -58,8 +62,8 @@ timezone=$(cat /etc/TZ)
     </div>
   </div>
 
-  <div class="col">
-    <div class="card h-100 mb-3">
+  <div class="col mb-3">
+    <div class="card h-100">
       <div class="card-header">Settings</div>
       <div class="card-body">
         <form action="/cgi-bin/network-update.cgi" method="post">
@@ -102,7 +106,7 @@ timezone=$(cat /etc/TZ)
 
 <div class="row">
   <div class="col-12 mb-3">
-    <div class="card h-100 mb-3">
+    <div class="card h-100">
       <div class="card-header">Network Address</div>
       <div class="card-body">
         <b># ip address</b>
@@ -112,7 +116,7 @@ timezone=$(cat /etc/TZ)
   </div>
 
   <div class="col-12 mb-3">
-    <div class="card h-100 mb-3">
+    <div class="card h-100">
       <div class="card-header">Network Routing</div>
       <div class="card-body">
         <b># ip route list</b>
@@ -121,8 +125,8 @@ timezone=$(cat /etc/TZ)
     </div>
   </div>
 
-  <div class="col-12">
-    <div class="card h-100 mb-3">
+  <div class="col-12 mb-3">
+    <div class="card h-100">
       <div class="card-header">Network Status</div>
       <div class="card-body">
         <b># netstat -tulpan</b>

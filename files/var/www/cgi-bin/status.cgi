@@ -1,10 +1,9 @@
 #!/usr/bin/haserl
-content-type: text/html
-
 <%
 interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
-hostname="Hostname: openipc-$(ipctool --chip_id)-$(ipctool --sensor_id | awk -F '_' '{print $1}')"
+hostname="Hostname: $(hostname -s)"
+
 openipc_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 2>&1)
 [ ! -z "$openipc_version" ] && openipc_version="<br>Version: ${openipc_version}"
 soc=$(ipcinfo --chip_id 2>&1)
@@ -32,6 +31,12 @@ soc_temp=$(ipcinfo --temp 2>&1)
     <div class="card h-100">
       <div class="card-header">System Info</div>
       <div class="card-body">
+        <b># date</b>
+        <pre><% date %></pre>
+        <p class="small">
+          <a href="/cgi-bin/network.cgi">Edit timezone</a> |
+          <a href="/cgi-bin/ntp-update.cgi">Sync time with an NTP server</a>
+        </p>
         <b># uptime</b>
         <pre><% /usr/bin/uptime %></pre>
         <b># cat /proc/meminfo | grep Mem</b>

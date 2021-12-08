@@ -1,6 +1,4 @@
 #!/usr/bin/haserl
-content-type: text/html
-
 <%in _mj.cgi %>
 <%in _header.cgi %>
 <h2>Majestic Settings</h2>

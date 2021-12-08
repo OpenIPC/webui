@@ -1,6 +1,4 @@
 #!/usr/bin/haserl
-content-type: text/html
-
 <%
 hostname=$(hostname -s)
 ipaddr=$(yaml-cli -g .network.lan.ipaddr)
@@ -10,20 +8,22 @@ netmask=$(yaml-cli -g .network.lan.netmask)
 netmask_eth0=$(ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $7}')
 password=$(awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf)
 vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
+timezone=$(cat /etc/TZ)
 %>
 <%in _header.cgi %>
 <h2>Network Administration</h2>
 
 <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
 
-  <div class="col">
-    <div class="card h-100 mb-3">
+  <div class="col mb-3">
+    <div class="card h-100">
       <div class="card-header">Settings</div>
       <div class="card-body">
         <form action="/cgi-bin/network-update.cgi" method="post">
           <input type="hidden" name="action" value="update">
+
           <div class="row">
-            <div class="col-md-5">
+            <div class="col-12 col-md-5">
               <label for="hostname" class="form-label">Device Name</label>
             </div>
             <div class="col-md-7 mb-3">
@@ -31,6 +31,7 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
               <i class="hint">Make hostname unique using MAC address information (<%= $macaddr %>).</i>
             </div>
           </div>
+
           <div class="row">
             <div class="col-md-5">
               <label for="password" class="form-label">Interface Password</label>
@@ -39,8 +40,18 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
               <input type="password" class="form-control" name="password" id="password" value="<%= $password %>" placeholder="K3wLHaZk3R!">
             </div>
           </div>
+
           <div class="row">
-            <div class="col mt-3 mb-0">
+            <div class="col-md-5">
+              <label for="timezone" class="form-label">Timezone</label>
+            </div>
+            <div class="col-md-7 mb-3">
+              <input type="text" class="form-control" name="timezone" id="timezone" value="<%= $timezone %>" placeholder="GMT+2">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col mb-0">
               <input type="submit" class="btn btn-primary" value="Save Settings">
             </div>
           </div>
@@ -49,8 +60,8 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
     </div>
   </div>
 
-  <div class="col">
-    <div class="card h-100 mb-3">
+  <div class="col mb-3">
+    <div class="card h-100">
       <div class="card-header">Settings</div>
       <div class="card-body">
         <form action="/cgi-bin/network-update.cgi" method="post">
@@ -76,7 +87,13 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
               <label for="remote" class="form-label">VTUNd Server</label>
             </div>
             <div class="col-md-7 mb-3">
-              <input type="text" class="form-control" name="remote" id="remote" value="<%= $vpn1 %>" placeholder="vtun.net">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" name="remote" id="remote" value="<%= $vpn1 %>" placeholder="vtun.net">
+                <div class="input-group-text">
+                  <input class="form-check-input mt-0 me-2" type="checkbox" name="remote" value="__delete">
+                  <img src="/img/trash.svg" alt="Delete">
+                </div>
+              </div>
             </div>
           </div>
           <div class="row">
@@ -93,7 +110,7 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
 
 <div class="row">
   <div class="col-12 mb-3">
-    <div class="card h-100 mb-3">
+    <div class="card h-100">
       <div class="card-header">Network Address</div>
       <div class="card-body">
         <b># ip address</b>
@@ -103,7 +120,7 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
   </div>
 
   <div class="col-12 mb-3">
-    <div class="card h-100 mb-3">
+    <div class="card h-100">
       <div class="card-header">Network Routing</div>
       <div class="card-body">
         <b># ip route list</b>
@@ -112,12 +129,32 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
     </div>
   </div>
 
-  <div class="col-12">
-    <div class="card h-100 mb-3">
+  <div class="col-12 mb-3">
+    <div class="card h-100">
       <div class="card-header">Network Status</div>
       <div class="card-body">
         <b># netstat -tulpan</b>
         <pre><% netstat -tulpan %></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="col mb-3">
+    <div class="card h-100">
+      <div class="card-header">DNS Resolver</div>
+      <div class="card-body">
+        <b># cat /etc/resolv.conf</b>
+        <pre><% cat /etc/resolv.conf 2>&1 %></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="col mb-3">
+    <div class="card h-100">
+      <div class="card-header">NTP Configuration</div>
+      <div class="card-body">
+        <b># cat /etc/ntp.conf</b>
+        <pre><% cat /etc/ntp.conf 2>&1 %></pre>
       </div>
     </div>
   </div>

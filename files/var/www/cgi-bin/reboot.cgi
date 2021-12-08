@@ -1,9 +1,13 @@
 #!/usr/bin/haserl
-content-type: text/html
-
+<%
+command="reboot -d 3"
+output=$(reboot -d 3)
+result=$?
+if [ "0" -ne "$result" ]; then %>
 <%in _header.cgi %>
-<h2>Trying to reboot. Please wait...</h2>
-<progress id="timer" max="60" value="0" class="w-100"></progress>
-<script>window.onload = engage;</script>
+<% report_command_error "$command"  "output" %>
 <%in _footer.cgi %>
-<% reboot -d 3 %>
+<% else
+  redirect_to "/cgi-bin/progress.cgi"
+fi
+%>

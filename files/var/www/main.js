@@ -34,10 +34,11 @@ function engage() {
             }
         }
 
+        $$('form').forEach(el => el.autocomplete = 'off');
         $$('input[data-for]').forEach(el => el.addEventListener('click', ev => toggleAuto(ev.target)));
-        $$('select').forEach(el => el.autocomplete = 'off');
         $$('.btn-danger').forEach(el => el.addEventListener('click', ev => (!confirm("Are you sure?")) ? ev.preventDefault() : null));
+        $$('a[href^=http]').forEach(el => el.target = '_blank');
     }
 
-    window.onload = initAll;
+    window.addEventListener('load', initAll);
 })();

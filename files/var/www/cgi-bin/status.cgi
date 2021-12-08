@@ -1,5 +1,6 @@
 #!/usr/bin/haserl
 <%
+page_title="Status"
 interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 hostname="Hostname: $(hostname -s)"

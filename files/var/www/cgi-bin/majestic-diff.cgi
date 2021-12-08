@@ -1,6 +1,7 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
+page_title="Majestic Changes"
 command="diff /rom/etc/majestic.yaml /etc/majestic.yaml"
 output=$($command 2>&1)
 result=$?

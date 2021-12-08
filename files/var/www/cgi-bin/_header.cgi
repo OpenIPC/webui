@@ -1,11 +1,14 @@
 content-type: text/html
 
+<%
+[ ! -z "$page_title" ] && page_title="$page_title - OpenIPC" || page_title="OpenIPC"
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>OpenIPC</title>
+  <title><%= $page_title %></title>
   <link rel="shortcut icon" href="/favicon.png">
   <link rel="stylesheet" href="/bootstrap.min.css">
   <link rel="stylesheet" href="/bootstrap.override.css">

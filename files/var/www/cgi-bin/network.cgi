@@ -1,5 +1,6 @@
 #!/usr/bin/haserl
 <%
+page_title="Network"
 hostname=$(hostname -s)
 ipaddr=$(yaml-cli -g .network.lan.ipaddr)
 ipaddr_eth0=$(ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $3}')

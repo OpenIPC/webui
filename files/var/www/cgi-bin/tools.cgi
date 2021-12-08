@@ -1,5 +1,6 @@
 #!/usr/bin/haserl
 <%
+page_title="Tools"
 interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
 %>
 <%in _header.cgi %>

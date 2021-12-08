@@ -1,5 +1,7 @@
 #!/usr/bin/haserl
 <%
+page_title="Updates"
+
 ui_date=$(ls -d --full-time /var/www/.etag | xargs | cut -d " " -f 6,7)
 ui_version=$(date --date="$ui_date" +"%s")
 

@@ -13,28 +13,28 @@ interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
         <form action="/cgi-bin/tools-do.cgi" method="post">
           <div class="row mb-3">
             <div class="col-md-6">
-              <label for="action">Action</label>
+              <label class="form-label" for="action">Action</label>
             </div>
             <div class="col-md-6">
-              <select name="action" id="action">
+              <select class="form-select" name="action" id="action">
                 <% for i in ping trace; do echo -n "<option>${i}</option>"; done %>
               </select>
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label for="target">Target FQDN or IP address</label>
+              <label class="form-label" for="target">Target FQDN or IP address</label>
             </div>
             <div class="col-md-6">
-              <input type="text" name="target" id="target" pattern="^[a-zA-Z0-9-_.]+$" value="4.2.2.1" placeholder="FQDN or IP address" required>
+              <input type="text" class="form-control" name="target" id="target" pattern="^[a-zA-Z0-9-_.]+$" value="4.2.2.1" placeholder="FQDN or IP address" required>
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label for="iface">Use network interface</label>
+              <label class="form-label" for="iface">Use network interface</label>
             </div>
             <div class="col-md-6">
-              <select name="iface" id="iface">
+              <select class="form-select" name="iface" id="iface">
                 <option>auto</option>
                 <% for i in $interfaces; do echo -n "<option>${i}</option>"; done %>
               </select>

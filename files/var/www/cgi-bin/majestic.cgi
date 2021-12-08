@@ -7,7 +7,7 @@ page_title="Majestic Settings"
 <h2>Majestic Settings</h2>
 
 <form action="/cgi-bin/majestic-update.cgi" method="post">
-<div class="row row-cols-1 row-cols-xl-2 g-4 mb-4">
+<div class="row row-cols-1 row-cols-xl-2 row-cols-xxl-3 g-4 mb-3">
 <%
 mj=$(echo "$mj"|sed "s/ /_/g")
 for line in $mj
@@ -25,7 +25,7 @@ do
   if [ "$olddomain" != "$domain" ]; then
     [ ! -z "$olddomain" ] && echo '</div></div></div>'
     olddomain="$domain"
-    echo '<div class="col mb-3">'
+    echo '<div class="col">'
     echo '<div class="card h-100">'
     echo "<div class=\"card-header\">${domain}</div>"
     echo '<div class="card-body">'
@@ -33,11 +33,11 @@ do
   case "$type" in
     boolean)
       [ "true" = "$value" ] && checked=" checked" || checked=""
-      echo "<div class=\"row mb-2\">" \
-        "<div class=\"col\"><div class=\"form-check form-switch\">" \
+      echo "<div class=\"mb-2\">" \
+        "<div class=\"form-check form-switch\">" \
           "<input name=\"${name}\" id=\"${name}\" value=\"true\" type=\"checkbox\" role=\"switch\"${checked} class=\"form-check-input\">" \
           "<label for=\"${name}\" class=\"form-check-label\">${label//_/ }</label>" \
-        "</div></div>"
+        "</div>"
       [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"
       echo "</div>"
       ;;
@@ -100,6 +100,6 @@ do
 done
 %>
 </div></div></div></div>
-<p><input type="submit" class="btn btn-primary" value="Save Changes"></p>
+<button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
 <%in _footer.cgi %>

@@ -29,7 +29,7 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
               <label class="form-check-label" for="reset">Reset settings after upgrade.</label>
             </div>
           </div>
-          <a class="btn btn-danger float-end">Reset overlay</a>
+          <a class="btn btn-danger float-end" title="Wipe overlay partition">Reset</a>
           <button type="submit" class="btn btn-danger">Update from GitHub</button>
         </form>
       </div>
@@ -72,7 +72,8 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
         <% fi %>
         <p class="mb-0">
           <% if [ ! -z "$majestic_diff" ]; then %>
-            <a class="btn btn-danger float-end" href="/cgi-bin/majestic-reset.cgi">Reset configuration</a>
+            <a class="btn btn-danger float-end" href="/cgi-bin/majestic-reset.cgi"
+              title="Restore original configuration">Reset</a>
           <% fi %>
           <a class="btn btn-danger" href="/cgi-bin/github-majestic.cgi">Update from GitHub</a>
         </p>
@@ -93,9 +94,11 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
       <div class="card-header">Upload kernel</div>
       <div class="card-body">
         <form action="/cgi-bin/firmware-upload-kernel.cgi" method="post" enctype="multipart/form-data">
-          <div class="mb-3">
-            <label class="form-label" for="upfile">kernel file</label>
-            <input class="form-control" type="file" name="upfile">
+          <div class="row mb-3">
+            <label class="col-md-3 form-label" for="upfile">kernel file</label>
+            <div class="col-md-9">
+              <input class="form-control" type="file" name="upfile">
+            </div>
           </div>
           <button type="submit" class="btn btn-danger">Upload file</button>
         </form>
@@ -106,9 +109,11 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
       <div class="card-header">Upload rootfs</div>
       <div class="card-body">
         <form action="/cgi-bin/firmware-upload-rootfs.cgi" method="post" enctype="multipart/form-data">
-          <div class="mb-3">
-            <label class="form-label" for="upfile">rootfs file</label>
-            <input class="form-control" type="file" name="upfile">
+          <div class="row mb-3">
+            <label class="col-md-3 form-label" for="upfile">rootfs file</label>
+            <div class="col-md-9">
+              <input class="form-control" type="file" name="upfile">
+            </div>
           </div>
           <button type="submit" class="btn btn-danger">Upload file</button>
         </form>

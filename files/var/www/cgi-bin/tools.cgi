@@ -12,28 +12,22 @@ interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
       <h5 class="card-header">Ping Quality</h5>
       <div class="card-body">
         <form action="/cgi-bin/tools-do.cgi" method="post">
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label class="form-label" for="action">Action</label>
-            </div>
+          <div class="row mb-2">
+            <label class="form-label col-md-6" for="action">Action</label>
             <div class="col-md-6">
               <select class="form-select" name="action" id="action">
                 <% for i in ping trace; do echo -n "<option>${i}</option>"; done %>
               </select>
             </div>
           </div>
-          <div class="row mb-3">
+          <div class="row mb-2">
+            <label class="col-md-6 form-label" for="target">Target FQDN or IP address</label>
             <div class="col-md-6">
-              <label class="form-label" for="target">Target FQDN or IP address</label>
-            </div>
-            <div class="col-md-6">
-              <input type="text" class="form-control" name="target" id="target" pattern="^[a-zA-Z0-9-_.]+$" value="4.2.2.1" placeholder="FQDN or IP address" required>
+              <input class="form-control pat-host-ip" type="text" name="target" id="target" value="4.2.2.1" placeholder="FQDN or IP address" required>
             </div>
           </div>
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label class="form-label" for="iface">Use network interface</label>
-            </div>
+          <div class="row mb-2">
+            <label class="col-md-6 form-label" for="iface">Use network interface</label>
             <div class="col-md-6">
               <select class="form-select" name="iface" id="iface">
                 <option>auto</option>
@@ -41,9 +35,7 @@ interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
               </select>
             </div>
           </div>
-          <p class="mb-0">
-            <input type="submit" value="Run" class="btn btn-primary">
-          </p>
+          <button type="submit" class="btn btn-primary">Run</button>
         </form>
       </div>
     </div>

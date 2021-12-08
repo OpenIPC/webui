@@ -3,10 +3,6 @@
 <%in _header.cgi %>
 <h2>Majestic Settings</h2>
 
-<div class="alert alert-warning">
-<p class="mb-0">If you ever need to restore the original configuration, you can do it <a href="/cgi-bin/updates.cgi">from this page</a>.</p>
-</div>
-
 <form action="/cgi-bin/majestic-update.cgi" method="post">
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-4">
 <%
@@ -103,7 +99,4 @@ done
 </div></div></div></div>
 <p><input type="submit" class="btn btn-primary" value="Save Changes"></p>
 </form>
-
-<p><a href="/cgi-bin/majestic-diff.cgi">See how recent configuration differs from the original one.</a></p>
-
 <%in _footer.cgi %>

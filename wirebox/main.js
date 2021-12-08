@@ -24,40 +24,44 @@
     }
 
     function initAll() {
-        // document.querySelectorAll('input[type=number].d').forEach(el => {
-        //     el.pattern = patterns.nd.rx;
-        //     el.step = 1;
-        // });
-        // document.querySelectorAll('input[type=number].f').forEach(el => {
-        //     el.pattern = patterns.nf.rx;
-        //     el.step = 0.1;
-        // });
-        // // input=password
-        // document.querySelectorAll('input.p').forEach(el => {
-        //     el.pattern = patterns.p.rx;
-        //     el.title = patterns.p.msg;
-        //     el.type = 'password';
-        // });
-        // // input=text
-        // document.querySelectorAll('input.t').forEach(el => {
-        //     el.type = 'text';
-        // });
-        // // pattern for ip address
-        // document.querySelectorAll('input.t.a').forEach(el => {
-        //     el.pattern = patterns.a.rx;
-        //     el.title = patterns.a.msg;
-        // });
-        // // pattern for hostname
-        // document.querySelectorAll('input.t.h').forEach(el => {
-        //     el.pattern = patterns.h.rx;
-        //     el.title = patterns.h.msg;
-        // });
+        document.querySelectorAll('input[type=number].d').forEach(el => {
+            el.pattern = patterns.nd.rx;
+            el.step = 1;
+        });
+        document.querySelectorAll('input[type=number].f').forEach(el => {
+            el.pattern = patterns.nf.rx;
+            el.step = 0.1;
+        });
+        // input=password
+        document.querySelectorAll('input.p').forEach(el => {
+            el.pattern = patterns.p.rx;
+            el.title = patterns.p.msg;
+            el.type = 'password';
+        });
+        // input=text
+        document.querySelectorAll('input.t').forEach(el => {
+            el.type = 'text';
+        });
+        // pattern for ip address
+        document.querySelectorAll('input.t.a').forEach(el => {
+            el.pattern = patterns.a.rx;
+            el.title = patterns.a.msg;
+        });
+        // pattern for hostname
+        document.querySelectorAll('input.t.h').forEach(el => {
+            el.pattern = patterns.h.rx;
+            el.title = patterns.h.msg;
+        });
         // range
+        function updateRangeValue(el) {
+            const id = '#v-' + el.name;
+            document.querySelector(id).textContent = el.value + el.dataset.units;
+        }
         document.querySelectorAll('input[type=range]').forEach(el => {
-            el.addEventListener('input', function(event) {
-                const id = '#v-' + event.target.name;
-                document.querySelector(id).textContent = el.value;
+            el.addEventListener('input', ev => {
+                updateRangeValue(ev.target)
             });
+            updateRangeValue(el);
         });
         // select
         document.querySelectorAll('select').forEach(el => {

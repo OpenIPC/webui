@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OpenIPC</title>
+  <link rel="shortcut icon" href="/favicon.png">
+  <link rel="stylesheet" href="/bootstrap.min.css">
+  <script src="/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="/bootstrap.override.css">
+  <script>
+      // window.onload = () => {
+      //     let xhr = new XMLHttpRequest();
+      //     xhr.open('get', '/cgi-bin/status.cgi', false, null, null);
+      //     xhr.send(null);
+      //     if (xhr.status === 403) {
+      //     window.location.href = 'login.html';
+      //   } else {
+      //     window.location.href = '/cgi-bin/status.cgi';
+      //   }
+      // }
+
+      window.onload = () => {
+          document.querySelector('form').addEventListener('submit', event => {
+              event.preventDefault();
+              const url = window.location.protocol + '//' +
+                  document.querySelector('#login').value + ':' +
+                  document.querySelector('#password').value + '@'
+                  + window.location.host + '/cgi-bin/status.cgi';
+              console.log(url);
+              document.location.href = url;
+          });
+      }
+  </script>
+</head>
+
+<body class="vh-100">
+  <header>
+    <div class="container-fluid">
+      <h1 class="display-1 text-center p-5">
+        <img src="/img/logo.svg" width="800" alt="" class="m-5 img-fluid">
+      </h1>
+    </div>
+  </header>
+  <main>
+    <div class="container p-5">
+      <form class="d-table m-auto border rounded-3 p-5" method="post">
+        <p><label class="form-label w-100">Login</label>
+          <input type="text" name="login" id="login" class="w-100" required></p>
+        <p><label class="form-label w-100">Password</label>
+          <input type="password" name="password" id="password" class="w-100" required></p>
+        <p><input type="submit" value="Sign in" class="btn btn-primary"></p>
+      </form>
+    </div>
+  </main>
+  <footer class="p-3">
+    <div class="container">
+      <p class="text-end">©2021 <a href="https://openipc.org/">OpenIPC</a></p>
+    </div>
+  </footer>
+</body>
+</html>

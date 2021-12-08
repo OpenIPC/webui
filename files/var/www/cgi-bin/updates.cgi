@@ -4,9 +4,8 @@ page_title="Updates"
 
 ui_date=$(ls -d --full-time /var/www/.etag | xargs | cut -d " " -f 6,7)
 ui_version=$(date --date="$ui_date" +"%s")
-
 fw_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 2>&1)
-
+mj_version=$(majestic -v)
 majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 %>
 <%in _header.cgi %>
@@ -65,6 +64,7 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
     <div class="card mb-3">
       <div class="card-header">Majestic</div>
       <div class="card-body">
+        <p><b>Installed ver.<%= $mj_version %></b></p>
         <% if [ -z "$majestic_diff" ]; then %>
           <p><b>Majestic uses the original configuration.</b>
             <a href="/cgi-bin/majestic.cgi">Change settings.</a></p>

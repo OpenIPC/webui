@@ -87,7 +87,13 @@ timezone=$(cat /etc/TZ)
               <label for="remote" class="form-label">VTUNd Server</label>
             </div>
             <div class="col-md-7 mb-3">
-              <input type="text" class="form-control" name="remote" id="remote" value="<%= $vpn1 %>" placeholder="vtun.net">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" name="remote" id="remote" value="<%= $vpn1 %>" placeholder="vtun.net">
+                <div class="input-group-text">
+                  <input class="form-check-input mt-0 me-2" type="checkbox" name="remote" value="__delete">
+                  <img src="/img/trash.svg" alt="Delete">
+                </div>
+              </div>
             </div>
           </div>
           <div class="row">

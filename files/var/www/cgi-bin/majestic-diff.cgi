@@ -20,6 +20,9 @@ if [ -z "$output" ]; then %>
 </pre>
 </div>
 <% fi %>
-<p><a class="btn btn-primary" href="/cgi-bin/majestic.cgi">Go to Majestic settings page.</a>
-   <a class="btn btn-danger" href="/cgi-bin/majestic-reset.cgi">Restore original configuration</a></p>
+<p class="d-grid gap-2">
+  <a class="btn btn-primary" href="/cgi-bin/majestic.cgi">Go to Majestic settings page</a>
+  <a class="btn btn-danger" href="/cgi-bin/majestic-reset.cgi">Restore original configuration</a>
+  <a class="btn btn-secondary" href="/cgi-bin/majestic-download.cgi">Download configuration file</a>
+</p>
 <%in _footer.cgi %>

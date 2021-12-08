@@ -13,9 +13,8 @@ else
 fi
 
 gh_etag="$(curl -skIL $url | grep "ETag:" | cut -d " " -f2 | sed 's/["\r\n]//g')"
-
 lo_etag=$(cat $etag_file)
-if [ "$lo_etag" = "$gh_etag" ]; then %>
+if [ -z "$FORM_enforce" -a "$lo_etag" = "$gh_etag" ]; then %>
 <%in _header.cgi %>
 <% report_error "GitHub version matches the installed one. Nothing to update." %>
 <%in _footer.cgi %>
@@ -28,7 +27,12 @@ if [ "$lo_etag" = "$gh_etag" ]; then %>
 <% report_error "$error" %>
 <%in _footer.cgi %>
 <% else
-    redirect_to "/cgi-bin/progress.cgi"
+    if [ -z "$FORM_debug" ]; then
+      redirect_to "/cgi-bin/progress.cgi"
+    else
+      echo "content-type: text/plain"
+      echo ""
+    fi
   fi
   unzip -o -d /tmp ${tmp_file} 2>&1
   cp -av /tmp/${zipdir}/files/var/www /var/ 2>&1

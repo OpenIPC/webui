@@ -24,7 +24,7 @@ if [ -z "$FORM_enforce" -a "$lo_etag" = "$gh_etag" ]; then %>
   result=$?
   if [ "0" -ne "$result" ]; then %>
 <%in _header.cgi %>
-<% report_error "$error" %>
+<% report_error "$output" %>
 <%in _footer.cgi %>
 <% else
     if [ -z "$FORM_debug" ]; then

@@ -1,7 +1,6 @@
 #!/usr/bin/haserl
 <%
-command="/sbin/ifconfig | grep '^\w' | awk {'print $1'}"
-interfaces=$($command)
+interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
 %>
 <%in _header.cgi %>
 <h2>Monitoring Tools</h2>

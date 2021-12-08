@@ -1,17 +1,7 @@
 #!/usr/bin/haserl
 <%
-command="curl -skI https://codeload.github.com/OpenIPC/microbe-web/zip/refs/heads/themactep-dev"
-output=$($command 2>&1)
-result=$?
-if [ "0" -ne "$result" ]; then
-  webui_gh_etag="[unknown]"
-else
-  webui_gh_headers="$output"
-  webui_gh_etag=$(echo "$webui_gh_headers" | grep "ETag:" | cut -d " " -f2 | sed 's/"//g')
-fi
-
-webui_local_etag=$(cat /var/www/.etag)
-[ -z "$webui_local_etag" ] && webui_local_etag="[unknown]"
+ui_date=$(ls -d --full-time /var/www/.etag | xargs | cut -d " " -f 6,7)
+ui_version=$(date --date="$ui_date" +"%s")
 
 majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 %>
@@ -41,13 +31,10 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
     <div class="card mb-3 danger">
       <div class="card-header">Web UI</div>
       <div class="card-body">
-        <dl>
-          <dt>Local version</dt>
-          <dd class="small"><%= $webui_local_etag %></dd>
-          <dt>GitHub version</dt>
-          <dd class="small"><%= $webui_gh_etag %></dd>
-        </dl>
-        <form action="/cgi-bin/web-ui-update.cgi" method="post">
+          <p>Installed Web UI ver.<%= $ui_version %>.</p>
+          <form action="/cgi-bin/web-ui-update.cgi" method="post">
+          <p>Update from <select name="version"><option>stable</option><option>development</option></select> branch.</p>
+          </p>
           <input type="submit" class="btn btn-danger" value="Update Web UI from GitHub">
         </form>
       </div>
@@ -57,9 +44,11 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
       <div class="card-header">Majestic</div>
       <div class="card-body">
         <% if [ -z "$majestic_diff" ]; then %>
-          <p><b>Majestic uses the original configuration.</b> <a href="/cgi-bin/majestic.cgi">Change settings.</a></p>
+          <p><b>Majestic uses the original configuration.</b>
+            <a href="/cgi-bin/majestic.cgi">Change settings.</a></p>
         <% else %>
-          <p><b>Majestic uses custom configuration.</b> <a href="/cgi-bin/majestic-diff.cgi">See changes.</a></p>
+          <p><b>Majestic uses custom configuration.</b>
+            <a href="/cgi-bin/majestic-diff.cgi">See changes.</a></p>
         <% fi %>
         <p class="mb-0">
           <% if [ ! -z "$majestic_diff" ]; then %>

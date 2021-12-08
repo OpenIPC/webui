@@ -22,16 +22,10 @@ fi
 
 if [ ! -z "$error" ]; then %>
 <%in _header.cgi %>
-<h2 class="text-danger">Oops. Something happened.</h2>
-<div class="alert alert-danger"><%= $error %></div>
+<% report_error "$error" %>
 <%in _footer.cgi %>
 <% else
-  echo "HTTP/1.1 302 Moved Temporarily"
-  echo "Content-type: text/html; charset=UTF-8"
-  echo "Date: $(TZ=GMT date +"%a, %d %b %Y %T %Z")"
-  echo "Location: /cgi-bin/progress.cgi"
-  echo "Server: httpd"
-  echo "Status: 302 Moved Temporarily"
+  redirect_to "/cgi-bin/progress.cgi"
 
   mv ${FORM_upfile} /tmp/${FORM_upfile_name}
   sysupgrade --rootfs=/tmp/${FORM_upfile_name}

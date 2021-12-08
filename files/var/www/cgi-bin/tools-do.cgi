@@ -1,4 +1,5 @@
 #!/usr/bin/haserl
+<%in _common.cgi %>
 <%
 case $FORM_action in
   ping)
@@ -16,24 +17,14 @@ esac
 output=$($command 2>&1)
 result=$?
 
+if [ "0" -eq "$result" ]; then
 %>
 <%in _header.cgi %>
-<% if [ "0" -ne "$result" ]; then %>
-<h2 class="text-danger">Oops. Something happened.</h2>
-<div class="alert alert-danger">
-<pre>
-<b># <%= $command %></b>
-<%= "$output" %>
-</pre>
-</div>
-<% else %>
-<h2><%= $title %>. Please wait...</h2>
-<div class="alert alert-success">
-<pre>
-<b># <%= $command %></b>
-<%= "$output" %>
-</pre>
-</div>
+<%
+  report_command_success "$command" "$output"
+else
+  report_command_error "$command" "$output"
+fi
+%>
 <p><a href="/cgi-bin/tools.cgi">Go back to monitoring tools</a></p>
-<% fi %>
 <%in _footer.cgi %>

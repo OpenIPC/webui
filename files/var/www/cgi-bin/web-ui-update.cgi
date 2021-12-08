@@ -1,52 +1,38 @@
 #!/usr/bin/haserl
+<%in _common.cgi %>
 <%
-command="curl --silent --insecure --head https://codeload.github.com/OpenIPC/microbe-web/zip/refs/heads/themactep-dev"
-output=$($command 2>&1)
-result=$?
-if [ "0" -ne "$result" ]; then
-  error="$output"
+tmp_file=/tmp/microbe.zip
+etag_file=/var/www/.etag
+if [ "development" = "$FORM_version" ]
+then
+  url="https://codeload.github.com/OpenIPC/microbe-web/zip/refs/heads/themactep-dev"
+  zipdir="microbe-web-themactep-dev"
 else
-  gh_headers="$output"
-  gh_etag=$(echo "$gh_headers" | grep "ETag:" | cut -d " " -f2 | sed 's/"//g')
-
-  etag_file=/var/www/.etag
-  etag=""
-  [ -f "$etag_file" ] && etag=$(cat $etag_file)
-
-  [ "$etag" = "$gh_etag" ] && error="It is the same version. Nothing to update."
+  url="https://github.com/OpenIPC/microbe-web/archive/refs/heads/main.zip"
+  zipdir="microbe-web-main"
 fi
 
-if [ ! -z "$error" ]; then %>
+gh_etag="$(curl -skIL $url | grep "ETag:" | cut -d " " -f2 | sed 's/["\r\n]//g')"
+
+lo_etag=$(cat $etag_file)
+if [ "$lo_etag" = "$gh_etag" ]; then %>
 <%in _header.cgi %>
-<h2 class="text-danger">Oops. Something happened.</h2>
-<div class="alert alert-danger"><%= "$error" %></div>
+<% report_error "GitHub version matches the installed one. Nothing to update." %>
 <%in _footer.cgi %>
 <% else
-  command="curl -skL -o /tmp/microbe-dev.zip https://github.com/OpenIPC/microbe-web/archive/refs/heads/themactep-dev.zip"
+  command="curl -skL -o /tmp/microbe.zip $url"
   output=$($command 2>&1)
   result=$?
   if [ "0" -ne "$result" ]; then %>
 <%in _header.cgi %>
-<h2 class="text-danger">Oops. Something happened.</h2>
-<div class="alert alert-danger">
-<pre>
-<b># <%= $command %></b>
-<%= "$output" %>
-</pre>
-</div>
+<% report_error "$error" %>
 <%in _footer.cgi %>
 <% else
-    echo "HTTP/1.1 302 Moved Temporarily"
-    echo "Content-type: text/html; charset=UTF-8"
-    echo "Date: $(TZ=GMT date +"%a, %d %b %Y %T %Z")"
-    echo "Location: /cgi-bin/progress.cgi"
-    echo "Server: httpd"
-    echo "Status: 302 Moved Temporarily"
+    redirect_to "/cgi-bin/progress.cgi"
   fi
-
-  unzip -o -d /tmp /tmp/microbe-dev.zip
-  cp -av /tmp/microbe-web-themactep-dev/files/var/www /var/
-  echo "$gh_etag" > "$etag_file"
-  rm -rf /tmp/microbe-dev.zip /tmp/microbe-web-themactep-dev
+  unzip -o -d /tmp ${tmp_file} 2>&1
+  cp -av /tmp/${zipdir}/files/var/www /var/ 2>&1
+  rm -rf ${tmp_file} /tmp/${zipdir} 2>&1
+  echo ${gh_etag} > ${etag_file}
 fi
 %>

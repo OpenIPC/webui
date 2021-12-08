@@ -27,7 +27,14 @@ content-type: text/html
       <ul class="navbar-nav">
         <li class="nav-item"><a class="nav-link" href="/cgi-bin/status.cgi">Information</a></li>
         <li class="nav-item"><a class="nav-link" href="/cgi-bin/updates.cgi">Updates</a></li>
-        <li class="nav-item"><a class="nav-link" href="/cgi-bin/network.cgi">Network</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownNetwork" href="#"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">Network</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownNetwork">
+            <li><a class="dropdown-item" href="/cgi-bin/network.cgi">Settings</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/network-ntp.cgi">NTP Settings</a></li>
+          </ul>
+        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownMajestic" href="#"
             role="button" data-bs-toggle="dropdown" aria-expanded="false">Majestic</a>

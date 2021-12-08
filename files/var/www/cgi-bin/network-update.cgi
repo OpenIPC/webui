@@ -73,17 +73,6 @@ if [ ! -z "$FORM_remote" ]; then
   fi
   report_command_info "$command" "$result"
 fi
-
-if [ ! -z "$FORM_timezone" ]; then
-  if [ "$(cat /etc/TZ)" = "$FORM_timezone" ]
-  then
-    report_warning "Same timezone. Skipping."
-  else
-    command="echo $FORM_timezone > /etc/TZ"
-    result=$(echo $FORM_timezone > /etc/TZ 2>&1)
-    report_command_info "$command" "$result"
-  fi
-fi
 %>
 
 <div class="alert alert-danger mt-5 mb-3">

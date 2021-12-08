@@ -28,7 +28,7 @@ timezone=$(cat /etc/TZ)
               <label for="hostname" class="form-label">Device Name</label>
             </div>
             <div class="col-md-7 mb-3">
-              <input type="text" class="form-control" name="hostname" id="hostname" value="<%= $hostname %>" placeholder="device-name">
+              <input class="form-control pat-host" type="text" name="hostname" id="hostname" value="<%= $hostname %>" placeholder="device-name">
               <i class="hint">Make hostname unique using MAC address information (<%= $macaddr %>).</i>
             </div>
           </div>
@@ -42,20 +42,7 @@ timezone=$(cat /etc/TZ)
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-md-5">
-              <label for="timezone" class="form-label">Timezone</label>
-            </div>
-            <div class="col-md-7 mb-3">
-              <input type="text" class="form-control" name="timezone" id="timezone" value="<%= $timezone %>" placeholder="GMT+2">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col mb-0">
-              <input type="submit" class="btn btn-primary" value="Save Settings">
-            </div>
-          </div>
+          <button type="submit" class="btn btn-primary">Save Settings</button>
         </form>
       </div>
     </div>

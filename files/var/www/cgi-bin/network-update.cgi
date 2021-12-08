@@ -9,23 +9,23 @@ if [ ! -z "$FORM_hostname" ]; then
       report_warning "Same hostname. Skipping."
   else
     command="echo ${FORM_hostname} > /etc/hostname"
-    result=$($command 2>&1)
+    result=$(echo ${FORM_hostname} > /etc/hostname 2>&1)
     report_command_info "$command" "$result"
 
     command="hostname ${FORM_hostname}"
-    result=$($command 2>&1)
+    result=$(hostname ${FORM_hostname} 2>&1)
     report_command_info "$command" "$result"
 
     command="sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts"
-    result=$($command 2>&1)
+    result=$(sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${FORM_hostname}/g' /etc/hosts 2>&1)
     report_command_info "$command" "$result"
 
     command="killall udhcpc"
-    result=$($command 2>&1)
+    result=$(killall udhcpc 2>&1)
     report_command_info "$command" "$result"
 
     command="udhcpc -x hostname:${FORM_hostname} -T 1 -t 5 -R -b -O search"
-    result=$($command 2>&1)
+    result=$(udhcpc -x hostname:${FORM_hostname} -T 1 -t 5 -R -b -O search 2>&1)
     report_command_info "$command" "$result"
   fi
 fi
@@ -36,7 +36,7 @@ if [ ! -z "$FORM_password" ]; then
     report_error "Password cannot have spaces!"
   else
     command="sed -i s/:admin:.*/:admin:${FORM_password}/ /etc/httpd.conf"
-    result=$($command 2>&1)
+    result=$(sed -i s/:admin:.*/:admin:${FORM_password}/ /etc/httpd.conf 2>&1)
     report_command_info "$command" "$result"
   fi
 fi
@@ -47,7 +47,7 @@ if [ ! -z "$FORM_ipaddr" ]; then
     report_warning "Same IP address. Skipping."
   else
     command="yaml-cli -s .network.lan.ipaddr ${FORM_ipaddr}"
-    result=$($command 2>&1)
+    result=$(yaml-cli -s .network.lan.ipaddr ${FORM_ipaddr} 2>&1)
     report_command_info "$command" "$result"
   fi
 fi
@@ -58,7 +58,7 @@ if [ ! -z "$FORM_netmask" ]; then
     report_warning "Same IP network mask. Skipping."
   else
     command="yaml-cli -s .network.lan.netmask ${FORM_netmask}"
-    result=$($command 2>&1)
+    result=$(yaml-cli -s .network.lan.netmask ${FORM_netmask} 2>&1)
     report_command_info "$command" "$result"
   fi
 fi
@@ -66,10 +66,11 @@ fi
 if [ ! -z "$FORM_remote" ]; then
   if [ "$FORM_remote" = "__delete" ]; then
     command="yaml-cli -d .openvpn.vpn1.remote"
+    result=$(yaml-cli -d .openvpn.vpn1.remote 2>&1)
   else
     command="yaml-cli -s .openvpn.vpn1.remote ${FORM_remote}"
+    result=$(yaml-cli -s .openvpn.vpn1.remote ${FORM_remote} 2>&1)
   fi
-  result=$($command 2>&1)
   report_command_info "$command" "$result"
 fi
 
@@ -78,8 +79,8 @@ if [ ! -z "$FORM_timezone" ]; then
   then
     report_warning "Same timezone. Skipping."
   else
-    command="echo ${FORM_timezone} > /etc/TZ"
-    result=$($command 2>&1)
+    command="echo $FORM_timezone > /etc/TZ"
+    result=$(echo $FORM_timezone > /etc/TZ 2>&1)
     report_command_info "$command" "$result"
   fi
 fi

@@ -28,7 +28,7 @@ for name in $data; do
     if [ ! -z "$oldvalue" ]
     then
       command="yaml-cli -d \"$key\" -i /tmp/majestic.yaml -o /tmp/majestic.yaml"
-      result=$($command 2>&1)
+      result=$(yaml-cli -d \"$key\" -i /tmp/majestic.yaml -o /tmp/majestic.yaml 2>&1)
 #     report_warning "Empty value for ${key}. Existing value is '${oldvalue}'. Deleting."
       report_command_error "$command" "$result"
     else
@@ -39,7 +39,7 @@ for name in $data; do
     if [ "$oldvalue" != "$value" ]
     then
       command="yaml-cli -s \"$key\" \"$value\" -i /tmp/majestic.yaml -o /tmp/majestic.yaml"
-      result=$($sommand 2>&1)
+      result=$(yaml-cli -s \"$key\" \"$value\" -i /tmp/majestic.yaml -o /tmp/majestic.yaml 2>&1)
       # "Updated value for ${key}. Existing value is '${oldvalue}'. Saving."
       report_command_info "$command" "$result"
     else

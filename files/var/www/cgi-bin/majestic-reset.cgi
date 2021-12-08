@@ -2,7 +2,7 @@
 <%in _common.cgi %>
 <%
 command="cp /rom/etc/majestic.yaml /etc/majestic.yaml"
-output=$($command 2>&1)
+output=$(cp /rom/etc/majestic.yaml /etc/majestic.yaml 2>&1)
 result=$?
 if [ "0" -ne "$result" ]; then %>
 <%in _header.cgi %>

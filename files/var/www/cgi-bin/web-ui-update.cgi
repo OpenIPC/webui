@@ -21,7 +21,7 @@ if [ "$lo_etag" = "$gh_etag" ]; then %>
 <%in _footer.cgi %>
 <% else
   command="curl -skL -o /tmp/microbe.zip $url"
-  output=$($command 2>&1)
+  output=$(curl -skL -o /tmp/microbe.zip $url 2>&1)
   result=$?
   if [ "0" -ne "$result" ]; then %>
 <%in _header.cgi %>

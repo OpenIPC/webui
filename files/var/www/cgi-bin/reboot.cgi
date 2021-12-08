@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 <%
 command="reboot -d 3"
-output=$($command 2>&1)
+output=$(reboot -d 3)
 result=$?
 if [ "0" -ne "$result" ]; then %>
 <%in _header.cgi %>

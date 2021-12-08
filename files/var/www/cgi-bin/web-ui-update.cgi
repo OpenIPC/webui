@@ -5,11 +5,11 @@ tmp_file=/tmp/microbe.zip
 etag_file=/var/www/.etag
 if [ "development" = "$FORM_version" ]
 then
-  url="https://codeload.github.com/OpenIPC/microbe-web/zip/refs/heads/themactep-dev"
-  zipdir="microbe-web-themactep-dev"
+  url="https://codeload.github.com/OpenIPC/microbe-web/zip/refs/heads/development"
+  zipdir="microbe-web-development"
 else
-  url="https://github.com/OpenIPC/microbe-web/archive/refs/heads/main.zip"
-  zipdir="microbe-web-main"
+  url="https://github.com/OpenIPC/microbe-web/archive/refs/heads/stable.zip"
+  zipdir="microbe-web-stable"
 fi
 
 gh_etag="$(curl -skIL $url | grep "ETag:" | cut -d " " -f2 | sed 's/["\r\n]//g')"

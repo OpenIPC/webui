@@ -12,8 +12,10 @@ case $FORM_action in
     title="Traceroute Quality"
     ;;
 esac
+
 output=$($command 2>&1)
 result=$?
+
 %>
 <%in _header.cgi %>
 <% if [ "0" -ne "$result" ]; then %>

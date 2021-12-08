@@ -30,7 +30,8 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
       <div class="card-header">Firmware</div>
       <div class="card-body">
         <form action="/cgi-bin/firmware-update.cgi" method="post">
-          <p><input type="checkbox" name="reset" id="reset" value="true"> <label for="reset">Reset settings after upgrade.</label></p>
+          <p><input type="checkbox" name="reset" value="true">
+            <label for="reset">Reset settings after upgrade.</label></p>
           <a class="btn btn-danger float-end">Reset overlay</a>
           <input type="submit" class="btn btn-danger" value="Upgrade Firmware from GitHub">
         </form>

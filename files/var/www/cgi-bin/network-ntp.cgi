@@ -1,7 +1,8 @@
 #!/usr/bin/haserl
 <%
 page_title="NTP Settings"
-tz=$(cat /etc/TZ)
+tz_data=$(cat /etc/TZ)
+tz_name=$(cat /etc/tzname)
 interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
 %>
 <%in _header.cgi %>
@@ -24,7 +25,10 @@ interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
         <form action="/cgi-bin/network-tz-update.cgi" method="post">
           <div class="row">
             <label class="col-md-4" for="tz_name" class="form-label">Zone name</label>
-            <div class="col-md-8"><select class="form-select" name="tz_name" id="tz_name"></select></div>
+            <div class="col-md-8">
+              <input class="form-select" name="tz_name" id="tz_name" list="tz_list" value="<%= $tz_name %>">
+              <datalist id="tz_list"></datalist>
+            </div>
           </div>
           <div class="row">
             <label class="col-md-4" for="tz_data" class="form-label">Zone string</label>
@@ -61,14 +65,26 @@ interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
 </div>
 <script src="/tz.js" async></script>
 <script>
+function findTimezone(tz) {
+  return tz.name == $('#tz_name').value;
+}
 function updateTimezone() {
-  $('#tz_data').value = $('#tz_name').selectedOptions[0].value
+  const tz = TZ.filter(findTimezone);
+  if (tz.length == 0) {
+    $('#tz_data').value = '';
+  } else {
+    $('#tz_data').value = tz[0].value;
+  }
 }
 window.addEventListener('load', () => {
-  const el = $('#tz_name');
+  const el = $('#tz_list');
   el.innerHTML='';
-  for (i in TZ) el.options.add(new Option(TZ[i][0], TZ[i][1], true, (TZ[i][1] == "<%= $tz %>")));
-  el.addEventListener('change', updateTimezone);
+  TZ.forEach(function(tz) {
+    const o = document.createElement('option');
+    o.value = tz.name;
+    el.appendChild(o);
+  });
+  $('#tz_name').addEventListener('selectionchange', updateTimezone);
   updateTimezone();
 });
 </script>

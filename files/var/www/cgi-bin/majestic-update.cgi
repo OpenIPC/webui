@@ -3,7 +3,10 @@
 <%in _header.cgi %>
 <h2>Updating Majestic settings</h2>
 <%
-cp -f /etc/majestic.yaml /tmp/majestic.yaml
+command="cp -f /etc/majestic.yaml /tmp/majestic.yaml"
+result=$(cp -f /etc/majestic.yaml /tmp/majestic.yaml 2>&1)
+report_command_info "$command" "$result"
+
 data="$(printenv|grep POST_)"
 IFS=$'\n' # make newlines the only separator
 for name in $data; do
@@ -28,7 +31,7 @@ for name in $data; do
     if [ ! -z "$oldvalue" ]
     then
       command="yaml-cli -d \"$key\" -i /tmp/majestic.yaml -o /tmp/majestic.yaml"
-      result=$(yaml-cli -d \"$key\" -i /tmp/majestic.yaml -o /tmp/majestic.yaml 2>&1)
+      result=$(yaml-cli -d "${key}" -i /tmp/majestic.yaml -o /tmp/majestic.yaml 2>&1)
 #     report_warning "Empty value for ${key}. Existing value is '${oldvalue}'. Deleting."
       report_command_error "$command" "$result"
     else
@@ -39,7 +42,7 @@ for name in $data; do
     if [ "$oldvalue" != "$value" ]
     then
       command="yaml-cli -s \"$key\" \"$value\" -i /tmp/majestic.yaml -o /tmp/majestic.yaml"
-      result=$(yaml-cli -s \"$key\" \"$value\" -i /tmp/majestic.yaml -o /tmp/majestic.yaml 2>&1)
+      result=$(yaml-cli -s "${key}" "${value}" -i /tmp/majestic.yaml -o /tmp/majestic.yaml 2>&1)
       # "Updated value for ${key}. Existing value is '${oldvalue}'. Saving."
       report_command_info "$command" "$result"
     else
@@ -52,12 +55,18 @@ done
 settings_changed=$(diff -q /tmp/majestic.yaml /etc/majestic.yaml)
 if [ ! -z "${settings_changed}" ];
 then
+  command="cp -f /tmp/majestic.yaml /etc/majestic.yaml"
+  result=$(cp -f /tmp/majestic.yaml /etc/majestic.yaml 2>&1)
+  report_command_info "$command" "$result"
+
   report_info "Settings changed."
-  cp -f /tmp/majestic.yaml /etc/majestic.yaml
 else
   report_info "Settings not changed."
 fi
-rm /tmp/majestic.yaml
+
+command="rm /tmp/majestic.yaml"
+result=$(rm /tmp/majestic.yaml 2>&1)
+report_command_info "$command" "$result"
 %>
 
 <p class="d-grid gap-2">

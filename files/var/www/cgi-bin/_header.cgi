@@ -25,7 +25,15 @@ content-type: text/html
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="/cgi-bin/status.cgi">Information</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownInformation" href="#"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">Information</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownInformation">
+            <li><a class="dropdown-item" href="/cgi-bin/status.cgi">Information</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/dmesg.cgi">Diagnostic message</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/log.cgi">Log read</a></li>
+          </ul>
+        </li>
         <li class="nav-item"><a class="nav-link" href="/cgi-bin/updates.cgi">Updates</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownNetwork" href="#"

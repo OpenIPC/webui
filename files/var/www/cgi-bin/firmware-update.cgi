@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-if [ -z "$FORM_debug" ]; then
+if [ -z "$POST_debug" ]; then
   redirect_to "/cgi-bin/progress.cgi"
 else
   echo "content-type: text/plain"
@@ -9,9 +9,9 @@ else
 fi
 
 opts=""
-[ ! -z "$FORM_kernel"  ] && opts="${opts} -k"
-[ ! -z "$FORM_rootfs"  ] && opts="${opts} -r"
-[ ! -z "$FORM_reset"   ] && opts="${opts} -n"
-[ ! -z "$FORM_noreboot"] && opts="${opts} -x"
+[ ! -z "$POST_kernel"  ] && opts="${opts} -k"
+[ ! -z "$POST_rootfs"  ] && opts="${opts} -r"
+[ ! -z "$POST_reset"   ] && opts="${opts} -n"
+[ ! -z "$POST_noreboot"] && opts="${opts} -x"
 sysupgrade ${opts}
 %>

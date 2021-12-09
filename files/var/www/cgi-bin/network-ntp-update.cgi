@@ -7,5 +7,5 @@ for i in $(printenv | grep FORM_ | sort 2>&1); do
   [ ! -z "$s" ] && echo "server $s iburst" >> /etc/ntp.conf 2>&1
 done
 #mv /tmp/ntp.conf /etc/ntp.conf 2>&1
-redirect_to "/cgi-bin/ntp.cgi"
+redirect_to "/cgi-bin/network-ntp.cgi"
 %>

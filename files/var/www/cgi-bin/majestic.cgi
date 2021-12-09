@@ -33,13 +33,14 @@ do
   case "$type" in
     boolean)
       [ "true" = "$value" ] && checked=" checked" || checked=""
-      echo "<div class=\"mb-2\">" \
-        "<div class=\"form-check form-switch\">" \
-          "<input class=\"form-check-input\" name=\"${name}\" id=\"${name}\" value=\"true\" type=\"checkbox\" role=\"switch\"${checked}>" \
-          "<label for=\"${name}\" class=\"form-check-label\">${label//_/ }</label>" \
-        "</div>"
+      echo "<div class=\"row mb-2\">" \
+        "<div class=\"col\">" \
+          "<div class=\"form-check form-switch\">" \
+            "<input class=\"form-check-input\" name=\"${name}\" id=\"${name}\" value=\"true\" type=\"checkbox\" role=\"switch\"${checked}>" \
+            "<label for=\"${name}\" class=\"form-check-label\">${label//_/ }</label>" \
+          "</div>"
       [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"
-      echo "</div>"
+      echo "</div></div>"
       ;;
     number)
       echo -n "<div class=\"row mb-2\">"  \

@@ -42,8 +42,8 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
               <label class="form-check-label" for="noreboot">Do not reboot after upgrade.</label>
             </div>
             <div class="col-md-10 offset-md-2">
-              <input class="form-check-input" type="checkbox" name="debug" id="debug" value="true">
-              <label class="form-check-label" for="debug">Show debugging information.</label>
+              <input class="form-check-input" type="checkbox" name="debug" id="debug-fw" value="true">
+              <label class="form-check-label" for="debug-fw">Show debugging information.</label>
             </div>
           </div>
           <a class="btn btn-danger float-end" title="Wipe overlay partition">Reset</a>
@@ -72,7 +72,7 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
               <label class="form-check-label" for="enforce">Disable version checking.</label>
             </div>
             <div class="col-md-10 offset-md-2">
-              <input class="form-check-input" type="checkbox" name="debug-ui" id="debug-ui" value="true">
+              <input class="form-check-input" type="checkbox" name="debug" id="debug-ui" value="true">
               <label class="form-check-label" for="debug-ui">Show debugging information.</label>
             </div>
           </div>
@@ -84,21 +84,27 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
     <div class="card mb-3">
       <div class="card-header">Majestic</div>
       <div class="card-body">
-        <p><b>Installed ver.<%= $mj_version %></b></p>
-        <% if [ -z "$majestic_diff" ]; then %>
-          <p><b>Majestic uses the original configuration.</b>
-            <a href="/cgi-bin/majestic.cgi">Change settings.</a></p>
-        <% else %>
-          <p><b>Majestic uses custom configuration.</b>
-            <a href="/cgi-bin/majestic-diff.cgi">See changes.</a></p>
-        <% fi %>
-        <p class="mb-0">
+        <p><b>Installed ver. <%= $mj_version %></b></p>
+        <form action="/cgi-bin/majestic-github.cgi" method="post">
+          <% if [ -z "$majestic_diff" ]; then %>
+            <p><b>Majestic uses the original configuration.</b>
+              <a href="/cgi-bin/majestic.cgi">Change settings.</a></p>
+          <% else %>
+            <p><b>Majestic uses custom configuration.</b>
+              <a href="/cgi-bin/majestic-diff.cgi">See changes.</a></p>
+          <% fi %>
+	  <div class="row mb-3">
+            <div class="col-md-10 offset-md-2">
+              <input class="form-check-input" type="checkbox" name="debug" id="debug--mj" value="true">
+              <label class="form-check-label" for="debug-mj">Show debugging information.</label>
+	    </div>
+          </div>
           <% if [ ! -z "$majestic_diff" ]; then %>
             <a class="btn btn-danger float-end" href="/cgi-bin/majestic-reset.cgi"
-              title="Restore original configuration">Reset</a>
+                title="Restore original configuration">Reset</a>
           <% fi %>
-          <a class="btn btn-danger" href="/cgi-bin/github-majestic.cgi">Update from GitHub</a>
-        </p>
+          <button class="btn btn-danger">Update from GitHub</button>
+	</form>
       </div>
     </div>
 

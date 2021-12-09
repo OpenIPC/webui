@@ -26,8 +26,24 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
         <form action="/cgi-bin/firmware-update.cgi" method="post">
           <div class="row mb-3">
             <div class="col-md-10 offset-md-2">
+              <input class="form-check-input" type="checkbox" name="kernel" id="kernel" value="true" checked>
+              <label class="form-check-label" for="kernel">Upgrade kernel.</label>
+            </div>
+            <div class="col-md-10 offset-md-2">
+              <input class="form-check-input" type="checkbox" name="rootfs" id="rootfs" value="true" checked>
+              <label class="form-check-label" for="rootfs">Upgrade rootfs.</label>
+            </div>
+            <div class="col-md-10 offset-md-2">
               <input class="form-check-input" type="checkbox" name="reset" id="reset" value="true">
               <label class="form-check-label" for="reset">Reset settings after upgrade.</label>
+            </div>
+            <div class="col-md-10 offset-md-2">
+              <input class="form-check-input" type="checkbox" name="noreboot" id="noreboot" value="true">
+              <label class="form-check-label" for="noreboot">Do not reboot after upgrade.</label>
+            </div>
+            <div class="col-md-10 offset-md-2">
+              <input class="form-check-input" type="checkbox" name="debug" id="debug" value="true">
+              <label class="form-check-label" for="debug">Show debugging information.</label>
             </div>
           </div>
           <a class="btn btn-danger float-end" title="Wipe overlay partition">Reset</a>

@@ -1,13 +1,17 @@
 #!/usr/bin/haserl
+<%in _common.cgi %>
 <%
-echo "HTTP/1.1 302 Moved Temporarily"
-echo "Content-type: text/html; charset=UTF-8"
-echo "Date: $(TZ=GMT date +"%a, %d %b %Y %T %Z")"
-echo "Location: /cgi-bin/progress.cgi"
-echo "Server: httpd"
-echo "Status: 302 Moved Temporarily"
+if [ -z "$FORM_debug" ]; then
+  redirect_to "/cgi-bin/progress.cgi"
+else
+  echo "content-type: text/plain"
+  echo ""
+fi
 
-key=""
-[ ! -z "$FORM_reset" ] key="-n"
-sysupgrade ${key} &
+opts=""
+[ ! -z "$FORM_kernel"  ] && opts="${opts} -k"
+[ ! -z "$FORM_rootfs"  ] && opts="${opts} -r"
+[ ! -z "$FORM_reset"   ] && opts="${opts} -n"
+[ ! -z "$FORM_noreboot"] && opts="${opts} -x"
+sysupgrade ${opts}
 %>

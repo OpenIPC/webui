@@ -31,6 +31,12 @@ interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
           <button type="submit" class="btn btn-primary mt-2">Save changes</button>
         </form>
       </div>
+      <div class="card-body">
+        <b># cat /etc/TZ</b>
+        <pre><% cat /etc/TZ %></pre>
+        <b># echo $TZ</b>
+        <pre><% echo $TZ %></pre>
+      </div>
     </div>
   </div>
 

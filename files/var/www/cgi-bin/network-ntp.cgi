@@ -11,30 +11,24 @@ interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-4">
   <div class="col">
     <div class="card mb-3">
-      <div class="card-body">
-        <pre><% cat /etc/ntp.conf %></pre>
-      </div>
-    </div>
-  </div>
-
-  <div class="col">
-    <div class="card mb-3">
       <h5 class="card-header">Timezone</h5>
       <!-- https://raw.githubusercontent.com/openwrt/luci/master/modules/luci-base/luasrc/sys/zoneinfo/tzdata.lua -->
       <div class="card-body">
         <form action="/cgi-bin/network-tz-update.cgi" method="post">
-          <div class="row">
-            <label class="col-md-4" for="tz_name" class="form-label">Zone name</label>
+          <div class="row mb-1">
+            <label class="col-md-4 form-label" for="tz_name">Zone name</label>
             <div class="col-md-8">
               <input class="form-select" name="tz_name" id="tz_name" list="tz_list" value="<%= $tz_name %>">
               <datalist id="tz_list"></datalist>
             </div>
           </div>
-          <div class="row">
-            <label class="col-md-4" for="tz_data" class="form-label">Zone string</label>
-            <div class="col-md-8"><input type="text" class="form-control" name="tz_data" id="tz_data" value="<%= $tz_data %>" readonly></div>
+          <div class="row mb-1">
+            <label class="col-md-4 form-label" for="tz_data">Zone string</label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="tz_data" id="tz_data" value="<%= $tz_data %>" readonly>
+            </div>
           </div>
-          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary mt-2">Save changes</button>
         </form>
       </div>
     </div>
@@ -57,12 +51,17 @@ interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
               echo "</div>"
             done
           %>
-          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary mt-2">Save changes</button>
         </form>
+      </div>
+      <div class="card-body">
+        <b># cat /etc/ntp.conf</b>
+        <pre><% cat /etc/ntp.conf %></pre>
       </div>
     </div>
   </div>
 </div>
+
 <script src="/tz.js" async></script>
 <script>
 function findTimezone(tz) {

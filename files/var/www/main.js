@@ -38,6 +38,10 @@ function engage() {
         $$('input[data-for]').forEach(el => el.addEventListener('click', ev => toggleAuto(ev.target)));
         $$('.btn-danger, .btn-warning, .confirm').forEach(el => el.addEventListener('click', ev => (!confirm("Are you sure?")) ? ev.preventDefault() : null));
         $$('a[href^=http]').forEach(el => el.target = '_blank');
+
+        $$('input.pat-host').forEach(el => el.pattern='^[a-zA-Z0-9-_.]+$');
+        $$('input.pat-host-ip').forEach(el => el.pattern='^[a-zA-Z0-9-_.]+$');
+
     }
 
     window.addEventListener('load', initAll);

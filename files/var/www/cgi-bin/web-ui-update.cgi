@@ -47,7 +47,7 @@ if [ ! -z "$error" ]; then %>
       "Only")
          src=$(echo $different | cut -d ' ' -f 3 | cut -d: -f 1)$(echo $different | cut -d ' ' -f 4)
         dst=/$(echo $different | cut -d ' ' -f 3 | cut -d: -f 1 | cut -d/ -f 5-)$(echo $different | cut -d ' ' -f 4)
-        [ "${zipdir}" == "$(echo $different | cut -d ' ' -f 3 | cut -d/ -f 3)" ] && cp -av ${src} ${dst} 2>&1 || rm -fv $src
+        [ "${zipdir}" == "$(echo $different | cut -d ' ' -f 3 | cut -d/ -f 3)" ] && cp -av ${src} ${dst} 2>&1 || rm -fv $src 2>&1
         ;;
       "Files")
         src=$(echo $different | cut -d ' ' -f 2)
@@ -58,7 +58,7 @@ if [ ! -z "$error" ]; then %>
         ;;
     esac
   done
-  rm -rf ${tmp_file} /tmp/${zipdir} 2>&1
+  rm -rfv ${tmp_file} /tmp/${zipdir} 2>&1
   echo ${gh_etag} > ${etag_file}
 fi
 %>

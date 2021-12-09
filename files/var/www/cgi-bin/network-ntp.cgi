@@ -34,8 +34,7 @@ interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
       <div class="card-body">
         <b># cat /etc/TZ</b>
         <pre><% cat /etc/TZ %></pre>
-        <b># echo $TZ</b>
-        <pre><% echo $TZ %></pre>
+        <% [ "$(cat /etc/TZ)" != "$TZ" ] && echo "<div class=\"alert alert-danger\">TZ in system environment needs updating. Please restart the system!</div>" %>
       </div>
     </div>
   </div>

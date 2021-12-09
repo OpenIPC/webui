@@ -35,7 +35,7 @@ soc_temp=$(ipcinfo --temp 2>&1)
         <b># date</b>
         <pre><% date %></pre>
         <p class="small">
-          <a href="/cgi-bin/network.cgi">Edit timezone</a> |
+          <a href="/cgi-bin/network-ntp.cgi">Edit timezone</a> |
           <a href="/cgi-bin/ntp-update.cgi">Sync time with an NTP server</a>
         </p>
         <b># uptime</b>

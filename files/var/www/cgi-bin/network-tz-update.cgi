@@ -13,8 +13,8 @@ fi
 if [ ! -z "$error"]; then
   report_error "$output"
 else
-  command="echo \"$POST_tz_data\" > /etc/TZ && export TZ=\"$POST_tz_data\" && echo \"$POST_tz_name\" > /etc/tzname"
-  output=$(echo "${POST_tz_data}" > /etc/TZ && export TZ="${POST_tz_data}" && echo "${POST_tz_name}" > /etc/tzname 2>&1)
+  command="echo \"$POST_tz_data\" > /etc/TZ && echo \"$POST_tz_name\" > /etc/tzname"
+  output=$(echo "${POST_tz_data}" > /etc/TZ && echo "${POST_tz_name}" > /etc/tzname 2>&1)
   result=$?
   if [ "0" -eq "$result" ]; then
     report_command_success "$command" "$output"

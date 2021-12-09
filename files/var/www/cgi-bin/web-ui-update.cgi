@@ -29,7 +29,7 @@ if [ ! -z "$error" ]; then %>
 <% report_error "$error" %>
 <%in _footer.cgi %>
 <% else
-    if [ -z "$POST_debug" ]; then
+    if [ -z "$POST_debug-ui" ]; then
       redirect_to "/cgi-bin/progress.cgi"
     else
       echo "content-type: text/plain"
@@ -39,7 +39,25 @@ if [ ! -z "$error" ]; then %>
   echo "$command"
   echo ""
   unzip -o -d /tmp ${tmp_file} 2>&1
-  cp -av /tmp/${zipdir}/files/var/www /var/ 2>&1
+  IFS=$'\n'
+  for different in $(diff -qr /tmp/${zipdir}/files/var/www/ /var/www/)
+  do
+    diff_type=$(echo "$different" | cut -d " " -f 1)    
+    case $diff_type in
+      "Only")
+         src=$(echo $different | cut -d ' ' -f 3 | cut -d: -f 1)$(echo $different | cut -d ' ' -f 4)
+        dst=/$(echo $different | cut -d ' ' -f 3 | cut -d: -f 1 | cut -d/ -f 5-)$(echo $different | cut -d ' ' -f 4)
+        [ "${zipdir}" == "$(echo $different | cut -d ' ' -f 3 | cut -d/ -f 3)" ] && cp -av ${src} ${dst} 2>&1 || rm -fv $src
+        ;;
+      "Files")
+        src=$(echo $different | cut -d ' ' -f 2)
+        dst=$(echo $different | cut -d ' ' -f 4)
+        cp -av ${src} ${dst} 2>&1
+        ;;
+      *)
+        ;;
+    esac
+  done
   rm -rf ${tmp_file} /tmp/${zipdir} 2>&1
   echo ${gh_etag} > ${etag_file}
 fi

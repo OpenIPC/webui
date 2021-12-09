@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 
-<% 
-get_soc() {  
+<%
+get_soc() {
   case "$soc" in
     gk7605v100 | gk7205v300 | gk7202v300 | gk7205v200)
       soc="gk7205v200"
@@ -48,7 +48,7 @@ check_url() {
 <script>window.onload = engage;</script>
 <pre>
 <%
-soc=$(ipcinfo --chip_id 2>&1) 
+soc=$(ipcinfo --chip_id 2>&1)
 if [ -f /rom/usr/bin/majestic ] && get_soc ; then
   if check_url ; then
     killall majestic
@@ -60,13 +60,13 @@ if [ -f /rom/usr/bin/majestic ] && get_soc ; then
 
     curl -k -L -o /tmp/majestic.tar.bz2 http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.bz2
 
-    bunzip2 -c /tmp/majestic.tar.bz2 | tar -x -C /tmp/ ./majestic 
+    bunzip2 -c /tmp/majestic.tar.bz2 | tar -x -C /tmp/ ./majestic
     new_majestic_size=$(ls -s /tmp/majestic | xargs | cut -d " " -f 1)
 
     if [ ! $new_majestic_size -gt $available_space ]; then
      # bunzip2 -ck /tmp/majestic.tar.bz2 | tar -xk -C /usr/lib/ ./lib*
       [ -f /overlay/root/usr/bin/majestic ] && rm -f /usr/bin/majestic
-      mv -f /tmp/majestic /usr/bin/majestic      
+      mv -f /tmp/majestic /usr/bin/majestic
     else
       error="Not enough space to update majestic."
     fi

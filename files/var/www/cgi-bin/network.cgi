@@ -22,26 +22,19 @@ timezone=$(cat /etc/TZ)
       <div class="card-body">
         <form action="/cgi-bin/network-update.cgi" method="post">
           <input type="hidden" name="action" value="update">
-
-          <div class="row">
-            <div class="col-12 col-md-5">
-              <label for="hostname" class="form-label">Device Name</label>
-            </div>
-            <div class="col-md-7 mb-3">
+          <div class="row mb-1">
+	    <label class="col-md-5 form-label" for="hostname">Device Name</label>
+            <div class="col-md-7 mb-1">
               <input class="form-control pat-host" type="text" name="hostname" id="hostname" value="<%= $hostname %>" placeholder="device-name">
               <i class="hint">Make hostname unique using MAC address information (<%= $macaddr %>).</i>
             </div>
           </div>
-
-          <div class="row">
-            <div class="col-md-5">
-              <label for="password" class="form-label">Interface Password</label>
-            </div>
-            <div class="col-md-7 mb-3">
+          <div class="row mb-1">
+            <label class="col-md-5 form-label" for="password">Interface Password</label>
+            <div class="col-md-7">
               <input type="password" class="form-control" name="password" id="password" value="<%= $password %>" placeholder="K3wLHaZk3R!">
             </div>
           </div>
-
           <button type="submit" class="btn btn-primary">Save Settings</button>
         </form>
       </div>
@@ -54,28 +47,22 @@ timezone=$(cat /etc/TZ)
       <div class="card-body">
         <form action="/cgi-bin/network-update.cgi" method="post">
           <input type="hidden" name="action" value="update">
-          <div class="row">
-            <div class="col-md-5">
-              <label for="ipaddr" class="form-label">IP Address</label>
-            </div>
-            <div class="col-md-7  mb-3">
+          <div class="row mb-1">
+            <label class="col-md-5 form-label" for="ipaddr">IP Address</label>
+            <div class="col-md-7">
               <input type="text" class="form-control" name="ipaddr" id="ipaddr" value="<%= $ipaddr %>" data-real="<%= $ipaddr_eth0 %>" placeholder="192.168.10.10">
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-5">
-              <label for="netmask" class="form-label">IP Netmask</label>
-            </div>
-            <div class="col-md-7 mb-3">
+          <div class="row mb-1">
+            <label class="col-md-5 form-label" for="netmask">IP Netmask</label>
+            <div class="col-md-7">
               <input type="text" class="form-control" name="netmask" id="netmask" value="<%= $netmask %>" data-real="<%= $netmask_eth0 %>" placeholder="255.255.255.0">
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-5">
-              <label for="remote" class="form-label">VTUNd Server</label>
-            </div>
-            <div class="col-md-7 mb-3">
-              <div class="input-group mb-3">
+          <div class="row mb-1">
+            <label class="col-md-5 form-label" for="remote">VTUNd Server</label>
+            <div class="col-md-7">
+              <div class="input-group">
                 <input type="text" class="form-control" name="remote" id="remote" value="<%= $vpn1 %>" placeholder="vtun.net">
                 <div class="input-group-text">
                   <input class="form-check-input mt-0 me-2" type="checkbox" name="remote" value="__delete">
@@ -84,11 +71,7 @@ timezone=$(cat /etc/TZ)
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col mt-3 mb-0">
-              <input type="submit" class="btn btn-primary" value="Save Settings">
-            </div>
-          </div>
+          <button type="submit" class="btn btn-primary">Save Settings"</button>
         </form>
       </div>
       <div class="card-footer bg-black text-white">Sorry, some things aren't working yet.</div>

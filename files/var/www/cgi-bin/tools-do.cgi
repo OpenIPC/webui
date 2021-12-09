@@ -1,18 +1,18 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-case $FORM_action in
+case $POST_action in
   ping)
-    [ "auto" = "$FORM_iface" ] && iface="" || iface=" -I $FORM_iface"
+    [ "auto" = "$POST_iface" ] && iface="" || iface=" -I $POST_iface"
     title="Ping Quality"
-    command="ping -c 15 -s 1500 ${iface}${FORM_target}"
-    output=$(ping -c 15 -s 1500 ${iface}${FORM_target} 2>&1)
+    command="ping -c 15 -s 1500 ${iface}${POST_target}"
+    output=$(ping -c 15 -s 1500 ${iface}${POST_target} 2>&1)
     ;;
   trace)
-    [ "auto" = "$FORM_iface" ] && iface="" || iface=" -i $FORM_iface"
+    [ "auto" = "$POST_iface" ] && iface="" || iface=" -i $POST_iface"
     title="Traceroute Quality"
-    command="traceroute ${iface}${FORM_target}"
-    output=$(traceroute ${iface}${FORM_target} 2>&1)
+    command="traceroute ${iface}${POST_target}"
+    output=$(traceroute ${iface}${POST_target} 2>&1)
     ;;
 esac
 result=$?

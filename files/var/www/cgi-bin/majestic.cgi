@@ -35,7 +35,7 @@ do
       [ "true" = "$value" ] && checked=" checked" || checked=""
       echo "<div class=\"mb-2\">" \
         "<div class=\"form-check form-switch\">" \
-          "<input name=\"${name}\" id=\"${name}\" value=\"true\" type=\"checkbox\" role=\"switch\"${checked} class=\"form-check-input\">" \
+          "<input class=\"form-check-input\" name=\"${name}\" id=\"${name}\" value=\"true\" type=\"checkbox\" role=\"switch\"${checked}>" \
           "<label for=\"${name}\" class=\"form-check-label\">${label//_/ }</label>" \
         "</div>"
       [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"
@@ -44,8 +44,9 @@ do
     number)
       echo -n "<div class=\"row mb-2\">"  \
         "<div class=\"col-md-7\"><label for=\"${name}\" class=\"form-label\">${label//_/ }</label></div>" \
-        "<div class=\"col-md-5\"><div class=\"input-group\">" \
-          "<input type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\" class=\"form-control text-end\">"
+        "<div class=\"col-md-5\">" \
+          "<div class=\"input-group\">" \
+            "<input class=\"form-control text-end\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\">"
       [ ! -z "$units" ] && echo -n "<span class=\"input-group-text\">${units}</span>"
       echo "</div></div>"
       [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"
@@ -53,15 +54,18 @@ do
       ;;
     range)
       echo "<div class=\"row mb-2\">" \
-        "<div class=\"col-lg-6\"><label for=\"${name}\" class=\"form-label\">${label//_/ }</label></div>" \
-        "<div class=\"col-lg-6\"><div class=\"input-group\">"
+        "<div class=\"col-12\"><label class=\"form-label\" for=\"${name}\">${label//_/ }</label></div>" \
+        "<div class=\"col-12\">" \
+          "<div class=\"input-group\">"
       if [ ! -z $(echo "${options}" | grep -E auto) ]
       then
         [ "auto" = "$value" ] && checked=" checked" || checked=""
-        echo "<span class=\"input-group-text\"><label><input type=\"checkbox\" class=\"form-check-input auto-value\" data-for=\"${name}\" data-value=\"${default}\"${checked}> auto</label></span>"
+        echo "<span class=\"input-group-text\">" \
+          "<label><input type=\"checkbox\" class=\"form-check-input auto-value\" data-for=\"${name}\" data-value=\"${default}\"${checked}> auto</label>" \
+          "</span>"
       fi
       [ "auto" = "$value" ] && readonly=" readonly" || readonly=""
-      echo "<input type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\" class=\"form-control text-end range\" data-units=\"${units}\"${readonly}>"
+      echo "<input class=\"form-control text-end range\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\" data-units=\"${units}\"${readonly}>"
       [ ! -z "$units" ] && echo "<span class=\"input-group-text\">${units}</span>"
       echo "</div></div>"
       [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"
@@ -69,9 +73,10 @@ do
       ;;
     select)
       echo -n "<div class=\"row mb-2\">" \
-        "<div class=\"col-md-7\"><label for=\"${name}\" class=\"form-label\">${label//_/ }</label></div>" \
-        "<div class=\"col-md-5\"><div class=\"input-group\">" \
-          "<select name=\"${name}\" id=\"${name}\" class=\"form-control\">"
+        "<div class=\"col-md-7\"><label class=\"form-label\" for=\"${name}\">${label//_/ }</label></div>" \
+        "<div class=\"col-md-5\">" \
+          "<div class=\"input-group\">" \
+            "<select class=\"form-select\" name=\"${name}\" id=\"${name}\">"
       [ -z "$value" ] && echo -n "<option value=\"\"></option>"
       for o in ${options//,/ }
       do
@@ -86,9 +91,10 @@ do
       ;;
     string)
       echo "<div class=\"row mb-2\">" \
-        "<div class=\"col-12\"><label for=\"${name}\" class=\"form-label\">${label//_/ }</label></div>" \
-        "<div class=\"col-12\"><div class=\"input-group\">" \
-          "<input type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\" class=\"form-control\">"
+        "<div class=\"col-12 form-label\"><label for=\"${name}\">${label//_/ }</label></div>" \
+        "<div class=\"col-12\">" \
+          "<div class=\"input-group\">" \
+            "<input class=\"form-control\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\">"
       [ ! -z "$units" ] && echo "<span class=\"input-group-text\">${units}</span>"
       echo "</div>"
       [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"

@@ -29,7 +29,7 @@ if [ ! -z "$error" ]; then %>
 <% report_error "$error" %>
 <%in _footer.cgi %>
 <% else
-    if [ -z "$POST_debug-ui" ]; then
+    if [ -z "$POST_debug" ]; then
       redirect_to "/cgi-bin/progress.cgi"
     else
       echo "content-type: text/plain"

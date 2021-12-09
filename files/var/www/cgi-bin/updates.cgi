@@ -72,8 +72,8 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
               <label class="form-check-label" for="enforce">Disable version checking.</label>
             </div>
             <div class="col-md-10 offset-md-2">
-              <input class="form-check-input" type="checkbox" name="debug" id="debug" value="true">
-              <label class="form-check-label" for="debug">Show debugging information.</label>
+              <input class="form-check-input" type="checkbox" name="debug-ui" id="debug-ui" value="true">
+              <label class="form-check-label" for="debug-ui">Show debugging information.</label>
             </div>
           </div>
           <button type="submit" class="btn btn-danger">Update from GitHub</button>

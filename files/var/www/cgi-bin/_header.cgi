@@ -32,6 +32,7 @@ content-type: text/html
             <li><a class="dropdown-item" href="/cgi-bin/status.cgi">Information</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/dmesg.cgi">Diagnostic message</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/log.cgi">Log read</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info/httpd.cgi">HTTPd environment</a></li>
           </ul>
         </li>
         <li class="nav-item"><a class="nav-link" href="/cgi-bin/updates.cgi">Updates</a></li>

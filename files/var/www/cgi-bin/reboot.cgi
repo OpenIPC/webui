@@ -1,4 +1,5 @@
 #!/usr/bin/haserl
+<%in _common.cgi %>
 <%
 command="reboot -d 3"
 output=$(reboot -d 3)

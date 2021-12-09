@@ -1,5 +1,6 @@
 #!/usr/bin/haserl
 <%
+page_title="Camera Preview"
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 button() {
   img=$1; alt=$2; id=$(echo "${alt// /-}" | tr '[:upper:]' '[:lower:]')

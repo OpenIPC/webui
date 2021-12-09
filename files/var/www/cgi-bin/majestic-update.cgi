@@ -4,10 +4,10 @@
 <h2>Updating Majestic settings</h2>
 <%
 cp -f /etc/majestic.yaml /tmp/majestic.yaml
-data="$(printenv|grep FORM_)"
+data="$(printenv|grep POST_)"
 IFS=$'\n' # make newlines the only separator
 for name in $data; do
-  key=".$(echo $name | sed 's/^FORM_//' | cut -d= -f1 | sed 's/-/./g')"
+  key=".$(echo $name | sed 's/^POST_//' | cut -d= -f1 | sed 's/-/./g')"
   value="$(echo $name | cut -d= -f2)"
   oldvalue=$(yaml-cli -g "$key")
 
@@ -60,8 +60,9 @@ fi
 rm /tmp/majestic.yaml
 %>
 
-<p><a class="btn btn-primary" href="/cgi-bin/majestic.cgi">Go to Majestic settings page.</a>
-   <a class="btn btn-danger" href="/cgi-bin/majestic-reset.cgi">Restore original configuration</a></p>
+<p class="d-grid gap-2">
+  <a class="btn btn-primary" href="/cgi-bin/majestic.cgi">Go to Majestic settings</a>
+  <a class="btn btn-danger" href="/cgi-bin/majestic-reset.cgi">Restore original configuration</a></p>
 
 <%in _footer.cgi %>
 

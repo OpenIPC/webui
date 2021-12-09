@@ -47,10 +47,6 @@ body > main > .container > h2 {
     /*max-height: 10rem;*/
     padding: 0.5rem 1rem;
 }
-.card.danger .card-header {
-    border-bottom-color: var(--bs-danger);
-    color: var(--bs-danger);
-}
 .pre {
     white-space: pre;
 }

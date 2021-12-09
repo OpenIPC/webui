@@ -1,11 +1,14 @@
 content-type: text/html
 
+<%
+[ ! -z "$page_title" ] && page_title="$page_title - OpenIPC" || page_title="OpenIPC"
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>OpenIPC</title>
+  <title><%= $page_title %></title>
   <link rel="shortcut icon" href="/favicon.png">
   <link rel="stylesheet" href="/bootstrap.min.css">
   <link rel="stylesheet" href="/bootstrap.override.css">
@@ -24,8 +27,24 @@ content-type: text/html
       <ul class="navbar-nav">
         <li class="nav-item"><a class="nav-link" href="/cgi-bin/status.cgi">Information</a></li>
         <li class="nav-item"><a class="nav-link" href="/cgi-bin/updates.cgi">Updates</a></li>
-        <li class="nav-item"><a class="nav-link" href="/cgi-bin/network.cgi">Network</a></li>
-        <li class="nav-item"><a class="nav-link" href="/cgi-bin/majestic.cgi">Majestic</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownNetwork" href="#"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">Network</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownNetwork">
+            <li><a class="dropdown-item" href="/cgi-bin/network.cgi">Settings</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/network-ntp.cgi">NTP Settings</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownMajestic" href="#"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">Majestic</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMajestic">
+            <li><a class="dropdown-item" href="/cgi-bin/majestic.cgi">Settings</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/majestic-diff.cgi">Review Changes</a></li>
+            <li><a class="dropdown-item text-danger confirm" href="/cgi-bin/majestic-reset.cgi">Restore Original</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/majestic-download.cgi">Backup</a></li>
+          </ul>
+        </li>
         <li class="nav-item"><a class="nav-link" href="/cgi-bin/tools.cgi">Tools</a></li>
         <li class="nav-item"><a class="nav-link" href="/cgi-bin/preview.cgi">Preview</a></li>
       </ul>

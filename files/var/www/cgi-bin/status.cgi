@@ -1,5 +1,6 @@
 #!/usr/bin/haserl
 <%
+page_title="Status"
 interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 hostname="Hostname: $(hostname -s)"
@@ -34,7 +35,7 @@ soc_temp=$(ipcinfo --temp 2>&1)
         <b># date</b>
         <pre><% date %></pre>
         <p class="small">
-          <a href="/cgi-bin/network.cgi">Edit timezone</a> |
+          <a href="/cgi-bin/network-ntp.cgi">Edit timezone</a> |
           <a href="/cgi-bin/ntp-update.cgi">Sync time with an NTP server</a>
         </p>
         <b># uptime</b>

@@ -18,7 +18,7 @@ interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
           <div class="row mb-1">
             <label class="col-md-4 form-label" for="tz_name">Zone name</label>
             <div class="col-md-8">
-              <input class="form-select" name="tz_name" id="tz_name" list="tz_list" value="<%= $tz_name %>">
+              <input class="form-control" name="tz_name" id="tz_name" list="tz_list" value="<%= $tz_name %>">
               <datalist id="tz_list"></datalist>
             </div>
           </div>
@@ -84,6 +84,7 @@ window.addEventListener('load', () => {
     el.appendChild(o);
   });
   $('#tz_name').addEventListener('selectionchange', updateTimezone);
+  $('#tz_name').addEventListener('change', updateTimezone);
   updateTimezone();
 });
 </script>

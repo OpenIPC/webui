@@ -39,7 +39,7 @@ if [ ! -z "$error" ]; then %>
   echo "$command"
   echo ""
   unzip -o -d /tmp ${tmp_file} 2>&1
-  cp -au /tmp/${zipdir}/files/var/www/ /var/www/ 2>&1
+  cp -au /tmp/${zipdir}/files/var/www /var/ 2>&1
   rm -rfv ${tmp_file} /tmp/${zipdir} 2>&1
   echo ${gh_etag} > ${etag_file}
 fi

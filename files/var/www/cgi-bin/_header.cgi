@@ -28,8 +28,8 @@
             role="button" data-bs-toggle="dropdown" aria-expanded="false">Information</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownInformation">
             <li><a class="dropdown-item" href="/cgi-bin/status.cgi">Information</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/dmesg.cgi">Diagnostic message</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/log.cgi">Log read</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info/dmesg.cgi">Diagnostic message</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info/log.cgi">Log read</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/info/httpd.cgi">HTTPd environment</a></li>
           </ul>
         </li>

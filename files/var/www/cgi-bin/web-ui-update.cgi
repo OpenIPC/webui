@@ -39,25 +39,7 @@ if [ ! -z "$error" ]; then %>
   echo "$command"
   echo ""
   unzip -o -d /tmp ${tmp_file} 2>&1
-  IFS=$'\n'
-  for different in $(diff -qr /tmp/${zipdir}/files/var/www/ /var/www/)
-  do
-    diff_type=$(echo "$different" | cut -d " " -f 1)    
-    case $diff_type in
-      "Only")
-         src=$(echo $different | cut -d ' ' -f 3 | cut -d: -f 1)$(echo $different | cut -d ' ' -f 4)
-        dst=/$(echo $different | cut -d ' ' -f 3 | cut -d: -f 1 | cut -d/ -f 5-)$(echo $different | cut -d ' ' -f 4)
-        [ "${zipdir}" == "$(echo $different | cut -d ' ' -f 3 | cut -d/ -f 3)" ] && cp -av ${src} ${dst} 2>&1 || rm -fv $src 2>&1
-        ;;
-      "Files")
-        src=$(echo $different | cut -d ' ' -f 2)
-        dst=$(echo $different | cut -d ' ' -f 4)
-        cp -av ${src} ${dst} 2>&1
-        ;;
-      *)
-        ;;
-    esac
-  done
+  cp -au /tmp/${zipdir}/files/var/www/ /var/www/ 2>&1
   rm -rfv ${tmp_file} /tmp/${zipdir} 2>&1
   echo ${gh_etag} > ${etag_file}
 fi

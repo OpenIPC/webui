@@ -6,6 +6,15 @@ tz_data=$(cat /etc/TZ)
 [ ! -f /etc/tzname ] && $(grep "$tz_data" /var/www/tz.js | head -1 | cut -d ":" -f 2 | cut -d "," -f 1 | tr -d "'" > /etc/tzname)
 tz_name=$(cat /etc/tzname)
 interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
+
+check_env_tz() {
+  if [ "$(cat /etc/TZ)" != "$TZ" ]; then
+    echo "<div class=\"alert alert-danger\">" \
+      "<p><b>\$TZ in system environment needs updating.</b> Please restart the system!</p>" \
+      "<a class=\"btn btn-danger\" href=\"/cgi-bin/reboot.cgi\">Restart</a>" \
+      "</div>"
+  fi
+}
 %>
 <%in _header.cgi %>
 <h2>NTP Settings</h2>
@@ -37,7 +46,9 @@ interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
         <pre><% cat /etc/TZ %></pre>
         <b># echo $TZ</b>
         <pre><% echo $TZ %></pre>
-        <% [ "$(cat /etc/TZ)" != "$TZ" ] && echo "<div class=\"alert alert-danger\">TZ in system environment needs updating. Please restart the system!</div>" %>
+        <b># date</b>
+        <pre><% date %></pre>
+        <% check_env_tz %>
       </div>
     </div>
   </div>

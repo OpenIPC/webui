@@ -1,17 +1,10 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
+zipdir="microbe-web-${POST_version}"
+url="https://github.com/OpenIPC/microbe-web/archive/refs/heads/${POST_version}.zip"
 tmp_file=/tmp/microbe.zip
 etag_file=/root/.ui.etag
-if [ "development" = "$POST_version" ]
-then
-  url="https://codeload.github.com/OpenIPC/microbe-web/zip/refs/heads/development"
-  zipdir="microbe-web-development"
-else
-  url="https://github.com/OpenIPC/microbe-web/archive/refs/heads/stable.zip"
-  zipdir="microbe-web-stable"
-fi
-
 opts="-skL --etag-save $etag_file"
 [ -z "$POST_enforce" ] && opts="$opts --etag-compare $etag_file"
 

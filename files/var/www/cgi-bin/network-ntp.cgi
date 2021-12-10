@@ -14,7 +14,6 @@ interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
   <div class="col">
     <div class="card mb-3">
       <h5 class="card-header">Timezone</h5>
-      <!-- https://raw.githubusercontent.com/openwrt/luci/master/modules/luci-base/luasrc/sys/zoneinfo/tzdata.lua -->
       <div class="card-body">
         <form action="/cgi-bin/network-tz-update.cgi" method="post">
           <div class="row mb-1">

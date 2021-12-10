@@ -1,4 +1,5 @@
 #!/usr/bin/haserl
+<%in _common.cgi %>
 <%
 command="/usr/sbin/firstboot -s"
 output=$(/usr/sbin/firstboot -s 2>&1)

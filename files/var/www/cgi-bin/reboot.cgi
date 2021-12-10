@@ -1,6 +1,7 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
+page_title="Rebooting..."
 command="reboot -d 3"
 output=$(reboot -d 3)
 result=$?

@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
+<%in _common.cgi %>
 <%
 page_title="Updates"
-
 ui_date=$(ls -d --full-time /var/www/.etag | xargs | cut -d " " -f 6,7)
 ui_version=$(date --date="$ui_date" +"%s")
 fw_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 2>&1)

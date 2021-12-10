@@ -1,4 +1,16 @@
 <%
+html_title() {
+   [ ! -z "$1" ] && echo -n "$1 - "
+  echo -n  "OpenIPC"
+}
+http_header_html() {
+  echo "content-type: text/html"
+  echo ""
+}
+http_header_text() {
+  echo "content-type: text/plain"
+  echo ""
+}
 redirect_to() {
   echo "HTTP/1.1 302 Moved Temporarily"
   echo "Content-type: text/html; charset=UTF-8"

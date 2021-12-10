@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-
+<%in _common.cgi %>
 <%
 get_soc() {
   case "$soc" in

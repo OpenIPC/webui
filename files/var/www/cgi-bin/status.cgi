@@ -1,4 +1,5 @@
 #!/usr/bin/haserl
+<%in _common.cgi %>
 <%
 page_title="Status"
 interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})

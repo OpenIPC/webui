@@ -1,4 +1,5 @@
 #!/usr/bin/haserl
+<%in _common.cgi %>
 <%
 page_title="Network"
 hostname=$(hostname -s)

@@ -1,8 +1,7 @@
 #!/usr/bin/haserl
-<%
-page_title="Majestic Settings"
-%>
+<%in _common.cgi %>
 <%in _mj.cgi %>
+<% page_title="Majestic Settings" %>
 <%in _header.cgi %>
 <h2>Majestic Settings</h2>
 

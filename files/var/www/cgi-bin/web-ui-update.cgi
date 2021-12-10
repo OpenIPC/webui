@@ -32,8 +32,7 @@ if [ ! -z "$error" ]; then %>
     if [ -z "$POST_debug" ]; then
       redirect_to "/cgi-bin/progress.cgi"
     else
-      echo "content-type: text/plain"
-      echo ""
+      http_header_html
     fi
   fi
   echo "$command"

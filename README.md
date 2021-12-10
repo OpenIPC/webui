@@ -1,7 +1,11 @@
 # microbe-web
 
-Microbe-WEB it is a simple and self-contained WEB interface based on httpd + haserl
+Microbe Web UI is a default web interface for OpenIPC firmware.
 
-The interface works on port 85
+Microbe Web is lightweight but powerful interface written mostly in shell
+and [haserl][haserl]. Web UI listens on port 85.
 
-Wiki of microbe-web found [here](https://github.com/OpenIPC/firmware/wiki/microbe-web)
+Documentation is available [in our wiki][wiki].
+
+[haserl]: http://haserl.sourceforge.net/
+[wiki]: https://github.com/OpenIPC/firmware/wiki/microbe-web

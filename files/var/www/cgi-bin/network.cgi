@@ -23,7 +23,7 @@ timezone=$(cat /etc/TZ)
         <form action="/cgi-bin/network-update.cgi" method="post">
           <input type="hidden" name="action" value="update">
           <div class="row mb-1">
-	    <label class="col-md-5 form-label" for="hostname">Device Name</label>
+            <label class="col-md-5 form-label" for="hostname">Device Name</label>
             <div class="col-md-7 mb-1">
               <input class="form-control pat-host" type="text" name="hostname" id="hostname" value="<%= $hostname %>" placeholder="device-name">
               <i class="hint">Make hostname unique using MAC address information (<%= $macaddr %>).</i>

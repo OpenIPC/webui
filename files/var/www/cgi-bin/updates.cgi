@@ -93,18 +93,18 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
             <p><b>Majestic uses custom configuration.</b>
               <a href="/cgi-bin/majestic-diff.cgi">See changes.</a></p>
           <% fi %>
-	  <div class="row mb-3">
+          <div class="row mb-3">
             <div class="col-md-10 offset-md-2">
               <input class="form-check-input" type="checkbox" name="debug" id="debug--mj" value="true">
               <label class="form-check-label" for="debug-mj">Show debugging information.</label>
-	    </div>
+            </div>
           </div>
           <% if [ ! -z "$majestic_diff" ]; then %>
             <a class="btn btn-danger float-end" href="/cgi-bin/majestic-reset.cgi"
                 title="Restore original configuration">Reset</a>
           <% fi %>
           <button class="btn btn-danger">Update from GitHub</button>
-	</form>
+        </form>
       </div>
     </div>
 

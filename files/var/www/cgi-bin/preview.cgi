@@ -57,7 +57,7 @@ videomp4() {
           <dd>MJPEG video stream.</dd>
           <dt>http://<%= $ipaddr %>/video.mp4</dt>
           <dd>fMP4 video stream.</dd>
-          <dt>rtsp://<%= $ipaddr %></dt>
+          <dt>rtsp://<%= $ipaddr %>/stream=0</dt>
           <dd>RTSP primary stream ("video0").</dd>
           <dt>rtsp://<%= $ipaddr %>/stream=1</dt>
           <dd>RTSP secondary stream ("video1").</dd>
@@ -122,9 +122,9 @@ videomp4() {
       <div class="card-header">Night API</div>
       <div class="card-body small">
         <dl>
-          <dt>http://<%= $ipaddr %>/night.on</dt>
+          <dt>http://<%= $ipaddr %>/night/on</dt>
           <dd>Turn on night mode.</dd>
-          <dt>http://<%= $ipaddr %>/night.off</dt>
+          <dt>http://<%= $ipaddr %>/night/off</dt>
           <dd>Turn off night mode.</dd>
           <dt>http://<%= $ipaddr %>/night/invert</dt>
           <dd>Invert current mode.</dd>

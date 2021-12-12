@@ -76,6 +76,7 @@ flash_read() {
   type=$(echo $flash | cut -d ":" -f 1)
   message=$(echo $flash | cut -d ":" -f 2)
   echo "<div class=\"alert alert-$type\">$message</div>"
+  flash_delete
 }
 flash_save() {
   xheader="X-ErrorMessage: $2"

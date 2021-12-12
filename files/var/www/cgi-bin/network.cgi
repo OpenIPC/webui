@@ -27,8 +27,8 @@ timezone=$(cat /etc/TZ)
             <label class="col-md-5 form-label" for="hostname">Device Name</label>
             <div class="col-md-7 mb-1">
               <input class="form-control pat-host" type="text" name="hostname" id="hostname" value="<%= $hostname %>" placeholder="device-name">
-              <i class="hint">Make hostname unique using MAC address information (<%= $macaddr %>).</i>
             </div>
+            <i class="hint">Make hostname unique using MAC address information (<%= $macaddr %>).</i>
           </div>
           <div class="row mb-1">
             <label class="col-md-5 form-label" for="ipaddr">IP Address</label>

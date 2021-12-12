@@ -9,17 +9,6 @@ function $$(n) {
     return document.querySelectorAll(n);
 }
 
-function tick() {
-    tock += 1;
-    $('#timer').value = tock;
-    (tock === max) ? window.location.replace("/cgi-bin/status.cgi") : setTimeout(tick, 1000);
-}
-
-function engage() {
-    max = $('#timer').max;
-    setTimeout(tick, 1000);
-}
-
 function refresh() {
     window.location.reload();
 }

@@ -1,4 +1,6 @@
 <% http_header_text %>
+<% http_header_nocache %>
+<% http_header_connection_close %>
 
 ------- REQUEST_* :
 <% echo "$(printenv|grep REQUEST_|sort 2>&1)" %>

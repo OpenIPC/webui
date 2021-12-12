@@ -55,7 +55,14 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
     <div class="card mb-3">
       <div class="card-header">Web UI</div>
       <div class="card-body">
-        <p><b>Installed ver.<%= $ui_version %></b></p>
+        <dl class="row">
+          <dt class="col-4">Installed</dt>
+          <dd class="col-8"><%= $ui_version %></dd>
+          <dt class="col-4">Stable</dt>
+          <dd class="col-8" id="ui-ver-stable"></dd>
+          <dt class="col-4">Development</dt>
+          <dd class="col-8" id="ui-ver-development"></dd>
+        </dl>
         <form action="/cgi-bin/web-ui-update.cgi" method="post">
           <div class="row mb-1">
             <label class="col-md-2 form-label" for="version">Branch</label>
@@ -149,5 +156,29 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
     </div>
   </div>
 </div>
+
+<script>
+  const url='https://api.github.com/repos/OpenIPC/microbe-web/branches/';
+
+  function reqListener() {
+    const d = JSON.parse(this.response);
+    const date = d.commit.commit.author.date;
+    const el = $('#ui-ver-' + d.name).textContent = Date.parse(date) / 1000;
+  }
+
+  function checkUpdates() {
+    queryBranch('stable');
+    queryBranch('development');
+  }
+
+  function queryBranch(name) {
+    var oReq = new XMLHttpRequest();
+    oReq.addEventListener("load", reqListener);
+    oReq.open("GET", url + name);
+    oReq.send();
+  }
+
+  window.addEventListener('load', checkUpdates);
+</script>
 
 <%in _footer.cgi %>

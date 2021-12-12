@@ -7,10 +7,8 @@
 <% flash_read %>
 <form action="/cgi-bin/majestic-update.cgi" method="post">
 <div class="row row-cols-1 row-cols-xl-2 row-cols-xxl-3 g-4 mb-3">
-<%
-mj=$(echo "$mj"|sed "s/ /_/g")
-for line in $mj
-do
+<% mj=$(echo "$mj"|sed "s/ /_/g")
+for line in $mj; do
   param=${line%%|*}; name=${param#.}; domain=${name%.*}; name=${name//./-}; line=${line#*|}
   label=${line%%|*}; line=${line#*|}
   units=${line%%|*}; line=${line#*|}
@@ -18,8 +16,7 @@ do
   options=${line%%|*}; line=${line#*|}
   placeholder=${line%%|*}; line=${line#*|}
   hint=${line%%|*}; line=${line#*|}
-
-  value=$(yaml-cli -g $param)
+  value=$(yaml-cli -g "$param")
 
   if [ "$olddomain" != "$domain" ]; then
     [ ! -z "$olddomain" ] && echo '</div></div></div>'
@@ -35,6 +32,7 @@ do
       echo "<div class=\"row mb-2\">" \
         "<div class=\"col\">" \
           "<div class=\"form-check form-switch\">" \
+            "<input type=\"hidden\" name=\"${name}\" id=\"${name}\" value=\"false\">" \
             "<input class=\"form-check-input\" name=\"${name}\" id=\"${name}\" value=\"true\" type=\"checkbox\" role=\"switch\"${checked}>" \
             "<label for=\"${name}\" class=\"form-check-label\">${label//_/ }</label>" \
           "</div>"
@@ -106,6 +104,12 @@ do
 done
 %>
 </div></div></div></div>
+
+<p>
+  <input class="form-check-input" type="checkbox" name="reset" id="reset" value="true">
+  <label class="form-check-label" for="reset">Reset config before applying changes.</label>
+</p>
+
 <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
 <%in _footer.cgi %>

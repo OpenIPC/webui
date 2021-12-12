@@ -36,10 +36,11 @@
         <li class="nav-item"><a class="nav-link" href="/cgi-bin/updates.cgi">Updates</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownNetwork" href="#"
-            role="button" data-bs-toggle="dropdown" aria-expanded="false">Network</a>
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">Settings</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownNetwork">
-            <li><a class="dropdown-item" href="/cgi-bin/network.cgi">Settings</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/network.cgi">Network Settings</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/network-ntp.cgi">NTP Settings</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/webui-password.cgi">Web UI Password</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">

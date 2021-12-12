@@ -1,4 +1,17 @@
 <%
+check_password() {
+  uri1=/cgi-bin/webui-password.cgi
+  uri2=/cgi-bin/webui-password-update.cgi
+  [ -z "$REQUEST_URI" ] && return
+  [ "$REQUEST_URI" = "$uri1" ] && return
+  [ "$REQUEST_URI" = "$uri2" ] && return
+
+  password=$(awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf)
+  if [ $password = "12345" ]; then
+    flash_save "danger" "You must set your own secure password!"
+    redirect_to "$uri1"
+  fi
+}
 html_title() {
    [ ! -z "$1" ] && echo -n "$1 - "
   echo -n  "OpenIPC"
@@ -68,4 +81,6 @@ flash_save() {
   xheader="X-ErrorMessage: $2"
   echo "$1:$2" > /tmp/webui-flash.txt
 }
+
+check_password
 %>

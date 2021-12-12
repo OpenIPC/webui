@@ -1,0 +1,48 @@
+#!/usr/bin/haserl
+<% password=$(awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf) %>
+<%in _common.cgi %>
+<%in _header.cgi %>
+<h2>Web Interface Access</h2>
+<% flash_read %>
+<div class="row">
+  <div class="col-md-6 m-auto">
+    <div class="card">
+      <div class="card-header">Web Interface</div>
+        <div class="card-body">
+          <form action="/cgi-bin/webui-password-update.cgi" method="post">
+            <div class="row mb-1">
+              <label class="col-md-5 form-label" for="password">Admin Password</label>
+              <div class="col-md-7">
+                <div class="input-group mb-3">
+                  <input type="password" class="form-control" name="password" id="password" value="<%= $password %>" placeholder="K3wLHaZk3R!">
+                  <div class="input-group-text">
+                    <button type="button" class="btn btn-sm btn-white p-0" id="toggle-password"><img src="/img/eye-fill.svg" alt="Toggle password"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Password</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$('#toggle-password').addEventListener('click', (ev) => {
+  const el = $('#password');
+  const img = $('#toggle-password img');
+  if (el.type == 'password') {
+    el.type = 'text';
+    img.src = '/img/eye-slash-fill.svg';
+  } else {
+    el.type = 'password';
+    img.src = '/img/eye-fill.svg';
+  }
+  el.focus();
+  ev.preventDefault();
+})
+</script>
+
+<%in _footer.cgi %>

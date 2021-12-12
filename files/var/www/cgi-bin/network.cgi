@@ -31,24 +31,6 @@ timezone=$(cat /etc/TZ)
             </div>
           </div>
           <div class="row mb-1">
-            <label class="col-md-5 form-label" for="password">Interface Password</label>
-            <div class="col-md-7">
-              <input type="password" class="form-control" name="password" id="password" value="<%= $password %>" placeholder="K3wLHaZk3R!">
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary">Save Settings</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="col mb-3">
-    <div class="card h-100">
-      <div class="card-header">Settings</div>
-      <div class="card-body">
-        <form action="/cgi-bin/network-update.cgi" method="post">
-          <input type="hidden" name="action" value="update">
-          <div class="row mb-1">
             <label class="col-md-5 form-label" for="ipaddr">IP Address</label>
             <div class="col-md-7">
               <input type="text" class="form-control" name="ipaddr" id="ipaddr" value="<%= $ipaddr %>" data-real="<%= $ipaddr_eth0 %>" placeholder="192.168.10.10">

@@ -14,7 +14,7 @@ timezone=$(cat /etc/TZ)
 %>
 <%in _header.cgi %>
 <h2>Network Administration</h2>
-
+<% flash_read %>
 <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
 
   <div class="col mb-3">

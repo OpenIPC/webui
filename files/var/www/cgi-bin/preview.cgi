@@ -16,7 +16,7 @@ videomp4() {
 %>
 <%in _header.cgi %>
 <h2>Camera Preview</h2>
-
+<% flash_read %>
 <div class="row preview">
   <div class="col position-relative mb-4">
     <% snapshot %>

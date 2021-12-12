@@ -4,7 +4,7 @@
 <% page_title="Majestic Settings" %>
 <%in _header.cgi %>
 <h2>Majestic Settings</h2>
-
+<% flash_read %>
 <form action="/cgi-bin/majestic-update.cgi" method="post">
 <div class="row row-cols-1 row-cols-xl-2 row-cols-xxl-3 g-4 mb-3">
 <%

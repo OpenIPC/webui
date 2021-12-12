@@ -2,6 +2,7 @@
 <%in _common.cgi %>
 <%in _header.cgi %>
 <h2>Updating Majestic settings</h2>
+<% flash_read %>
 <%
 show_post() {
   echo "$(printenv | grep "POST" | grep "$1")<br>"

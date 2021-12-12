@@ -54,7 +54,7 @@ timezone=$(cat /etc/TZ)
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Save Settings"</button>
+          <button type="submit" class="btn btn-primary">Save Settings</button>
         </form>
       </div>
       <div class="card-footer bg-black text-white">Sorry, some things aren't working yet.</div>

@@ -103,6 +103,7 @@ window.addEventListener('load', () => {
     o.value = tz.name;
     el.appendChild(o);
   });
+  $('#tz_name').addEventListener('focus', ev => ev.target.select());
   $('#tz_name').addEventListener('selectionchange', updateTimezone);
   $('#tz_name').addEventListener('change', updateTimezone);
   updateTimezone();

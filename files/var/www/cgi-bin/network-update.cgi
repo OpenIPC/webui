@@ -31,17 +31,6 @@ if [ ! -z "$POST_hostname" ]; then
   fi
 fi
 
-if [ ! -z "$POST_password" ]; then
-  if [[ ! -z "$(echo "$POST_password" | grep " ")" ]]
-  then
-    report_error "Password cannot have spaces!"
-  else
-    command="sed -i s/:admin:.*/:admin:${POST_password}/ /etc/httpd.conf"
-    result=$(sed -i s/:admin:.*/:admin:${POST_password}/ /etc/httpd.conf 2>&1)
-    report_command_info "$command" "$result"
-  fi
-fi
-
 if [ ! -z "$POST_ipaddr" ]; then
   if [ "$(yaml-cli -g .network.lan.ipaddr)" = "$POST_ipaddr" ]
   then

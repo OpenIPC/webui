@@ -2,6 +2,7 @@
 <%in _common.cgi %>
 <%
 password="$POST_password"
+confirmation="$POST_passwordconfirmation"
 if [ -z "$password" ]; then
   flash_save "danger" "Password cannot be empty!"
   redirect_to "/cgi-bin/webui-password.cgi"
@@ -12,6 +13,14 @@ elif [[ ! -z "$(echo "$password" | grep " ")" ]]; then
   exit
 elif [ "5" -ge "${#password}" ]; then
   flash_save "danger" "Password cannot be shorter than 6 characters!"
+  redirect_to "/cgi-bin/webui-password.cgi"
+  exit
+elif [ -z "$confirmation" ]; then
+  flash_save "danger" "Password requires confirmation!"
+  redirect_to "/cgi-bin/webui-password.cgi"
+  exit
+elif [ "$password" != "$confirmation" ]; then
+  flash_save "danger" "Password does not match its confirmation!"
   redirect_to "/cgi-bin/webui-password.cgi"
   exit
 fi

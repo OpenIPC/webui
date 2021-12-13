@@ -14,10 +14,18 @@
               <label class="col-md-5 form-label" for="password">Admin Password</label>
               <div class="col-md-7">
                 <div class="input-group mb-3">
-                  <input type="password" class="form-control" name="password" id="password" value="<%= $password %>" placeholder="K3wLHaZk3R!">
+                  <input type="password" class="form-control password" name="password" id="password" value="<%= $password %>" placeholder="K3wLHaZk3R!">
                   <div class="input-group-text">
                     <button type="button" class="btn btn-sm btn-white p-0" id="toggle-password"><img src="/img/eye-fill.svg" alt="Toggle password"></button>
                   </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label class="col-md-5 form-label" for="password">Confirm Password</label>
+              <div class="col-md-7">
+                <div class="input-group mb-3">
+                  <input type="password" class="form-control password" name="passwordconfirmation" id="passwordconfirmation" value="" placeholder="K3wLHaZk3R!">
                 </div>
               </div>
             </div>
@@ -31,16 +39,15 @@
 
 <script>
 $('#toggle-password').addEventListener('click', (ev) => {
-  const el = $('#password');
   const img = $('#toggle-password img');
-  if (el.type == 'password') {
-    el.type = 'text';
+  if ($('#password').type == 'password') {
+    $$('input.password').forEach(el => el.type = 'text');
     img.src = '/img/eye-slash-fill.svg';
   } else {
-    el.type = 'password';
+    $$('input.password').forEach(el => el.type = 'password');
     img.src = '/img/eye-fill.svg';
   }
-  el.focus();
+  $('#password').focus();
   ev.preventDefault();
 })
 </script>

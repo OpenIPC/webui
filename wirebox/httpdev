@@ -3,7 +3,10 @@
 if [ -z "$(cat /etc/mtab | grep /tmp/www)" ]
 then
   mkdir -p /tmp/www
-  mount -t nfs -o nolock,tcp 192.168.1.61:/tmp/www /tmp/www
+  mount -t nfs -o nolock,tcp 192.168.1.61:/home/paul/localwork/microbe-web/files/var/www /tmp/www
 fi
 
-httpd -p 86 -h "/tmp/www" -c /dev/null
+pid=$(ps ax | grep httpd | grep 86 | xargs | cut -d " " -f 1)
+[ ! -z "$pid" ] && kill -9 $pid
+sleep 3
+HTTP_MODE=development httpd -p 86 -h "/tmp/www" -c /dev/null

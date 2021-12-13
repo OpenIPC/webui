@@ -30,7 +30,7 @@ mj="
 .image.saturation|Image saturation|%|range|1-100|50|
 .image.luminance|Image luminance|%|range|auto,1-100|auto|
 .osd.enabled|Enable On-Screen Display (OSD)||boolean|true,false|false|
-.osd.font|Path to font file used in OSD||string||/usr/lib/fonts/fonts.bin|
+.osd.font|Path to font file used in OSD||string||/usr/share/fonts/truetype/UbuntuMono-Regular.ttf|
 .osd.template|OSD template||string||%a %e %B %Y %H:%M:%S %Z|Supports strftime() format.
 .osd.posX|Horizontal position of OSD|px|number|-2000-2000|-100|
 .osd.posY|Vertical position of OSD|px|number|-2000-2000|-100|

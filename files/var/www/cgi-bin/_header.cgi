@@ -53,7 +53,14 @@
             <li><a class="dropdown-item" href="/cgi-bin/majestic-download.cgi">Backup</a></li>
           </ul>
         </li>
-        <li class="nav-item"><a class="nav-link" href="/cgi-bin/tools.cgi">Tools</a></li>
+        <li class="nav-item  dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownTools" href="#"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">Tools</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownTools">
+            <li><a class="dropdown-item" href="/cgi-bin/tools.cgi">Ping & Traceroute</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/console.cgi">Web Console</a></li>
+          </ul>
+        </li>
         <li class="nav-item"><a class="nav-link" href="/cgi-bin/preview.cgi">Preview</a></li>
       </ul>
     </div>

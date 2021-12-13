@@ -1,4 +1,5 @@
 #!/usr/bin/haserl
+<%in _common.cgi %>
 <%
 page_title="Status"
 interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
@@ -16,7 +17,7 @@ soc_temp=$(ipcinfo --temp 2>&1)
 %>
 <%in _header.cgi %>
 <h2>Device Status</h2>
-
+<% flash_read %>
 <div class="row">
   <div class="col mb-3">
     <div class="card h-100">

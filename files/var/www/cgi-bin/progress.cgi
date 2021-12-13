@@ -1,6 +1,23 @@
 #!/usr/bin/haserl
+<%in _common.cgi %>
+<% if [ -f /tmp/webjob.lock ]; then
+page_title="Please wait..." %>
 <%in _header.cgi %>
 <h2>Doing something. Please wait...</h2>
 <progress id="timer" max="20" value="0" class="w-100"></progress>
-<script>window.onload = engage;</script>
+<script>
+function tick() {
+    tock += 1;
+    $('#timer').value = tock;
+    (tock === max) ? window.location.replace("/cgi-bin/progress.cgi") : setTimeout(tick, 1000);
+}
+function engage() {
+    max = $('#timer').max;
+    setTimeout(tick, 1000);
+}
+engage();
+</script>
 <%in _footer.cgi %>
+<% else
+redirect_to "/cgi-bin/status.cgi"
+fi %>

@@ -2,6 +2,7 @@
 <%in _common.cgi %>
 <%in _header.cgi %>
 <h2>Updating settings</h2>
+<% flash_read %>
 <%
 if [ ! -z "$POST_hostname" ]; then
   oldhostname=$(cat /etc/hostname)
@@ -26,17 +27,6 @@ if [ ! -z "$POST_hostname" ]; then
 
     command="udhcpc -x hostname:${POST_hostname} -T 1 -t 5 -R -b -O search"
     result=$(udhcpc -x hostname:${POST_hostname} -T 1 -t 5 -R -b -O search 2>&1)
-    report_command_info "$command" "$result"
-  fi
-fi
-
-if [ ! -z "$POST_password" ]; then
-  if [[ ! -z "$(echo "$POST_password" | grep " ")" ]]
-  then
-    report_error "Password cannot have spaces!"
-  else
-    command="sed -i s/:admin:.*/:admin:${POST_password}/ /etc/httpd.conf"
-    result=$(sed -i s/:admin:.*/:admin:${POST_password}/ /etc/httpd.conf 2>&1)
     report_command_info "$command" "$result"
   fi
 fi

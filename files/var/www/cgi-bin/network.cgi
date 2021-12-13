@@ -1,4 +1,5 @@
 #!/usr/bin/haserl
+<%in _common.cgi %>
 <%
 page_title="Network"
 hostname=$(hostname -s)
@@ -13,7 +14,7 @@ timezone=$(cat /etc/TZ)
 %>
 <%in _header.cgi %>
 <h2>Network Administration</h2>
-
+<% flash_read %>
 <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
 
   <div class="col mb-3">
@@ -23,30 +24,12 @@ timezone=$(cat /etc/TZ)
         <form action="/cgi-bin/network-update.cgi" method="post">
           <input type="hidden" name="action" value="update">
           <div class="row mb-1">
-	    <label class="col-md-5 form-label" for="hostname">Device Name</label>
+            <label class="col-md-5 form-label" for="hostname">Device Name</label>
             <div class="col-md-7 mb-1">
               <input class="form-control pat-host" type="text" name="hostname" id="hostname" value="<%= $hostname %>" placeholder="device-name">
-              <i class="hint">Make hostname unique using MAC address information (<%= $macaddr %>).</i>
             </div>
+            <i class="hint">Make hostname unique using MAC address information (<%= $macaddr %>).</i>
           </div>
-          <div class="row mb-1">
-            <label class="col-md-5 form-label" for="password">Interface Password</label>
-            <div class="col-md-7">
-              <input type="password" class="form-control" name="password" id="password" value="<%= $password %>" placeholder="K3wLHaZk3R!">
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary">Save Settings</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="col mb-3">
-    <div class="card h-100">
-      <div class="card-header">Settings</div>
-      <div class="card-body">
-        <form action="/cgi-bin/network-update.cgi" method="post">
-          <input type="hidden" name="action" value="update">
           <div class="row mb-1">
             <label class="col-md-5 form-label" for="ipaddr">IP Address</label>
             <div class="col-md-7">
@@ -71,7 +54,7 @@ timezone=$(cat /etc/TZ)
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Save Settings"</button>
+          <button type="submit" class="btn btn-primary">Save Settings</button>
         </form>
       </div>
       <div class="card-footer bg-black text-white">Sorry, some things aren't working yet.</div>

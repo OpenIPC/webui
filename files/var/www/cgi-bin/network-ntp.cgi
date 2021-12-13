@@ -1,18 +1,29 @@
 #!/usr/bin/haserl
+<%in _common.cgi %>
 <%
 page_title="NTP Settings"
 tz_data=$(cat /etc/TZ)
+[ -z "$tz_data" ] && tz_data="GMT0"
+[ ! -f /etc/tzname ] && $(grep "$tz_data" /var/www/tz.js | head -1 | cut -d ":" -f 2 | cut -d "," -f 1 | tr -d "'" > /etc/tzname)
 tz_name=$(cat /etc/tzname)
 interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
+
+check_env_tz() {
+  if [ "$(cat /etc/TZ)" != "$TZ" ]; then
+    echo "<div class=\"alert alert-danger\">" \
+      "<p><b>\$TZ in system environment needs updating.</b> Please restart the system!</p>" \
+      "<a class=\"btn btn-danger\" href=\"/cgi-bin/reboot.cgi\">Restart</a>" \
+      "</div>"
+  fi
+}
 %>
 <%in _header.cgi %>
 <h2>NTP Settings</h2>
-
+<% flash_read %>
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-4">
   <div class="col">
     <div class="card mb-3">
       <h5 class="card-header">Timezone</h5>
-      <!-- https://raw.githubusercontent.com/openwrt/luci/master/modules/luci-base/luasrc/sys/zoneinfo/tzdata.lua -->
       <div class="card-body">
         <form action="/cgi-bin/network-tz-update.cgi" method="post">
           <div class="row mb-1">
@@ -34,7 +45,11 @@ interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
       <div class="card-body">
         <b># cat /etc/TZ</b>
         <pre><% cat /etc/TZ %></pre>
-        <% [ "$(cat /etc/TZ)" != "$TZ" ] && echo "<div class=\"alert alert-danger\">TZ in system environment needs updating. Please restart the system!</div>" %>
+        <b># echo $TZ</b>
+        <pre><% echo $TZ %></pre>
+        <b># date</b>
+        <pre><% date %></pre>
+        <% check_env_tz %>
       </div>
     </div>
   </div>
@@ -88,6 +103,7 @@ window.addEventListener('load', () => {
     o.value = tz.name;
     el.appendChild(o);
   });
+  $('#tz_name').addEventListener('focus', ev => ev.target.select());
   $('#tz_name').addEventListener('selectionchange', updateTimezone);
   $('#tz_name').addEventListener('change', updateTimezone);
   updateTimezone();

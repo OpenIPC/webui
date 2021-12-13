@@ -1,6 +1,7 @@
-content-type: text/plain
+<% http_header_text %>
+<% http_header_nocache %>
+<% http_header_connection_close %>
 
-<pre class="alert alert-warning">
 ------- REQUEST_* :
 <% echo "$(printenv|grep REQUEST_|sort 2>&1)" %>
 ------- FORM_*    :
@@ -9,4 +10,5 @@ content-type: text/plain
 <% echo "$(printenv|grep GET_|sort 2>&1)" %>
 ------- POST_*    :
 <% echo "$(printenv|grep POST_|sort 2>&1)" %>
-</pre>
+
+---------------------------------------------

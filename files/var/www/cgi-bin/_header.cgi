@@ -1,20 +1,18 @@
-content-type: text/html
-
-<%
-[ ! -z "$page_title" ] && page_title="$page_title - OpenIPC" || page_title="OpenIPC"
-%>
+<% http_header_html %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title><%= $page_title %></title>
-  <link rel="shortcut icon" href="/favicon.png">
-  <link rel="stylesheet" href="/bootstrap.min.css">
-  <link rel="stylesheet" href="/bootstrap.override.css">
-  <script src="/bootstrap.bundle.min.js"></script>
-  <script src="/main.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title><% html_title "$page_title" %></title>
+<link rel="shortcut icon" href="/favicon.png">
+<link rel="stylesheet" href="/bootstrap.min.css">
+<link rel="stylesheet" href="/bootstrap.override.css">
+<% if [ $HTTP_MODE = "development" ]; then %><link rel="stylesheet" href="/debug.css"><% fi %>
+<script src="/bootstrap.bundle.min.js"></script>
+<script src="/main.js"></script>
 </head>
+
 <body id="top">
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
   <div class="container">
@@ -25,14 +23,24 @@ content-type: text/html
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="/cgi-bin/status.cgi">Information</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownInformation" href="#"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">Information</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownInformation">
+            <li><a class="dropdown-item" href="/cgi-bin/status.cgi">Information</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info/dmesg.cgi">Diagnostic message</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info/log.cgi">Log read</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info/httpd.cgi">HTTPd environment</a></li>
+          </ul>
+        </li>
         <li class="nav-item"><a class="nav-link" href="/cgi-bin/updates.cgi">Updates</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownNetwork" href="#"
-            role="button" data-bs-toggle="dropdown" aria-expanded="false">Network</a>
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">Settings</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownNetwork">
-            <li><a class="dropdown-item" href="/cgi-bin/network.cgi">Settings</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/network.cgi">Network Settings</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/network-ntp.cgi">NTP Settings</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/webui-password.cgi">Web UI Password</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
@@ -45,7 +53,14 @@ content-type: text/html
             <li><a class="dropdown-item" href="/cgi-bin/majestic-download.cgi">Backup</a></li>
           </ul>
         </li>
-        <li class="nav-item"><a class="nav-link" href="/cgi-bin/tools.cgi">Tools</a></li>
+        <li class="nav-item  dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownTools" href="#"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">Tools</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownTools">
+            <li><a class="dropdown-item" href="/cgi-bin/tools.cgi">Ping & Traceroute</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/console.cgi">Web Console</a></li>
+          </ul>
+        </li>
         <li class="nav-item"><a class="nav-link" href="/cgi-bin/preview.cgi">Preview</a></li>
       </ul>
     </div>

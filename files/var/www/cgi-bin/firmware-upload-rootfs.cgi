@@ -1,4 +1,5 @@
 #!/usr/bin/haserl --upload-limit=5120 --upload-dir=/tmp
+<%in _common.cgi %>
 <%
 maxsize=5242880
 magicnum="68737173"

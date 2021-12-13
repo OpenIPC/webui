@@ -9,15 +9,8 @@ function $$(n) {
     return document.querySelectorAll(n);
 }
 
-function tick() {
-    tock += 1;
-    $('#timer').value = tock;
-    (tock === max) ? window.location.replace("/cgi-bin/status.cgi") : setTimeout(tick, 1000);
-}
-
-function engage() {
-    max = $('#timer').max;
-    setTimeout(tick, 1000);
+function refresh() {
+    window.location.reload();
 }
 
 (function () {
@@ -37,11 +30,10 @@ function engage() {
         $$('form').forEach(el => el.autocomplete = 'off');
         $$('input[data-for]').forEach(el => el.addEventListener('click', ev => toggleAuto(ev.target)));
         $$('.btn-danger, .btn-warning, .confirm').forEach(el => el.addEventListener('click', ev => (!confirm("Are you sure?")) ? ev.preventDefault() : null));
+        $$('.refresh').forEach(el => el.addEventListener('click', refresh));
         $$('a[href^=http]').forEach(el => el.target = '_blank');
-
         $$('input.pat-host').forEach(el => el.pattern='^[a-zA-Z0-9-_.]+$');
         $$('input.pat-host-ip').forEach(el => el.pattern='^[a-zA-Z0-9-_.]+$');
-
     }
 
     window.addEventListener('load', initAll);

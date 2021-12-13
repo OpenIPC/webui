@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
+<%in _common.cgi %>
 <%
 page_title="Updates"
-
 ui_date=$(ls -d --full-time /var/www/.etag | xargs | cut -d " " -f 6,7)
 ui_version=$(date --date="$ui_date" +"%s")
 fw_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 2>&1)
@@ -10,7 +10,7 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 %>
 <%in _header.cgi %>
 <h2>Firmware Updates</h2>
-
+<% flash_read %>
 <div class="alert alert-danger">
   <b>Attention: Destructive Actions!</b>
   <p class="mb-0">Make sure you know what you are doing.</p>
@@ -42,8 +42,8 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
               <label class="form-check-label" for="noreboot">Do not reboot after upgrade.</label>
             </div>
             <div class="col-md-10 offset-md-2">
-              <input class="form-check-input" type="checkbox" name="debug" id="debug" value="true">
-              <label class="form-check-label" for="debug">Show debugging information.</label>
+              <input class="form-check-input" type="checkbox" name="debug" id="debug-fw" value="true">
+              <label class="form-check-label" for="debug-fw">Show debugging information.</label>
             </div>
           </div>
           <a class="btn btn-danger float-end" title="Wipe overlay partition">Reset</a>
@@ -55,7 +55,14 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
     <div class="card mb-3">
       <div class="card-header">Web UI</div>
       <div class="card-body">
-        <p><b>Installed ver.<%= $ui_version %></b></p>
+        <dl class="row">
+          <dt class="col-4">Installed</dt>
+          <dd class="col-8"><%= $ui_version %></dd>
+          <dt class="col-4">Stable</dt>
+          <dd class="col-8" id="ui-ver-stable"></dd>
+          <dt class="col-4">Development</dt>
+          <dd class="col-8" id="ui-ver-development"></dd>
+        </dl>
         <form action="/cgi-bin/web-ui-update.cgi" method="post">
           <div class="row mb-1">
             <label class="col-md-2 form-label" for="version">Branch</label>
@@ -72,8 +79,8 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
               <label class="form-check-label" for="enforce">Disable version checking.</label>
             </div>
             <div class="col-md-10 offset-md-2">
-              <input class="form-check-input" type="checkbox" name="debug" id="debug" value="true">
-              <label class="form-check-label" for="debug">Show debugging information.</label>
+              <input class="form-check-input" type="checkbox" name="debug" id="debug-ui" value="true">
+              <label class="form-check-label" for="debug-ui">Show debugging information.</label>
             </div>
           </div>
           <button type="submit" class="btn btn-danger">Update from GitHub</button>
@@ -84,21 +91,27 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
     <div class="card mb-3">
       <div class="card-header">Majestic</div>
       <div class="card-body">
-        <p><b>Installed ver.<%= $mj_version %></b></p>
-        <% if [ -z "$majestic_diff" ]; then %>
-          <p><b>Majestic uses the original configuration.</b>
-            <a href="/cgi-bin/majestic.cgi">Change settings.</a></p>
-        <% else %>
-          <p><b>Majestic uses custom configuration.</b>
-            <a href="/cgi-bin/majestic-diff.cgi">See changes.</a></p>
-        <% fi %>
-        <p class="mb-0">
+        <p><b>Installed ver. <%= $mj_version %></b></p>
+        <form action="/cgi-bin/majestic-github.cgi" method="post">
+          <% if [ -z "$majestic_diff" ]; then %>
+            <p><b>Majestic uses the original configuration.</b>
+              <a href="/cgi-bin/majestic.cgi">Change settings.</a></p>
+          <% else %>
+            <p><b>Majestic uses custom configuration.</b>
+              <a href="/cgi-bin/majestic-diff.cgi">See changes.</a></p>
+          <% fi %>
+          <div class="row mb-3">
+            <div class="col-md-10 offset-md-2">
+              <input class="form-check-input" type="checkbox" name="debug" id="debug--mj" value="true">
+              <label class="form-check-label" for="debug-mj">Show debugging information.</label>
+            </div>
+          </div>
           <% if [ ! -z "$majestic_diff" ]; then %>
             <a class="btn btn-danger float-end" href="/cgi-bin/majestic-reset.cgi"
-              title="Restore original configuration">Reset</a>
+                title="Restore original configuration">Reset</a>
           <% fi %>
-          <a class="btn btn-danger" href="/cgi-bin/github-majestic.cgi">Update from GitHub</a>
-        </p>
+          <button class="btn btn-danger">Update from GitHub</button>
+        </form>
       </div>
     </div>
 
@@ -143,5 +156,29 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
     </div>
   </div>
 </div>
+
+<script>
+  const url='https://api.github.com/repos/OpenIPC/microbe-web/branches/';
+
+  function reqListener() {
+    const d = JSON.parse(this.response);
+    const date = d.commit.commit.author.date;
+    const el = $('#ui-ver-' + d.name).textContent = Date.parse(date) / 1000;
+  }
+
+  function checkUpdates() {
+    queryBranch('stable');
+    queryBranch('development');
+  }
+
+  function queryBranch(name) {
+    var oReq = new XMLHttpRequest();
+    oReq.addEventListener("load", reqListener);
+    oReq.open("GET", url + name);
+    oReq.send();
+  }
+
+  window.addEventListener('load', checkUpdates);
+</script>
 
 <%in _footer.cgi %>

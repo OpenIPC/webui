@@ -127,8 +127,8 @@ videomp4() {
           <dd>Turn on night mode.</dd>
           <dt>http://<%= $ipaddr %>/night/off</dt>
           <dd>Turn off night mode.</dd>
-          <dt>http://<%= $ipaddr %>/night/invert</dt>
-          <dd>Invert current mode.</dd>
+          <dt>http://<%= $ipaddr %>/night/toggle</dt>
+          <dd>Toggle current night mode.</dd>
         </dl>
       </div>
     </div>

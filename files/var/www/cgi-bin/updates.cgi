@@ -4,7 +4,7 @@
 page_title="Updates"
 ui_date=$(ls -d --full-time /var/www/.etag | xargs | cut -d " " -f 6,7)
 ui_version=$(date --date="$ui_date" +"%s")
-fw_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 2>&1)
+fw_version=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/ 2>&1)
 mj_version=$(majestic -v)
 majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 %>
@@ -22,7 +22,7 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
     <div class="card mb-3">
       <div class="card-header">Firmware</div>
       <div class="card-body">
-        <p><b>Installed ver.<%= $fw_version %></b></p>
+        <p><b>Installed ver. <%= $fw_version %></b></p>
         <form action="/cgi-bin/firmware-update.cgi" method="post">
           <div class="row mb-3">
             <div class="col-md-10 offset-md-2">

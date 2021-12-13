@@ -35,15 +35,15 @@ mj="
 .osd.posX|Horizontal position of OSD|px|number|-2000-2000|-100|
 .osd.posY|Vertical position of OSD|px|number|-2000-2000|-100|
 .osd.privacyMasks|Privacy masks|px|string||0x0x234x640,2124x0x468x1300|Coordinates of masked areas separated by commas.
-.nightmode.enabled|Enable night mode||boolean|true,false|false|
-.nightmode.irSensorPin|GPIO pin of signal from IR sensor||number|1-100|62|
-.nightmode.irSensorPinInvert|IR sensor is inverted||boolean|true,false|false|
-.nightmode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|1-100|1|
-.nightmode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|1-100|2|
-.nightmode.pinSwitchDelayUs|Delay before triggering IRcut filter||number|0-1000|150|
-.nightmode.backlightPin|GPIO pin to turn on night mode illumination||number|1-100|65|
-.nightmode.nightAPI|Use night mode API||boolean|true,false|false|
-.nightmode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1-1000|300|
+.nightMode.enabled|Enable night mode||boolean|true,false|false|
+.nightMode.irSensorPin|GPIO pin of signal from IR sensor||number|1-100|62|
+.nightMode.irSensorPinInvert|IR sensor is inverted||boolean|true,false|false|
+.nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|1-100|1|
+.nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|1-100|2|
+.nightMode.pinSwitchDelayUs|Delay before triggering IRcut filter||number|0-1000|150|
+.nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|1-100|65|
+.nightMode.nightAPI|Use night mode API||boolean|true,false|false|
+.nightMode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1-1000|300|
 .records.enabled|Enable saving records||boolean|true,false|false|
 .records.path|Template for saving video records||string||/mnt/mmc/%Y/%m/%d/%H.mp4|Supports strftime() format.
 .records.maxUsage|Limit of available space usage|%|range|1-100|95|

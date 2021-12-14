@@ -17,7 +17,7 @@ mj="
 .isp.alignWidth|Align width||number||8|
 .isp.blkCnt|Block count||number|1-32|4|Use 4 for small memory systems, 10+ for performant SoCs.
 .isp.threadStackSize|Thread stack size|KB|number|1-32|16|
-.isp.exposure|Sensor exposure time|ms|range|auto,1-500000|auto|From 1 to 500000.
+.isp.exposure|Sensor exposure time|&micro;s|range|auto,1-500000|auto|From 1 to 500000.
 .isp.aGain|Sensor analog gain||number|0.1-1.0|1|
 .isp.dGain|Sensor digital gain||number|0.1-1.0|1|
 .isp.ispGain|ISP gain||number|0.1-1.0|1|

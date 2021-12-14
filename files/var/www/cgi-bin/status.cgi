@@ -49,6 +49,16 @@ soc_temp=$(ipcinfo --temp 2>&1)
       </div>
     </div>
   </div>
+
+  <div class="col mb-3">
+    <div class="card h-100">
+      <div class="card-header">Resources</div>
+      <div class="card-body">
+        <b># df</b>
+        <pre><% df %></pre>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="row">

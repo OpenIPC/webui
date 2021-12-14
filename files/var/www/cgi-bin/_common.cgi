@@ -75,7 +75,9 @@ flash_read() {
   [ -z "$flash" ] && return
   type=$(echo $flash | cut -d ":" -f 1)
   message=$(echo $flash | cut -d ":" -f 2)
-  echo "<div class=\"alert alert-$type\">$message</div>"
+  echo "<div class=\"alert alert-${type} alert-dismissible fade show\" role=\"alert\">${message}"
+  echo "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>"
+  echo "</div>"
   flash_delete
 }
 flash_save() {

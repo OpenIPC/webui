@@ -20,10 +20,8 @@ if [ ! -z "$error" ]; then %>
 <% report_error "$error" %>
 <%in _footer.cgi %>
 <% else
-  # sanitize
-  yaml-cli -i ${POST_upfile} -o /tmp/majestic.yaml
+  # yaml-cli -i ${POST_upfile} -o /tmp/majestic.yaml # FIXME: sanitize
   mv /tmp/majestic.yaml /etc/majestic.yaml
-
   redirect_to "/cgi-bin/majestic-config-compare.cgi"
 fi
 %>

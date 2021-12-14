@@ -52,8 +52,7 @@ rm $temp_yaml
 debug_message "rm $temp_yaml"
 
 if [ -z "$DEBUG" ]; then
-  # killall -1 majestic
-  /etc/init.d/S95hisilicon restart
+  killall -1 majestic
   redirect_to "/cgi-bin/majestic-config-compare.cgi"
 else
   debug_message "diff /tmp/majestic.yaml.original /etc/majestic.yaml"

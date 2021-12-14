@@ -40,11 +40,11 @@ if [ ! -z "$error" ]; then %>
   for upd_file in $(find "${upd_dir}/var/www" -type f); do
     file=${upd_file#/tmp/microbe-web-${POST_version}/files}
     if [ -z "$(diff -q "$upd_file" "/rom/${file}")" ]; then
-      rm -vf "/var/www/${file}" 2>&1
+      rm -vf "/var/www/${file}"
     else
       if [ -n "$(diff -q "$upd_file" "/var/www/${file}")" ]; then
-        [ ! -d "${web_file%/*}" ] && mkdir -p "${web_file%/*}" 2>&1
-        cp "$upd_file" "$web_file" 2>&1
+        [ ! -d "${web_file%/*}" ] && mkdir -p "${web_file%/*}"
+        cp "$upd_file" "$web_file"
       fi
     fi
   done
@@ -55,7 +55,7 @@ if [ ! -z "$error" ]; then %>
   done
 
   # clean up
-  rm -vfr "tmp/microbe-web-${POST_version}" 2>&1
-  rm -vf "${tmp_file}" 2>&1
+  rm -vfr "/tmp/microbe-web-${POST_version}"
+  rm -vf "${tmp_file}"
 fi
 %>

@@ -19,7 +19,7 @@ if [ -z "$output" ]; then %>
 <% report_command_info "$command" "$output" %>
 <% fi %>
 <p class="d-flex gap-2">
-  <a class="btn btn-secondary" href="/cgi-bin/majestic-download.cgi">Download config</a>
-  <a class="btn btn-danger" href="/cgi-bin/majestic-reset.cgi">Restore original</a>
+  <a class="btn btn-secondary" href="/cgi-bin/majestic-config-backup.cgi">Download config</a>
+  <a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi">Restore original</a>
 </p>
 <%in _footer.cgi %>

@@ -95,10 +95,10 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
         <form action="/cgi-bin/majestic-github.cgi" method="post">
           <% if [ -z "$majestic_diff" ]; then %>
             <p><b>Majestic uses the original configuration.</b>
-              <a href="/cgi-bin/majestic.cgi">Change settings.</a></p>
+              <a href="/cgi-bin/majestic-settings-general.cgi">Change settings.</a></p>
           <% else %>
             <p><b>Majestic uses custom configuration.</b>
-              <a href="/cgi-bin/majestic-diff.cgi">See changes.</a></p>
+              <a href="/cgi-bin/majestic-config-compare.cgi">See changes.</a></p>
           <% fi %>
           <div class="row mb-3">
             <div class="col-md-10 offset-md-2">
@@ -107,7 +107,7 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
             </div>
           </div>
           <% if [ ! -z "$majestic_diff" ]; then %>
-            <a class="btn btn-danger float-end" href="/cgi-bin/majestic-reset.cgi"
+            <a class="btn btn-danger float-end" href="/cgi-bin/majestic-config-reset.cgi"
                 title="Restore original configuration">Reset</a>
           <% fi %>
           <button class="btn btn-danger">Update from GitHub</button>

@@ -33,7 +33,7 @@
             <li><a class="dropdown-item" href="/cgi-bin/info/httpd.cgi">HTTPd environment</a></li>
           </ul>
         </li>
-        <li class="nav-item"><a class="nav-link" href="/cgi-bin/updates.cgi">Updates</a></li>
+        <li class="nav-item"><a class="nav-link" href="/cgi-bin/firmware.cgi">Firmware</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownNetwork" href="#"
             role="button" data-bs-toggle="dropdown" aria-expanded="false">Settings</a>
@@ -47,10 +47,10 @@
           <a class="nav-link dropdown-toggle" id="dropdownMajestic" href="#"
             role="button" data-bs-toggle="dropdown" aria-expanded="false">Majestic</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownMajestic">
-            <li><a class="dropdown-item" href="/cgi-bin/majestic.cgi">Settings</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/majestic-diff.cgi">Review Changes</a></li>
-            <li><a class="dropdown-item text-danger confirm" href="/cgi-bin/majestic-reset.cgi">Restore Original</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/majestic-download.cgi">Backup</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/majestic-settings-general.cgi">Settings</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/majestic-settings-services.cgi">Services</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/majestic-config-actions.cgi">Maintenance</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/preview-help.cgi">Information</a></li>
           </ul>
         </li>
         <li class="nav-item  dropdown">

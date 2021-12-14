@@ -39,10 +39,10 @@ if [ ! -z "$error" ]; then %>
   # copy newer files to web directory
   for upd_file in $(find "${upd_dir}/var/www" -type f); do
     file=${upd_file#/tmp/microbe-web-${POST_version}/files}
-    if [ -z "$(diff -q "$upd_file" "/rom/${file}")" ]; then
-      rm -vf "/var/www/${file}"
+    if [ -z "$(diff -q "$upd_file" "/rom${file}")" ]; then
+      rm -vf "/var/www${file}"
     else
-      if [ -n "$(diff -q "$upd_file" "/var/www/${file}")" ]; then
+      if [ -n "$(diff -q "$upd_file" "/var/www${file}")" ]; then
         [ ! -d "${web_file%/*}" ] && mkdir -p "${web_file%/*}"
         cp "$upd_file" "$web_file"
       fi
@@ -51,7 +51,7 @@ if [ ! -z "$error" ]; then %>
 
   # remove absent files from overlay
   for file in $(diff -q "/var/www" "${upd_dir}/var/www" | grep "Only in /var/www:" | cut -d ":" -f 2 | tr -d "^ "); do
-    [ "$file" != "$wtag_file" ] && rm -vf "/var/www/${file}" 2>&1
+    [ "$file" != "$wtag_file" ] && rm -vf "/var/www/${file}"
   done
 
   # clean up

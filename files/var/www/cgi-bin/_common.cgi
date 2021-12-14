@@ -38,6 +38,7 @@ redirect_to() {
   echo "Location: $1"
   echo "Server: httpd"
   echo "Status: 302 Moved Temporarily"
+  echo "$xheader"
   echo ""
 }
 report_error() {

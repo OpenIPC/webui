@@ -99,5 +99,3 @@ form .range-value {
 .console p input {flex:100%;}
 .console p button {flex:2rem}
 #refresh { cursor: pointer; flex-grow: 1; font-size: .8rem; padding: 0.5rem 1rem; text-align: right; }
-input[type="text"] { background: #ffffcc; border: none; border-bottom: solid 1px gray; }
-input[type="text"]:focus { border-bottom-color: red; outline: none; }

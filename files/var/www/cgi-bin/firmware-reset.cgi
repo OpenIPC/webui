@@ -9,6 +9,6 @@ if [ "0" -ne "$result" ]; then %>
 <% report_command_error "$command" "$output" %>
 <%in _footer.cgi %>
 <% else
-  redirect_to "/cgi-bin/updates.cgi"
+  redirect_to "/cgi-bin/firmware.cgi"
 fi
 %>

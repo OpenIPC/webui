@@ -19,5 +19,5 @@ engage();
 </script>
 <%in _footer.cgi %>
 <% else
-redirect_to "/cgi-bin/status.cgi"
+redirect_to "/cgi-bin/firmware.cgi"
 fi %>

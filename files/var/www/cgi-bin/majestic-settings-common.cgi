@@ -1,13 +1,11 @@
-#!/usr/bin/haserl
 <%in _common.cgi %>
 <%in _mj.cgi %>
-<% page_title="Majestic Settings" %>
 <%in _header.cgi %>
-<h2>Majestic Settings</h2>
+<h2><%= $page_title %></h2>
 <% flash_read %>
-<form action="/cgi-bin/majestic-update.cgi" method="post">
+<form action="/cgi-bin/majestic-settings-update.cgi" method="post">
 <div class="row row-cols-1 row-cols-xl-2 row-cols-xxl-3 g-4 mb-3">
-<% mj=$(echo "$mj"|sed "s/ /_/g")
+<% mj=$(echo "$mj" | sed "s/ /_/g" | grep -E $only)
 for line in $mj; do
   param=${line%%|*}; name=${param#.}; domain=${name%.*}; name=${name//./-}; line=${line#*|}
   label=${line%%|*}; line=${line#*|}
@@ -104,11 +102,6 @@ for line in $mj; do
 done
 %>
 </div></div></div></div>
-
-<p>
-  <input class="form-check-input" type="checkbox" name="reset" id="reset" value="true">
-  <label class="form-check-label" for="reset">Reset config before applying changes.</label>
-</p>
 
 <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>

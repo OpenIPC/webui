@@ -12,6 +12,9 @@ check_password() {
     redirect_to "$uri1"
   fi
 }
+debug_message() {
+  [ ! -z "$DEBUG" ] && echo $1
+}
 html_title() {
    [ ! -z "$1" ] && echo -n "$1 - "
   echo -n  "OpenIPC"

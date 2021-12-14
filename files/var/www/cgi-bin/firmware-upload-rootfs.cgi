@@ -29,6 +29,6 @@ if [ ! -z "$error" ]; then %>
   redirect_to "/cgi-bin/progress.cgi"
 
   mv ${POST_upfile} /tmp/${POST_upfile_name}
-  sysupgrade --rootfs=/tmp/${POST_upfile_name}
+  sysupgrade -f --rootfs=/tmp/${POST_upfile_name}
 fi
 %>

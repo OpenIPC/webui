@@ -11,8 +11,8 @@ elif [ ! -r "$POST_upfile" ]; then
   error="Cannot read file \"${POST_upfile_name}\" from \"${POST_upfile}\"!"
 elif [ "$(wc -c "$POST_upfile" | awk '{print $1}')" -gt "$maxsize" ]; then
   error="File \"${POST_upfile_name}\" is too large! Its size is $(wc -c "$POST_upfile" | awk '{print $1}') bytes, but it should be ${maxsize} bytes or less."
-elif [ "$magicnum" -ne "$(xxd -p -l 10 "$POST_upfile")" ]; then
-  error="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 10 "$POST_upfile") != $magicnum"
+#elif [ "$magicnum" -ne "$(xxd -p -l 10 "$POST_upfile")" ]; then
+#  error="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 10 "$POST_upfile") != $magicnum"
 fi
 
 if [ ! -z "$error" ]; then %>

@@ -1,7 +1,7 @@
 const from1to99 = Array.from({length: 98}, (_, i) => i + 1);
 const from1to500k = Array.from({length: 499999}, (_, i) => i + 1);
 
-const majectic = {
+const majestic = {
     system: {
         logLevel: {
             default: 'WARN',

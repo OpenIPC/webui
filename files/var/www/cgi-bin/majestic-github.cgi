@@ -61,15 +61,21 @@ if [ -f /rom/usr/bin/majestic ] && get_soc ; then
     curl -k -L -o /tmp/majestic.tar.bz2 http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.bz2
 
     bunzip2 -c /tmp/majestic.tar.bz2 | tar -x -C /tmp/ ./majestic
-    new_majestic_size=$(ls -s /tmp/majestic | xargs | cut -d " " -f 1)
 
-    if [ ! $new_majestic_size -gt $available_space ]; then
-     # bunzip2 -ck /tmp/majestic.tar.bz2 | tar -xk -C /usr/lib/ ./lib*
-      [ -f /overlay/root/usr/bin/majestic ] && rm -f /usr/bin/majestic
-      mv -f /tmp/majestic /usr/bin/majestic
+    if [ $? -eq 0 ]; then
+      new_majestic_size=$(ls -s /tmp/majestic | xargs | cut -d " " -f 1)
+
+      if [ ! $new_majestic_size -gt $available_space ]; then
+       # bunzip2 -ck /tmp/majestic.tar.bz2 | tar -xk -C /usr/lib/ ./lib*
+        [ -f /overlay/root/usr/bin/majestic ] && rm -f /usr/bin/majestic
+        mv -f /tmp/majestic /usr/bin/majestic
+      else
+        error="Not enough space to update majestic."
+      fi
     else
-      error="Not enough space to update majestic."
+      error="Cannot extract majestic."
     fi
+
     rm -f /tmp/majestic
     rm -f /tmp/majestic.tar.bz2
     nohup majestic -s 2>&1 >/dev/null &
@@ -83,7 +89,6 @@ fi
 </pre>
 <%
 if [ ! -z "$error" ]; then %>
-<h2 class="text-danger">Oops. Something happened.</h2>
-<div class="alert alert-danger"><%= "$error" %></div>
+<% report_error "$error" %>
 <% fi %>
 <%in _footer.cgi %>

@@ -93,7 +93,7 @@ mj="
 .netip.password|NETIP password||string||6V0Y4HLF|
 .netip.port|NETIP port||number|1-65535|34567|
 .netip.snapshots|NETIP snaphots||boolean|true,false|true|
-.netip.ignore_set_time|Ignore set time||boolean|true,false|false|
+.netip.ignoreSetTime|Ignore set time||boolean|true,false|false|
 .onvif.enabled|Enable ONVIF protocol support||boolean|true,false|false|
 .raw.enabled|Enable raw feed support||boolean|true,false|false|
 .raw.mode|Raw feed mode||select|slow,fast,none|slow|

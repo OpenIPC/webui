@@ -23,7 +23,8 @@ if [ ! -z "$error" ]; then %>
 <%in _header.cgi %>
 <% report_error "$error" %>
 <%in _footer.cgi %>
-<% else
+<%
+else
   if [ -z "$POST_debug" ]; then
     redirect_to "/cgi-bin/progress.cgi"
   else
@@ -37,25 +38,24 @@ if [ ! -z "$error" ]; then %>
   upd_dir="/tmp/microbe-web-${POST_version}/files"
   # copy newer files to web directory
   for upd_file in $(find "${upd_dir}/var/www" -type f); do
-    file=${upd_file#/tmp/microbe-web-${POST_version}/files}
-    if [ -z "$(diff -q "$upd_file" "/rom${file}")" ]; then
-#      rm -vf "/overlay/root${file}"
-      ln -sf "/rom${file}" "${file}"
-    else
-      if [ -n "$(diff -q "$upd_file" "$file")" ]; then
-        [ ! -d "${file%/*}" ] && mkdir -p "${file%/*}"
-        cp -f "$upd_file" "$file"
-      fi
+    www_file=${upd_file#/tmp/microbe-web-${POST_version}/files}
+    if [ ! -f "$www_file" ] || [ ! -z "$(diff "$www_file" "$upd_file")" ]; then
+      [ ! -d "${www_file%/*}" ] && mkdir -p "${www_file%/*}"
+      cp -f "$upd_file" "$www_file"
     fi
   done
 
   # remove absent files from overlay
   for file in $(diff -qr "/var/www" "${upd_dir}/var/www" | grep "Only in /var/www:" | cut -d ":" -f 2 | tr -d "^ "); do
-    [ "$file" != "$wtag_file" ] && rm -vf "/var/www/${file}"
+    if [ "$file" != "$etag_file" ]; then
+      rm -vf "/var/www/${file}"
+    fi
   done
 
   # clean up
-  rm -vf "${tmp_file}"
-  rm -vfr "/tmp/microbe-web-${POST_version}"
+  rm -f "${tmp_file}"
+  rm -fr "/tmp/microbe-web-${POST_version}"
+
+  echo "done."
 fi
 %>

@@ -1,13 +1,13 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="Majestic Changes"
+page_title="Majestic configuration changes"
 command="diff /rom/etc/majestic.yaml /etc/majestic.yaml"
 output=$($command 2>&1)
 result=$?
 %>
 <%in _header.cgi %>
-<h2>Changes in Majestic config</h2>
+<h2><%= $page_title %></h2>
 <% flash_read %>
 <%
 # diff returns 0 on no difference, 1 on difference, 2+ on errors

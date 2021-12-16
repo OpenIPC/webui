@@ -1,21 +1,19 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<%
-page_title="Camera Preview"
+<% page_title="Camera Preview"
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 button() {
   id=$(echo "${2// /-}" | tr '[:upper:]' '[:lower:]')
   echo "<a id=\"${id}\" href=\"\"><img src=\"/img/${1}\" alt=\"${2}\"></a>"
-}
-snapshot() { echo "<img id=\"snapshot\" src=\"http://${ipaddr}/image.jpg\" class=\"img-fluid\" width=\"1280\" height=\"720\" alt=\"\">" }
-videomp4() { echo "<video src=\"http://${ipaddr}/video.mp4\" class=\"img-fluid\"></video>" }
-%>
+} %>
 <%in _header.cgi %>
 <h2>Camera Preview</h2>
 <% flash_read %>
 <div class="row preview">
   <div class="col position-relative mb-4">
-    <div class="ratio ratio-16x9 mb-3"><% videomp4 %></div>
+    <div class="ratio ratio-16x9 mb-3">
+      <video src="http://<%= $ipaddr %>/video.mp4" poster="http://<%= $ipaddr %>/image.jpg" preload="auto" autoplay controls></video>
+    </div>
     <div class="alert alert-danger">Motors not initialized.</div>
     <div class="control">
       <% button "arrow-up-square-fill.svg" "Pan up" %>

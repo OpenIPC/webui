@@ -11,10 +11,7 @@ button() {
 <% flash_read %>
 <div class="row preview">
   <div class="col position-relative mb-4">
-    <div class="ratio ratio-16x9 mb-3">
-      <video src="http://<%= $ipaddr %>/video.mp4" poster="http://<%= $ipaddr %>/image.jpg" preload="auto" autoplay controls></video>
-    </div>
-    <div class="alert alert-danger">Motors not initialized.</div>
+    <img id="snapshot" src="http://<%= $ipaddr %>/image.jpg" class="img-fluid" width="1280" height="720" alt="">
     <div class="control">
       <% button "arrow-up-square-fill.svg" "Pan up" %>
       <% button "dash-square-fill.svg" "Zoom out" %>
@@ -29,10 +26,8 @@ button() {
 <p><a href="/cgi-bin/preview-help.cgi">Camera Available Endpoints cheatsheet</a></p>
 <script>
 function updateSnapshot() {
-  if ($('#snapshot'))
-    $('#snapshot').src = "http://<%= $ipaddr %>/image.jpg?t=" + Date.now();
-  setTimeout(updateSnapshot, 3500);
+  $('#snapshot').src = "http://<%= $ipaddr %>/image.jpg?t=" + Date.now();
 }
-window.onload = updateSnapshot;
+$('#snapshot').addEventListener('load', updateSnapshot);
 </script>
 <%in _footer.cgi %>

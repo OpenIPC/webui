@@ -59,17 +59,17 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
           <dt class="col-4">Installed</dt>
           <dd class="col-8"><%= $ui_version %></dd>
           <dt class="col-4">Stable</dt>
-          <dd class="col-8" id="ui-ver-stable"></dd>
+          <dd class="col-8" id="ui-ver-master"></dd>
           <dt class="col-4">Development</dt>
-          <dd class="col-8" id="ui-ver-development"></dd>
+          <dd class="col-8" id="ui-ver-dev"></dd>
         </dl>
         <form action="/cgi-bin/web-ui-update.cgi" method="post">
           <div class="row mb-1">
             <label class="col-md-2 form-label" for="version">Branch</label>
             <div class="col-md-10">
               <select class="form-select" name="version" id="version">
-                <option>stable</option>
-                <option>development</option>
+                <option value="master">stable</option>
+                <option value="dev">development</option>
               </select>
             </div>
           </div>
@@ -167,8 +167,8 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
   }
 
   function checkUpdates() {
-    queryBranch('stable');
-    queryBranch('development');
+    queryBranch('master');
+    queryBranch('dev');
   }
 
   function queryBranch(name) {

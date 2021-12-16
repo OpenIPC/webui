@@ -64,7 +64,15 @@
             <li><a class="dropdown-item" href="/cgi-bin/console.cgi">Web Console</a></li>
           </ul>
         </li>
-        <li class="nav-item"><a class="nav-link" href="/cgi-bin/preview.cgi">Preview</a></li>
+        <li class="nav-item  dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownTools" href="#"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">Preview</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownTools">
+            <li><a class="dropdown-item" href="/cgi-bin/preview.cgi">JPEG</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/preview-mjpeg.cgi">MJPEG</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/preview-video.cgi">Video</a></li>
+          </ul>
+        </li>
       </ul>
     </div>
   </div>

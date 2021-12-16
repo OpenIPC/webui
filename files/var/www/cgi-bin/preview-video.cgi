@@ -1,13 +1,13 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<% page_title="Camera Preview"
+<% page_title="Video Preview"
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 button() {
   id=$(echo "${2// /-}" | tr '[:upper:]' '[:lower:]')
   echo "<a id=\"${id}\" href=\"\"><img src=\"/img/${1}\" alt=\"${2}\"></a>"
 } %>
 <%in _header.cgi %>
-<h2>Camera Preview</h2>
+<h2><%= $page_title %></h2>
 <% flash_read %>
 <div class="row preview">
   <div class="col position-relative mb-4">

@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="Status"
+page_title="Device Status"
 interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 hostname="Hostname: $(hostname -s)"
@@ -18,7 +18,7 @@ soc_temp=$(ipcinfo --temp 2>&1)
 [ ! -z "$soc_temp" ] && soc_temp="<br>Temp.: $soc_temp°C"
 %>
 <%in _header.cgi %>
-<h2>Device Status</h2>
+<h2><%= $page_title %></h2>
 <% flash_read %>
 
 <div class="row">

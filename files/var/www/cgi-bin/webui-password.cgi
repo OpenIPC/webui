@@ -1,8 +1,9 @@
 #!/usr/bin/haserl
-<% password=$(awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf) %>
+<% page_title="Web Interface Access"
+password=$(awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf) %>
 <%in _common.cgi %>
 <%in _header.cgi %>
-<h2>Web Interface Access</h2>
+<h2><%= $page_title %></h2>
 <% flash_read %>
 <div class="row">
   <div class="col-md-6 m-auto">

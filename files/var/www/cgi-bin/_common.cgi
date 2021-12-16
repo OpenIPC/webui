@@ -7,10 +7,13 @@ check_password() {
   [ "$REQUEST_URI" = "$uri2" ] && return
 
   password=$(awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf)
-  if [ $password = "12345" ]; then
+  if [ "$password" = "12345" ]; then
     flash_save "danger" "You must set your own secure password!"
     redirect_to "$uri1"
   fi
+}
+debug_message() {
+  [ ! -z "$DEBUG" ] && echo $1
 }
 html_title() {
    [ ! -z "$1" ] && echo -n "$1 - "
@@ -35,6 +38,7 @@ redirect_to() {
   echo "Location: $1"
   echo "Server: httpd"
   echo "Status: 302 Moved Temporarily"
+  echo "$xheader"
   echo ""
 }
 report_error() {
@@ -75,7 +79,9 @@ flash_read() {
   [ -z "$flash" ] && return
   type=$(echo $flash | cut -d ":" -f 1)
   message=$(echo $flash | cut -d ":" -f 2)
-  echo "<div class=\"alert alert-$type\">$message</div>"
+  echo "<div class=\"alert alert-${type} alert-dismissible fade show\" role=\"alert\">${message}"
+  echo "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>"
+  echo "</div>"
   flash_delete
 }
 flash_save() {

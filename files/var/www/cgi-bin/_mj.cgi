@@ -17,7 +17,7 @@ mj="
 .isp.alignWidth|Align width||number||8|
 .isp.blkCnt|Block count||number|1-32|4|Use 4 for small memory systems, 10+ for performant SoCs.
 .isp.threadStackSize|Thread stack size|KB|number|1-32|16|
-.isp.exposure|Sensor exposure time|ms|range|auto,1-500000|auto|From 1 to 500000.
+.isp.exposure|Sensor exposure time|&micro;s|range|auto,1-500000|auto|From 1 to 500000.
 .isp.aGain|Sensor analog gain||number|0.1-1.0|1|
 .isp.dGain|Sensor digital gain||number|0.1-1.0|1|
 .isp.ispGain|ISP gain||number|0.1-1.0|1|
@@ -30,20 +30,20 @@ mj="
 .image.saturation|Image saturation|%|range|1-100|50|
 .image.luminance|Image luminance|%|range|auto,1-100|auto|
 .osd.enabled|Enable On-Screen Display (OSD)||boolean|true,false|false|
-.osd.font|Path to font file used in OSD||string||/usr/lib/fonts/fonts.bin|
+.osd.font|Path to font file used in OSD||string||/usr/share/fonts/truetype/UbuntuMono-Regular.ttf|
 .osd.template|OSD template||string||%a %e %B %Y %H:%M:%S %Z|Supports strftime() format.
 .osd.posX|Horizontal position of OSD|px|number|-2000-2000|-100|
 .osd.posY|Vertical position of OSD|px|number|-2000-2000|-100|
 .osd.privacyMasks|Privacy masks|px|string||0x0x234x640,2124x0x468x1300|Coordinates of masked areas separated by commas.
-.nightmode.enabled|Enable night mode||boolean|true,false|false|
-.nightmode.irSensorPin|GPIO pin of signal from IR sensor||number|1-100|62|
-.nightmode.irSensorPinInvert|IR sensor is inverted||boolean|true,false|false|
-.nightmode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|1-100|1|
-.nightmode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|1-100|2|
-.nightmode.pinSwitchDelayUs|Delay before triggering IRcut filter||number|0-1000|150|
-.nightmode.backlightPin|GPIO pin to turn on night mode illumination||number|1-100|65|
-.nightmode.nightAPI|Use night mode API||boolean|true,false|false|
-.nightmode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1-1000|300|
+.nightMode.enabled|Enable night mode||boolean|true,false|false|
+.nightMode.irSensorPin|GPIO pin of signal from IR sensor||number|1-100|62|
+.nightMode.irSensorPinInvert|IR sensor is inverted||boolean|true,false|false|
+.nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|1-100|1|
+.nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|1-100|2|
+.nightMode.pinSwitchDelayUs|Delay before triggering IRcut filter||number|0-1000|150|
+.nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|1-100|65|
+.nightMode.nightAPI|Use night mode API||boolean|true,false|false|
+.nightMode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1-1000|300|
 .records.enabled|Enable saving records||boolean|true,false|false|
 .records.path|Template for saving video records||string||/mnt/mmc/%Y/%m/%d/%H.mp4|Supports strftime() format.
 .records.maxUsage|Limit of available space usage|%|range|1-100|95|
@@ -93,7 +93,7 @@ mj="
 .netip.password|NETIP password||string||6V0Y4HLF|
 .netip.port|NETIP port||number|1-65535|34567|
 .netip.snapshots|NETIP snaphots||boolean|true,false|true|
-.netip.ignore_set_time|Ignore set time||boolean|true,false|false|
+.netip.ignoreSetTime|Ignore set time||boolean|true,false|false|
 .onvif.enabled|Enable ONVIF protocol support||boolean|true,false|false|
 .raw.enabled|Enable raw feed support||boolean|true,false|false|
 .raw.mode|Raw feed mode||select|slow,fast,none|slow|

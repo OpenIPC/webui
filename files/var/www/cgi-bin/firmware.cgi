@@ -4,7 +4,7 @@
 page_title="Updates"
 ui_date=$(ls -d --full-time /var/www/.etag | xargs | cut -d " " -f 6,7)
 ui_version=$(date --date="$ui_date" +"%s")
-fw_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 2>&1)
+fw_version=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/ 2>&1)
 mj_version=$(majestic -v)
 majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 %>
@@ -22,7 +22,7 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
     <div class="card mb-3">
       <div class="card-header">Firmware</div>
       <div class="card-body">
-        <p><b>Installed ver.<%= $fw_version %></b></p>
+        <p><b>Installed ver. <%= $fw_version %></b></p>
         <form action="/cgi-bin/firmware-update.cgi" method="post">
           <div class="row mb-3">
             <div class="col-md-10 offset-md-2">
@@ -59,17 +59,17 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
           <dt class="col-4">Installed</dt>
           <dd class="col-8"><%= $ui_version %></dd>
           <dt class="col-4">Stable</dt>
-          <dd class="col-8" id="ui-ver-stable"></dd>
+          <dd class="col-8" id="ui-ver-master"></dd>
           <dt class="col-4">Development</dt>
-          <dd class="col-8" id="ui-ver-development"></dd>
+          <dd class="col-8" id="ui-ver-dev"></dd>
         </dl>
         <form action="/cgi-bin/web-ui-update.cgi" method="post">
           <div class="row mb-1">
             <label class="col-md-2 form-label" for="version">Branch</label>
             <div class="col-md-10">
               <select class="form-select" name="version" id="version">
-                <option>stable</option>
-                <option>development</option>
+                <option value="master">stable</option>
+                <option value="dev">development</option>
               </select>
             </div>
           </div>
@@ -95,10 +95,10 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
         <form action="/cgi-bin/majestic-github.cgi" method="post">
           <% if [ -z "$majestic_diff" ]; then %>
             <p><b>Majestic uses the original configuration.</b>
-              <a href="/cgi-bin/majestic.cgi">Change settings.</a></p>
+              <a href="/cgi-bin/majestic-settings-general.cgi">Change settings.</a></p>
           <% else %>
             <p><b>Majestic uses custom configuration.</b>
-              <a href="/cgi-bin/majestic-diff.cgi">See changes.</a></p>
+              <a href="/cgi-bin/majestic-config-compare.cgi">See changes.</a></p>
           <% fi %>
           <div class="row mb-3">
             <div class="col-md-10 offset-md-2">
@@ -107,7 +107,7 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
             </div>
           </div>
           <% if [ ! -z "$majestic_diff" ]; then %>
-            <a class="btn btn-danger float-end" href="/cgi-bin/majestic-reset.cgi"
+            <a class="btn btn-danger float-end" href="/cgi-bin/majestic-config-reset.cgi"
                 title="Restore original configuration">Reset</a>
           <% fi %>
           <button class="btn btn-danger">Update from GitHub</button>
@@ -167,8 +167,8 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
   }
 
   function checkUpdates() {
-    queryBranch('stable');
-    queryBranch('development');
+    queryBranch('master');
+    queryBranch('dev');
   }
 
   function queryBranch(name) {

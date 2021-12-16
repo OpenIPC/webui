@@ -10,11 +10,11 @@ new_sysupgrade_date=$(date --date="2021-12-07" +"%s")
 
 error=""
 if [ -z "$POST_upfile_name"  ]; then
-  error="no file found! Did you forget to upload?"
+  error="No file found! Did you forget to upload?"
 elif [ ! -r "$POST_upfile" ]; then
-  error="cannot read file \"${POST_upfile_name}\" from \"${POST_upfile}\"!"
+  error="Cannot read file \"${POST_upfile_name}\" from \"${POST_upfile}\"!"
 elif [ "$(wc -c "$POST_upfile" | awk '{print $1}')" -gt "$maxsize" ]; then
-  error="file \"${POST_upfile_name}\" is too large! Its size is $(wc -c "$POST_upfile" | awk '{print $1}') bytes, but it should be ${maxsize} bytes or less."
+  error="File \"${POST_upfile_name}\" is too large! Its size is $(wc -c "$POST_upfile" | awk '{print $1}') bytes, but it should be ${maxsize} bytes or less."
 elif [ "$magicnum" -ne "$(xxd -p -l 4 "$POST_upfile")" ]; then
   error="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 4 "$POST_upfile") != $magicnum"
 elif [ "$sysupgrade_date" -ge "$new_sysupgrade_date" ]; then
@@ -29,6 +29,6 @@ if [ ! -z "$error" ]; then %>
   redirect_to "/cgi-bin/progress.cgi"
 
   mv ${POST_upfile} /tmp/${POST_upfile_name}
-  sysupgrade --rootfs=/tmp/${POST_upfile_name}
+  sysupgrade -f --rootfs=/tmp/${POST_upfile_name}
 fi
 %>

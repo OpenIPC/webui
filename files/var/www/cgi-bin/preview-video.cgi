@@ -11,7 +11,14 @@ button() {
 <% flash_read %>
 <div class="row preview">
   <div class="col position-relative mb-4">
-    <img id="snapshot" src="http://<%= $ipaddr %>/image.jpg" class="img-fluid" width="1280" height="720" alt="">
+    <div class="ratio ratio-16x9 mb-3">
+      <video poster="http://<%= $ipaddr %>/image.jpg" autoplay controls>
+        <source src="http://<%= $ipaddr %>/video.m3u8" type="application/x-mpegURL">
+        <source src="rtsp://<%= $ipaddr %>/stream=0" type="application/x-rtsp">
+        <source src="http://<%= $ipaddr %>/video.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="alert alert-danger">Motors not initialized.</div>
     <div class="control">
       <% button "arrow-up-square-fill.svg" "Pan up" %>
       <% button "dash-square-fill.svg" "Zoom out" %>
@@ -24,10 +31,4 @@ button() {
   </div>
 </div>
 <p><a href="/cgi-bin/preview-help.cgi">Camera Available Endpoints cheatsheet</a></p>
-<script>
-function updateSnapshot() {
-  $('#snapshot').src = "http://<%= $ipaddr %>/image.jpg?t=" + Date.now();
-}
-$('#snapshot').addEventListener('load', updateSnapshot);
-</script>
 <%in _footer.cgi %>

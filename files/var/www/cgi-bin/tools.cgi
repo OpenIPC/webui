@@ -2,7 +2,7 @@
 <%in _common.cgi %>
 <%
 page_title="Monitoring Tools"
-interfaces=$("/sbin/ifconfig | grep '^\w' | awk {'print $1'}")
+interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
 %>
 <%in _header.cgi %>
 <h2><%= $page_title %></h2>

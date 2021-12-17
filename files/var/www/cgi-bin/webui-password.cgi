@@ -1,6 +1,5 @@
 #!/usr/bin/haserl
-<% page_title="Web Interface Access"
-password=$(awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf) %>
+<% page_title="Web Interface Access" %>
 <%in _common.cgi %>
 <%in _header.cgi %>
 <h2><%= $page_title %></h2>
@@ -12,10 +11,10 @@ password=$(awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf) %>
         <div class="card-body">
           <form action="/cgi-bin/webui-password-update.cgi" method="post">
             <div class="row mb-1">
-              <label class="col-md-5 form-label" for="password">Admin Password</label>
+              <label class="col-md-5 form-label" for="password">Password</label>
               <div class="col-md-7">
                 <div class="input-group mb-3">
-                  <input type="password" class="form-control password" name="password" id="password" value="<%= $password %>" placeholder="K3wLHaZk3R!">
+                  <input type="password" class="form-control password" name="password" id="password" value="" placeholder="K3wLHaZk3R!">
                   <div class="input-group-text">
                     <button type="button" class="btn btn-sm btn-white p-0" id="toggle-password"><img src="/img/eye-fill.svg" alt="Toggle password"></button>
                   </div>

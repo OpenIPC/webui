@@ -1,8 +1,12 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <% page_title="Firmware Updates"
-ui_date=$(ls -d --full-time /var/www/.etag | xargs | cut -d " " -f 6,7)
-ui_version=$(date --date="$ui_date" +"%s")
+if [ -f /var/www/.etag ]; then
+  ui_date=$(ls -d --full-time /var/www/.etag | xargs | cut -d " " -f 6,7)
+  ui_version=$(date --date="$ui_date" +"%s")
+else
+  ui_version="unknown"
+fi
 fw_version=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/ 2>&1)
 mj_version=$(majestic -v)
 majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)

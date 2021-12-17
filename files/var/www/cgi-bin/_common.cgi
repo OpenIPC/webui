@@ -13,7 +13,8 @@ check_password() {
   fi
 }
 debug_message() {
-  [ ! -z "$DEBUG" ] && echo $1
+  # [ "$HTTP_MODE" = "development" ] &&
+  echo "$(date +"%F %T") $1" >> /tmp/webui.log
 }
 html_title() {
    [ ! -z "$1" ] && echo -n "$1 - "

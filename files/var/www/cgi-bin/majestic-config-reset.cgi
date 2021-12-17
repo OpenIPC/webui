@@ -1,8 +1,8 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-command="cp /rom/etc/majestic.yaml /etc/majestic.yaml"
-output=$(cp /rom/etc/majestic.yaml /etc/majestic.yaml 2>&1)
+command="cp -f /rom/etc/majestic.yaml /etc/majestic.yaml"
+output=$(cp -f /rom/etc/majestic.yaml /etc/majestic.yaml 2>&1)
 result=$?
 if [ "0" -ne "$result" ]; then %>
 <%in _header.cgi %>

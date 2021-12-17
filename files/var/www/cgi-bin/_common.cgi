@@ -75,6 +75,7 @@ flash_delete() {
   :> /tmp/webui-flash.txt
 }
 flash_read() {
+  [ ! -f /tmp/webui-flash.txt ] && return
   flash=$(cat /tmp/webui-flash.txt)
   [ -z "$flash" ] && return
   type=$(echo $flash | cut -d ":" -f 1)

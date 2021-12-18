@@ -80,8 +80,8 @@ ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
           <dd>MP3 audio stream.</dd>
           <dt>http://<%= $ipaddr %>/audio.alaw</dt>
           <dd>A-law compressed audio stream.</dd>
-          <dt>http://<%= $ipaddr %>/audio.alaw</dt>
-          <dd>A-law compressed audio stream.</dd>
+          <dt>http://<%= $ipaddr %>/audio.ulaw</dt>
+          <dd>μ-law compressed audio stream.</dd>
           <dt>http://<%= $ipaddr %>/audio.g711a</dt>
           <dd>G.711 A-law audio stream.</dd>
         </dl>

@@ -90,7 +90,7 @@ for line in $mj; do
         "<div class=\"col-12 form-label\"><label for=\"${name}\">${label//_/ }</label></div>" \
         "<div class=\"col-12\">" \
           "<div class=\"input-group\">" \
-            "<input class=\"form-control\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\">"
+            "<input class=\"form-control\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder//_/ }\">"
       [ ! -z "$units" ] && echo "<span class=\"input-group-text\">${units}</span>"
       echo "</div>"
       [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"

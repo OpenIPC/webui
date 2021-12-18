@@ -30,7 +30,7 @@ for line in $mj; do
       echo "<div class=\"row mb-2\">" \
         "<div class=\"col\">" \
           "<div class=\"form-check form-switch\">" \
-            "<input type=\"hidden\" name=\"${name}\" id=\"${name}\" value=\"false\">" \
+            "<input type=\"hidden\" name=\"${name}\" id=\"${name}-false\" value=\"false\">" \
             "<input class=\"form-check-input\" name=\"${name}\" id=\"${name}\" value=\"true\" type=\"checkbox\" role=\"switch\"${checked}>" \
             "<label for=\"${name}\" class=\"form-check-label\">${label//_/ }</label>" \
           "</div>"
@@ -105,4 +105,15 @@ done
 
 <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
+
+<script>
+window.addEventListener('load', () => {
+  if ($('#netip-enabled'))
+    $('#netip-enabled').addEventListener('change', (event) => {
+      $('#netip-user').required = event.target.checked;
+      $('#netip-password').required = event.target.checked;
+    });
+});
+</script>
+
 <%in _footer.cgi %>

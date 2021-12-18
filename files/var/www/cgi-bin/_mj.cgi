@@ -75,7 +75,7 @@ mj="
 .audio.enabled|Enable audio||boolean|true,false|false|
 .audio.volume|Audio volume level|%|range|auto,1-100|auto|
 .audio.srate|Audio sampling rate|kHz|number|1-44100|8000|
-.audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,aac,pcm|opus|
+.audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,pcm,alaw,ulaw|opus|
 .audio.outputEnabled|Audio card||boolean||hw:3|
 .rtsp.enabled|Enable output||boolean|true,false|true||
 .rtsp.port|Port for RTSP protocol||number|1-65535|554|

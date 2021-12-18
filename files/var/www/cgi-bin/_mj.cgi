@@ -78,7 +78,7 @@ mj="
 .audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,pcm,alaw,ulaw|opus|
 .audio.outputEnabled|Audio card||boolean||hw:3|
 .rtsp.enabled|Enable output||boolean|true,false|true||
-.rtsp.port|Port for RTSP protocol||number|1-65535|554|
+.rtsp.port|Port for RTSP protocol||number|1-65535|554|rtsp://[ip.add.re.ss]:[port]/stream={0,1}
 .hls.enabled|Enable HTTP Live Streaming (HLS)||boolean|true,false|true|
 .youtube.enabled|Enable Youtube support||boolean|true,false|false|
 .youtube.key|Youtube API key||string||xxxx-xxxx-xxxx-xxxx-xxxx|

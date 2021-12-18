@@ -90,7 +90,7 @@ mj="
 .ipeye.enabled|Enable IP EYE support||boolean|true,false|false|
 .netip.enabled|Enable NETIP protocol support||boolean|true,false|false|
 .netip.user|NETIP user||string||admin|
-.netip.password|NETIP password||string||6V0Y4HLF|
+.netip.password|NETIP password hash||string||6V0Y4HLF|
 .netip.port|NETIP port||number|1-65535|34567|
 .netip.snapshots|NETIP snaphots||boolean|true,false|true|
 .netip.ignoreSetTime|Ignore set time||boolean|true,false|false|

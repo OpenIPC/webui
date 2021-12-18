@@ -9,9 +9,10 @@ else
 fi
 
 opts=""
-[ ! -z "$POST_kernel"  ] && opts="${opts} -k"
-[ ! -z "$POST_rootfs"  ] && opts="${opts} -r"
-[ ! -z "$POST_reset"   ] && opts="${opts} -n"
-[ ! -z "$POST_noreboot"] && opts="${opts} -x"
+[ ! -z "$POST_kernel"   ] && opts="${opts} -k"
+[ ! -z "$POST_rootfs"   ] && opts="${opts} -r"
+[ ! -z "$POST_reset"    ] && opts="${opts} -n"
+[ ! -z "$POST_noreboot" ] && opts="${opts} -x"
+[ ! -z $(sysupgrade | grep force) ] && opts="${opts} --force"
 sysupgrade ${opts}
 %>

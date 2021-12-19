@@ -12,7 +12,7 @@ function bit_rol(d,_){return d<<_|d>>>32-_}
 function ord(str){return str.charCodeAt(0)}
 function chr(n){return String.fromCharCode(n)}
 
-function doSofia(text) {
+function generateSofiaHash(text) {
     let h = '';
     let md5 = MD5(text);
     for (let i = 0; i <= 7; i++) {
@@ -33,8 +33,8 @@ window.addEventListener('load', () => {
 
     if ($('#netip-password-plain')) {
         $('form').addEventListener('submit', (event) => {
-            const password = $('#netip-password-plain').value;
-            if (password !== '') $('#netip-password').value = doSofia(password);
+            const password = $('#netip-password-plain').value.trim();
+            if (password !== '') $('#netip-password').value = generateSofiaHash(password);
         });
     }
 });

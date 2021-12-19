@@ -5,8 +5,6 @@ page_title="Available Endpoints"
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 %>
 <%in _header.cgi %>
-<h2><%= $page_title %></h2>
-<% flash_read %>
 <p class="small">Detailed information available <a href="https://github.com/OpenIPC/firmware/wiki/majestic_streamer">in the wiki</a>.</p>
 <div class="row row-cols-1 row-cols-md-2 g-4">
   <div class="col">

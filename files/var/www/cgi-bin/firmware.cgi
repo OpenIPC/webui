@@ -12,8 +12,6 @@ mj_version=$(majestic -v)
 majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 %>
 <%in _header.cgi %>
-<h2><%= $page_title %></h2>
-<% flash_read %>
 <div class="alert alert-danger">
   <b>Attention: Destructive Actions!</b>
   <p class="mb-0">Make sure you know what you are doing.</p>

@@ -7,8 +7,6 @@ button() {
   echo "<a id=\"${id}\" href=\"\"><img src=\"/img/${1}\" alt=\"${2}\"></a>"
 } %>
 <%in _header.cgi %>
-<h2><%= $page_title %></h2>
-<% flash_read %>
 <div class="row preview">
   <div class="col position-relative mb-4">
     <div class="ratio ratio-16x9 mb-3">

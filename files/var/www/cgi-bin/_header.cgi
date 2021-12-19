@@ -79,3 +79,5 @@
 </nav>
 <main>
   <div class="container p-3">
+    <h2><%= $page_title %></h2>
+    <% flash_read %>

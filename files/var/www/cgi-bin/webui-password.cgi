@@ -2,8 +2,6 @@
 <% page_title="Web Interface Access" %>
 <%in _common.cgi %>
 <%in _header.cgi %>
-<h2><%= $page_title %></h2>
-<% flash_read %>
 <div class="row">
   <div class="col-md-6 m-auto">
     <div class="card">

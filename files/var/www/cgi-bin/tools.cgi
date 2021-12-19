@@ -5,8 +5,6 @@ page_title="Monitoring Tools"
 interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
 %>
 <%in _header.cgi %>
-<h2><%= $page_title %></h2>
-<% flash_read %>
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-4">
   <div class="col">
     <div class="card h-100 mb-3">

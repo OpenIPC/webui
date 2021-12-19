@@ -6,8 +6,6 @@ size=$(yaml-cli -g .mjpeg.size)
 [ -z "$size" ] && size="640x480"
 size_w=${size%x*}; size_h=${size#*x} %>
 <%in _header.cgi %>
-<h2><%= $page_title %></h2>
-<% flash_read %>
 <div class="row preview">
 <div class="col mb-4">
 <img id="image" width="<%= $size_w %>" height="<%= $size_h %>" alt="MJPEG Preview">

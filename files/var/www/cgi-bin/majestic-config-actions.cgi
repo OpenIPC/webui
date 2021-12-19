@@ -2,9 +2,6 @@
 <% page_title="Majestic Maintenance" %>
 <%in _common.cgi %>
 <%in _header.cgi %>
-<h2><%= $page_title %></h2>
-<% flash_read %>
-
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-3">
   <div class="col">
     <div class="card h-100">

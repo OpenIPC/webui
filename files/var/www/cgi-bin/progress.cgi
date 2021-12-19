@@ -3,7 +3,6 @@
 <% if [ -f /tmp/webjob.lock ]; then
 page_title="Please wait..." %>
 <%in _header.cgi %>
-<h2>Doing something. Please wait...</h2>
 <progress id="timer" max="20" value="0" class="w-100"></progress>
 <script>
 function tick() {

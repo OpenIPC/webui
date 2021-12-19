@@ -18,9 +18,6 @@ soc_temp=$(ipcinfo --temp 2>&1)
 [ ! -z "$soc_temp" ] && soc_temp="<br>Temp.: $soc_temp°C"
 %>
 <%in _header.cgi %>
-<h2><%= $page_title %></h2>
-<% flash_read %>
-
 <div class="row">
   <div class="col mb-3">
     <div class="card h-100">

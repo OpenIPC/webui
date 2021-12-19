@@ -7,8 +7,6 @@ output=$($command 2>&1)
 result=$?
 %>
 <%in _header.cgi %>
-<h2><%= $page_title %></h2>
-<% flash_read %>
 <%
 # diff returns 0 on no difference, 1 on difference, 2+ on errors
 # checking exit status won't work here

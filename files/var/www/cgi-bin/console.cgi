@@ -3,8 +3,6 @@
 cmd=$FORM_cmd %>
 <%in _common.cgi %>
 <%in _header.cgi %>
-<h2><%= $page_title %></h2>
-<% flash_read %>
 <div class="console">
   <div class="input-group mb-3">
     <div class="input-group-text">~#</div>

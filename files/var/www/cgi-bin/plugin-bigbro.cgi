@@ -2,7 +2,7 @@
 <%in _common.cgi %>
 <%
 plugin="bigbro"
-config_file="/tmp/${plugin}.yaml"
+config_file="/etc/${plugin}.cfg"
 
 if [ -n "$POST_pin" ]; then
   pin="$POST_pin"

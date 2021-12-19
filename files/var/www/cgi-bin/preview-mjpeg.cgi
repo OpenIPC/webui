@@ -11,17 +11,25 @@ size_w=${size%x*}; size_h=${size#*x} %>
 <img id="image" width="<%= $size_w %>" height="<%= $size_h %>" alt="MJPEG Preview">
 </div>
 </div>
+
 <script>
 // Based on https://github.com/aruntj/mjpeg-readable-stream
-const url = "http://<%= $ipaddr %>/mjpeg";
 const CONTENT_LENGTH = 'content-length';
 const TYPE_JPEG = 'image/jpeg';
 const SOI = new Uint8Array(2);
-SOI[0] = 0xFF; SOI[1] = 0xD8;
+const mjpeg_url = "http://<%= $ipaddr %>/mjpeg";
+SOI[0] = 0xFF;
+SOI[1] = 0xD8;
+
 let image = document.getElementById('image');
-fetch(url).then(response => {
-  if (!response.ok) { throw Error(response.status+' '+response.statusText) }
-  if (!response.body) { throw Error('ReadableStream not yet supported in this browser.') }
+
+fetch(mjpeg_url).then(response => {
+  if (!response.ok) {
+      throw Error(response.status + ' ' + response.statusText)
+  }
+  if (!response.body) {
+      throw Error('ReadableStream not yet supported in this browser.')
+  }
   const reader = response.body.getReader();
   let headers = '';
   let contentLength = -1;
@@ -34,7 +42,7 @@ fetch(url).then(response => {
         return;
       }
       for (let index = 0; index < value.length; index++) {
-        if (value[index] === SOI[0] && value[index+1] === SOI[1]) {
+        if (value[index] === SOI[0] && value[index + 1] === SOI[1]) {
           contentLength = getLength(headers);
           imageBuffer = new Uint8Array(new ArrayBuffer(contentLength));
         }
@@ -43,12 +51,14 @@ fetch(url).then(response => {
         } else if (bytesRead < contentLength) {
           imageBuffer[bytesRead++] = value[index];
         } else {
-          let frame = URL.createObjectURL(new Blob([imageBuffer], {type: 'video/x-motion-jpeg'}));
+          let frame = URL.createObjectURL(new Blob([imageBuffer], {type: TYPE_JPEG})); //'video/x-motion-jpeg'
           image.src = frame;
-          URL.revokeObjectURL(frame);
-          contentLength = 0;
-          bytesRead = 0;
-          headers = '';
+          image.onload = function() {
+            URL.revokeObjectURL(frame);
+            contentLength = 0;
+            bytesRead = 0;
+            headers = '';
+          }
         }
       }
       read();
@@ -69,4 +79,5 @@ const getLength = (headers) => {
   return contentLength;
 };
 </script>
+
 <%in _footer.cgi %>

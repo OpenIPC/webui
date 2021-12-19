@@ -21,6 +21,7 @@ for name in $data; do
   # validation and normalization
   [ "$key" = ".track" ] && continue
   [ "$key" = ".reset" ] && continue
+  [ "$key" = ".netip.password.plain" ] && continue
   if [ "$key" = ".image.rotate" ]; then
     if [ "$value" = "0°" ]; then
       value="none"

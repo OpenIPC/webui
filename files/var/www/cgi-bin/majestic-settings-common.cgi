@@ -37,6 +37,9 @@ for line in $mj; do
       [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"
       echo "</div></div>"
       ;;
+    hidden)
+      echo -n "<input type=\"hidden\" name=\"${name}\" id=\"${name}\" value=\"${value}\">"
+      ;;
     number)
       echo -n "<div class=\"row mb-2\">"  \
         "<div class=\"col-md-7\"><label for=\"${name}\" class=\"form-label\">${label//_/ }</label></div>" \
@@ -106,14 +109,7 @@ done
 <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
 
+<script src="/js/majestic-settings.js"></script>
 <script>
-window.addEventListener('load', () => {
-  if ($('#netip-enabled'))
-    $('#netip-enabled').addEventListener('change', (event) => {
-      $('#netip-user').required = event.target.checked;
-      $('#netip-password').required = event.target.checked;
-    });
-});
 </script>
-
 <%in _footer.cgi %>

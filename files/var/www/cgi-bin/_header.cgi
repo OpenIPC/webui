@@ -65,6 +65,13 @@
           </ul>
         </li>
         <li class="nav-item  dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownServices" href="#"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">Services</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownServices">
+            <li><a class="dropdown-item" href="/cgi-bin/plugin-bigbro.cgi">Big Bro</a></li>
+          </ul>
+        </li>
+        <li class="nav-item  dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownPreview" href="#"
             role="button" data-bs-toggle="dropdown" aria-expanded="false">Preview</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownPreview">

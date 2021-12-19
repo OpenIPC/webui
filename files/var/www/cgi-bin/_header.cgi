@@ -65,9 +65,9 @@
           </ul>
         </li>
         <li class="nav-item  dropdown">
-          <a class="nav-link dropdown-toggle" id="dropdownTools" href="#"
+          <a class="nav-link dropdown-toggle" id="dropdownPreview" href="#"
             role="button" data-bs-toggle="dropdown" aria-expanded="false">Preview</a>
-          <ul class="dropdown-menu" aria-labelledby="dropdownTools">
+          <ul class="dropdown-menu" aria-labelledby="dropdownPreview">
             <li><a class="dropdown-item" href="/cgi-bin/preview.cgi">JPEG</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/preview-mjpeg.cgi">MJPEG</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/preview-video.cgi">Video</a></li>

@@ -8,7 +8,7 @@ size_w=${size%x*}; size_h=${size#*x} %>
 <%in _header.cgi %>
 <div class="row preview">
 <div class="col mb-4">
-<img id="image" width="<%= $size_w %>" height="<%= $size_h %>" alt="MJPEG Preview">
+<img class="img-fluid" id="image" width="<%= $size_w %>" height="<%= $size_h %>" alt="MJPEG Preview">
 </div>
 </div>
 

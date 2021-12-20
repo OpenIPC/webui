@@ -2,30 +2,30 @@
 <%in _common.cgi %>
 <% page_title="JPEG Preview"
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
-button() {
-  id=$(echo "${2// /-}" | tr '[:upper:]' '[:lower:]')
-  echo "<a id=\"${id}\" href=\"\"><img src=\"/img/${1}\" alt=\"${2}\"></a>"
-} %>
+%>
 <%in _header.cgi %>
 <div class="row preview">
   <div class="col position-relative mb-4">
-    <img id="snapshot" src="http://<%= $ipaddr %>/image.jpg" class="img-fluid" width="1280" height="720" alt="">
-    <div class="control">
-      <% button "arrow-up-square-fill.svg" "Pan up" %>
-      <% button "dash-square-fill.svg" "Zoom out" %>
-      <% button "arrow-left-square-fill.svg" "Pan left" %>
-      <% button "camera-fill.svg" "Source" %>
-      <% button "arrow-right-square-fill.svg" "Pan right" %>
-      <% button "arrow-down-square-fill.svg" "Pan down" %>
-      <% button "plus-square-fill.svg" "Zoom in" %>
-    </div>
+    <img id="preview" src="http://<%= $ipaddr %>/image.jpg" class="img-fluid" width="1280" height="720" alt="">
   </div>
 </div>
+<%in _joystick.cgi %>
 <p><a href="/cgi-bin/preview-help.cgi">Camera Available Endpoints cheatsheet</a></p>
 <script>
-function updateSnapshot() {
-  $('#snapshot').src = "http://<%= $ipaddr %>/image.jpg?t=" + Date.now();
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
-$('#snapshot').addEventListener('load', updateSnapshot);
+
+async function updatePreview() {
+  // await sleep(1000);
+  $('#preview').src = "http://<%= $ipaddr %>/image.jpg?t=" + Date.now();
+}
+
+function initPage() {
+  $('#preview').addEventListener('load', updatePreview);
+  updatePreview();
+}
+
+window.addEventListener('load', initPage);
 </script>
 <%in _footer.cgi %>

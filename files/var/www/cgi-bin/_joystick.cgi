@@ -6,6 +6,7 @@ button() {
   echo "<img id=\"${id}\" src=\"/img/${1}\" alt=\"${2}\">"
 }
 %>
+<div class="alert alert-danger">Motors not initialized.</div>
 <div class="control">
 <% button "arrow-up-left-square-fill.svg" "Pan up left" %>
 <% button "arrow-up-square-fill.svg" "Pan up" %>

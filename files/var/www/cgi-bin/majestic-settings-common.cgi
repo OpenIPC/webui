@@ -87,11 +87,12 @@ for line in $mj; do
       echo "</div>"
       ;;
     string)
+      [ "$name" != "system-sensorConfig" ] && placeholder=${placeholder//_/ }
       echo "<div class=\"row mb-2\">" \
         "<div class=\"col-12 form-label\"><label for=\"${name}\">${label//_/ }</label></div>" \
         "<div class=\"col-12\">" \
           "<div class=\"input-group\">" \
-            "<input class=\"form-control\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder//_/ }\">"
+            "<input class=\"form-control\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\">"
       [ ! -z "$units" ] && echo "<span class=\"input-group-text\">${units}</span>"
       echo "</div>"
       [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"

@@ -110,5 +110,12 @@ done
 
 <script src="/js/majestic-settings.js"></script>
 <script>
+  if (screen.width < 768) {
+    const button = $('button[type=submit]');
+    const div = document.createElement('div');
+    div.classList.add('fixed-bottom','p-3','bg-light');
+    div.appendChild(button.cloneNode(true));
+    button.replaceWith(div);
+  }
 </script>
 <%in _footer.cgi %>

@@ -1,8 +1,6 @@
 <%in _common.cgi %>
 <%in _mj.cgi %>
 <%in _header.cgi %>
-<h2><%= $page_title %></h2>
-<% flash_read %>
 <form action="/cgi-bin/majestic-settings-update.cgi" method="post">
 <div class="row row-cols-1 row-cols-xl-2 row-cols-xxl-3 g-4 mb-3">
 <% mj=$(echo "$mj" | sed "s/ /_/g" | grep -E $only)
@@ -30,12 +28,15 @@ for line in $mj; do
       echo "<div class=\"row mb-2\">" \
         "<div class=\"col\">" \
           "<div class=\"form-check form-switch\">" \
-            "<input type=\"hidden\" name=\"${name}\" id=\"${name}\" value=\"false\">" \
+            "<input type=\"hidden\" name=\"${name}\" id=\"${name}-false\" value=\"false\">" \
             "<input class=\"form-check-input\" name=\"${name}\" id=\"${name}\" value=\"true\" type=\"checkbox\" role=\"switch\"${checked}>" \
             "<label for=\"${name}\" class=\"form-check-label\">${label//_/ }</label>" \
           "</div>"
       [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"
       echo "</div></div>"
+      ;;
+    hidden)
+      echo -n "<input type=\"hidden\" name=\"${name}\" id=\"${name}\" value=\"${value}\">"
       ;;
     number)
       echo -n "<div class=\"row mb-2\">"  \
@@ -90,7 +91,7 @@ for line in $mj; do
         "<div class=\"col-12 form-label\"><label for=\"${name}\">${label//_/ }</label></div>" \
         "<div class=\"col-12\">" \
           "<div class=\"input-group\">" \
-            "<input class=\"form-control\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\">"
+            "<input class=\"form-control\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder//_/ }\">"
       [ ! -z "$units" ] && echo "<span class=\"input-group-text\">${units}</span>"
       echo "</div>"
       [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"
@@ -105,4 +106,8 @@ done
 
 <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
+
+<script src="/js/majestic-settings.js"></script>
+<script>
+</script>
 <%in _footer.cgi %>

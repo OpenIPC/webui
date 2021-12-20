@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="Network"
+page_title="Network Administration"
 hostname=$(hostname -s)
 ipaddr=$(yaml-cli -g .network.lan.ipaddr)
 ipaddr_eth0=$(ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $3}')
@@ -13,8 +13,6 @@ vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
 timezone=$(cat /etc/TZ)
 %>
 <%in _header.cgi %>
-<h2>Network Administration</h2>
-<% flash_read %>
 <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
 
   <div class="col mb-3">

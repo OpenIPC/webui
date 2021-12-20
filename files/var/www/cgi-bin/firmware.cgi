@@ -1,16 +1,17 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<%
-page_title="Updates"
-ui_date=$(ls -d --full-time /var/www/.etag | xargs | cut -d " " -f 6,7)
-ui_version=$(date --date="$ui_date" +"%s")
+<% page_title="Firmware Updates"
+if [ -f /var/www/.etag ]; then
+  ui_date=$(ls -d --full-time /var/www/.etag | xargs | cut -d " " -f 6,7)
+  ui_version=$(date --date="$ui_date" +"%s")
+else
+  ui_version="unknown"
+fi
 fw_version=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/ 2>&1)
 mj_version=$(majestic -v)
 majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 %>
 <%in _header.cgi %>
-<h2>Firmware Updates</h2>
-<% flash_read %>
 <div class="alert alert-danger">
   <b>Attention: Destructive Actions!</b>
   <p class="mb-0">Make sure you know what you are doing.</p>

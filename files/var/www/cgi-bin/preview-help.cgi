@@ -1,12 +1,10 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="Camera Available Endpoints"
+page_title="Available Endpoints"
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 %>
 <%in _header.cgi %>
-<h2>Camera Available Endpoints</h2>
-<% flash_read %>
 <p class="small">Detailed information available <a href="https://github.com/OpenIPC/firmware/wiki/majestic_streamer">in the wiki</a>.</p>
 <div class="row row-cols-1 row-cols-md-2 g-4">
   <div class="col">
@@ -80,8 +78,8 @@ ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
           <dd>MP3 audio stream.</dd>
           <dt>http://<%= $ipaddr %>/audio.alaw</dt>
           <dd>A-law compressed audio stream.</dd>
-          <dt>http://<%= $ipaddr %>/audio.alaw</dt>
-          <dd>A-law compressed audio stream.</dd>
+          <dt>http://<%= $ipaddr %>/audio.ulaw</dt>
+          <dd>μ-law compressed audio stream.</dd>
           <dt>http://<%= $ipaddr %>/audio.g711a</dt>
           <dd>G.711 A-law audio stream.</dd>
         </dl>

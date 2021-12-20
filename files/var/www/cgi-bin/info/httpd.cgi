@@ -2,6 +2,6 @@
 <% page_title="printenv" %>
 <%in ../_common.cgi %>
 <%in ../_header.cgi %>
-<h2># printenv</h2>
+<b># printenv</b>
 <pre class="bg-light p-4"><% printenv | sort %></pre>
 <%in ../_footer.cgi %>

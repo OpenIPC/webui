@@ -1,8 +1,7 @@
 #!/usr/bin/haserl
+<% page_title="Updating settings" %>
 <%in _common.cgi %>
 <%in _header.cgi %>
-<h2>Updating settings</h2>
-<% flash_read %>
 <%
 if [ ! -z "$POST_hostname" ]; then
   oldhostname=$(cat /etc/hostname)

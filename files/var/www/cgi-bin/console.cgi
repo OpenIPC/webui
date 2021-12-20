@@ -1,9 +1,8 @@
 #!/usr/bin/haserl
+<% page_title="Web Console"
+cmd=$FORM_cmd %>
 <%in _common.cgi %>
 <%in _header.cgi %>
-<% cmd=$FORM_cmd %>
-<h2>Web Console</h2>
-<% flash_read %>
 <div class="console">
   <div class="input-group mb-3">
     <div class="input-group-text">~#</div>

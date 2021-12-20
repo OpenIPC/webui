@@ -39,15 +39,15 @@ get_soc() {
 check_url() {
   status_code=$(curl --silent --head http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.bz2)
   status_code=$(echo "$status_code" | grep "HTTP/1.1" | cut -d " " -f 2)
-
   [ ${status_code} = "200" ] && return=1
-} %>
+}
+page_title="Downloading latest majestic"
+%>
 <%in _header.cgi %>
-<h2>Downloading latest majestic. Please wait...</h2>
+<h4>Please wait...</h4>
 <progress id="timer" max="90" value="0" class="w-100"></progress>
 <script>window.onload = engage;</script>
-<pre>
-<%
+<pre><%
 soc=$(ipcinfo --chip_id 2>&1)
 if [ -f /rom/usr/bin/majestic ] && get_soc ; then
   if check_url ; then

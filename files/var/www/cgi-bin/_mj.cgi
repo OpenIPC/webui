@@ -75,10 +75,10 @@ mj="
 .audio.enabled|Enable audio||boolean|true,false|false|
 .audio.volume|Audio volume level|%|range|auto,1-100|auto|
 .audio.srate|Audio sampling rate|kHz|number|1-44100|8000|
-.audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,aac,pcm|opus|
+.audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,pcm,alaw,ulaw|opus|
 .audio.outputEnabled|Audio card||boolean||hw:3|
 .rtsp.enabled|Enable output||boolean|true,false|true||
-.rtsp.port|Port for RTSP protocol||number|1-65535|554|
+.rtsp.port|Port for RTSP protocol||number|1-65535|554|rtsp://[ip.add.re.ss]:[port]/stream={0,1}
 .hls.enabled|Enable HTTP Live Streaming (HLS)||boolean|true,false|true|
 .youtube.enabled|Enable Youtube support||boolean|true,false|false|
 .youtube.key|Youtube API key||string||xxxx-xxxx-xxxx-xxxx-xxxx|
@@ -90,7 +90,8 @@ mj="
 .ipeye.enabled|Enable IP EYE support||boolean|true,false|false|
 .netip.enabled|Enable NETIP protocol support||boolean|true,false|false|
 .netip.user|NETIP user||string||admin|
-.netip.password|NETIP password||string||6V0Y4HLF|
+.netip.password-plain|NETIP password||string||12345|
+.netip.password|NETIP password hash||hidden||6V0Y4HLF|
 .netip.port|NETIP port||number|1-65535|34567|
 .netip.snapshots|NETIP snaphots||boolean|true,false|true|
 .netip.ignoreSetTime|Ignore set time||boolean|true,false|false|

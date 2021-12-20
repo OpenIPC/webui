@@ -8,10 +8,10 @@ size_w=${size%x*}; size_h=${size#*x} %>
 <%in _header.cgi %>
 <div class="row preview">
 <div class="col mb-4">
-<img class="img-fluid" id="image" width="<%= $size_w %>" height="<%= $size_h %>" alt="MJPEG Preview">
+<img class="img-fluid" id="preview" width="<%= $size_w %>" height="<%= $size_h %>" alt="MJPEG Preview">
 </div>
 </div>
-
+<%in _joystick.cgi %>
 <script>
 // Based on https://github.com/aruntj/mjpeg-readable-stream
 const CONTENT_LENGTH = 'content-length';
@@ -21,7 +21,7 @@ const mjpeg_url = "http://<%= $ipaddr %>/mjpeg";
 SOI[0] = 0xFF;
 SOI[1] = 0xD8;
 
-let image = document.getElementById('image');
+let image = $('#preview');
 
 fetch(mjpeg_url).then(response => {
   if (!response.ok) {

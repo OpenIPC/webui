@@ -7,8 +7,8 @@ button() {
 }
 %>
 <div class="alert alert-danger">Motors not initialized.</div>
-<div class="control-board">
-<div class="control">
+<div class="control-board row">
+<div class="control col-lg-6">
 <% button "arrow-ul.svg" "Pan up left" %>
 <% button "arrow-uc.svg" "Pan up" %>
 <% button "arrow-ur.svg" "Pan up right" %>
@@ -24,6 +24,8 @@ button() {
 <% button "focus-plus.svg" "Focus: plus" %>
 <% button "focus-auto.svg" "Focus: auto" %>
 <% button "focus-minus.svg" "Focus: minus" %>
+</div>
+<div class="control col-lg-6">
 <% button "preset-home.svg" "Preset: Home" %>
 <% button "preset-save.svg" "Preset: Save" %>
 <% button "preset-1.svg" "Preset 1" %>

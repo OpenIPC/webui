@@ -133,6 +133,5 @@ done
      <% done %>
      inp.replaceWith(sel);
    }
-
 </script>
 <%in _footer.cgi %>

@@ -123,7 +123,14 @@ form .range-value {
 .control #image-flip          { grid-column-start: 1; grid-column-end: 1; grid-row-start: 2; grid-row-end: 2; }
 .control #image-mirror        { grid-column-start: 2; grid-column-end: 2; grid-row-start: 2; grid-row-end: 2; }
 
-.control input[type="range"] { max-height: 8rem; }
+input[type=range][orient=vertical]
+{
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 8px;
+    height: 175px;
+    padding: 0 5px;
+}
 
 /*
 .control img { filter: sepia(50%) hue-rotate(231deg) saturate(800%) invert(75%) brightness(100%) contrast(100%) drop-shadow(1px 1px 3px rgb(255,255,255)); }

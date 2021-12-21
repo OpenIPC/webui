@@ -3,7 +3,6 @@
 mj="
 .system.logLevel|Severity of logging||select|ERROR,WARN,INFO,DEBUG,TRACE|TRACE|
 .system.sensorConfig|Path to sensor configuration file||string||/etc/sensors/imx222_1080p_line.ini|
-.system.sensorConfigDir|Path to sensors config directory||string||/etc/sensors|
 .system.staticDir|Home directory for static files||string||/var/www/html|
 .system.webPort|Port for HTTP access||number|1-65535|80|
 .system.httpsPort|Port for HTTPS access||number|1-65535|443|
@@ -42,7 +41,6 @@ mj="
 .nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|1-100|2|
 .nightMode.pinSwitchDelayUs|Delay before triggering IRcut filter||number|0-1000|150|
 .nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|1-100|65|
-.nightMode.nightAPI|Use night mode API||boolean|true,false|false|
 .nightMode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1-1000|300|
 .records.enabled|Enable saving records||boolean|true,false|false|
 .records.path|Template for saving video records||string||/mnt/mmc/%Y/%m/%d/%H.mp4|Supports strftime() format.

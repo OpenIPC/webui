@@ -30,6 +30,7 @@
             <li><a class="dropdown-item" href="/cgi-bin/status.cgi">Overview</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/info-cron.cgi">Cron config</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/info-dmesg.cgi">Diagnostic message</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info-httpd-config.cgi">HTTPd config</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/info-httpd.cgi">HTTPd environment</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/info-log.cgi">Log read</a></li>
           </ul>

@@ -69,6 +69,7 @@ check_env_tz() {
             done
           %>
           <button type="submit" class="btn btn-primary mt-2">Save changes</button>
+          <a class="btn btn-danger mt-2" href="/cgi-bin/network-ntp-reset.cgi">Reset to defaults</a>
         </form>
       </div>
       <div class="card-body">

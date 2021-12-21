@@ -8,7 +8,7 @@ button() {
 %>
 <div class="alert alert-danger">Motors not initialized.</div>
 <div class="control-board row">
-<div class="control col-lg-6">
+<div class="control col-lg-4">
 <% button "arrow-ul.svg" "Pan up left" %>
 <% button "arrow-uc.svg" "Pan up" %>
 <% button "arrow-ur.svg" "Pan up right" %>
@@ -20,12 +20,25 @@ button() {
 <% button "speed-slow.svg" "Speed" %>
 <% button "zoom-close.svg" "Zoom in" %>
 <% button "zoom-far.svg" "Zoom out" %>
-<% [ "true" = "$(yaml-cli -g .nightMode.enabled)" ] && button "light-off.svg" "Night mode" %>
 <% button "focus-plus.svg" "Focus: plus" %>
 <% button "focus-auto.svg" "Focus: auto" %>
 <% button "focus-minus.svg" "Focus: minus" %>
+<% [ "true" = "$(yaml-cli -g .nightMode.enabled)" ] && button "light-off.svg" "Night mode" %>
 </div>
-<div class="control col-lg-6">
+<div class="control col-6 col-lg-2">
+<% button "image-rotate-cw.svg" "Image rotate 90° CW" %>
+<% button "image-rotate-ccw.svg" "Image rotate 90° CCW" %>
+<% button "image-flip.svg" "Image: flip" %>
+<% button "image-mirror.svg" "Image: mirror" %>
+</div>
+<div class="control col-6 col-lg-2">
+<div class="row">
+<div class="col-4"><input type="range" orient="vertical" id="isp-again" title="aGain"></div>
+<div class="col-4"><input type="range" orient="vertical" id="isp-dgain" title="dGain"></div>
+<div class="col-4"><input type="range" orient="vertical" id="isp-gain" title="Gain"></div>
+</div>
+</div>
+<div class="control col-lg-4">
 <% button "preset-home.svg" "Preset: Home" %>
 <% button "preset-save.svg" "Preset: Save" %>
 <% button "preset-1.svg" "Preset 1" %>
@@ -39,6 +52,7 @@ button() {
 <% button "preset-9.svg" "Preset 9" %>
 </div>
 </div>
+
 
 <script>
 function reqListener() {

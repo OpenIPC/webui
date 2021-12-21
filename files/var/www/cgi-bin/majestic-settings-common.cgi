@@ -117,5 +117,22 @@ done
     div.appendChild(button.cloneNode(true));
     button.replaceWith(div);
   }
+
+  if ($('#system-sensorConfig')) {
+     const inp = $('#system-sensorConfig');
+     const sel = document.createElement('select');
+     sel.classList.add('form-select');
+     sel.name=inp.name;
+     sel.id=inp.id;
+     sel.options.add(new Option());
+     let opt;
+     <% for i in $(ls -1 /etc/sensors/*.ini); do %>
+      opt = new Option('<%= $i %>');
+      opt.selected = ('<%= $i %>' == inp.value);
+      sel.options.add(opt);
+     <% done %>
+     inp.replaceWith(sel);
+   }
+
 </script>
 <%in _footer.cgi %>

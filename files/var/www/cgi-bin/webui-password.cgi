@@ -48,17 +48,5 @@
     </div>
   </div>
 </div>
-
-<script>
-$$('.toggle-password').forEach(el => { el.addEventListener('click', (ev) => {
-  if (ev.target.checked) {
-    $$('input.password').forEach(el => el.type = 'text');
-  } else {
-    $$('input.password').forEach(el => el.type = 'password');
-  }
-  $$('.toggle-password').forEach(el => el.checked = ev.target.checked);
-  $('#password').focus();
-})});
-</script>
-
+<script src="/webui-password.js"></script>
 <%in _footer.cgi %>

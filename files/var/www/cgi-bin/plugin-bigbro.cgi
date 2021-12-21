@@ -2,6 +2,7 @@
 <%in _common.cgi %>
 <%
 plugin="bigbro"
+page_title="BigBro"
 config_file="/etc/${plugin}.cfg"
 [ ! -f "$config_file" ] && touch ${config_file}
 

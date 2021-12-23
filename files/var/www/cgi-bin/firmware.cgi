@@ -5,6 +5,7 @@ fw_version=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /
 mj_version=$(majestic -v)
 mj_filesize=$(ls -s /usr/bin/majestic | xargs | cut -d " " -f 1)
 majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
+ui_version=$(cat /var/www/.version)
 %>
 <%in _header.cgi %>
 <div class="alert alert-danger">

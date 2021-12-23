@@ -6,9 +6,7 @@ tmp_file=/tmp/microbe.zip
 etag_file=/root/.ui.etag
 
 opts="-skL --etag-save $etag_file"
-if [ -z "$POST_enforce" ]; then
-  opts="${opts} --etag-compare ${etag_file}"
-fi
+[ -z "$POST_enforce" ] && opts="${opts} --etag-compare ${etag_file}"
 
 echo "$(date +"%F %T"): curl ${opts} -o ${tmp_file} ${url}" >> /tmp/webui-update.log
 output=$(curl $opts -o $tmp_file $url 2>&1)
@@ -27,13 +25,12 @@ if [ ! -z "$error" ]; then %>
 else
   if [ -z "$POST_debug" ]; then
     redirect_to "/cgi-bin/progress.cgi"
-  else
-    http_header_text
-    http_header_connection_close
-    echo ""
-  fi
-
-  unzip -o -d /tmp $tmp_file > /dev/null
+  else %>
+<%in _debug.cgi %>
+<% fi
+  commit=$(tail -c 40 $tmp_file | cut -b1-7)
+  timestamp=$(unzip -l $tmp_file | head -5 | tail -1 | xargs | cut -d" " -f2 | sed 's/\(\d\d\)-\(\d\d\)-\(\d\d\d\d\)/\3-\1-\2/')
+  unzip -o -d /tmp $tmp_file 2>&1
 
   upd_dir="/tmp/microbe-web-${POST_version}/files"
 
@@ -41,21 +38,21 @@ else
   for upd_file in $(find "${upd_dir}/var/www" -type f -or -type l); do
     www_file=${upd_file#/tmp/microbe-web-${POST_version}/files}
     if [ ! -f "$www_file" ] || [ ! -z "$(diff "$www_file" "$upd_file")" ]; then
-      [ ! -d "${www_file%/*}" ] && mkdir -p "${www_file%/*}"
-      cp -f "$upd_file" "$www_file"
+      [ ! -d "${www_file%/*}" ] && mkdir -p "${www_file%/*}" 2>&1
+      cp -f "$upd_file" "$www_file" 2>&1
     fi
   done
 
   # remove absent files from overlay
   for file in $(diff -qr "/var/www" "${upd_dir}/var/www" | grep "Only in /var/www:" | cut -d ":" -f 2 | tr -d "^ "); do
-    if [ "$file" != "$etag_file" ]; then
-      rm -vf "/var/www/${file}"
-    fi
+    [ "$file" != "$etag_file" ] && rm -vf "/var/www/${file}" 2>&1
   done
 
+  echo "${POST_version}+${commit}, ${timestamp}" > /var/www/.version
+
   # clean up
-  rm -f "${tmp_file}"
-  rm -fr "/tmp/microbe-web-${POST_version}"
+  rm -f "${tmp_file}" 2>&1
+  rm -fr "/tmp/microbe-web-${POST_version}" 2>&1
 
   echo "done."
 fi

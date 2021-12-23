@@ -37,23 +37,30 @@ else
   # copy newer files to web directory
   for upd_file in $(find "${upd_dir}/var/www" -type f -or -type l); do
     www_file=${upd_file#/tmp/microbe-web-${POST_version}/files}
-    diff ${www_file} ${upd_file}
+    diff ${www_file} ${upd_file} > /dev/null
     if [ 0 -ne $? ]; then
       [ ! -d "${www_file%/*}" ] && mkdir -p "${www_file%/*}" 2>&1
-      cp -f "$upd_file" "$www_file" 2>&1
+      echo "cp -f ${upd_file} ${www_file}"
+      cp -f ${upd_file} ${www_file} 2>&1
     fi
   done
 
   # remove absent files from overlay
   for file in $(diff -qr "/var/www" "${upd_dir}/var/www" | grep "Only in /var/www:" | cut -d ":" -f 2 | tr -d "^ "); do
-    [ "$file" != "$etag_file" ] && rm -vf "/var/www/${file}" 2>&1
+    if [ "$file" != "$etag_file" ]; then
+      echo "rm -f /var/www/${file}"
+      rm -f "/var/www/${file}" 2>&1
+    fi
   done
 
-  echo "${POST_version}+${commit}, ${timestamp}" > /var/www/.version
-
   # clean up
-  rm -f "${tmp_file}" 2>&1
-  rm -fr "/tmp/microbe-web-${POST_version}" 2>&1
+  echo "rm -f ${tmp_file}"
+  rm -f ${tmp_file} 2>&1
+  echo "rm -fr /tmp/microbe-web-${POST_version}"
+  rm -fr /tmp/microbe-web-${POST_version} 2>&1
+
+  echo "echo \"${POST_version}+${commit}, ${timestamp}\" > /var/www/.version"
+  echo "${POST_version}+${commit}, ${timestamp}" > /var/www/.version
 
   echo "done."
 fi

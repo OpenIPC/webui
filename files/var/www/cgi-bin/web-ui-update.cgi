@@ -29,9 +29,12 @@ else
 <% fi
   commit=$(tail -c 40 $tmp_file | cut -b1-7)
   timestamp=$(unzip -l $tmp_file | head -5 | tail -1 | xargs | cut -d" " -f2 | sed 's/\(\d\d\)-\(\d\d\)-\(\d\d\d\d\)/\3-\1-\2/')
+
+  unzip_dir="/tmp/microbe-web-${POST_version}"
+  [ -d "$unzip_dir" ] && rm -rf ${unzip_dir} 2>&1
   unzip -o -d /tmp $tmp_file 2>&1
 
-  upd_dir="/tmp/microbe-web-${POST_version}/files"
+  upd_dir="${unzip_dir}/files"
   # copy newer files to web directory
   for upd_file in $(find "${upd_dir}/var/www" -type f -or -type l); do
     www_file=${upd_file#/tmp/microbe-web-${POST_version}/files}

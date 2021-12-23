@@ -123,15 +123,7 @@ form .range-value {
 .control #image-flip          { grid-column-start: 1; grid-column-end: 1; grid-row-start: 2; grid-row-end: 2; }
 .control #image-mirror        { grid-column-start: 2; grid-column-end: 2; grid-row-start: 2; grid-row-end: 2; }
 
-input[type=range][orient=vertical]
-{
-    writing-mode: bt-lr; /* IE */
-    -webkit-appearance: slider-vertical; /* WebKit */
-    width: 8px;
-    height: 175px;
-    padding: 0 5px;
-}
-
+input[type=range][orient=vertical] {height: 175px;padding: 0 5px;-webkit-appearance: slider-vertical;width: 8px;writing-mode: bt-lr;}
 /*
 .control img { filter: sepia(50%) hue-rotate(231deg) saturate(800%) invert(75%) brightness(100%) contrast(100%) drop-shadow(1px 1px 3px rgb(255,255,255)); }
 .control img:active { filter: none; }
@@ -146,3 +138,7 @@ input[type=range][orient=vertical]
 .console p button {flex:2rem}
 
 #refresh { cursor: pointer; flex-grow: 1; font-size: .8rem; padding: 0.5rem 1rem; text-align: right; }
+
+.navbar-brand {position: relative;}
+#beta {font-size:0.75rem;font-weight:700;left:8rem;position:absolute;top:1.25rem;transform:rotate(-105deg);}
+#beta span {background:gold;color: black;display:block;line-height:3em;text-align:center;transform:rotate(22.5deg);width:3em;}

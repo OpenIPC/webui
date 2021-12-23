@@ -1,14 +1,9 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <% page_title="Firmware Updates"
-if [ -f /var/www/.etag ]; then
-  ui_date=$(ls -d --full-time /var/www/.etag | xargs | cut -d " " -f 6,7)
-  ui_version=$(date --date="$ui_date" +"%s")
-else
-  ui_version="unknown"
-fi
 fw_version=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/ 2>&1)
 mj_version=$(majestic -v)
+mj_filesize=$(ls -s /usr/bin/majestic | xargs | cut -d " " -f 1)
 majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 %>
 <%in _header.cgi %>
@@ -23,7 +18,12 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
     <div class="card mb-3">
       <div class="card-header">Firmware</div>
       <div class="card-body">
-        <p><b>Installed ver. <%= $fw_version %></b></p>
+        <dl class="row">
+          <dt class="col-6">Installed</dt>
+          <dd class="col-6 text-end"><%= $fw_version %></dd>
+          <dt class="col-6">Stable channel</dt>
+          <dd class="col-6 text-end" id="firmware-master-ver"></dd>
+        </dl>
         <form action="/cgi-bin/firmware-update.cgi" method="post">
           <div class="row mb-3">
             <div class="col-md-10 offset-md-2">
@@ -57,12 +57,12 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
       <div class="card-header">Web UI</div>
       <div class="card-body">
         <dl class="row">
-          <dt class="col-4">Installed</dt>
-          <dd class="col-8"><%= $ui_version %></dd>
-          <dt class="col-4">Stable</dt>
-          <dd class="col-8" id="ui-ver-master"></dd>
-          <dt class="col-4">Development</dt>
-          <dd class="col-8" id="ui-ver-dev"></dd>
+          <dt class="col-6">Installed</dt>
+          <dd class="col-6 text-end"><%= $ui_version %></dd>
+          <dt class="col-6">Stable channel</dt>
+          <dd class="col-6 text-end" id="microbe-web-master-ver"></dd>
+          <dt class="col-6">Unstable channel</dt>
+          <dd class="col-6 text-end" id="microbe-web-dev-ver"></dd>
         </dl>
         <form action="/cgi-bin/web-ui-update.cgi" method="post">
           <div class="row mb-1">
@@ -92,14 +92,14 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
     <div class="card mb-3">
       <div class="card-header">Majestic</div>
       <div class="card-body">
-        <p><b>Installed ver. <%= $mj_version %></b></p>
-	<dl>
-	<% if [ -f /overlay/root/usr/bin/majestic ]; then %>
-	  <dd>Majestic is installed in the overlay.</dd>
-	<% else %>
-	  <dd>Bundled version of Majestic is used.</dd>
-	<% fi %>
         <form action="/cgi-bin/majestic-github.cgi" method="post">
+          <p><b>Installed ver. <%= $mj_version %></b> <span id="mj-ver-master"></span></p>
+          <dl>
+          <% if [ -f /overlay/root/usr/bin/majestic ]; then %>
+            <dd>Majestic is installed in the overlay. (<%= $mj_filesize %> KB)</dd>
+          <% else %>
+            <dd>Bundled version of Majestic is used. (<%= $mj_filesize %> KB)</dd>
+          <% fi %>
           <% if [ -z "$majestic_diff" ]; then %>
             <dd>Majestic uses the original configuration.
               <a href="/cgi-bin/majestic-settings-general.cgi">Change settings.</a></dd>
@@ -107,10 +107,10 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
             <dd>Majestic uses custom configuration.
               <a href="/cgi-bin/majestic-config-compare.cgi">See changes.</a></dd>
           <% fi %>
-	  </dl>
+          </dl>
           <div class="row mb-3">
             <div class="col-md-10 offset-md-2">
-              <input class="form-check-input" type="checkbox" name="debug" id="debug--mj" value="true">
+              <input class="form-check-input" type="checkbox" name="debug" id="debug-mj" value="true">
               <label class="form-check-label" for="debug-mj">Show debugging information.</label>
             </div>
           </div>
@@ -166,23 +166,25 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 </div>
 
 <script>
-  const url='https://api.github.com/repos/OpenIPC/microbe-web/branches/';
-
-  function reqListener() {
-    const d = JSON.parse(this.response);
-    const date = d.commit.commit.author.date;
-    const el = $('#ui-ver-' + d.name).textContent = Date.parse(date) / 1000;
-  }
-
   function checkUpdates() {
-    queryBranch('master');
-    queryBranch('dev');
+    queryBranch('firmware', 'master');
+    queryBranch('microbe-web', 'master');
+    queryBranch('microbe-web', 'dev');
   }
 
-  function queryBranch(name) {
+  function queryBranch(repo, branch) {
     var oReq = new XMLHttpRequest();
-    oReq.addEventListener("load", reqListener);
-    oReq.open("GET", url + name);
+    oReq.addEventListener("load", function(){
+      const d = JSON.parse(this.response);
+      const sha_short = d.commit.sha.slice(0,7);
+      const date = d.commit.commit.author.date.slice(0,10);
+      const link = document.createElement('a');
+      link.href = 'https://github.com/OpenIPC/' + repo + '/commits/' + branch;
+      link.target = '_blank';
+      link.textContent = branch + '+' + sha_short + ', ' + date;
+      const el = $('#' + repo + '-' + branch + '-ver').appendChild(link);
+    });
+    oReq.open("GET", 'https://api.github.com/repos/OpenIPC/' + repo + '/branches/' + branch);
     oReq.send();
   }
 

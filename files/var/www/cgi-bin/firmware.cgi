@@ -93,14 +93,21 @@ majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
       <div class="card-header">Majestic</div>
       <div class="card-body">
         <p><b>Installed ver. <%= $mj_version %></b></p>
+	<dl>
+	<% if [ -f /overlay/root/usr/bin/majestic ]; then %>
+	  <dd>Majestic is installed in the overlay.</dd>
+	<% else %>
+	  <dd>Bundled version of Majestic is used.</dd>
+	<% fi %>
         <form action="/cgi-bin/majestic-github.cgi" method="post">
           <% if [ -z "$majestic_diff" ]; then %>
-            <p><b>Majestic uses the original configuration.</b>
-              <a href="/cgi-bin/majestic-settings-general.cgi">Change settings.</a></p>
+            <dd>Majestic uses the original configuration.
+              <a href="/cgi-bin/majestic-settings-general.cgi">Change settings.</a></dd>
           <% else %>
-            <p><b>Majestic uses custom configuration.</b>
-              <a href="/cgi-bin/majestic-config-compare.cgi">See changes.</a></p>
+            <dd>Majestic uses custom configuration.
+              <a href="/cgi-bin/majestic-config-compare.cgi">See changes.</a></dd>
           <% fi %>
+	  </dl>
           <div class="row mb-3">
             <div class="col-md-10 offset-md-2">
               <input class="form-check-input" type="checkbox" name="debug" id="debug--mj" value="true">

@@ -36,7 +36,8 @@ else
   # copy newer files to web directory
   for upd_file in $(find "${upd_dir}/var/www" -type f -or -type l); do
     www_file=${upd_file#/tmp/microbe-web-${POST_version}/files}
-    if [ ! -f "$www_file" ] || [ ! -z "$(diff "$www_file" "$upd_file")" ]; then
+    diff ${www_file} ${upd_file}
+    if [ 0 -ne $? ]; then
       [ ! -d "${www_file%/*}" ] && mkdir -p "${www_file%/*}" 2>&1
       cp -f "$upd_file" "$www_file" 2>&1
     fi

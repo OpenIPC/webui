@@ -2,12 +2,13 @@
 <%in _common.cgi %>
 <%
 plugin="bigbro"
+page_title="BigBro"
 config_file="/etc/${plugin}.cfg"
+[ ! -f "$config_file" ] && touch ${config_file}
 
 if [ -n "$POST_pin" ]; then
   pin="$POST_pin"
   signature=$(echo -ne "$pin" | md5sum | awk '{print $1}')
-  [ ! -f "$config_file" ] && touch ${config_file}
   sed -d /^${pin}:/ ${config_file}
   echo "${pin}:${signature}" >> ${config_file}
   redirect_to "?pin=${pin}"

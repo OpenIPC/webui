@@ -6,12 +6,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title><% html_title "$page_title" %></title>
 <link rel="shortcut icon" href="/favicon.png">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-  integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link rel="stylesheet" href="/bootstrap.min.css" >
 <link rel="stylesheet" href="/bootstrap.override.css">
 <% if [ $HTTP_MODE = "development" ]; then %><link rel="stylesheet" href="/debug.css"><% fi %>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="/bootstrap.bundle.min.js"></script>
 <script src="/main.js"></script>
 </head>
 
@@ -30,10 +28,11 @@
             role="button" data-bs-toggle="dropdown" aria-expanded="false">Information</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownInformation">
             <li><a class="dropdown-item" href="/cgi-bin/status.cgi">Overview</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/info/cron.cgi">Cron config</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/info/dmesg.cgi">Diagnostic message</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/info/httpd.cgi">HTTPd environment</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/info/log.cgi">Log read</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info-cron.cgi">Cron config</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info-dmesg.cgi">Diagnostic message</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info-httpd-config.cgi">HTTPd config</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info-httpd.cgi">HTTPd environment</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info-log.cgi">Log read</a></li>
           </ul>
         </li>
         <li class="nav-item"><a class="nav-link" href="/cgi-bin/firmware.cgi">Firmware</a></li>

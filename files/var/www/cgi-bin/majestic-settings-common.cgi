@@ -87,11 +87,12 @@ for line in $mj; do
       echo "</div>"
       ;;
     string)
+      [ "$name" != "system-sensorConfig" ] && placeholder=${placeholder//_/ }
       echo "<div class=\"row mb-2\">" \
         "<div class=\"col-12 form-label\"><label for=\"${name}\">${label//_/ }</label></div>" \
         "<div class=\"col-12\">" \
           "<div class=\"input-group\">" \
-            "<input class=\"form-control\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder//_/ }\">"
+            "<input class=\"form-control\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\">"
       [ ! -z "$units" ] && echo "<span class=\"input-group-text\">${units}</span>"
       echo "</div>"
       [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"
@@ -109,5 +110,28 @@ done
 
 <script src="/js/majestic-settings.js"></script>
 <script>
+  if (screen.width < 768) {
+    const button = $('button[type=submit]');
+    const div = document.createElement('div');
+    div.classList.add('fixed-bottom','p-3','bg-light');
+    div.appendChild(button.cloneNode(true));
+    button.replaceWith(div);
+  }
+
+  if ($('#system-sensorConfig')) {
+     const inp = $('#system-sensorConfig');
+     const sel = document.createElement('select');
+     sel.classList.add('form-select');
+     sel.name=inp.name;
+     sel.id=inp.id;
+     sel.options.add(new Option());
+     let opt;
+     <% for i in $(ls -1 /etc/sensors/*.ini); do %>
+      opt = new Option('<%= $i %>');
+      opt.selected = ('<%= $i %>' == inp.value);
+      sel.options.add(opt);
+     <% done %>
+     inp.replaceWith(sel);
+   }
 </script>
 <%in _footer.cgi %>

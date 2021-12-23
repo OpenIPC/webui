@@ -10,7 +10,6 @@ ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
   </div>
 </div>
 <%in _joystick.cgi %>
-<p><a href="/cgi-bin/preview-help.cgi">Camera Available Endpoints cheatsheet</a></p>
 <script>
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));

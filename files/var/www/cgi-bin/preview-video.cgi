@@ -16,5 +16,4 @@ ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
   </div>
 </div>
 <%in _joystick.cgi %>
-<p><a href="/cgi-bin/preview-help.cgi">Camera Available Endpoints cheatsheet</a></p>
 <%in _footer.cgi %>

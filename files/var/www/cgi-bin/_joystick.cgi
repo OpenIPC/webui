@@ -53,7 +53,6 @@ button() {
 </div>
 </div>
 
-
 <script>
 function reqListener() {
   console.log(this.responseText);

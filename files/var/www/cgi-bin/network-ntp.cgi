@@ -4,7 +4,7 @@
 page_title="NTP Settings"
 tz_data=$(cat /etc/TZ)
 [ -z "$tz_data" ] && tz_data="GMT0"
-[ ! -f /etc/tzname ] && $(grep "$tz_data" /var/www/tz.js | head -1 | cut -d ":" -f 2 | cut -d "," -f 1 | tr -d "'" > /etc/tzname)
+[ ! -f /etc/tzname ] && $(grep "$tz_data" /var/www/js/tz.js | head -1 | cut -d ":" -f 2 | cut -d "," -f 1 | tr -d "'" > /etc/tzname)
 tz_name=$(cat /etc/tzname)
 
 check_env_tz() {
@@ -80,7 +80,7 @@ check_env_tz() {
   </div>
 </div>
 
-<script src="/tz.js" async></script>
+<script src="/js/tz.js" async></script>
 <script>
 function findTimezone(tz) {
   return tz.name == $('#tz_name').value;

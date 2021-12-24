@@ -1,18 +1,25 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
+opts=""
 case $POST_action in
   ping)
-    [ "auto" = "$POST_iface" ] && iface="" || iface=" -I $POST_iface"
     title="Ping Quality"
-    command="ping -c 15 -s 1500 ${iface}${POST_target}"
-    output=$(ping -c 15 -s 1500 ${iface}${POST_target} 2>&1)
+    [ -n "$POST_size" ] && opts="${opts} -s ${POST_size}"
+    [ -n "$POST_duration" ] && opts="${opts} -c ${POST_duration}"
+    [ "auto" != "$POST_iface" ] && opts="${opts} -I ${POST_iface}"
+    opts="${opts} ${POST_target}"
+    command="ping ${opts}"
+    output=$(ping ${opts} 2>&1)
     ;;
   trace)
-    [ "auto" = "$POST_iface" ] && iface="" || iface=" -i $POST_iface"
     title="Traceroute Quality"
-    command="traceroute ${iface}${POST_target}"
-    output=$(traceroute ${iface}${POST_target} 2>&1)
+    [ "auto" != "$POST_iface" ] opts="${opts]} -i ${POST_iface}"
+    [ -n "$POST_duration" ] && opts="${opts} -q ${POST_duration}"
+    opts="${opts} ${POST_target}"
+    [ -n "$POST_size" ] && opts="${opts} ${POST_size}"
+    command="traceroute ${opts}"
+    output=$(traceroute ${opts} 2>&1)
     ;;
 esac
 result=$?

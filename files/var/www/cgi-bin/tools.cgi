@@ -34,6 +34,23 @@ interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
               </select>
             </div>
           </div>
+          <div class="row mb-2">
+            <label class="col-md-6 form-label" for="size">Packet size</label>
+            <div class="col-md-6">
+              <div class="input-group">
+                <span class="input-group-text">
+                  <label><input type="checkbox" class="form-check-input auto-value" data-for="size" data-value=""> default</label>
+                </span>
+                <input class="form-control" type="number" min="56" max="1500" step="1" name="size" id="size" value="56">
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label class="col-md-6 form-label" for="duration">Number of packets</label>
+            <div class="col-md-6">
+              <input class="form-control" type="number" min="1" max="30" step="1" name="duration" id="duration" value="5">
+            </div>
+          </div>
           <button type="submit" class="btn btn-primary">Run</button>
         </form>
       </div>

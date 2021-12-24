@@ -48,5 +48,5 @@
     </div>
   </div>
 </div>
-<script src="/webui-password.js"></script>
+<script src="/js/webui-password.js"></script>
 <%in _footer.cgi %>

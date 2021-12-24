@@ -32,7 +32,7 @@ else
 
   unzip_dir="/tmp/microbe-web-${POST_version}"
   [ -d "$unzip_dir" ] && rm -rf ${unzip_dir} 2>&1
-  unzip -o -d /tmp $tmp_file 2>&1
+  unzip -o -d /tmp $tmp_file -x microbe-web-dev/README.md microbe-web-dev/.git* microbe-web-dev/LICENSE microbe-web-dev/docs/* microbe-web-dev/wirebox/* 2>&1
 
   upd_dir="${unzip_dir}/files"
   # copy newer files to web directory

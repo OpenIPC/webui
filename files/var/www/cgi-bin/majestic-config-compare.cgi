@@ -18,6 +18,7 @@ if [ -z "$output" ]; then %>
 <% fi %>
 <p class="d-flex gap-2">
   <a class="btn btn-secondary" href="/cgi-bin/majestic-config-backup.cgi">Download config</a>
+  <a class="btn btn-secondary" href="/cgi-bin/majestic-config-aspatch.cgi">Save as patch</a>
   <a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi">Restore original</a>
 </p>
 <%in _footer.cgi %>

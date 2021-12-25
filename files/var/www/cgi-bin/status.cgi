@@ -16,7 +16,7 @@ sensor=$(ipcinfo --long_sensor 2>&1)
 [ -n "$sensor" ] && sensor="<br>Sensor: ${sensor}"
 soc_temp=$(ipcinfo --temp 2>&1)
 [ -n "$soc_temp" ] && soc_temp="<br>Temp.: $soc_temp°C"
-wan_mac=$(cat /sys/class/net/*/address | grep -v 00:00:00:00:00:00 | head -1)
+wan_mac=$(ifconfig | grep HWaddr | xargs | cut -d" " -f5)
 [ -n "$wan_mac" ] && wan_mac="<br>WAN MAC: ${wan_mac}"
 %>
 <%in _header.cgi %>

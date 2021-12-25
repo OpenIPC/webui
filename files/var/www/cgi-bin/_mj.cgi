@@ -94,7 +94,6 @@ mj="
 .netip.snapshots|NETIP snaphots||boolean|true,false|true|
 .netip.ignoreSetTime|Ignore set time||boolean|true,false|false|
 .onvif.enabled|Enable ONVIF protocol support||boolean|true,false|false|
-.raw.enabled|Enable raw feed support||boolean|true,false|false|
 .raw.mode|Raw feed mode||select|slow,fast,none|slow|
 .watchdog.enabled|Enable watchdog||boolean|true,false|true|
 .watchdog.timeout|Watchdog timeout|sec|number|1-1000|10|

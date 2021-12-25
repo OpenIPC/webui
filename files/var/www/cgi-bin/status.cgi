@@ -8,14 +8,16 @@ hostname="Hostname: $(hostname -s)"
 
 openipc_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 2>&1)
 openipc_build=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d '"')
-[ ! -z "$openipc_version" ] && openipc_version="<br>Version: ${openipc_version}"
-[ ! -z "$openipc_build" ] && openipc_build="<br>Build: ${openipc_build}"
+[ -n "$openipc_version" ] && openipc_version="<br>Version: ${openipc_version}"
+[ -n "$openipc_build" ] && openipc_build="<br>Build: ${openipc_build}"
 soc=$(ipcinfo --chip_id 2>&1)
-[ ! -z "$soc" ] && soc="<br>SoC: ${soc}"
+[ -n "$soc" ] && soc="<br>SoC: ${soc}"
 sensor=$(ipcinfo --long_sensor 2>&1)
-[ ! -z "$sensor" ] && sensor="<br>Sensor: ${sensor}"
+[ -n "$sensor" ] && sensor="<br>Sensor: ${sensor}"
 soc_temp=$(ipcinfo --temp 2>&1)
-[ ! -z "$soc_temp" ] && soc_temp="<br>Temp.: $soc_temp°C"
+[ -n "$soc_temp" ] && soc_temp="<br>Temp.: $soc_temp°C"
+wan_mac=$(cat /sys/class/net/*/address | grep -v 00:00:00:00:00:00 | head -1)
+[ -n "$wan_mac" ] && wan_mac="<br>WAN MAC: ${wan_mac}"
 %>
 <%in _header.cgi %>
 <div class="row">
@@ -24,7 +26,7 @@ soc_temp=$(ipcinfo --temp 2>&1)
       <div class="card-header">Device Info</div>
       <div class="card-body">
         <b># ipcinfo</b>
-        <pre><%= $hostname %><% echo -n "$openipc_version" %><% echo -n "$openipc_build" %><% echo -n "$soc" %><% echo -n "$sensor" %><% echo -n "$soc_temp" %></pre>
+        <pre><%= $hostname %><% echo -n "$openipc_version" %><% echo -n "$openipc_build" %><% echo -n "$soc" %><% echo -n "$sensor" %><% echo -n "$soc_temp" %><% echo -n "$wan_mac" %></pre>
       </div>
     </div>
   </div>

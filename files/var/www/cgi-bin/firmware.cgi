@@ -80,10 +80,6 @@ ui_version=$(cat /var/www/.version)
               <input class="form-check-input" type="checkbox" name="enforce" id="enforce" value="true">
               <label class="form-check-label" for="enforce">Disable version checking.</label>
             </div>
-            <div class="col-md-10 offset-md-2">
-              <input class="form-check-input" type="checkbox" name="debug" id="debug-ui" value="true">
-              <label class="form-check-label" for="debug-ui">Show debugging information.</label>
-            </div>
           </div>
           <button type="submit" class="btn btn-danger">Update from GitHub</button>
         </form>

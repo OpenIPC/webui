@@ -19,6 +19,7 @@ for name in $data; do
   value="$(echo $name | cut -d= -f2)"
 
   # validation and normalization
+  [ "$key" = ".go.to" ] && goto=${value} && continue
   [ "$key" = ".track" ] && continue
   [ "$key" = ".reset" ] && continue
   [ "$key" = ".netip.password.plain" ] && continue
@@ -54,7 +55,11 @@ debug_message "rm $temp_yaml"
 
 if [ -z "$DEBUG" ]; then
   killall -1 majestic
-  redirect_to "/cgi-bin/majestic-config-compare.cgi"
+  if [ -n "$goto" ]; then
+    redirect_to ${goto}
+  else
+    redirect_to "/cgi-bin/majestic-config-compare.cgi"
+  fi
 else
   debug_message "diff /tmp/majestic.yaml.original /etc/majestic.yaml"
   diff /tmp/majestic.yaml.original /etc/majestic.yaml

@@ -3,6 +3,8 @@
 <%in _common.cgi %>
 <%in _header.cgi %>
 <b># dmesg</b>
-<pre class="bg-light p-4"><%= "$(dmesg)" %></pre>
+<pre class="bg-light p-4 log-scroll">
+<%= "$(dmesg)" %>
+</pre>
 <a class="btn btn-primary refresh">Refresh</a>
 <%in _footer.cgi %>

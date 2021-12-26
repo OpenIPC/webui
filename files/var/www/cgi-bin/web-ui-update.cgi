@@ -24,9 +24,8 @@ if [ ! -z "$error" ]; then
   report_error "$error"
 else
 %>
-<pre>
+<pre class="bg-light p-4 log-scroll">
 <%
-#  fi
   commit=$(tail -c 40 $tmp_file | cut -b1-7)
   timestamp=$(unzip -l $tmp_file | head -5 | tail -1 | xargs | cut -d" " -f2 | sed 's/\(\d\d\)-\(\d\d\)-\(\d\d\d\d\)/\3-\1-\2/')
 

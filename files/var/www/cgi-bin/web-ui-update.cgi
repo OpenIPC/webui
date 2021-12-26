@@ -1,6 +1,8 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
+page_title="Upgrading Web UI"
+
 url="https://github.com/OpenIPC/microbe-web/archive/refs/heads/${POST_version}.zip"
 tmp_file=/tmp/microbe.zip
 etag_file=/root/.ui.etag
@@ -15,18 +17,16 @@ if [ 0 -ne $? ]; then
 elif [ ! -f "$tmp_file" ]; then
   error="GitHub version matches the installed one. Nothing to update."
 fi
-
-if [ ! -z "$error" ]; then %>
+%>
 <%in _header.cgi %>
-<% report_error "$error" %>
-<%in _footer.cgi %>
 <%
+if [ ! -z "$error" ]; then
+  report_error "$error"
 else
-  if [ -z "$POST_debug" ]; then
-    redirect_to "/cgi-bin/progress.cgi"
-  else %>
-<%in _debug.cgi %>
-<% fi
+%>
+<pre>
+<%
+#  fi
   commit=$(tail -c 40 $tmp_file | cut -b1-7)
   timestamp=$(unzip -l $tmp_file | head -5 | tail -1 | xargs | cut -d" " -f2 | sed 's/\(\d\d\)-\(\d\d\)-\(\d\d\d\d\)/\3-\1-\2/')
 
@@ -62,7 +62,8 @@ else
 
   echo "echo \"${POST_version}+${commit}, ${timestamp}\" > /var/www/.version"
   echo "${POST_version}+${commit}, ${timestamp}" > /var/www/.version
-
-  echo "done."
-fi
 %>
+</pre>
+<a class="btn btn-primary" href="/">Go Home</a>
+<% fi %>
+<%in _footer.cgi %>

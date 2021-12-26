@@ -70,6 +70,7 @@
           <ul class="dropdown-menu" aria-labelledby="dropdownServices">
             <li><a class="dropdown-item" href="/cgi-bin/plugin-bigbro.cgi">Big Bro</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/plugin-ipeye.cgi">IP Eye</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/plugin-telegram.cgi">Telegram Bot</a></li>
           </ul>
         </li>
         <li class="nav-item  dropdown">

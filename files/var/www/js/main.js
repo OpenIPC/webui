@@ -34,6 +34,7 @@ function refresh() {
         $$('a[href^=http]').forEach(el => el.target = '_blank');
         $$('input.pat-host').forEach(el => el.pattern='^[a-zA-Z0-9-_.]+$');
         $$('input.pat-host-ip').forEach(el => el.pattern='^[a-zA-Z0-9-_.]+$');
+        $$('.log-scroll').forEach(el => el.addEventListener('change', ev => ev.target.scrollTop = ev.target.scrollHeight));
     }
 
     window.addEventListener('load', initAll);

@@ -46,7 +46,7 @@ fi
               <span id="channelHelpBlock" class="form-text">Numeric ID of the channel you want the bot to post images to.</span>
             </div>
           </div>
-          <% if [ -f /etc/telegram.cfg ]; then %>
+          <% if [ $(cat /etc/telegram.cfg | wc -l) -eq 2 ]; then %>
             <button type="button" class="btn btn-danger" data-method="delete">Reset configuration</button>
           <% else %>
             <button type="submit" class="btn btn-primary">Save configuration</button>

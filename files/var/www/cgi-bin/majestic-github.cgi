@@ -46,7 +46,7 @@ check_url() {
 <%in _header.cgi %>
 <h4>Please wait...</h4>
 <progress id="timer" max="90" value="0" class="w-100"></progress>
-<pre>
+<pre class="bg-light p-4 log-scroll">
 <%
 soc=$(ipcinfo --chip_id 2>&1)
 if [ -f /rom/usr/bin/majestic ] && get_soc ; then

@@ -14,7 +14,8 @@ cmd=$FORM_cmd %>
       </button>
     </div>
   </div>
-  <pre id="code" class="bg-light p-3" style="min-height:20rem;"></pre>
+  <pre class="bg-light p-4 log-scroll" id="code">
+  </pre>
 </div>
 <script>
 jx = {

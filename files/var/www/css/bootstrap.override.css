@@ -107,6 +107,7 @@ form .range-value {
 .control #zoom-in             { grid-column-start: 7; grid-column-end: 7; grid-row-start: 1; grid-row-end: 1; }
 .control #zoom-out            { grid-column-start: 7; grid-column-end: 7; grid-row-start: 3; grid-row-end: 3; }
 .control #night-mode          { grid-column-start: 7; grid-column-end: 7; grid-row-start: 2; grid-row-end: 2; }
+.control #send-to-telegram    { grid-column-start: 8; grid-column-end: 8; grid-row-start: 2; grid-row-end: 2; }
 .control #preset-home         { grid-column-start: 1; grid-column-end: 1; grid-row-start: 1; grid-row-end: 1; }
 .control #preset-1            { grid-column-start: 2; grid-column-end: 2; grid-row-start: 1; grid-row-end: 1; }
 .control #preset-2            { grid-column-start: 3; grid-column-end: 3; grid-row-start: 1; grid-row-end: 1; }

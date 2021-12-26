@@ -74,7 +74,7 @@ mj="
 .audio.volume|Audio volume level|%|range|auto,1-100|auto|
 .audio.srate|Audio sampling rate|kHz|number|1-44100|8000|
 .audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,pcm,alaw,ulaw|opus|
-.audio.outputEnabled|Audio card||boolean||hw:3|
+.audio.outputEnabled|Audio card||string||hw:3|
 .rtsp.enabled|Enable output||boolean|true,false|true||
 .rtsp.port|Port for RTSP protocol||number|1-65535|554|rtsp://[ip.add.re.ss]:[port]/stream={0,1}
 .hls.enabled|Enable HTTP Live Streaming (HLS)||boolean|true,false|true|

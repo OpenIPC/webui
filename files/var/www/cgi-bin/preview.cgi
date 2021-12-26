@@ -16,7 +16,7 @@ function sleep(ms) {
 }
 
 async function updatePreview() {
-  // await sleep(1000);
+  await sleep(1000);
   $('#preview').src = "http://<%= $ipaddr %>/image.jpg?t=" + Date.now();
 }
 

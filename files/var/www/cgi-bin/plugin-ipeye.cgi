@@ -2,13 +2,26 @@
 <%in _common.cgi %>
 <%
 plugin="ipeye"
-page_title="IPEYE Cloud"
+page_title="IP EYE Cloud"
 hostname=$(hostname -s)
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 %>
 <%in _header.cgi %>
-<div class="alert alert-warning">Attention! This is only a proof of concept for the prospective subsystem of additional services. No real functionality here.</div>
-
+<div class="alert alert-info">
+  Attention! This is only a proof of concept for the prospective subsystem of additional services.
+  No real functionality here.
+</div>
+<% if [ "$(yaml-cli -g .ipeye.enabled)" != "true" ]; then %>
+<div class="alert alert-warning">
+  <h4>Cannot proceed because IP EYE support is disabled.</h4>
+  <p>In order to add this camera to the cloud you have to enable IP EYE support first.</p>
+  <form action="/cgi-bin/majestic-settings-update.cgi" method="post">
+  <input type="hidden" name="ipeye-enabled" value="true">
+  <input type="hidden" name="go-to" value="<%= $REQUEST_URI %>">
+  <button type"submit" class="btn btn-warning">Enable IP EYE support</button>
+  </form>
+</div>
+<% else %>
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-3">
   <div class="col order-sm-2 order-xl-1">
     <div class="card h-100">
@@ -16,11 +29,11 @@ ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
       <div class="card-body">
         <form>
           <div class="form-group mb-3">
-            <label class="form-label" for="login">IPEYE cloud login</label>
+            <label class="form-label" for="login">IP EYE cloud login</label>
             <input class="form-control" type="text" id="login" name="login">
           </div>
           <div class="form-group mb-3">
-            <label class="form-label" for="password">IPEYE cloud password</label>
+            <label class="form-label" for="password">IP EYE cloud password</label>
             <input class="form-control" type="password" id="password" name="password">
           </div>
           <div class="form-group mb-3">
@@ -40,12 +53,11 @@ ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
     </div>
   </div>
   <div class="col order-sm-1 order-xl-2">
-    <p><img src="/img/logo-ipeye.png" alt="IPEYE Logo"></p>
+    <p><img src="/img/logo-ipeye.png" alt="IP EYE Logo"></p>
     <p><a href="https://www.ipeye.ru/">www.ipeye.ru</a></p>
     <p>Don't have an account? <a href="https://www.ipeye.ru/">Sign-up here</a></p>
   </div>
 </div>
-
 <script>
 function handleSubmit(event) {
   event.preventDefault();
@@ -58,4 +70,5 @@ function initIpEyeForm() {
 }
 window.addEventListener('load', initIpEyeForm);
 </script>
+<% fi %>
 <%in _footer.cgi %>

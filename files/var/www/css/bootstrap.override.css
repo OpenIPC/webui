@@ -149,12 +149,9 @@ input[type=range][orient=vertical] {
     overflow: auto;
 }
 
-
 .control-board {text-align: center;}
 .control {display: grid;gap: 1rem;justify-content: center;margin: 2rem auto;place-items: center;}
-.control img {cursor: pointer;height: 2.5rem;width: 2.5rem;}
-
-.control img {filter: sepia(50%) hue-rotate(231deg) saturate(800%) invert(75%) brightness(100%) contrast(100%); }
+.control img {cursor: pointer;height: 2.5rem;width: 2.5rem; filter: sepia(50%) hue-rotate(231deg) saturate(800%) invert(75%) brightness(100%) contrast(100%); }
 .control img:hover {filter: sepia(0%) hue-rotate(0deg) saturate(800%) invert(50%) brightness(50%) contrast(50%); }
 .control img:active {filter: none;}
 

@@ -68,6 +68,7 @@
             role="button" data-bs-toggle="dropdown" aria-expanded="false">Services</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownServices">
             <li><a class="dropdown-item" href="/cgi-bin/plugin-bigbro.cgi">Big Bro</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/plugin-ipeye.cgi">IP Eye</a></li>
           </ul>
         </li>
         <li class="nav-item  dropdown">

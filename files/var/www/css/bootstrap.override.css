@@ -1,8 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap");
+@import url('/css/fonts.css');
 
 :root {
-    --bs-font-monospace: "IBM Plex Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --bs-body-font-family: var(--bs-font-monospace);
+    --bs-font-monospace: "IBM Plex Mono", monospace;
+    --bs-body-font-family: "IBM Plex Sans", sans-serif;
     --bs-blue: #4c60d8;
 }
 body > nav.navbar {
@@ -108,6 +108,7 @@ form .range-value {
 .control #zoom-out            { grid-column-start: 7; grid-column-end: 7; grid-row-start: 3; grid-row-end: 3; }
 .control #night-mode          { grid-column-start: 7; grid-column-end: 7; grid-row-start: 2; grid-row-end: 2; }
 .control #send-to-telegram    { grid-column-start: 8; grid-column-end: 8; grid-row-start: 2; grid-row-end: 2; }
+
 .control #preset-home         { grid-column-start: 1; grid-column-end: 1; grid-row-start: 1; grid-row-end: 1; }
 .control #preset-1            { grid-column-start: 2; grid-column-end: 2; grid-row-start: 1; grid-row-end: 1; }
 .control #preset-2            { grid-column-start: 3; grid-column-end: 3; grid-row-start: 1; grid-row-end: 1; }

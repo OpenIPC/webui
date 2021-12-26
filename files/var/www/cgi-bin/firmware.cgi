@@ -43,10 +43,6 @@ ui_version=$(cat /var/www/.version)
               <input class="form-check-input" type="checkbox" name="noreboot" id="noreboot" value="true">
               <label class="form-check-label" for="noreboot">Do not reboot after upgrade.</label>
             </div>
-            <div class="col-md-10 offset-md-2">
-              <input class="form-check-input" type="checkbox" name="debug" id="debug-fw" value="true">
-              <label class="form-check-label" for="debug-fw">Show debugging information.</label>
-            </div>
           </div>
           <a class="btn btn-danger float-end" title="Wipe overlay partition">Reset</a>
           <button type="submit" class="btn btn-danger">Update from GitHub</button>

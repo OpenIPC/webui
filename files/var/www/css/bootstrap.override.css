@@ -6,118 +6,41 @@
     --bs-blue: #4c60d8;
 }
 
-body > nav.navbar {
-    background: var(--bs-blue);
-    color: #ffffff;
-}
+body > nav.navbar {background: var(--bs-blue);color: #ffffff;}
+body > header {background: var(--bs-blue);}
+body > main > .container > h2 {font-weight: 700;color: var(--bs-blue);margin: 1rem 0 1.5rem;}
+body > footer > .container {border-top: solid 1px #d3d3d3;font-size: 0.8rem;padding-top: 1rem;}
 
-body > header {
-    background: var(--bs-blue);
-}
+.card-header {border-bottom: solid 1px var(--bs-blue);color: var(--bs-blue);font-weight: 700;text-align: right;text-transform: uppercase;}
+.card:not(.danger) .card-body {background: #4c60d811;}
+.card-body > div.row {padding: 0.5rem 0 0;}
+.card-body pre {background: #4c60d812;margin: 0.5rem 0 1rem;padding: 0.5rem 1rem;}
+.card dl dd, .card dl dt {border-bottom: solid 1px #ffffff;margin-bottom: 0;}
 
-body > footer > .container {
-    border-top: solid 1px #d3d3d3;
-    font-size: 0.8rem;
-    padding-top: 1rem;
-}
+.pre {white-space: pre;}
 
-body > main > .container > h2 {
-    font-weight: 700;
-    color: var(--bs-blue);
-    margin: 1rem 0 1.5rem;
-}
-
-.card-header {
-    border-bottom: solid 1px var(--bs-blue);
-    color: var(--bs-blue);
-    font-weight: 700;
-    text-align: right;
-    text-transform: uppercase;
-}
-
-.card:not(.danger) .card-body {
-    background: #4c60d811;
-}
-
-.card-body > div.row {
-    padding: 0.5rem 0 0;
-}
-
-.card-body pre {
-    background: #4c60d812;
-    margin: 0.5rem 0 1rem;
-    padding: 0.5rem 1rem;
-}
-
-.pre {
-    white-space: pre;
-}
-
-form label {
-    font-weight: 400;
-}
-
-form .row:not(:first-of-type) {
-    border-top: solid 1px #ffffff;
-    padding-top: 0.5rem;
-}
-
-form .input-group-text {
-    min-width: 4rem;
-}
-
-form .form-control::placeholder {
-    color: #c2c2d9;
-}
-
-form .hint {
-    font-size: 0.82rem;
-    margin-top: 0.2rem;
-    margin-bottom: 0;
-}
-
-form .range-value {
-    text-align: right;
-}
-
-input[type=range][orient=vertical] {
-    height: 175px;
-    padding: 0 5px;
-    -webkit-appearance: slider-vertical;
-    width: 8px;
-    writing-mode: bt-lr;
-}
-
-.card dl dd, .card dl dt {
-    border-bottom: solid 1px #ffffff;
-    margin-bottom: 0;
-}
+form label {font-weight: 400;}
+form .row:not(:first-of-type) {border-top: solid 1px #ffffff;padding-top: 0.5rem;}
+form .input-group-text {min-width: 4rem;}
+form .form-control::placeholder {color: #c2c2d9;}
+form .hint {font-size: 0.82rem;margin-top: 0.2rem;margin-bottom: 0;}
+form .range-value {text-align: right;}
+input[type=range][orient=vertical] {height: 175px;padding: 0 5px;-webkit-appearance: slider-vertical;width: 8px;writing-mode: bt-lr;}
 
 .console p {display: flex;gap: 0.5rem;}
 .console p b {flex: 2rem;text-align: right}
 .console p input {flex: 100%;}
 .console p button {flex: 2rem}
 
-#refresh {
-    cursor: pointer;
-    flex-grow: 1;
-    font-size: .8rem;
-    padding: 0.5rem 1rem;
-    text-align: right;
-}
+#refresh {cursor: pointer;flex-grow: 1;font-size: .8rem;padding: 0.5rem 1rem;text-align: right;}
 
-.navbar-brand {
-    position: relative;
-}
+.navbar-brand {position: relative;}
+.dropdown-item {font-size: 0.9rem;}
 
 #beta {font-size: 0.82rem;font-weight: 700;left: 8rem;position: absolute;top: 1.25rem;transform: rotate(-105deg);}
 #beta span {background: gold;color: black;display: block;line-height: 3em;text-align: center;transform: rotate(22.5deg);width: 3em;}
 
-.log-scroll {
-    max-height: 40rem;
-    min-height: 100%;
-    overflow: auto;
-}
+.log-scroll {max-height: 40rem;min-height: 100%;overflow: auto;}
 
 .control-board {text-align: center;}
 .control {display: grid;gap: 1rem;justify-content: center;margin: 2rem auto;place-items: center;}

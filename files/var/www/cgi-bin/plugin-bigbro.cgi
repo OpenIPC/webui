@@ -15,7 +15,10 @@ if [ -n "$POST_pin" ]; then
 fi
 %>
 <%in _header.cgi %>
-<div class="alert alert-warning">Attention! This is only a proof of concept for the prospective subsystem of additional services. No real functionality here.</div>
+<div class="alert alert-info">
+Attention! This is only a proof of concept for the prospective subsystem of additional services.
+No real functionality here.
+</div>
 <%
 if [ -n "$GET_new" ]; then
   page_title="Add a device"

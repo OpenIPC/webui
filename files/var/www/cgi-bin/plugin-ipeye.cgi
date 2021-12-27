@@ -8,8 +8,8 @@ ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 %>
 <%in _header.cgi %>
 <div class="alert alert-info">
-  Attention! This is only a proof of concept for the prospective subsystem of additional services.
-  No real functionality here.
+Attention! This is only a proof of concept for the prospective subsystem of additional services.
+No real functionality here.
 </div>
 <% if [ "$(yaml-cli -g .ipeye.enabled)" != "true" ]; then %>
 <div class="alert alert-warning">

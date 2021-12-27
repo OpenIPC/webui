@@ -94,23 +94,10 @@ input[type=range][orient=vertical] {
     margin-bottom: 0;
 }
 
-.console p {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.console p b {
-    flex: 2rem;
-    text-align: right
-}
-
-.console p input {
-    flex: 100%;
-}
-
-.console p button {
-    flex: 2rem
-}
+.console p {display: flex;gap: 0.5rem;}
+.console p b {flex: 2rem;text-align: right}
+.console p input {flex: 100%;}
+.console p button {flex: 2rem}
 
 #refresh {
     cursor: pointer;
@@ -124,28 +111,12 @@ input[type=range][orient=vertical] {
     position: relative;
 }
 
-#beta {
-    font-size: 0.82rem;
-    font-weight: 500;
-    left: 8rem;
-    position: absolute;
-    top: 1.25rem;
-    transform: rotate(-105deg);
-}
-
-#beta span {
-    background: gold;
-    color: black;
-    display: block;
-    line-height: 3em;
-    text-align: center;
-    transform: rotate(22.5deg);
-    width: 3em;
-}
+#beta {font-size: 0.82rem;font-weight: 500;left: 8rem;position: absolute;top: 1.25rem;transform: rotate(-105deg);}
+#beta span {background: gold;color: black;display: block;line-height: 3em;text-align: center;transform: rotate(22.5deg);width: 3em;}
 
 .log-scroll {
-    max-height: 30rem;
-    min-height: 20rem;
+    max-height: 40rem;
+    min-height: 100%;
     overflow: auto;
 }
 

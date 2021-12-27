@@ -54,7 +54,7 @@ body > main > .container > h2 {
 }
 
 form label {
-    font-weight: 500;
+    font-weight: 400;
 }
 
 form .row:not(:first-of-type) {
@@ -72,7 +72,6 @@ form .form-control::placeholder {
 
 form .hint {
     font-size: 0.82rem;
-    font-style: italic;
     margin-top: 0.2rem;
     margin-bottom: 0;
 }
@@ -111,7 +110,7 @@ input[type=range][orient=vertical] {
     position: relative;
 }
 
-#beta {font-size: 0.82rem;font-weight: 500;left: 8rem;position: absolute;top: 1.25rem;transform: rotate(-105deg);}
+#beta {font-size: 0.82rem;font-weight: 700;left: 8rem;position: absolute;top: 1.25rem;transform: rotate(-105deg);}
 #beta span {background: gold;color: black;display: block;line-height: 3em;text-align: center;transform: rotate(22.5deg);width: 3em;}
 
 .log-scroll {

@@ -38,18 +38,6 @@ html_title() {
    [ ! -z "$1" ] && echo -n "$1 - "
   echo -n  "OpenIPC"
 }
-http_header_connection_close() {
-  echo "Connection: close"
-}
-http_header_html() {
-  echo "Content-Type: text/html; charset=UTF-8"
-}
-http_header_nocache() {
-  echo "Pragma: no-cache"
-}
-http_header_text() {
-  echo "Content-Type: text/plain; charset=UTF-8"
-}
 redirect_to() {
   echo "HTTP/1.1 302 Moved Temporarily"
   echo "Content-type: text/html; charset=UTF-8"

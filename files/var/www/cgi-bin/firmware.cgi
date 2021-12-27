@@ -44,7 +44,7 @@ ui_version=$(cat /var/www/.version)
               <label class="form-check-label" for="noreboot">Do not reboot after upgrade.</label>
             </div>
           </div>
-          <a class="btn btn-danger float-end" title="Wipe overlay partition">Reset</a>
+          <a class="btn btn-danger float-end" title="Wipe overlay partition">Reset changes</a>
           <button type="submit" class="btn btn-danger">Update from GitHub</button>
         </form>
       </div>
@@ -101,15 +101,9 @@ ui_version=$(cat /var/www/.version)
               <a href="/cgi-bin/majestic-config-compare.cgi">See changes.</a></dd>
           <% fi %>
           </dl>
-          <div class="row mb-3">
-            <div class="col-md-10 offset-md-2">
-              <input class="form-check-input" type="checkbox" name="debug" id="debug-mj" value="true">
-              <label class="form-check-label" for="debug-mj">Show debugging information.</label>
-            </div>
-          </div>
           <% if [ ! -z "$majestic_diff" ]; then %>
             <a class="btn btn-danger float-end" href="/cgi-bin/majestic-config-reset.cgi"
-                title="Restore original configuration">Reset</a>
+                title="Restore original configuration">Reset configuration</a>
           <% fi %>
           <button class="btn btn-danger">Update from GitHub</button>
         </form>

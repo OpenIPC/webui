@@ -9,9 +9,7 @@ cmd=$FORM_cmd %>
     <input class="form-control" type="text" id="cmd" value="<%= $cmd %>"
       placeholder="Type a command and hit Enter" autofocus>
     <div class="input-group-text">
-      <button type="button" class="btn btn-sm btn-white p-0" id="submit-cmd">
-        <img src="/img/arrow-return-left.svg" alt="Submit command">
-      </button>
+      <button type="button" class="btn btn-sm btn-white p-0" id="submit-cmd">⏎</button>
     </div>
   </div>
   <pre class="bg-light p-4 log-scroll" id="code">

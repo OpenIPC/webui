@@ -2,6 +2,7 @@
 <%in _common.cgi %>
 <% page_title="Firmware Updates"
 fw_version=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/ 2>&1)
+soc=$(ipcinfo --chip_id 2>&1)
 mj_version=$(majestic -v)
 mj_filesize=$(ls -s /usr/bin/majestic | xargs | cut -d " " -f 1)
 majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
@@ -44,7 +45,8 @@ ui_version=$(cat /var/www/.version)
               <label class="form-check-label" for="noreboot">Do not reboot after upgrade.</label>
             </div>
           </div>
-          <a class="btn btn-danger float-end" title="Wipe overlay partition">Reset changes</a>
+          <a class="btn btn-danger float-end" href="/cgi-bin/firmware-reset.cgi"
+	    title="Wipe overlay partition">Reset changes</a>
           <button type="submit" class="btn btn-danger">Update from GitHub</button>
         </form>
       </div>
@@ -154,11 +156,10 @@ ui_version=$(cat /var/www/.version)
 
 <script>
   function checkUpdates() {
-    queryBranch('firmware', 'master');
+    queryRelease();
     queryBranch('microbe-web', 'master');
     queryBranch('microbe-web', 'dev');
   }
-
   function queryBranch(repo, branch) {
     var oReq = new XMLHttpRequest();
     oReq.addEventListener("load", function(){
@@ -174,7 +175,22 @@ ui_version=$(cat /var/www/.version)
     oReq.open("GET", 'https://api.github.com/repos/OpenIPC/' + repo + '/branches/' + branch);
     oReq.send();
   }
-
+  function queryRelease() {
+    var oReq = new XMLHttpRequest();
+    oReq.addEventListener("load", function(){
+      const d = JSON.parse(this.response);
+      const asset = d[0].assets.find(a => a['name'] === 'openipc.<%= $soc %>-br.tgz');
+      const date = asset.created_at.slice(0,10);
+      const sha_short = asset.target_commitish.slice(0,7);
+      const link = document.createElement('a');
+      link.href = 'https://github.com/OpenIPC/firmware/commits/master';
+      link.target = '_blank';
+      link.textContent = 'master+' + sha_short + ', ' + date;
+      const el = $('#firmware-master-ver').appendChild(link);
+    });
+    oReq.open("GET", 'https://api.github.com/repos/OpenIPC/firmware/releases');
+    oReq.send();
+  }
   window.addEventListener('load', checkUpdates);
 </script>
 

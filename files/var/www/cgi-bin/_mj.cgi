@@ -21,6 +21,7 @@ mj="
 .isp.dGain|Sensor digital gain||number|0.1-1.0|1|
 .isp.ispGain|ISP gain||number|0.1-1.0|1|
 .isp.drc|Dynamic Range Compression (DRC) rate|:1|number|1-1000|300|
+.isp.rawMode|Raw feed mode||select|slow,fast,none|slow|
 .image.mirror|Flip image horizontally||boolean|true,false|false|
 .image.flip|Flip image vertically||boolean|true,false|false|
 .image.rotate|Rotate image clockwise||select|0°,90°,270°|0|
@@ -94,7 +95,6 @@ mj="
 .netip.snapshots|NETIP snaphots||boolean|true,false|true|
 .netip.ignoreSetTime|Ignore set time||boolean|true,false|false|
 .onvif.enabled|Enable ONVIF protocol support||boolean|true,false|false|
-.raw.mode|Raw feed mode||select|slow,fast,none|slow|
 .watchdog.enabled|Enable watchdog||boolean|true,false|true|
 .watchdog.timeout|Watchdog timeout|sec|number|1-1000|10|
 .cloud.enabled|Enable cloud support||boolean|true,false|false|

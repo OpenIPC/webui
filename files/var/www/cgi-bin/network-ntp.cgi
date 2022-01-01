@@ -4,7 +4,7 @@
 page_title="NTP Settings"
 tz_data=$(cat /etc/TZ)
 [ -z "$tz_data" ] && tz_data="GMT0"
-[ ! -f /etc/tzname ] && $(grep "$tz_data" /var/www/tz.js | head -1 | cut -d ":" -f 2 | cut -d "," -f 1 | tr -d "'" > /etc/tzname)
+[ ! -f /etc/tzname ] && $(grep "$tz_data" /var/www/js/tz.js | head -1 | cut -d ":" -f 2 | cut -d "," -f 1 | tr -d "'" > /etc/tzname)
 tz_name=$(cat /etc/tzname)
 
 check_env_tz() {
@@ -80,7 +80,7 @@ check_env_tz() {
   </div>
 </div>
 
-<script src="/tz.js" async></script>
+<script src="/js/tz.js" async></script>
 <script>
 function findTimezone(tz) {
   return tz.name == $('#tz_name').value;
@@ -94,13 +94,29 @@ function updateTimezone() {
   }
 }
 window.addEventListener('load', () => {
-  const el = $('#tz_list');
-  el.innerHTML='';
-  TZ.forEach(function(tz) {
-    const o = document.createElement('option');
-    o.value = tz.name;
-    el.appendChild(o);
-  });
+  if (navigator.userAgent.includes('Android') && navigator.userAgent.includes('FxQuantum')) {
+    const inp = $('#tz_name');
+    const sel = document.createElement('select');
+    sel.classList.add('form-select');
+    sel.name = 'tz_name';
+    sel.id = 'tz_name';
+    sel.options.add(new Option());
+    let opt;
+    TZ.forEach(function(tz) {
+      opt = new Option(tz.name);
+      opt.selected = (tz.name == inp.value);
+      sel.options.add(opt);
+    });
+    inp.replaceWith(sel);
+  } else {
+    const el = $('#tz_list');
+    el.innerHTML='';
+    TZ.forEach(function(tz) {
+      const o = document.createElement('option');
+      o.value = tz.name;
+      el.appendChild(o);
+    });
+  }
   $('#tz_name').addEventListener('focus', ev => ev.target.select());
   $('#tz_name').addEventListener('selectionchange', updateTimezone);
   $('#tz_name').addEventListener('change', updateTimezone);

@@ -2,7 +2,6 @@
 # line format: parameter|label|units|type|o,p,t,i,o,n,s|placeholder|hint
 mj="
 .system.logLevel|Severity of logging||select|ERROR,WARN,INFO,DEBUG,TRACE|TRACE|
-.system.sensorConfig|Path to sensor configuration file||string||/etc/sensors/imx222_1080p_line.ini|
 .system.staticDir|Home directory for static files||string||/var/www/html|
 .system.webPort|Port for HTTP access||number|1-65535|80|
 .system.httpsPort|Port for HTTPS access||number|1-65535|443|
@@ -11,6 +10,7 @@ mj="
 .system.updateChannel|Channel to use for updates||select|testing,beta,stable,none|stable|
 .system.buffer|Maximum buffer size per client|KB|number||1024|
 .isp.memMode|Memory mode||select|normal,reduction|reduction|
+.isp.sensorConfig|Path to sensor configuration file||string||/etc/sensors/imx222_1080p_line.ini|
 .isp.slowShutter|Slow shutter||select|disabled,low,medium,high|low|Automatic frame rate reduction mode.
 .isp.antiFlicker|Anti-flicker||select|disabled,50Hz,60Hz|disabled|Usually, the utility frequency in your grid line.
 .isp.alignWidth|Align width||number||8|
@@ -21,6 +21,7 @@ mj="
 .isp.dGain|Sensor digital gain||number|0.1-1.0|1|
 .isp.ispGain|ISP gain||number|0.1-1.0|1|
 .isp.drc|Dynamic Range Compression (DRC) rate|:1|number|1-1000|300|
+.isp.rawMode|Raw feed mode||select|slow,fast,none|slow|
 .image.mirror|Flip image horizontally||boolean|true,false|false|
 .image.flip|Flip image vertically||boolean|true,false|false|
 .image.rotate|Rotate image clockwise||select|0°,90°,270°|0|
@@ -74,7 +75,7 @@ mj="
 .audio.volume|Audio volume level|%|range|auto,1-100|auto|
 .audio.srate|Audio sampling rate|kHz|number|1-44100|8000|
 .audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,pcm,alaw,ulaw|opus|
-.audio.outputEnabled|Audio card||boolean||hw:3|
+.audio.outputEnabled|Audio card||string||hw:3|
 .rtsp.enabled|Enable output||boolean|true,false|true||
 .rtsp.port|Port for RTSP protocol||number|1-65535|554|rtsp://[ip.add.re.ss]:[port]/stream={0,1}
 .hls.enabled|Enable HTTP Live Streaming (HLS)||boolean|true,false|true|
@@ -94,8 +95,6 @@ mj="
 .netip.snapshots|NETIP snaphots||boolean|true,false|true|
 .netip.ignoreSetTime|Ignore set time||boolean|true,false|false|
 .onvif.enabled|Enable ONVIF protocol support||boolean|true,false|false|
-.raw.enabled|Enable raw feed support||boolean|true,false|false|
-.raw.mode|Raw feed mode||select|slow,fast,none|slow|
 .watchdog.enabled|Enable watchdog||boolean|true,false|true|
 .watchdog.timeout|Watchdog timeout|sec|number|1-1000|10|
 .cloud.enabled|Enable cloud support||boolean|true,false|false|

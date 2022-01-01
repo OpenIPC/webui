@@ -3,7 +3,8 @@
 <%in _header.cgi %>
 <form action="/cgi-bin/majestic-settings-update.cgi" method="post">
 <div class="row row-cols-1 row-cols-xl-2 row-cols-xxl-3 g-4 mb-3">
-<% mj=$(echo "$mj" | sed "s/ /_/g" | grep -E $only)
+<%
+mj=$(echo "$mj" | sed "s/ /_/g" | grep -E $only)
 for line in $mj; do
   param=${line%%|*}; name=${param#.}; domain=${name%.*}; name=${name//./-}; line=${line#*|}
   label=${line%%|*}; line=${line#*|}
@@ -119,19 +120,19 @@ done
   }
 
   if ($('#system-sensorConfig')) {
-     const inp = $('#system-sensorConfig');
-     const sel = document.createElement('select');
-     sel.classList.add('form-select');
-     sel.name=inp.name;
-     sel.id=inp.id;
-     sel.options.add(new Option());
-     let opt;
-     <% for i in $(ls -1 /etc/sensors/*.ini); do %>
+    const inp = $('#system-sensorConfig');
+    const sel = document.createElement('select');
+    sel.classList.add('form-select');
+    sel.name=inp.name;
+    sel.id=inp.id;
+    sel.options.add(new Option());
+    let opt;
+    <% for i in $(ls -1 /etc/sensors/*.ini); do %>
       opt = new Option('<%= $i %>');
       opt.selected = ('<%= $i %>' == inp.value);
       sel.options.add(opt);
-     <% done %>
-     inp.replaceWith(sel);
-   }
+    <% done %>
+    inp.replaceWith(sel);
+  }
 </script>
 <%in _footer.cgi %>

@@ -23,8 +23,10 @@ button() {
 <% button "focus-plus.svg" "Focus: plus" %>
 <% button "focus-auto.svg" "Focus: auto" %>
 <% button "focus-minus.svg" "Focus: minus" %>
-<% [ "true" = "$(yaml-cli -g .nightMode.enabled)" ] && button "light-off.svg" "Night mode" %>
+<% [ "true" != "$(yaml-cli -g .nightMode.enabled)" ] && button "light-off.svg" "Night mode" %>
+<% [ -f /etc/telegram.cfg ] && [ $(cat /etc/telegram.cfg | wc -l) -eq 2 ] && button "telegram.svg" "Send to Telegram" %>
 </div>
+
 <div class="control col-6 col-lg-2">
 <% button "image-rotate-cw.svg" "Image rotate 90° CW" %>
 <% button "image-rotate-ccw.svg" "Image rotate 90° CCW" %>
@@ -53,7 +55,6 @@ button() {
 </div>
 </div>
 
-
 <script>
 function reqListener() {
   console.log(this.responseText);
@@ -80,6 +81,16 @@ function initControls() {
     event.target.src = (event.target.src.split('/').pop() == 'light-on.svg') ? '/img/light-off.svg' : '/img/light-on.svg';
     sendToApi('/night/toggle');
   });
+
+  if ($('#send-to-telegram')) {
+    $('#send-to-telegram').addEventListener('click', event => {
+      event.preventDefault();
+      if (!confirm('Are you sure?')) return false;
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", "/cgi-bin/telegram-bot-send.cgi");
+      xhr.send();
+    });
+  }
 
   if ($('#speed')) $('#speed').addEventListener('click', event => {
     event.preventDefault();

@@ -16,21 +16,27 @@ debug_message() {
   # [ "$HTTP_MODE" = "development" ] &&
   echo "$(date +"%F %T") $1" >> /tmp/webui.log
 }
+flash_delete() {
+  :> /tmp/webui-flash.txt
+}
+flash_read() {
+  [ ! -f /tmp/webui-flash.txt ] && return
+  flash=$(cat /tmp/webui-flash.txt)
+  [ -z "$flash" ] && return
+  type=$(echo $flash | cut -d ":" -f 1)
+  message=$(echo $flash | cut -d ":" -f 2)
+  echo "<div class=\"alert alert-${type} alert-dismissible fade show\" role=\"alert\">${message}"
+  echo "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>"
+  echo "</div>"
+  flash_delete
+}
+flash_save() {
+  xheader="X-ErrorMessage: $2"
+  echo "$1:$2" > /tmp/webui-flash.txt
+}
 html_title() {
    [ ! -z "$1" ] && echo -n "$1 - "
   echo -n  "OpenIPC"
-}
-http_header_connection_close() {
-  echo "Connection: close"
-}
-http_header_html() {
-  echo "Content-Type: text/html; charset=UTF-8"
-}
-http_header_nocache() {
-  echo "Pragma: no-cache"
-}
-http_header_text() {
-  echo "Content-Type: text/plain; charset=UTF-8"
 }
 redirect_to() {
   echo "HTTP/1.1 302 Moved Temporarily"
@@ -72,24 +78,5 @@ report_command_success() {
   echo "<pre class=\"mb-0\">$2</pre>"
   echo "</div>"
 }
-flash_delete() {
-  :> /tmp/webui-flash.txt
-}
-flash_read() {
-  [ ! -f /tmp/webui-flash.txt ] && return
-  flash=$(cat /tmp/webui-flash.txt)
-  [ -z "$flash" ] && return
-  type=$(echo $flash | cut -d ":" -f 1)
-  message=$(echo $flash | cut -d ":" -f 2)
-  echo "<div class=\"alert alert-${type} alert-dismissible fade show\" role=\"alert\">${message}"
-  echo "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>"
-  echo "</div>"
-  flash_delete
-}
-flash_save() {
-  xheader="X-ErrorMessage: $2"
-  echo "$1:$2" > /tmp/webui-flash.txt
-}
-
 check_password
 %>

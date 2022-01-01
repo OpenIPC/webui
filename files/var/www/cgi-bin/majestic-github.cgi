@@ -1,6 +1,7 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
+page_title="Downloading latest majestic"
 get_soc() {
   case "$soc" in
     gk7605v100 | gk7205v300 | gk7202v300 | gk7205v200)
@@ -39,15 +40,14 @@ get_soc() {
 check_url() {
   status_code=$(curl --silent --head http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.bz2)
   status_code=$(echo "$status_code" | grep "HTTP/1.1" | cut -d " " -f 2)
+
   [ ${status_code} = "200" ] && return=1
-}
-page_title="Downloading latest majestic"
-%>
+} %>
 <%in _header.cgi %>
 <h4>Please wait...</h4>
 <progress id="timer" max="90" value="0" class="w-100"></progress>
-<script>window.onload = engage;</script>
-<pre><%
+<pre class="bg-light p-4 log-scroll">
+<%
 soc=$(ipcinfo --chip_id 2>&1)
 if [ -f /rom/usr/bin/majestic ] && get_soc ; then
   if check_url ; then
@@ -61,7 +61,6 @@ if [ -f /rom/usr/bin/majestic ] && get_soc ; then
     curl -k -L -o /tmp/majestic.tar.bz2 http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.bz2
 
     bunzip2 -c /tmp/majestic.tar.bz2 | tar -x -C /tmp/ ./majestic
-
     if [ $? -eq 0 ]; then
       new_majestic_size=$(ls -s /tmp/majestic | xargs | cut -d " " -f 1)
 
@@ -75,7 +74,6 @@ if [ -f /rom/usr/bin/majestic ] && get_soc ; then
     else
       error="Cannot extract majestic."
     fi
-
     rm -f /tmp/majestic
     rm -f /tmp/majestic.tar.bz2
     nohup majestic -s 2>&1 >/dev/null &
@@ -88,7 +86,20 @@ fi
 %>
 </pre>
 <%
-if [ ! -z "$error" ]; then %>
-<% report_error "$error" %>
-<% fi %>
+if [ ! -z "$error" ]; then
+  report_error "$error"
+fi
+%>
+<script>
+function tick() {
+    tock += 1;
+    $('#timer').value = tock;
+    (tock === max) ? window.location.replace("/cgi-bin/progress.cgi") : setTimeout(tick, 1000);
+}
+function engage() {
+    max = $('#timer').max;
+    setTimeout(tick, 1000);
+}
+window.onload = engage;
+</script>
 <%in _footer.cgi %>

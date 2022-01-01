@@ -1,22 +1,24 @@
-<% http_header_html %>
+Content-Type: text/html; charset=UTF-8
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title><% html_title "$page_title" %></title>
-<link rel="shortcut icon" href="/favicon.png">
-<link rel="stylesheet" href="/bootstrap.min.css" >
-<link rel="stylesheet" href="/bootstrap.override.css">
-<% if [ $HTTP_MODE = "development" ]; then %><link rel="stylesheet" href="/debug.css"><% fi %>
-<script src="/bootstrap.bundle.min.js"></script>
-<script src="/main.js"></script>
+<link rel="shortcut icon" href="/img/favicon.png">
+<link rel="stylesheet" href="/css/bootstrap.min.css" >
+<link rel="stylesheet" href="/css/bootstrap.override.css">
+<% if [ $HTTP_MODE = "development" ]; then %><link rel="stylesheet" href="/css/debug.css"><% fi %>
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/main.js"></script>
 </head>
 
 <body id="top">
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
   <div class="container">
-    <a class="navbar-brand" href="/cgi-bin/status.cgi"><img src="/img/logo.svg" width="116" height="32" alt=""></a>
+    <a class="navbar-brand" href="/cgi-bin/status.cgi"><img src="/img/logo.svg" width="116" height="32" alt="">
+      <div id="beta"><span><span><span><span>beta</span></span></span></span></div></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -68,6 +70,8 @@
             role="button" data-bs-toggle="dropdown" aria-expanded="false">Services</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownServices">
             <li><a class="dropdown-item" href="/cgi-bin/plugin-bigbro.cgi">Big Bro</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/plugin-ipeye.cgi">IP Eye</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/plugin-telegram.cgi">Telegram Bot</a></li>
           </ul>
         </li>
         <li class="nav-item  dropdown">

@@ -1,6 +1,6 @@
-<% http_header_text %>
-<% http_header_nocache %>
-<% http_header_connection_close %>
+Content-Type: text/plain; charset=UTF-8
+Pragma: no-cache
+Connection: close
 
 ------- REQUEST_* :
 <% echo "$(printenv|grep REQUEST_|sort 2>&1)" %>

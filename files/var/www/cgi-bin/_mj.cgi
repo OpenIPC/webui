@@ -2,7 +2,6 @@
 # line format: parameter|label|units|type|o,p,t,i,o,n,s|placeholder|hint
 mj="
 .system.logLevel|Severity of logging||select|ERROR,WARN,INFO,DEBUG,TRACE|TRACE|
-.system.sensorConfig|Path to sensor configuration file||string||/etc/sensors/imx222_1080p_line.ini|
 .system.staticDir|Home directory for static files||string||/var/www/html|
 .system.webPort|Port for HTTP access||number|1-65535|80|
 .system.httpsPort|Port for HTTPS access||number|1-65535|443|
@@ -11,6 +10,7 @@ mj="
 .system.updateChannel|Channel to use for updates||select|testing,beta,stable,none|stable|
 .system.buffer|Maximum buffer size per client|KB|number||1024|
 .isp.memMode|Memory mode||select|normal,reduction|reduction|
+.isp.sensorConfig|Path to sensor configuration file||string||/etc/sensors/imx222_1080p_line.ini|
 .isp.slowShutter|Slow shutter||select|disabled,low,medium,high|low|Automatic frame rate reduction mode.
 .isp.antiFlicker|Anti-flicker||select|disabled,50Hz,60Hz|disabled|Usually, the utility frequency in your grid line.
 .isp.alignWidth|Align width||number||8|

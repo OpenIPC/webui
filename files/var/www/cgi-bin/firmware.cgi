@@ -21,113 +21,134 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
   <b>Attention: Destructive Actions!</b>
   <p class="mb-0">Make sure you know what you are doing.</p>
 </div>
-<div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
   <div class="col">
-    <div class="card mb-3">
+    <div class="card h-100">
       <div class="card-header">Firmware</div>
       <div class="card-body">
         <dl class="row">
-          <dt class="col-6">Installed</dt>
-          <dd class="col-6 text-end"><%= $fw_version %></dd>
-          <dt class="col-6">Stable channel</dt>
-          <dd class="col-6 text-end" id="firmware-master-ver"></dd>
+          <dt class="col-4">Installed</dt>
+          <dd class="col-8 text-end"><%= $fw_version %></dd>
+          <dt class="col-4">Latest</dt>
+          <dd class="col-8 text-end" id="firmware-master-ver"></dd>
         </dl>
-        <form action="/cgi-bin/firmware-update.cgi" method="post">
-          <div class="row mb-3">
-            <div class="col-md-10 offset-md-2">
+        <div class="alert alert-light">
+          <p><b>Install update.</b></p>
+          <form action="/cgi-bin/firmware-update.cgi" method="post">
+            <div class="form-check">
               <input class="form-check-input" type="checkbox" name="kernel" id="kernel" value="true" checked>
               <label class="form-check-label" for="kernel">Upgrade kernel.</label>
             </div>
-            <div class="col-md-10 offset-md-2">
+            <div class="form-check">
               <input class="form-check-input" type="checkbox" name="rootfs" id="rootfs" value="true" checked>
               <label class="form-check-label" for="rootfs">Upgrade rootfs.</label>
             </div>
-            <div class="col-md-10 offset-md-2">
+            <div class="form-check">
               <input class="form-check-input" type="checkbox" name="reset" id="reset" value="true">
-              <label class="form-check-label" for="reset">Reset settings after upgrade.</label>
+              <label class="form-check-label" for="reset">Reset firmware.</label>
             </div>
-            <div class="col-md-10 offset-md-2">
+            <div class="form-check">
               <input class="form-check-input" type="checkbox" name="noreboot" id="noreboot" value="true">
               <label class="form-check-label" for="noreboot">Do not reboot after upgrade.</label>
             </div>
-          </div>
-          <a class="btn btn-danger float-end" href="/cgi-bin/firmware-reset.cgi"
-            title="Wipe overlay partition">Reset changes</a>
-          <button type="submit" class="btn btn-danger">Update from GitHub</button>
-        </form>
-      </div>
-    </div>
-    <div class="card mb-3">
-      <div class="card-header">Web UI</div>
-      <div class="card-body">
-        <dl class="row">
-          <dt class="col-6">Installed</dt>
-          <dd class="col-6 text-end"><%= $ui_version %></dd>
-          <dt class="col-6">Stable channel</dt>
-          <dd class="col-6 text-end" id="microbe-web-master-ver"></dd>
-          <dt class="col-6">Unstable channel</dt>
-          <dd class="col-6 text-end" id="microbe-web-dev-ver"></dd>
-        </dl>
-        <form action="/cgi-bin/web-ui-update.cgi" method="post">
-          <div class="row mb-1">
-            <label class="col-md-2 form-label" for="version">Branch</label>
-            <div class="col-md-10">
-              <select class="form-select" name="version" id="version">
-                <option value="master">stable</option>
-                <option value="dev">development</option>
-              </select>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-10 offset-md-2">
-              <input class="form-check-input" type="checkbox" name="enforce" id="enforce" value="true">
-              <label class="form-check-label" for="enforce">Disable version checking.</label>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-danger">Update from GitHub</button>
-        </form>
-      </div>
-    </div>
-    <div class="card mb-3">
-      <div class="card-header">Majestic</div>
-      <div class="card-body">
-        <p><b>Installed ver. <%= $mj_version %></b> <span id="mj-ver-master"></span></p>
-        <dl>
-        <% if [ -f /overlay/root/usr/bin/majestic ]; then %>
-          <dd>Majestic is installed in the overlay. (<%= $mj_filesize_old %> KB)</dd>
-        <% else %>
-          <dd>Bundled version of Majestic is used.</dd>
-        <% fi %>
-        <% if [ -z "$mj_config_diff" ]; then %>
-          <dd>Majestic uses the original configuration.
-            <a href="/cgi-bin/majestic-settings-general.cgi">Change settings.</a></dd>
-        <% else %>
-          <dd>Majestic uses custom configuration.
-            <a href="/cgi-bin/majestic-config-compare.cgi">See changes.</a></dd>
-        <% fi %>
-        </dl>
-        <% if [ ! -z "$mj_config_diff" ]; then %>
-          <p><a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi"
-            title="Restore original configuration">Reset configuration</a></p>
-        <% fi %>
-        <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
-          <form action="/cgi-bin/majestic-github.cgi" method="post">
-            <button class="btn btn-danger">Update from GitHub</button>
+            <p class="mt-3 mb-0"><button type="submit" class="btn btn-warning">Install update</button></p>
           </form>
-        <% else %>
-          <pre>Not enough space to update Majestic.<br>Required <%= $mj_filesize_new %> KB, available <%= $available_space %> KB.</pre>
-        <% fi %>
+        </div>
+        <div class="alert alert-danger mb-0">
+          <p><b>Reset firmware.</b></p>
+          <p>Revert firmware to its original state by wiping out content of the overlay partition. All custom settings will be lost!</p>
+          <p class="mb-0"><a class="btn btn-danger" href="/cgi-bin/firmware-reset.cgi"
+            title="Wipe overlay partition">Reset firmware</a></p>
+        </div>
       </div>
     </div>
   </div>
   <div class="col">
-    <div class="card mb-3">
+    <div class="card h-100">
+      <div class="card-header">Web UI</div>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-4">Installed</dt>
+          <dd class="col-8 text-end"><%= $ui_version %></dd>
+          <dt class="col-4">Stable</dt>
+          <dd class="col-8 text-end" id="microbe-web-master-ver"></dd>
+          <dt class="col-4">Unstable</dt>
+          <dd class="col-8 text-end" id="microbe-web-dev-ver"></dd>
+        </dl>
+
+        <div class="alert alert-light">
+          <p><b>Install update.</b></p>
+          <form action="/cgi-bin/web-ui-update.cgi" method="post">
+            <label class="form-label" for="version">Update from the following branch:</label>
+            <select class="form-select mb-2" name="version" id="version">
+              <option value="master">stable</option>
+              <option value="dev">development</option>
+            </select>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="enforce" id="enforce" value="true">
+              <label class="form-check-label" for="enforce">Install even if matches the existing version.</label>
+            </div>
+            <p class="mt-3 mb-0"><button type="submit" class="btn btn-warning">Install update</button></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-header">Majestic</div>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-4">Installed</dt>
+          <dd class="col-8 text-end"><%= $mj_version %></dd>
+          <dt class="col-4">Latest</dt>
+          <dd class="col-8 text-end" id="mj-ver-master"></dd>
+        </dl>
+
+        <div class="alert alert-light">
+        <% if [ -f /overlay/root/usr/bin/majestic ]; then %>
+          <p><b>Majestic is installed in the overlay.</b> (<%= $mj_filesize_old %> KB)</p>
+        <% else %>
+          <p><b>Bundled version of Majestic is used.</b></p>
+        <% fi %>
+
+        <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
+          <form action="/cgi-bin/majestic-github.cgi" method="post">
+            <p><button class="btn btn-warning">Install update</button></p>
+          </form>
+        <% else %>
+          <div class="alert alert-warning">Not enough space to update Majestic.<br>
+            Required <%= $mj_filesize_new %> KB, available <%= $available_space %> KB.</div>
+        <% fi %>
+        </div>
+
+        <div class="alert alert-light mb-0">
+        <% if [ -z "$mj_config_diff" ]; then %>
+          <p><b>Majestic uses the original configuration.</b></p>
+          <p class="mb-0"><a href="/cgi-bin/majestic-settings-general.cgi">Make changes.</a></p>
+        <% else %>
+          <p><b>Majestic uses custom configuration.</b></p>
+          <p><a href="/cgi-bin/majestic-config-compare.cgi">See changes.</a></p>
+          <div class="alert alert-danger mb-0">
+            <p><b>Reset Majestic settings.</b></p>
+            <p>Revert Majestic configuration to default setings. All changes will be lost! You might want to <a href="/cgi-bin/majestic-config-backup.cgi">backup your recent configuration</a> first.</p>
+            <p class="mb-0"><a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi" title="Restore original configuration">Reset settings</a></p>
+          </div>
+        <% fi %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card h-100">
       <div class="card-header">Camera</div>
       <div class="card-body">
         <a class="btn btn-warning" href="/cgi-bin/reboot.cgi">Reboot camera</a>
       </div>
     </div>
-    <div class="card mb-3">
+  </div>
+  <div class="col">
+    <div class="card h-100">
       <div class="card-header">Upload kernel</div>
       <div class="card-body">
         <form action="/cgi-bin/firmware-upload-kernel.cgi" method="post" enctype="multipart/form-data">
@@ -141,7 +162,9 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
         </form>
       </div>
     </div>
-    <div class="card mb-3">
+  </div>
+  <div class="col">
+    <div class="card h-100">
       <div class="card-header">Upload rootfs</div>
       <div class="card-body">
         <form action="/cgi-bin/firmware-upload-rootfs.cgi" method="post" enctype="multipart/form-data">

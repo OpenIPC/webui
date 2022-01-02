@@ -94,7 +94,7 @@ function updateTimezone() {
   }
 }
 window.addEventListener('load', () => {
-  if (navigator.userAgent.includes('Android') && navigator.userAgent.includes('FxQuantum')) {
+  if (navigator.userAgent.includes('Android') && navigator.userAgent.includes('Firefox')) {
     const inp = $('#tz_name');
     const sel = document.createElement('select');
     sel.classList.add('form-select');

@@ -46,7 +46,7 @@ ui_version=$(cat /var/www/.version)
             </div>
           </div>
           <a class="btn btn-danger float-end" href="/cgi-bin/firmware-reset.cgi"
-	    title="Wipe overlay partition">Reset changes</a>
+            title="Wipe overlay partition">Reset changes</a>
           <button type="submit" class="btn btn-danger">Update from GitHub</button>
         </form>
       </div>

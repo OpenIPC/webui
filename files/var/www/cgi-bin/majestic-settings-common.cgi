@@ -16,96 +16,78 @@ for line in $mj; do
   value=$(yaml-cli -g "$param")
 
   if [ "$olddomain" != "$domain" ]; then
-    [ ! -z "$olddomain" ] && echo '</div></div></div>'
+    [ -n "$olddomain" ] && echo -n '</div></div></div>'
     olddomain="$domain"
-    echo '<div class="col">'
-    echo '<div class="card h-100">'
-    echo "<div class=\"card-header\">${domain}</div>"
-    echo '<div class="card-body">'
+    echo "<div class=\"col\"><div class=\"card h-100\"><div class=\"card-header\">${domain}</div><div class=\"card-body\">"
   fi
+
+  echo -n "<div class=\"row mb-2 ${type}\">"
   case "$type" in
     boolean)
+      echo -n "<div class=\"col\">"
       [ "true" = "$value" ] && checked=" checked" || checked=""
-      echo "<div class=\"row mb-2\">" \
-        "<div class=\"col\">" \
-          "<div class=\"form-check form-switch\">" \
-            "<input type=\"hidden\" name=\"${name}\" id=\"${name}-false\" value=\"false\">" \
-            "<input class=\"form-check-input\" name=\"${name}\" id=\"${name}\" value=\"true\" type=\"checkbox\" role=\"switch\"${checked}>" \
-            "<label for=\"${name}\" class=\"form-check-label\">${label//_/ }</label>" \
-          "</div>"
-      [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"
-      echo "</div></div>"
+      echo -n "<div class=\"form-check form-switch\"><input type=\"hidden\" name=\"${name}\" id=\"${name}-false\"" \
+        " value=\"false\"><input class=\"form-check-input\" name=\"${name}\" id=\"${name}\" type=\"checkbox\"${checked}" \
+        " role=\"switch\" value=\"true\"><label class=\"form-check-label\" for=\"${name}\">${label//_/ }</label></div>"
+      [ -n "$hint" ] && echo -n "<p class=\"hint text-secondary\">${hint//_/ }</p>"
+      echo -n "</div>"
       ;;
     hidden)
       echo -n "<input type=\"hidden\" name=\"${name}\" id=\"${name}\" value=\"${value}\">"
       ;;
     number)
-      echo -n "<div class=\"row mb-2\">"  \
-        "<div class=\"col-md-7\"><label for=\"${name}\" class=\"form-label\">${label//_/ }</label></div>" \
-        "<div class=\"col-md-5\">" \
-          "<div class=\"input-group\">" \
-            "<input class=\"form-control text-end\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\">"
-      [ ! -z "$units" ] && echo -n "<span class=\"input-group-text\">${units}</span>"
-      echo "</div></div>"
-      [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"
-      echo "</div>"
+      echo -n "<div class=\"col-md-7\"><label class=\"form-label\" for=\"${name}\">${label//_/ }</label></div><div" \
+        " class=\"col-md-5\"><div class=\"input-group\"><input class=\"form-control text-end\" type=\"text\"" \
+        " name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\">"
+      [ -n "$units" ] && echo -n "<span class=\"input-group-text\">${units}</span>"
+      echo -n "</div></div>"
+      [ -n "$hint" ] && echo -n "<p class=\"hint text-secondary\">${hint//_/ }</p>"
       ;;
     range)
-      echo "<div class=\"row mb-2\">" \
-        "<div class=\"col-12\"><label class=\"form-label\" for=\"${name}\">${label//_/ }</label></div>" \
-        "<div class=\"col-12\">" \
-          "<div class=\"input-group\">"
-      if [ ! -z $(echo "${options}" | grep -E auto) ]
-      then
+      echo -n "<div class=\"col-12\"><label class=\"form-label\" for=\"${name}\">${label//_/ }</label></div><div" \
+        " class=\"col-12\"><div class=\"input-group\">"
+      if [ ! -z $(echo "${options}" | grep -E auto) ]; then
         [ "auto" = "$value" ] && checked=" checked" || checked=""
-        echo "<span class=\"input-group-text\">" \
-          "<label><input type=\"checkbox\" class=\"form-check-input auto-value\" data-for=\"${name}\" data-value=\"${default}\"${checked}> auto</label>" \
-          "</span>"
+        echo -n "<span class=\"input-group-text\"><label><input class=\"form-check-input auto-value\"" \
+          " type=\"checkbox\" data-for=\"${name}\" data-value=\"${default}\"${checked}> auto</label></span>"
       fi
       [ "auto" = "$value" ] && readonly=" readonly" || readonly=""
-      echo "<input class=\"form-control text-end range\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\" data-units=\"${units}\"${readonly}>"
-      [ ! -z "$units" ] && echo "<span class=\"input-group-text\">${units}</span>"
-      echo "</div></div>"
-      [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"
-      echo "</div>"
+      echo -n "<input class=\"form-control text-end range\" type=\"text\" name=\"${name}\" id=\"${name}\"" \
+       " value=\"${value}\" placeholder=\"${placeholder}\" data-units=\"${units}\"${readonly}>"
+      [ -n "$units" ] && echo -n "<span class=\"input-group-text\">${units}</span>"
+      echo -n "</div></div>"
+      [ -n "$hint" ] && echo -n "<p class=\"hint text-secondary\">${hint//_/ }</p>"
       ;;
     select)
-      echo -n "<div class=\"row mb-2\">" \
-        "<div class=\"col-md-7\"><label class=\"form-label\" for=\"${name}\">${label//_/ }</label></div>" \
-        "<div class=\"col-md-5\">" \
-          "<div class=\"input-group\">" \
-            "<select class=\"form-select\" name=\"${name}\" id=\"${name}\">"
+      echo -n "<div class=\"col-md-7\"><label class=\"form-label\" for=\"${name}\">${label//_/ }</label></div><div" \
+        " class=\"col-md-5\"><div class=\"input-group\"><select class=\"form-select\" name=\"${name}\" id=\"${name}\">"
       [ -z "$value" ] && echo -n "<option value=\"\"></option>"
-      for o in ${options//,/ }
-      do
+      for o in ${options//,/ }; do
         [ "$o" = "$value" ] && selected=" selected" || selected=""
         echo -n "<option${selected}>${o}</option>"
       done
       echo -n "</select>"
-      [ ! -z "$units" ] && echo -n "<span class=\"input-group-text\">${units}</span>"
-      echo "</div></div>"
-      [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"
-      echo "</div>"
+      [ -n "$units" ] && echo -n "<span class=\"input-group-text\">${units}</span>"
+      echo -n "</div></div>"
+      [ -n "$hint" ] && echo -n "<p class=\"hint text-secondary\">${hint//_/ }</p>"
       ;;
     string)
       [ "$name" != "isp-sensorConfig" ] && placeholder=${placeholder//_/ }
-      echo "<div class=\"row mb-2\">" \
-        "<div class=\"col-12 form-label\"><label for=\"${name}\">${label//_/ }</label></div>" \
-        "<div class=\"col-12\">" \
-          "<div class=\"input-group\">" \
-            "<input class=\"form-control\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\">"
-      [ ! -z "$units" ] && echo "<span class=\"input-group-text\">${units}</span>"
-      echo "</div>"
-      [ ! -z "$hint" ] && echo "<p class=\"hint text-secondary\">${hint//_/ }</p>"
-      echo "</div></div>"
+      echo -n "<div class=\"col-12\"><label class=\"form-label\" for=\"${name}\">${label//_/ }</label></div><div" \
+        " class=\"col-12\"><div class=\"input-group\"><input class=\"form-control\" type=\"text\" name=\"${name}\"" \
+        " id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\">"
+      [ -n "$units" ] && echo -n "<span class=\"input-group-text\">${units}</span>"
+      echo -n "</div>"
+      [ -n "$hint" ] && echo -n "<p class=\"hint text-secondary\">${hint//_/ }</p>"
+      echo -n "</div>"
       ;;
     *)
       ;;
   esac
+  echo "</div>"
 done
 %>
 </div></div></div></div>
-
 <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
 

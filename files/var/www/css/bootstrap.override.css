@@ -1,4 +1,4 @@
-@import url('/css/fonts.css');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;700&display=swap');
 
 :root {
     --bs-font-monospace: "IBM Plex Mono", monospace;

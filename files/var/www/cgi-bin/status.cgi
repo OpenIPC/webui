@@ -18,6 +18,8 @@ soc_temp=$(ipcinfo --temp 2>&1)
 [ -n "$soc_temp" ] && soc_temp="<br>Temp.: $soc_temp°C"
 wan_mac=$(cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address)
 [ -n "$wan_mac" ] && wan_mac="<br>WAN MAC: ${wan_mac}"
+flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
+[ -n "$flash_size" ] && flash_size="<br>Flash: $flash_size MB"
 %>
 <%in _header.cgi %>
 <div class="row">
@@ -26,7 +28,15 @@ wan_mac=$(cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address)
       <div class="card-header">Device Info</div>
       <div class="card-body">
         <b># ipcinfo</b>
-        <pre><%= $hostname %><% echo -n "$openipc_version" %><% echo -n "$openipc_build" %><% echo -n "$soc" %><% echo -n "$sensor" %><% echo -n "$soc_temp" %><% echo -n "$wan_mac" %></pre>
+        <pre><%= $hostname %>
+	<% echo -n "$openipc_version" %>
+	<% echo -n "$openipc_build" %>
+	<% echo -n "$soc" %>
+	<% echo -n "$sensor" %>
+	<% echo -n "$flash_size" %>
+	<% echo -n "$soc_temp" %>
+	<% echo -n "$wan_mac" %>
+	</pre>
       </div>
     </div>
   </div>

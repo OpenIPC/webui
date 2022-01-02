@@ -58,6 +58,9 @@ report_error() {
 report_info() {
   echo "<div class=\"alert alert-info mb-3\">$1</div>"
 }
+report_log() {
+  echo "<pre class=\"bg-light p-3\">$1</pre>"
+}
 report_warning() {
   echo "<div class=\"alert alert-warning mb-3\">$1</div>"
 }

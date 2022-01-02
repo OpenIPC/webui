@@ -1,4 +1,7 @@
 <%
+beats() {
+  echo -n "@$(echo "$(date -d "1970-01-01 $(TZ=UTC-1 date +%T)" +%s) * 10 / 864" | bc)"
+}
 check_password() {
   uri1=/cgi-bin/webui-password.cgi
   uri2=/cgi-bin/webui-password-update.cgi
@@ -7,7 +10,7 @@ check_password() {
   [ "$REQUEST_URI" = "$uri2" ] && return
 
   password=$(awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf)
-  if [ "$password" = "12345" ]; then
+  if [ "12345" == "$password" ]; then
     flash_save "danger" "You must set your own secure password!"
     redirect_to "$uri1"
   fi
@@ -54,6 +57,9 @@ report_error() {
 }
 report_info() {
   echo "<div class=\"alert alert-info mb-3\">$1</div>"
+}
+report_log() {
+  echo "<pre class=\"bg-light p-3\">$1</pre>"
 }
 report_warning() {
   echo "<div class=\"alert alert-warning mb-3\">$1</div>"

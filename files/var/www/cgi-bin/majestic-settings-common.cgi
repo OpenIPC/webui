@@ -88,7 +88,7 @@ for line in $mj; do
       echo "</div>"
       ;;
     string)
-      [ "$name" != "system-sensorConfig" ] && placeholder=${placeholder//_/ }
+      [ "$name" != "isp-sensorConfig" ] && placeholder=${placeholder//_/ }
       echo "<div class=\"row mb-2\">" \
         "<div class=\"col-12 form-label\"><label for=\"${name}\">${label//_/ }</label></div>" \
         "<div class=\"col-12\">" \
@@ -119,8 +119,8 @@ done
     button.replaceWith(div);
   }
 
-  if ($('#system-sensorConfig')) {
-    const inp = $('#system-sensorConfig');
+  if ($('#isp-sensorConfig')) {
+    const inp = $('#isp-sensorConfig');
     const sel = document.createElement('select');
     sel.classList.add('form-select');
     sel.name=inp.name;

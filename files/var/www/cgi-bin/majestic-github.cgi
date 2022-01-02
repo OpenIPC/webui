@@ -1,105 +1,80 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="Downloading latest majestic"
-get_soc() {
-  case "$soc" in
-    gk7605v100 | gk7205v300 | gk7202v300 | gk7205v200)
-      soc="gk7205v200"
-      ;;
-    hi3516dv100 | hi3516av100)
-      soc="hi3516av100"
-      ;;
-    hi3518cv200 | hi3518ev200 | hi3518ev201 | hi3516cv200)
-      soc="hi3516cv200"
-      ;;
-    hi3516ev100 | hi3516cv300)
-      soc="hi3516cv300"
-      ;;
-    hi3516dv300 | hi3516av300 | hi3516cv500)
-      soc="hi3516cv500"
-      ;;
-    hi3516ev200 | hi3518ev300 | hi3516dv200 | hi3516ev300)
-      soc="hi3516ev300"
-      ;;
-    nt98562 | nt98566)
-      soc="nt9856x"
-      ;;
-    ssc337 | ssc335)
-      soc="ssc335"
-      ;;
-    xm530 | xm550)
-      soc="xm550"
-      ;;
-    *)
-      soc=
-      ;;
-  esac
-  [ ! -z "$soc" ] && return=${soc}
-}
 check_url() {
-  status_code=$(curl --silent --head http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.bz2)
+  status_code=$(curl --silent --head ${mj_bz2_url})
   status_code=$(echo "$status_code" | grep "HTTP/1.1" | cut -d " " -f 2)
-
   [ ${status_code} = "200" ] && return=1
-} %>
-<%in _header.cgi %>
-<h4>Please wait...</h4>
-<progress id="timer" max="90" value="0" class="w-100"></progress>
-<pre class="bg-light p-4 log-scroll">
-<%
-soc=$(ipcinfo --chip_id 2>&1)
-if [ -f /rom/usr/bin/majestic ] && get_soc ; then
-  if check_url ; then
-    killall majestic
+}
 
-    free_space=$(df | grep /overlay | xargs | cut -d " " -f 4)
-    old_majestic_size=0
-    [ -f /overlay/root/usr/bin/majestic ] && old_majestic_size=$(ls -s /usr/bin/majestic | xargs | cut -d " " -f 1)
-    available_space=$(( $free_space + $old_majestic_size - 1 ))
+get_soc
+page_title="Updating Majestic"
+mj_bin_file="/usr/bin/majestic"
+mj_bz2_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.bz2"
+mj_bz2_file="/tmp/majestic.tar.bz2"
+mj_tmp_file="/tmp/majestic"
 
-    curl -k -L -o /tmp/majestic.tar.bz2 http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.bz2
-
-    bunzip2 -c /tmp/majestic.tar.bz2 | tar -x -C /tmp/ ./majestic
-    if [ $? -eq 0 ]; then
-      new_majestic_size=$(ls -s /tmp/majestic | xargs | cut -d " " -f 1)
-
-      if [ ! $new_majestic_size -gt $available_space ]; then
-       # bunzip2 -ck /tmp/majestic.tar.bz2 | tar -xk -C /usr/lib/ ./lib*
-        [ -f /overlay/root/usr/bin/majestic ] && rm -f /usr/bin/majestic
-        mv -f /tmp/majestic /usr/bin/majestic
-      else
-        error="Not enough space to update majestic."
-      fi
-    else
-      error="Cannot extract majestic."
-    fi
-    rm -f /tmp/majestic
-    rm -f /tmp/majestic.tar.bz2
-    nohup majestic -s 2>&1 >/dev/null &
-  else
-    error="Can't get update from server."
-  fi
+if [ ! -f /rom/${mj_bin_file} ]; then
+  error="Majestic is not supported on this system."
+elif [ check_url -ne 1 ]; then
+  error="Cannot retrieve update from the server."
 else
-  error="Majestic is not support this system."
+  free_space=$(df | grep /overlay | xargs | cut -d" " -f4)
+  mj_filesize_old=0
+  [ -f /overlay/root/${mj_bin_file} ] && mj_filesize_old=$(ls -s ${mj_bin_file} | xargs | cut -d " " -f 1)
+  available_space=$(( $free_space + $mj_filesize_old - 1 ))
+
+  log="curl -k -L -o ${mj_bz2_file} ${mj_bz2_url}"
+  log="${log}<br>$(curl -k -L -o ${mj_bz2_file} ${mj_bz2_url} 2>&1)"
+
+  # bunzip2 -ck ${mj_bz2_file} | tar -xk -C /usr/lib/ ./lib*
+
+  log="${log}<br>bunzip2 -c ${mj_bz2_file} | tar -x -C /tmp/ ./majestic"
+  log="${log}<br>$(bunzip2 -c ${mj_bz2_file} | tar -x -C /tmp/ ./majestic 2>&1)"
+  if [ $? -ne 0 ]; then
+    error="Cannot extract Majestic."
+    log="${log}<br>rm -f ${mj_bz2_file}"
+    log="${log}<br>$(rm -f ${mj_bz2_file} 2>&1)"
+    log="${log}<br>rm -f ${mj_tmp_file}"
+    log="${log}<br>$(rm -f ${mj_tmp_file} 2>&1)"
+  else
+#    mj_filesize_new=$(curl https://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.meta)
+    mj_filesize_new=$(ls -s ${mj_tmp_file} | xargs | cut -d " " -f 1)
+    if [ $mj_filesize_new -gt $available_space ]; then
+      error="Not enough space to update Majestic. Required ${mj_filesize_new} KB, available ${available_space} KB."
+    fi
+  fi
 fi
 %>
-</pre>
+<%in _header.cgi %>
 <%
 if [ ! -z "$error" ]; then
   report_error "$error"
+  report_log "$log"
+else
+%>
+<pre class="bg-light p-4 log-scroll">
+<%
+  echo "killall majestic"
+  killall majestic 2>&1
+
+  if [ -f /overlay/root/${mj_bin_file} ]; then
+    echo "rm -f ${mj_bin_file}"
+    rm -f ${mj_bin_file} 2>&1
+  fi
+
+  echo "mv -f ${mj_tmp_file} ${mj_bin_file}"
+  mv -f ${mj_tmp_file} ${mj_bin_file} 2>&1
+
+  echo "rm -f ${mj_tmp_file}"
+  rm -f ${mj_tmp_file} 2>&1
+
+  echo "rm -f ${mj_bz2_file}"
+  rm -f ${mj_bz2_file} 2>&1
+
+  echo "nohup majestic -s &"
+  nohup majestic -s 2>&1 &
 fi
 %>
-<script>
-function tick() {
-    tock += 1;
-    $('#timer').value = tock;
-    (tock === max) ? window.location.replace("/cgi-bin/progress.cgi") : setTimeout(tick, 1000);
-}
-function engage() {
-    max = $('#timer').max;
-    setTimeout(tick, 1000);
-}
-window.onload = engage;
-</script>
+</pre>
 <%in _footer.cgi %>

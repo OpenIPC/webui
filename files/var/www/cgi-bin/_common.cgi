@@ -7,7 +7,7 @@ check_password() {
   [ "$REQUEST_URI" = "$uri2" ] && return
 
   password=$(awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf)
-  if [ "$password" = "12345" ]; then
+  if [ "12345" == "$password" ]; then
     flash_save "danger" "You must set your own secure password!"
     redirect_to "$uri1"
   fi

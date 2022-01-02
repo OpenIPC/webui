@@ -72,8 +72,8 @@ else
   echo "rm -f ${mj_bz2_file}"
   rm -f ${mj_bz2_file} 2>&1
 
-  echo "nohup majestic -s &"
-  nohup majestic -s 2>&1 &
+  echo "nohup majestic -s"
+  nohup majestic -s > /dev/null
 fi
 %>
 </pre>

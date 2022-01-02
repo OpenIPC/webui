@@ -1,21 +1,27 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<% page_title="Firmware Updates"
-fw_version=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/ 2>&1)
-soc=$(ipcinfo --chip_id 2>&1)
-mj_version=$(majestic -v)
-mj_filesize=$(ls -s /usr/bin/majestic | xargs | cut -d " " -f 1)
-majestic_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
+<%
+get_soc
+page_title="Firmware Updates"
+mj_bin_file="/usr/bin/majestic"
+mj_meta_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.meta"
+mj_version=$(${mj_bin_file} -v)
 ui_version=$(cat /var/www/.version)
+fw_version=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/ 2>&1)
+mj_config_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
+[ -f /overlay/root/${mj_bin_file} ] && mj_filesize_old=$(ls -s ${mj_bin_file} | xargs | cut -d" " -f1) || mj_filesize_old=0
+
+mj_filesize_new=$(curl -vv ${mj_meta_url})
+mj_filesize_new=$(echo $mj_filesize_new / 1024 | bc)
+free_space=$(df | grep /overlay | xargs | cut -d" " -f4)
+available_space=$(( $free_space + $mj_filesize_old - 1 ))
 %>
 <%in _header.cgi %>
 <div class="alert alert-danger">
   <b>Attention: Destructive Actions!</b>
   <p class="mb-0">Make sure you know what you are doing.</p>
 </div>
-
 <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
-
   <div class="col">
     <div class="card mb-3">
       <div class="card-header">Firmware</div>
@@ -51,7 +57,6 @@ ui_version=$(cat /var/www/.version)
         </form>
       </div>
     </div>
-
     <div class="card mb-3">
       <div class="card-header">Web UI</div>
       <div class="card-body">
@@ -83,45 +88,45 @@ ui_version=$(cat /var/www/.version)
         </form>
       </div>
     </div>
-
     <div class="card mb-3">
       <div class="card-header">Majestic</div>
       <div class="card-body">
-        <form action="/cgi-bin/majestic-github.cgi" method="post">
-          <p><b>Installed ver. <%= $mj_version %></b> <span id="mj-ver-master"></span></p>
-          <dl>
-          <% if [ -f /overlay/root/usr/bin/majestic ]; then %>
-            <dd>Majestic is installed in the overlay. (<%= $mj_filesize %> KB)</dd>
-          <% else %>
-            <dd>Bundled version of Majestic is used. (<%= $mj_filesize %> KB)</dd>
-          <% fi %>
-          <% if [ -z "$majestic_diff" ]; then %>
-            <dd>Majestic uses the original configuration.
-              <a href="/cgi-bin/majestic-settings-general.cgi">Change settings.</a></dd>
-          <% else %>
-            <dd>Majestic uses custom configuration.
-              <a href="/cgi-bin/majestic-config-compare.cgi">See changes.</a></dd>
-          <% fi %>
-          </dl>
-          <% if [ ! -z "$majestic_diff" ]; then %>
-            <a class="btn btn-danger float-end" href="/cgi-bin/majestic-config-reset.cgi"
-                title="Restore original configuration">Reset configuration</a>
-          <% fi %>
-          <button class="btn btn-danger">Update from GitHub</button>
-        </form>
+        <p><b>Installed ver. <%= $mj_version %></b> <span id="mj-ver-master"></span></p>
+        <dl>
+        <% if [ -f /overlay/root/usr/bin/majestic ]; then %>
+          <dd>Majestic is installed in the overlay. (<%= $mj_filesize_old %> KB)</dd>
+        <% else %>
+          <dd>Bundled version of Majestic is used.</dd>
+        <% fi %>
+        <% if [ -z "$mj_config_diff" ]; then %>
+          <dd>Majestic uses the original configuration.
+            <a href="/cgi-bin/majestic-settings-general.cgi">Change settings.</a></dd>
+        <% else %>
+          <dd>Majestic uses custom configuration.
+            <a href="/cgi-bin/majestic-config-compare.cgi">See changes.</a></dd>
+        <% fi %>
+        </dl>
+        <% if [ ! -z "$mj_config_diff" ]; then %>
+          <p><a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi"
+            title="Restore original configuration">Reset configuration</a></p>
+        <% fi %>
+        <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
+          <form action="/cgi-bin/majestic-github.cgi" method="post">
+            <button class="btn btn-danger">Update from GitHub</button>
+          </form>
+        <% else %>
+          <pre>Not enough space to update Majestic.<br>Required <%= $mj_filesize_new %> KB, available <%= $available_space %> KB.</pre>
+        <% fi %>
       </div>
     </div>
-
   </div>
   <div class="col">
-
     <div class="card mb-3">
       <div class="card-header">Camera</div>
       <div class="card-body">
         <a class="btn btn-warning" href="/cgi-bin/reboot.cgi">Reboot camera</a>
       </div>
     </div>
-
     <div class="card mb-3">
       <div class="card-header">Upload kernel</div>
       <div class="card-body">
@@ -136,7 +141,6 @@ ui_version=$(cat /var/www/.version)
         </form>
       </div>
     </div>
-
     <div class="card mb-3">
       <div class="card-header">Upload rootfs</div>
       <div class="card-body">
@@ -153,7 +157,6 @@ ui_version=$(cat /var/www/.version)
     </div>
   </div>
 </div>
-
 <script>
   function checkUpdates() {
     queryRelease();
@@ -193,5 +196,4 @@ ui_version=$(cat /var/www/.version)
   }
   window.addEventListener('load', checkUpdates);
 </script>
-
 <%in _footer.cgi %>

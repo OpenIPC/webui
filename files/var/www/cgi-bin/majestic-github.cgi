@@ -8,12 +8,12 @@ check_url() {
 }
 
 get_soc
-variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d '"')
-[ -n "$variant" ] && soc="${soc}.${variant}"
+fw_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/ 2>&1)
+[ -z "$fw_variant" ] && fw_variant="lite"
 
 page_title="Updating Majestic"
 mj_bin_file="/usr/bin/majestic"
-mj_bz2_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.bz2"
+mj_bz2_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.${fw_variant}.master.tar.bz2"
 mj_bz2_file="/tmp/majestic.tar.bz2"
 mj_tmp_file="/tmp/majestic"
 

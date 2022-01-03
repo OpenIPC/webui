@@ -37,6 +37,42 @@ flash_save() {
   xheader="X-ErrorMessage: $2"
   echo "$1:$2" > /tmp/webui-flash.txt
 }
+get_soc() {
+  soc=$(ipcinfo --chip_id 2>&1)
+  case "$soc" in
+    gk7605v100 | gk7205v300 | gk7202v300 | gk7205v200)
+      soc="gk7205v200"
+      ;;
+    hi3516dv100 | hi3516av100)
+      soc="hi3516av100"
+      ;;
+    hi3518cv200 | hi3518ev200 | hi3518ev201 | hi3516cv200)
+      soc="hi3516cv200"
+      ;;
+    hi3516ev100 | hi3516cv300)
+      soc="hi3516cv300"
+      ;;
+    hi3516dv300 | hi3516av300 | hi3516cv500)
+      soc="hi3516cv500"
+      ;;
+    hi3516ev200 | hi3518ev300 | hi3516dv200 | hi3516ev300)
+      soc="hi3516ev300"
+      ;;
+    nt98562 | nt98566)
+      soc="nt9856x"
+      ;;
+    ssc337 | ssc335)
+      soc="ssc335"
+      ;;
+    xm530 | xm550)
+      soc="xm550"
+      ;;
+    *)
+      soc=
+      ;;
+  esac
+  [ ! -z "$soc" ] && return=${soc}
+}
 html_title() {
    [ ! -z "$1" ] && echo -n "$1 - "
   echo -n  "OpenIPC"
@@ -59,7 +95,7 @@ report_info() {
   echo "<div class=\"alert alert-info mb-3\">$1</div>"
 }
 report_log() {
-  echo "<pre class=\"bg-light p-3\">$1</pre>"
+  echo -e "<pre class=\"bg-light p-3\">$1</pre>"
 }
 report_warning() {
   echo "<div class=\"alert alert-warning mb-3\">$1</div>"

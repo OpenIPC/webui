@@ -59,6 +59,8 @@ else
 %>
 <pre class="bg-light p-4 log-scroll">
 <%
+  echo -e "$log"
+
   echo "killall majestic"
   echo "$(killall majestic 2>&1)"
 

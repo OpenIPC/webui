@@ -60,7 +60,7 @@ else
 <pre class="bg-light p-4 log-scroll">
 <%
   echo "killall majestic"
-  echo "$(killal majestic 2>&1)"
+  echo "$(killall majestic 2>&1)"
 
   if [ -f /overlay/root/${mj_bin_file} ]; then
     echo "rm -f ${mj_bin_file}"

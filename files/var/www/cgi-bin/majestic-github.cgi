@@ -24,19 +24,19 @@ else
   [ -f /overlay/root/${mj_bin_file} ] && mj_filesize_old=$(ls -s ${mj_bin_file} | xargs | cut -d " " -f 1)
   available_space=$(( $free_space + $mj_filesize_old - 1 ))
 
-  log="curl -k -L -o ${mj_bz2_file} ${mj_bz2_url}"
-  log="${log}<br>$(curl -k -L -o ${mj_bz2_file} ${mj_bz2_url} 2>&1)"
+  log="curl -s -k -L -o ${mj_bz2_file} ${mj_bz2_url}\n"
+  log="${log}$(curl -s -k -L -o ${mj_bz2_file} ${mj_bz2_url} 2>&1)"
 
   # bunzip2 -ck ${mj_bz2_file} | tar -xk -C /usr/lib/ ./lib*
 
-  log="${log}<br>bunzip2 -c ${mj_bz2_file} | tar -x -C /tmp/ ./majestic"
-  log="${log}<br>$(bunzip2 -c ${mj_bz2_file} | tar -x -C /tmp/ ./majestic 2>&1)"
+  log="${log}bunzip2 -c ${mj_bz2_file} | tar -x -C /tmp/ ./majestic\n"
+  log="${log}$(bunzip2 -c ${mj_bz2_file} | tar -x -C /tmp/ ./majestic 2>&1)"
   if [ $? -ne 0 ]; then
     error="Cannot extract Majestic."
-    log="${log}<br>rm -f ${mj_bz2_file}"
-    log="${log}<br>$(rm -f ${mj_bz2_file} 2>&1)"
-    log="${log}<br>rm -f ${mj_tmp_file}"
-    log="${log}<br>$(rm -f ${mj_tmp_file} 2>&1)"
+    log="${log}rm -f ${mj_bz2_file}\n"
+    log="${log}$(rm -f ${mj_bz2_file} 2>&1)"
+    log="${log}rm -f ${mj_tmp_file}\n"
+    log="${log}$(rm -f ${mj_tmp_file} 2>&1)"
   else
 #    mj_filesize_new=$(curl https://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.meta)
     mj_filesize_new=$(ls -s ${mj_tmp_file} | xargs | cut -d " " -f 1)
@@ -44,6 +44,10 @@ else
       error="Not enough space to update Majestic. Required ${mj_filesize_new} KB, available ${available_space} KB."
     fi
   fi
+  log="${log}rm -f ${mj_bz2_file}\n"
+  log="${log}$(rm -f ${mj_bz2_file} 2>&1)"
+  log="${log}rm -f ${mj_tmp_file}\n"
+  log="${log}$(rm -f ${mj_tmp_file} 2>&1)"
 fi
 %>
 <%in _header.cgi %>
@@ -56,24 +60,21 @@ else
 <pre class="bg-light p-4 log-scroll">
 <%
   echo "killall majestic"
-  killall majestic 2>&1
+  echo "$(killal majestic 2>&1)"
 
   if [ -f /overlay/root/${mj_bin_file} ]; then
     echo "rm -f ${mj_bin_file}"
-    rm -f ${mj_bin_file} 2>&1
+    echo "$(rm -f ${mj_bin_file} 2>&1)"
   fi
 
   echo "mv -f ${mj_tmp_file} ${mj_bin_file}"
-  mv -f ${mj_tmp_file} ${mj_bin_file} 2>&1
+  echo "$(mv -f ${mj_tmp_file} ${mj_bin_file} 2>&1)"
 
-  echo "rm -f ${mj_tmp_file}"
-  rm -f ${mj_tmp_file} 2>&1
+#  echo "nohup majestic -s"
+#  echo "$(nohup majestic -s)"
 
-  echo "rm -f ${mj_bz2_file}"
-  rm -f ${mj_bz2_file} 2>&1
-
-  echo "nohup majestic -s"
-  nohup majestic -s > /dev/null
+   echo "Rebooting..."
+   echo "$(reboot)"
 fi
 %>
 </pre>

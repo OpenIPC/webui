@@ -4,13 +4,14 @@
 get_soc
 page_title="Firmware Updates"
 mj_bin_file="/usr/bin/majestic"
-mj_meta_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.meta"
 mj_version=$(${mj_bin_file} -v)
 ui_version=$(cat /var/www/.version)
 fw_version=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/ 2>&1)
+fw_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/ 2>&1)
+[ -z "$fw_variant" ] && fw_variant="lite"
+mj_meta_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.${fw_variant}.master.tar.meta"
 mj_config_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 [ -f /overlay/root/${mj_bin_file} ] && mj_filesize_old=$(ls -s ${mj_bin_file} | xargs | cut -d" " -f1) || mj_filesize_old=0
-
 mj_filesize_new=$(curl -vv ${mj_meta_url})
 mj_filesize_new=$(echo $mj_filesize_new / 1024 | bc)
 free_space=$(df | grep /overlay | xargs | cut -d" " -f4)
@@ -75,7 +76,6 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
           <dt class="col-4">Unstable</dt>
           <dd class="col-8 text-end" id="microbe-web-dev-ver"></dd>
         </dl>
-
         <div class="alert alert-light">
           <p><b>Install update.</b></p>
           <form action="/cgi-bin/web-ui-update.cgi" method="post">
@@ -104,14 +104,12 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
           <dt class="col-4">Latest</dt>
           <dd class="col-8 text-end" id="mj-ver-master"></dd>
         </dl>
-
         <div class="alert alert-light">
         <% if [ -f /overlay/root/usr/bin/majestic ]; then %>
           <p><b>Majestic is installed in the overlay.</b> (<%= $mj_filesize_old %> KB)</p>
         <% else %>
           <p><b>Bundled version of Majestic is used.</b></p>
         <% fi %>
-
         <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
           <form action="/cgi-bin/majestic-github.cgi" method="post">
             <p><button class="btn btn-warning">Install update</button></p>
@@ -121,7 +119,6 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
             Required <%= $mj_filesize_new %> KB, available <%= $available_space %> KB.</div>
         <% fi %>
         </div>
-
         <div class="alert alert-light mb-0">
         <% if [ -z "$mj_config_diff" ]; then %>
           <p><b>Majestic uses the original configuration.</b></p>
@@ -182,7 +179,7 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
 </div>
 <script>
   function checkUpdates() {
-    queryRelease();
+    //queryRelease();
     queryBranch('microbe-web', 'master');
     queryBranch('microbe-web', 'dev');
   }

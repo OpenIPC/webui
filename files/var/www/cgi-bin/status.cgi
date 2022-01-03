@@ -5,13 +5,13 @@ page_title="Device Status"
 interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 hostname="Hostname: $(hostname -s)"
-
-openipc_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 2>&1)
-[ -n "$openipc_version" ] && openipc_version="<br>Version: ${openipc_version}"
-openipc_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d '"')
-[ -n "$openipc_variant" ] && openipc_variant="<br>Variant: ${openipc_variant}"
-openipc_build=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d '"')
-[ -n "$openipc_build" ] && openipc_build="<br>Build: ${openipc_build}"
+fw_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 2>&1)
+[ -n "$fw_version" ] && fw_version="<br>Version: ${fw_version}"
+fw_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/ 2>&1)
+[ -z "$fw_variant" ] && fw_variant="lite"
+[ -n "$fw_variant" ] && fw_variant="<br>Variant: ${fw_variant}"
+fw_build=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d '"')
+[ -n "$fw_build" ] && fw_build="<br>Build: ${fw_build}"
 soc=$(ipcinfo --chip_id 2>&1)
 [ -n "$soc" ] && soc="<br>SoC: ${soc}"
 sensor=$(ipcinfo --long_sensor 2>&1)
@@ -31,19 +31,18 @@ flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd
       <div class="card-body">
         <b># ipcinfo</b>
         <pre><%= $hostname %>
-	<% echo -n "$openipc_version" %>
-	<% echo -n "$openipc_variant" %>
-	<% echo -n "$openipc_build" %>
-	<% echo -n "$soc" %>
-	<% echo -n "$sensor" %>
-	<% echo -n "$flash_size" %>
-	<% echo -n "$soc_temp" %>
-	<% echo -n "$wan_mac" %>
-	</pre>
+        <% echo -n "$fw_version" %>
+        <% echo -n "$fw_variant" %>
+        <% echo -n "$fw_build" %>
+        <% echo -n "$soc" %>
+        <% echo -n "$sensor" %>
+        <% echo -n "$flash_size" %>
+        <% echo -n "$soc_temp" %>
+        <% echo -n "$wan_mac" %>
+        </pre>
       </div>
     </div>
   </div>
-
   <div class="col mb-3">
     <div class="card h-100">
       <div class="card-header">System Info</div>
@@ -61,7 +60,6 @@ flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd
       </div>
     </div>
   </div>
-
   <div class="col mb-3">
     <div class="card h-100">
       <div class="card-header">Resources</div>
@@ -72,7 +70,6 @@ flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd
     </div>
   </div>
 </div>
-
 <div class="row">
   <div class="col">
     <div class="card mb-3">
@@ -83,5 +80,4 @@ flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd
     </div>
   </div>
 </div>
-
 <%in _footer.cgi %>

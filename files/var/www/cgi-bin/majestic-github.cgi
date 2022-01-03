@@ -42,12 +42,12 @@ else
     mj_filesize_new=$(ls -s ${mj_tmp_file} | xargs | cut -d " " -f 1)
     if [ $mj_filesize_new -gt $available_space ]; then
       error="Not enough space to update Majestic. Required ${mj_filesize_new} KB, available ${available_space} KB."
+      log="${log}rm -f ${mj_tmp_file}\n"
+      log="${log}$(rm -f ${mj_tmp_file} 2>&1)"
     fi
   fi
   log="${log}rm -f ${mj_bz2_file}\n"
   log="${log}$(rm -f ${mj_bz2_file} 2>&1)"
-  log="${log}rm -f ${mj_tmp_file}\n"
-  log="${log}$(rm -f ${mj_tmp_file} 2>&1)"
 fi
 %>
 <%in _header.cgi %>

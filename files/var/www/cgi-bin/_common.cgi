@@ -1,6 +1,6 @@
 <%
 beats() {
-  echo -n "@$(echo "$(date -d "1970-01-01 $(TZ=UTC-1 date +%T)" +%s) * 10 / 864" | bc)"
+  echo -n "@$(echo "$(date -u -d "1970-01-01 $(TZ=UTC-1 date +%T)" +%s) * 10 / 864" | bc)"
 }
 check_password() {
   uri1=/cgi-bin/webui-password.cgi

@@ -7,8 +7,10 @@ ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 hostname="Hostname: $(hostname -s)"
 
 openipc_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 2>&1)
-openipc_build=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d '"')
 [ -n "$openipc_version" ] && openipc_version="<br>Version: ${openipc_version}"
+openipc_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d '"')
+[ -n "$openipc_variant" ] && openipc_variant="<br>Variant: ${openipc_variant}"
+openipc_build=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d '"')
 [ -n "$openipc_build" ] && openipc_build="<br>Build: ${openipc_build}"
 soc=$(ipcinfo --chip_id 2>&1)
 [ -n "$soc" ] && soc="<br>SoC: ${soc}"
@@ -30,6 +32,7 @@ flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd
         <b># ipcinfo</b>
         <pre><%= $hostname %>
 	<% echo -n "$openipc_version" %>
+	<% echo -n "$openipc_variant" %>
 	<% echo -n "$openipc_build" %>
 	<% echo -n "$soc" %>
 	<% echo -n "$sensor" %>

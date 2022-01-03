@@ -8,6 +8,9 @@ check_url() {
 }
 
 get_soc
+variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d '"')
+[ -n "$variant" ] && soc="${soc}.${variant}"
+
 page_title="Updating Majestic"
 mj_bin_file="/usr/bin/majestic"
 mj_bz2_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.bz2"

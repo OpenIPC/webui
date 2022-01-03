@@ -67,19 +67,11 @@ else
   echo "killall majestic"
   echo "$(killall majestic 2>&1)"
 
-  if [ -f /overlay/root/${mj_bin_file} ]; then
-    echo "rm -f ${mj_bin_file}"
-    echo "$(rm -f ${mj_bin_file} 2>&1)"
-  fi
-
   echo "mv -f ${mj_tmp_file} ${mj_bin_file}"
   echo "$(mv -f ${mj_tmp_file} ${mj_bin_file} 2>&1)"
 
-#  echo "nohup majestic -s"
-#  echo "$(nohup majestic -s)"
-
-   echo "Rebooting..."
-   echo "$(reboot)"
+  echo "Rebooting..."
+  echo "$(reboot)"
 fi
 %>
 </pre>

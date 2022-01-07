@@ -6,8 +6,7 @@ interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 get_soc
 eeprom() { awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd; }
-fw_version() { cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2; }
-fw_variant() { cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/; }
+fw_version() { echo $(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2)-$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/); }
 fw_build() { cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/; }
 sensor() { ipcinfo --long_sensor; }
 soc_temp() {
@@ -37,7 +36,7 @@ wan_mac() { cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address; }
         <h5>Firmware</h5>
         <dl class="row">
           <dt class="col-4">Version</dt>
-          <dd class="col-8"><% fw_version %>-<% fw_variant %></dd>
+          <dd class="col-8"><% fw_version %></dd>
           <dt class="col-4">Build</dt>
           <dd class="col-8"><% fw_build %></dd>
         </dl>

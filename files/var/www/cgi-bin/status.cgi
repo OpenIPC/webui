@@ -4,24 +4,17 @@
 page_title="Device Status"
 interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
-hostname="Hostname: $(hostname -s)"
-fw_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 2>&1)
-[ -n "$fw_version" ] && fw_version="<br>Version: ${fw_version}"
-fw_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/ 2>&1)
-[ -z "$fw_variant" ] && fw_variant="lite"
-[ -n "$fw_variant" ] && fw_variant="<br>Variant: ${fw_variant}"
-fw_build=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d '"')
-[ -n "$fw_build" ] && fw_build="<br>Build: ${fw_build}"
-soc=$(ipcinfo --chip_id 2>&1)
-[ -n "$soc" ] && soc="<br>SoC: ${soc}"
-sensor=$(ipcinfo --long_sensor 2>&1)
-[ -n "$sensor" ] && sensor="<br>Sensor: ${sensor}"
-soc_temp=$(ipcinfo --temp 2>&1)
-[ -n "$soc_temp" ] && soc_temp="<br>Temp.: $soc_temp°C"
-wan_mac=$(cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address)
-[ -n "$wan_mac" ] && wan_mac="<br>WAN MAC: ${wan_mac}"
-flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
-[ -n "$flash_size" ] && flash_size="<br>Flash: $flash_size MB"
+get_soc
+eeprom() { awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd; }
+fw_version() { cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2; }
+fw_variant() { cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/; }
+fw_build() { cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/; }
+sensor() { ipcinfo --long_sensor; }
+soc_temp() {
+  temp=$(ipcinfo --temp)
+  [ $? -eq 0 ] && echo "<dt class=\"col-4\">SoC temp.</dt><dd class=\"col-8\">${temp}°C</dd>"
+}
+wan_mac() { cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address; }
 %>
 <%in _header.cgi %>
 <div class="row">
@@ -29,17 +22,33 @@ flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd
     <div class="card h-100">
       <div class="card-header">Device Info</div>
       <div class="card-body">
-        <b># ipcinfo</b>
-        <pre><%= $hostname %>
-        <% echo -n "$fw_version" %>
-        <% echo -n "$fw_variant" %>
-        <% echo -n "$fw_build" %>
-        <% echo -n "$soc" %>
-        <% echo -n "$sensor" %>
-        <% echo -n "$flash_size" %>
-        <% echo -n "$soc_temp" %>
-        <% echo -n "$wan_mac" %>
-        </pre>
+        <h5>Hardware</h5>
+        <dl class="row">
+          <dt class="col-4">SoC</dt>
+          <dd class="col-8"><%= $soc %></dd>
+          <dt class="col-4">SoC Family</dt>
+          <dd class="col-8"><%= $soc_sdk %></dd>
+          <dt class="col-4">Sensor</dt>
+          <dd class="col-8"><% sensor %></dd>
+          <dt class="col-4">Flash</dt>
+          <dd class="col-8"><% eeprom %> MB</dd>
+          <% soc_temp %>
+        </dl>
+        <h5>Firmware</h5>
+        <dl class="row">
+          <dt class="col-4">Version</dt>
+          <dd class="col-8"><% fw_version %></dd>
+          <dt class="col-4">Variant</dt>
+          <dd class="col-8"><% fw_variant %></dd>
+          <dt class="col-4">Build</dt>
+          <dd class="col-8"><% fw_build %></dd>
+        </dl>
+        <dl class="row">
+          <dt class="col-4">Hostname</dt>
+          <dd class="col-8"><% hostname %></dd>
+          <dt class="col-4">WAN MAC</dt>
+          <dd class="col-8"><% wan_mac %></dd>
+        </dl>
       </div>
     </div>
   </div>
@@ -50,8 +59,8 @@ flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd
         <b># date</b>
         <pre><% date %></pre>
         <p class="small">
-          <a href="/cgi-bin/network-ntp.cgi">Edit timezone</a> |
-          <a href="/cgi-bin/ntp-update.cgi">Sync time with an NTP server</a>
+        <a href="/cgi-bin/network-ntp.cgi">Edit timezone</a> |
+        <a href="/cgi-bin/ntp-update.cgi">Sync time with an NTP server</a>
         </p>
         <b># uptime</b>
         <pre><% /usr/bin/uptime %></pre>

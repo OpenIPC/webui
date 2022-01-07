@@ -57,5 +57,4 @@ interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
     </div>
   </div>
 </div>
-
 <%in _footer.cgi %>

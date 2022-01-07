@@ -29,9 +29,6 @@ else
 
   log="curl -s -k -L -o ${mj_bz2_file} ${mj_bz2_url}\n"
   log="${log}$(curl -s -k -L -o ${mj_bz2_file} ${mj_bz2_url} 2>&1)"
-
-  # bunzip2 -ck ${mj_bz2_file} | tar -xk -C /usr/lib/ ./lib*
-
   log="${log}bunzip2 -c ${mj_bz2_file} | tar -x -C /tmp/ ./majestic\n"
   log="${log}$(bunzip2 -c ${mj_bz2_file} | tar -x -C /tmp/ ./majestic 2>&1)"
   if [ $? -ne 0 ]; then
@@ -63,13 +60,10 @@ else
 <pre class="bg-light p-4 log-scroll">
 <%
   echo -e "$log"
-
   echo "killall majestic"
   echo "$(killall majestic 2>&1)"
-
   echo "mv -f ${mj_tmp_file} ${mj_bin_file}"
   echo "$(mv -f ${mj_tmp_file} ${mj_bin_file} 2>&1)"
-
   echo "Rebooting..."
   echo "$(reboot)"
 fi

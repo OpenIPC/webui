@@ -12,7 +12,6 @@
       </div>
     </div>
   </div>
-
   <div class="col">
     <div class="card h-100">
       <div class="card-header">Restore</div>
@@ -30,7 +29,6 @@
       </div>
     </div>
   </div>
-
   <div class="col">
     <div class="card h-100">
       <div class="card-header">Changes</div>
@@ -40,7 +38,6 @@
       </div>
     </div>
   </div>
-
   <div class="col">
     <div class="card h-100">
       <div class="card-header">Reset</div>

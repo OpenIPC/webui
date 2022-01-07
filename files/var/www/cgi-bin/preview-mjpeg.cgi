@@ -20,16 +20,10 @@ const SOI = new Uint8Array(2);
 const mjpeg_url = "http://<%= $ipaddr %>/mjpeg";
 SOI[0] = 0xFF;
 SOI[1] = 0xD8;
-
 let image = $('#preview');
-
 fetch(mjpeg_url).then(response => {
-  if (!response.ok) {
-      throw Error(response.status + ' ' + response.statusText)
-  }
-  if (!response.body) {
-      throw Error('ReadableStream not yet supported in this browser.')
-  }
+  if (!response.ok) throw Error(response.status + ' ' + response.statusText);
+  if (!response.body) throw Error('ReadableStream not yet supported in this browser.');
   const reader = response.body.getReader();
   let headers = '';
   let contentLength = -1;
@@ -79,5 +73,4 @@ const getLength = (headers) => {
   return contentLength;
 };
 </script>
-
 <%in _footer.cgi %>

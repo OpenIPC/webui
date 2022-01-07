@@ -7,7 +7,7 @@ page_title="Erasing overlay"
 <%
 command="/usr/sbin/firstboot -s"
 output=$(/usr/sbin/firstboot -s 2>&1)
-if [ 0 -ne $? ]; then
+if [ $? -ne 0 ]; then
   report_command_error "$command" "$output"
 else
   report_command_info "$command" "$output"

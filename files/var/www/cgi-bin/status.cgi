@@ -37,9 +37,7 @@ wan_mac() { cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address; }
         <h5>Firmware</h5>
         <dl class="row">
           <dt class="col-4">Version</dt>
-          <dd class="col-8"><% fw_version %></dd>
-          <dt class="col-4">Variant</dt>
-          <dd class="col-8"><% fw_variant %></dd>
+          <dd class="col-8"><% fw_version %>-<% fw_variant %></dd>
           <dt class="col-4">Build</dt>
           <dd class="col-8"><% fw_build %></dd>
         </dl>

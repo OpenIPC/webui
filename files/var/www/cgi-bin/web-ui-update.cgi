@@ -12,7 +12,7 @@ opts="-skL --etag-save $etag_file"
 
 echo "$(date +"%F %T"): curl ${opts} -o ${tmp_file} ${url}" >> /tmp/webui-update.log
 output=$(curl $opts -o $tmp_file $url 2>&1)
-if [ 0 -ne $? ]; then
+if [ $? -ne 0 ]; then
   error="$output"
 elif [ ! -f "$tmp_file" ]; then
   error="GitHub version matches the installed one. Nothing to update."

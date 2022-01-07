@@ -50,7 +50,6 @@ check_env_tz() {
       </div>
     </div>
   </div>
-
   <div class="col">
     <div class="card mb-3">
       <h5 class="card-header">NTP Servers</h5>
@@ -79,7 +78,6 @@ check_env_tz() {
     </div>
   </div>
 </div>
-
 <script src="/js/tz.js" async></script>
 <script>
 function findTimezone(tz) {

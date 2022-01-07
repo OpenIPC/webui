@@ -22,11 +22,10 @@ case $POST_action in
     output=$(traceroute ${opts} 2>&1)
     ;;
 esac
-result=$?
 %>
 <%in _header.cgi %>
 <%
-if [ "0" -eq "$result" ]; then
+if [ $? -eq 0 ]; then
   report_command_success "$command" "$output"
 else
   report_command_error "$command" "$output"

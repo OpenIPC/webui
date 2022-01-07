@@ -3,7 +3,6 @@
 <%
 config_file=/etc/majestic.yaml
 magicnum="23206d616a6573746963"
-
 error=""
 if [ -z "$POST_upfile_name"  ]; then
   error="No file found! Did you forget to upload?"
@@ -14,14 +13,13 @@ elif [ "$(wc -c "$POST_upfile" | awk '{print $1}')" -gt "$maxsize" ]; then
 #elif [ "$magicnum" -ne "$(xxd -p -l 10 "$POST_upfile")" ]; then
 #  error="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 10 "$POST_upfile") != $magicnum"
 fi
-
 if [ ! -z "$error" ]; then %>
 <%in _header.cgi %>
 <% report_error "$error" %>
 <%in _footer.cgi %>
 <% else
-  # yaml-cli -i ${POST_upfile} -o /tmp/majestic.yaml # FIXME: sanitize
-  mv /tmp/majestic.yaml /etc/majestic.yaml
-  redirect_to "/cgi-bin/majestic-config-compare.cgi"
+# yaml-cli -i ${POST_upfile} -o /tmp/majestic.yaml # FIXME: sanitize
+mv /tmp/majestic.yaml /etc/majestic.yaml
+redirect_to "/cgi-bin/majestic-config-compare.cgi"
 fi
 %>

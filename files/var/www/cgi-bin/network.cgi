@@ -14,7 +14,6 @@ timezone=$(cat /etc/TZ)
 %>
 <%in _header.cgi %>
 <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
-
   <div class="col mb-3">
     <div class="card h-100">
       <div class="card-header">Settings</div>
@@ -59,7 +58,6 @@ timezone=$(cat /etc/TZ)
     </div>
   </div>
 </div>
-
 <div class="row">
   <div class="col-12 mb-3">
     <div class="card h-100">
@@ -70,7 +68,6 @@ timezone=$(cat /etc/TZ)
       </div>
     </div>
   </div>
-
   <div class="col-12 mb-3">
     <div class="card h-100">
       <div class="card-header">Network Routing</div>
@@ -80,7 +77,6 @@ timezone=$(cat /etc/TZ)
       </div>
     </div>
   </div>
-
   <div class="col-12 mb-3">
     <div class="card h-100">
       <div class="card-header">Network Status</div>
@@ -90,7 +86,6 @@ timezone=$(cat /etc/TZ)
       </div>
     </div>
   </div>
-
   <div class="col mb-3">
     <div class="card h-100">
       <div class="card-header">DNS Resolver</div>
@@ -100,7 +95,6 @@ timezone=$(cat /etc/TZ)
       </div>
     </div>
   </div>
-
   <div class="col mb-3">
     <div class="card h-100">
       <div class="card-header">NTP Configuration</div>
@@ -111,5 +105,4 @@ timezone=$(cat /etc/TZ)
     </div>
   </div>
 </div>
-
 <%in _footer.cgi %>

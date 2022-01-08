@@ -7,11 +7,11 @@ check_url() {
   [ ${status_code} = "200" ] && return=1
 }
 
-get_soc
+get_hardware_info
 get_firmware_info
+get_software_info
 
 page_title="Updating Majestic"
-mj_bin_file="/usr/bin/majestic"
 mj_bz2_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.bz2"
 mj_bz2_file="/tmp/majestic.tar.bz2"
 mj_tmp_file="/tmp/majestic"

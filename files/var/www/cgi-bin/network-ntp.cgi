@@ -1,11 +1,9 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
+get_system_info
+
 page_title="NTP Settings"
-tz_data=$(cat /etc/TZ)
-[ -z "$tz_data" ] && tz_data="GMT0"
-[ ! -f /etc/tzname ] && $(grep "$tz_data" /var/www/js/tz.js | head -1 | cut -d ":" -f 2 | cut -d "," -f 1 | tr -d "'" > /etc/tzname)
-tz_name=$(cat /etc/tzname)
 
 check_env_tz() {
   if [ "$(cat /etc/TZ)" != "$TZ" ]; then

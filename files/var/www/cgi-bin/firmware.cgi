@@ -1,12 +1,11 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-get_soc
+get_hardware_info
 get_firmware_info
+get_software_info
+
 page_title="Firmware Updates"
-mj_bin_file="/usr/bin/majestic"
-mj_version=$(${mj_bin_file} -v)
-ui_version=$(cat /var/www/.version)
 mj_meta_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.meta"
 mj_config_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 [ -f /overlay/root/${mj_bin_file} ] && mj_filesize_old=$(ls -s ${mj_bin_file} | xargs | cut -d" " -f1) || mj_filesize_old=0

@@ -1,7 +1,8 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<% page_title="MJPEG Preview"
-ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
+<%
+get_system_info
+page_title="MJPEG Preview"
 size=$(yaml-cli -g .mjpeg.size)
 [ -z "$size" ] && size="640x480"
 size_w=${size%x*}; size_h=${size#*x} %>

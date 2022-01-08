@@ -1,8 +1,6 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<%
-page_title="Upgrading Firmware"
-%>
+<% page_title="Upgrading Firmware" %>
 <%in _header.cgi %>
 <%
 if [ -f /tmp/webjob.lock ]; then

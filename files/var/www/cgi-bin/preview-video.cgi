@@ -1,7 +1,8 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<% page_title="Video Preview"
-ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
+<%
+get_system_info
+page_title="Video Preview"
 %>
 <%in _header.cgi %>
 <div class="row preview">

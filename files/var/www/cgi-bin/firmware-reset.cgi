@@ -1,8 +1,6 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<%
-page_title="Erasing overlay"
-%>
+<% page_title="Erasing overlay" %>
 <%in _header.cgi %>
 <%
 command="/usr/sbin/firstboot -s"

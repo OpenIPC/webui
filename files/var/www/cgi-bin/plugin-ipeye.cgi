@@ -1,10 +1,9 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
+get_system_info
 plugin="ipeye"
 page_title="IP EYE Cloud"
-hostname=$(hostname -s)
-ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 %>
 <%in _header.cgi %>
 <div class="alert alert-info">

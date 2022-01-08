@@ -1,18 +1,10 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="Device Status"
-interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
-ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
-get_soc
+get_hardware_info
 get_firmware_info
-eeprom() { awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd; }
-sensor() { ipcinfo --long_sensor; }
-soc_temp() {
-  temp=$(ipcinfo --temp)
-  [ $? -eq 0 ] && echo "<dt class=\"col-4\">SoC temp.</dt><dd class=\"col-8\">${temp}°C</dd>"
-}
-wan_mac() { cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address; }
+get_system_info
+page_title="Device Status"
 %>
 <%in _header.cgi %>
 <div class="row">
@@ -27,10 +19,13 @@ wan_mac() { cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address; }
           <dt class="col-4">SoC Family</dt>
           <dd class="col-8"><%= $soc_family %></dd>
           <dt class="col-4">Sensor</dt>
-          <dd class="col-8"><% sensor %></dd>
+          <dd class="col-8"><%= $sensor %></dd>
           <dt class="col-4">Flash</dt>
-          <dd class="col-8"><% eeprom %> MB</dd>
-          <% soc_temp %>
+          <dd class="col-8"><%= $flash_size %> MB</dd>
+        <% if [ -n "$soc_temp" ]; then %>
+          <dt class="col-4">SoC temp.</dt>
+          <dd class="col-8"><%= $soc_temp %>°C</dd>
+        <% fi %>
         </dl>
         <h5>Firmware</h5>
         <dl class="row">
@@ -41,9 +36,9 @@ wan_mac() { cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address; }
         </dl>
         <dl class="row">
           <dt class="col-4">Hostname</dt>
-          <dd class="col-8"><% hostname %></dd>
+          <dd class="col-8"><%= $hostname %></dd>
           <dt class="col-4">WAN MAC</dt>
-          <dd class="col-8"><% wan_mac %></dd>
+          <dd class="col-8"><%= $wan_mac %></dd>
         </dl>
       </div>
     </div>

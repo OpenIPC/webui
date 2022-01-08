@@ -1,4 +1,5 @@
 <%in _common.cgi %>
+<% get_system_info %>
 <%in _mj.cgi %>
 <%in _header.cgi %>
 <form action="/cgi-bin/majestic-settings-update.cgi" method="post">

@@ -43,8 +43,10 @@ get_firmware_info() {
   [ -z "$fw_variant" ] && fw_variant="lite"
   fw_build=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/)
 }
-get_soc() {
-  soc=$(ipcinfo --chip_id 2>&1)
+get_hardware_info() {
+  flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
+  sensor=$(ipcinfo --long_sensor)
+  soc=$(ipcinfo --chip_id)
   case "$soc" in
     gk7605v100 | gk7205v300 | gk7202v300 | gk7205v200)
       soc_family="gk7205v200"
@@ -77,6 +79,23 @@ get_soc() {
       soc_family=
       ;;
   esac
+  soc_temp=$(ipcinfo --temp)
+}
+get_software_info() {
+  mj_bin_file="/usr/bin/majestic"
+  mj_version=$(${mj_bin_file} -v)
+  ui_version=$(cat /var/www/.version)
+}
+get_system_info() {
+  hostname=$(hostname -s)
+  interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
+  ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
+  macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | uniq)
+  tz_data=$(cat /etc/TZ)
+  [ -z "$tz_data" ] && tz_data="GMT0"
+  [ ! -f /etc/tzname ] && $(grep "$tz_data" /var/www/js/tz.js | head -1 | cut -d ":" -f 2 | cut -d "," -f 1 | tr -d "'" > /etc/tzname)
+  tz_name=$(cat /etc/tzname)
+  wan_mac=$(cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address)
 }
 html_title() {
    [ ! -z "$1" ] && echo -n "$1 - "

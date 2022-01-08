@@ -1,16 +1,17 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
+get_system_info
+
 page_title="Network Administration"
-hostname=$(hostname -s)
-ipaddr=$(yaml-cli -g .network.lan.ipaddr)
+
+ipaddr_mj=$(yaml-cli -g .network.lan.ipaddr)
+netmask_mj=$(yaml-cli -g .network.lan.netmask)
+vpn1_mj=$(yaml-cli -g .openvpn.vpn1.remote)
+
 ipaddr_eth0=$(ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $3}')
-macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | uniq)
-netmask=$(yaml-cli -g .network.lan.netmask)
 netmask_eth0=$(ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $7}')
 password=$(awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf)
-vpn1=$(yaml-cli -g .openvpn.vpn1.remote)
-timezone=$(cat /etc/TZ)
 %>
 <%in _header.cgi %>
 <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
@@ -30,20 +31,20 @@ timezone=$(cat /etc/TZ)
           <div class="row mb-1">
             <label class="col-md-5 form-label" for="ipaddr">IP Address</label>
             <div class="col-md-7">
-              <input type="text" class="form-control" name="ipaddr" id="ipaddr" value="<%= $ipaddr %>" data-real="<%= $ipaddr_eth0 %>" placeholder="192.168.10.10">
+              <input type="text" class="form-control" name="ipaddr" id="ipaddr" value="<%= $ipaddr_mj %>" data-real="<%= $ipaddr_eth0 %>" placeholder="192.168.10.10">
             </div>
           </div>
           <div class="row mb-1">
             <label class="col-md-5 form-label" for="netmask">IP Netmask</label>
             <div class="col-md-7">
-              <input type="text" class="form-control" name="netmask" id="netmask" value="<%= $netmask %>" data-real="<%= $netmask_eth0 %>" placeholder="255.255.255.0">
+              <input type="text" class="form-control" name="netmask" id="netmask" value="<%= $netmask_mj %>" data-real="<%= $netmask_eth0 %>" placeholder="255.255.255.0">
             </div>
           </div>
           <div class="row mb-1">
             <label class="col-md-5 form-label" for="remote">VTUNd Server</label>
             <div class="col-md-7">
               <div class="input-group">
-                <input type="text" class="form-control" name="remote" id="remote" value="<%= $vpn1 %>" placeholder="vtun.net">
+                <input type="text" class="form-control" name="remote" id="remote" value="<%= $vpn1_mj %>" placeholder="vtun.net">
                 <div class="input-group-text">
                   <input class="form-check-input mt-0 me-2" type="checkbox" name="remote" value="__delete">
                   <img src="/img/trash.svg" alt="Delete">

@@ -1,8 +1,8 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
+get_system_info
 page_title="Monitoring Tools"
-interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
 %>
 <%in _header.cgi %>
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-4">

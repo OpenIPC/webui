@@ -8,41 +8,31 @@ page_title="Device Status"
 %>
 <%in _header.cgi %>
 <div class="row">
-  <div class="col mb-3">
-    <div class="card h-100">
-      <div class="card-header">Device Info</div>
-      <div class="card-body">
-        <h5>Hardware</h5>
-        <dl class="row">
-          <dt class="col-4">SoC</dt>
-          <dd class="col-8"><%= $soc %></dd>
-          <dt class="col-4">SoC Family</dt>
-          <dd class="col-8"><%= $soc_family %></dd>
-          <dt class="col-4">Sensor</dt>
-          <dd class="col-8"><%= $sensor %></dd>
-          <dt class="col-4">Flash</dt>
-          <dd class="col-8"><%= $flash_size %> MB</dd>
-        <% if [ -n "$soc_temp" ]; then %>
-          <dt class="col-4">SoC temp.</dt>
-          <dd class="col-8"><%= $soc_temp %>°C</dd>
-        <% fi %>
-        </dl>
-        <h5>Firmware</h5>
-        <dl class="row">
-          <dt class="col-4">Version</dt>
-          <dd class="col-8"><%= $fw_version %>-<%= $fw_variant %></dd>
-          <dt class="col-4">Build</dt>
-          <dd class="col-8"><%= $fw_build %></dd>
-        </dl>
-        <dl class="row">
-          <dt class="col-4">Hostname</dt>
-          <dd class="col-8"><%= $hostname %></dd>
-          <dt class="col-4">WAN MAC</dt>
-          <dd class="col-8"><%= $wan_mac %></dd>
-        </dl>
-      </div>
-    </div>
-  </div>
+<div class="col mb-3">
+<div class="card h-100">
+<div class="card-header">Device Info</div>
+<div class="card-body">
+<b>Hardware</b>
+<pre>
+SoC           <%= $soc %>
+SoC Family    <%= $soc_family %>
+Sensor        <%= $sensor %>
+Flash         <%= $flash_size %> MB
+<% if [ -n "$soc_temp" ]; then %>SoC temp.     <%= $soc_temp %>°C<% fi %>
+</pre>
+<b>Firmware</b>
+<pre>
+Version       <%= $fw_version %>-<%= $fw_variant %>
+Build         <%= $fw_build %>
+</pre>
+<b>System</b>
+<pre class="mb-0">
+Hostname      <%= $hostname %></dd>
+WAN MAC       <%= $wan_mac %>
+</pre>
+</div>
+</div>
+</div>
   <div class="col mb-3">
     <div class="card h-100">
       <div class="card-header">System Info</div>

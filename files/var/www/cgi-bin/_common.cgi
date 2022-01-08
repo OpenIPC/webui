@@ -38,7 +38,7 @@ flash_save() {
   echo "$1:$2" > /tmp/webui-flash.txt
 }
 get_firmware_info() {
-  fw_version=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/)
+  fw_version=$(cat /etc/os-release | grep "VERSION_ID" | cut -d= -f2 | tr -d /\"/)
   fw_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/)
   [ -z "$fw_variant" ] && fw_variant="lite"
   fw_build=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/)

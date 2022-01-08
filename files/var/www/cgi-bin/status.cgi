@@ -25,7 +25,7 @@ wan_mac() { cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address; }
           <dt class="col-4">SoC</dt>
           <dd class="col-8"><%= $soc %></dd>
           <dt class="col-4">SoC Family</dt>
-          <dd class="col-8"><%= $soc_sdk %></dd>
+          <dd class="col-8"><%= $soc_family %></dd>
           <dt class="col-4">Sensor</dt>
           <dd class="col-8"><% sensor %></dd>
           <dt class="col-4">Flash</dt>

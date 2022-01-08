@@ -8,12 +8,11 @@ check_url() {
 }
 
 get_soc
-fw_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/ 2>&1)
-[ -z "$fw_variant" ] && fw_variant="lite"
+get_firmware_info
 
 page_title="Updating Majestic"
 mj_bin_file="/usr/bin/majestic"
-mj_bz2_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.${fw_variant}.master.tar.bz2"
+mj_bz2_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.bz2"
 mj_bz2_file="/tmp/majestic.tar.bz2"
 mj_tmp_file="/tmp/majestic"
 
@@ -38,7 +37,7 @@ else
     log="${log}rm -f ${mj_tmp_file}\n"
     log="${log}$(rm -f ${mj_tmp_file} 2>&1)"
   else
-#    mj_filesize_new=$(curl https://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.master.tar.meta)
+#    mj_filesize_new=$(curl https://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.master.tar.meta)
     mj_filesize_new=$(ls -s ${mj_tmp_file} | xargs | cut -d " " -f 1)
     if [ $mj_filesize_new -gt $available_space ]; then
       error="Not enough space to update Majestic. Required ${mj_filesize_new} KB, available ${available_space} KB."

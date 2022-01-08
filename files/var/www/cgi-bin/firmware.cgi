@@ -2,13 +2,11 @@
 <%in _common.cgi %>
 <%
 get_soc
+get_firmware_info
 page_title="Firmware Updates"
 mj_bin_file="/usr/bin/majestic"
 mj_version=$(${mj_bin_file} -v)
 ui_version=$(cat /var/www/.version)
-fw_version=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/ 2>&1)
-fw_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/ 2>&1)
-[ -z "$fw_variant" ] && fw_variant="lite"
 mj_meta_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc}.${fw_variant}.master.tar.meta"
 mj_config_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 [ -f /overlay/root/${mj_bin_file} ] && mj_filesize_old=$(ls -s ${mj_bin_file} | xargs | cut -d" " -f1) || mj_filesize_old=0

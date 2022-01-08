@@ -37,6 +37,14 @@ flash_save() {
   xheader="X-ErrorMessage: $2"
   echo "$1:$2" > /tmp/webui-flash.txt
 }
+
+get_firmware_info() {
+  fw_version=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/)
+  fw_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/)
+  [ -z "$fw_variant" ] && fw_variant="lite"
+  fw_build=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/)
+}
+
 get_soc() {
   soc=$(ipcinfo --chip_id 2>&1)
   case "$soc" in

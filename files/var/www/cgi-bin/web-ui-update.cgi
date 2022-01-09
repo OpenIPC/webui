@@ -10,7 +10,7 @@ etag_file=/root/.ui.etag
 opts="-skL --etag-save $etag_file"
 [ -z "$POST_enforce" ] && opts="${opts} --etag-compare ${etag_file}"
 
-echo "$(date +"%F %T"): curl ${opts} -o ${tmp_file} ${url}" >> /tmp/webui-update.log
+echo "curl ${opts} -o ${tmp_file} ${url}"
 output=$(curl $opts -o $tmp_file $url 2>&1)
 if [ $? -ne 0 ]; then
   error="$output"

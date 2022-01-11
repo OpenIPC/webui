@@ -11,7 +11,6 @@ function sendToApi(endpoint) {
 
 function initControls() {
     $$('a[id^=pan-],a[id^=zoom-]').forEach(el => {
-        el.style.backgroundColor = 'red';
         el.addEventListener('click', event => {
             event.preventDefault();
             alert('Sorry, this feature does not work, yet!');

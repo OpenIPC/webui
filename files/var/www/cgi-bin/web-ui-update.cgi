@@ -7,11 +7,11 @@ url="https://github.com/OpenIPC/microbe-web/archive/refs/heads/${POST_version}.z
 tmp_file=/tmp/microbe.zip
 etag_file=/root/.ui.etag
 
-opts="-skL --etag-save $etag_file"
+opts="-skL --etag-save ${etag_file}"
 [ -z "$POST_enforce" ] && opts="${opts} --etag-compare ${etag_file}"
 
-echo "curl ${opts} -o ${tmp_file} ${url}"
-output=$(curl $opts -o $tmp_file $url 2>&1)
+output="curl ${opts} -o ${tmp_file} ${url}"
+output="${output}<br>$(curl $opts -o $tmp_file $url 2>&1)"
 if [ $? -ne 0 ]; then
   error="$output"
 elif [ ! -f "$tmp_file" ]; then
@@ -42,6 +42,7 @@ else
       [ ! -d "${www_file%/*}" ] && mkdir -p "${www_file%/*}" 2>&1
       echo "cp -f ${upd_file} ${www_file}"
       cp -f ${upd_file} ${www_file} 2>&1
+      [ $? -ne 0 ] && error=1
     fi
   done
 
@@ -50,17 +51,26 @@ else
     if [ "$file" != "$etag_file" ]; then
       echo "rm -f /var/www/${file}"
       rm -f "/var/www/${file}" 2>&1
+      [ $? -ne 0 ] && error=1
     fi
   done
 
   # clean up
   echo "rm -f ${tmp_file}"
   rm -f ${tmp_file} 2>&1
+  [ $? -ne 0 ] && error=1
+
   echo "rm -fr /tmp/microbe-web-${POST_version}"
   rm -fr /tmp/microbe-web-${POST_version} 2>&1
+  [ $? -ne 0 ] && error=1
 
-  echo "echo \"${POST_version}+${commit}, ${timestamp}\" > /var/www/.version"
-  echo "${POST_version}+${commit}, ${timestamp}" > /var/www/.version
+  if [ -z "$error" ]; then
+    echo "echo \"${POST_version}+${commit}, ${timestamp}\" > /var/www/.version"
+    echo "${POST_version}+${commit}, ${timestamp}" > /var/www/.version
+  else
+    echo ""
+    echo "ATTENTION! There were errors!"
+  fi
 %>
 </pre>
 <a class="btn btn-primary" href="/">Go Home</a>

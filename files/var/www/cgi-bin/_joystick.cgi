@@ -24,7 +24,7 @@ button() {
 <% button "focus-plus.svg" "Focus: plus" %>
 <% button "focus-auto.svg" "Focus: auto" %>
 <% button "focus-minus.svg" "Focus: minus" %>
-<% [ "true" != "$(yaml-cli -g .nightMode.enabled)" ] && button "light-off.svg" "Night mode" %>
+<% [ "true" = "$(yaml-cli -g .nightMode.enabled)" ] && button "light-off.svg" "Night mode" %>
 <% [ -f /etc/telegram.cfg ] && [ $(cat /etc/telegram.cfg | wc -l) -eq 2 ] && button "telegram.svg" "Send to Telegram" %>
 </div>
 

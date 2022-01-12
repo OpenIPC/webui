@@ -68,6 +68,7 @@ else
     echo "echo \"${POST_version}+${commit}, ${timestamp}\" > /var/www/.version"
     echo "${POST_version}+${commit}, ${timestamp}" > /var/www/.version
   else
+    rm ${etag_file}
     echo ""
     echo "ATTENTION! There were errors!"
   fi

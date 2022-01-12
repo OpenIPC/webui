@@ -76,7 +76,7 @@ get_hardware_info() {
       soc_family="xm550"
       ;;
     *)
-      soc_family=
+      soc_family="$soc"
       ;;
   esac
   soc_temp=$(ipcinfo --temp)

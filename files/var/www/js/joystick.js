@@ -5,7 +5,7 @@ function reqListener() {
 function sendToApi(endpoint) {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener("load", reqListener);
-    xhr.open("GET", "http://<%= $ipaddr %>" + endpoint);
+    xhr.open("GET", 'http://' + ipaddr + endpoint);
     xhr.send();
 }
 

@@ -55,4 +55,7 @@ button() {
 <% button "preset-9.svg" "Preset 9" %>
 </div>
 </div>
+<script>
+const ipaddr = '<%= $ipaddr %>';
+</script>
 <script src="/js/joystick.js"></script>

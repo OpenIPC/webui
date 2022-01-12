@@ -9,7 +9,7 @@ page_title="Firmware Updates"
 mj_meta_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.meta"
 mj_config_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 [ -f /overlay/root/${mj_bin_file} ] && mj_filesize_old=$(ls -s ${mj_bin_file} | xargs | cut -d" " -f1) || mj_filesize_old=0
-mj_filesize_new=$(curl -vv ${mj_meta_url})
+mj_filesize_new=$(curl -s ${mj_meta_url})
 mj_filesize_new=$(echo $mj_filesize_new / 1024 | bc)
 free_space=$(df | grep /overlay | xargs | cut -d" " -f4)
 available_space=$(( $free_space + $mj_filesize_old - 1 ))
@@ -113,7 +113,8 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
           </form>
         <% else %>
           <div class="alert alert-warning">Not enough space to update Majestic.<br>
-            Required <%= $mj_filesize_new %> KB, available <%= $available_space %> KB.</div>
+            Required <a href="<%= $mj_meta_url %>"><%= $mj_filesize_new %> KB</a>,
+            available <%= $available_space %> KB.</div>
         <% fi %>
         </div>
         <div class="alert alert-light mb-0">

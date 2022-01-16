@@ -54,6 +54,9 @@ get_hardware_info() {
     hi3516dv100 | hi3516av100)
       soc_family="hi3516av100"
       ;;
+    hi3518ev100 | hi3516cv100)
+      soc_family="hi3516cv100"
+      ;;
     hi3518cv200 | hi3518ev200 | hi3518ev201 | hi3516cv200)
       soc_family="hi3516cv200"
       ;;

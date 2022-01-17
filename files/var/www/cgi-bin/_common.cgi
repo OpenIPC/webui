@@ -1,4 +1,4 @@
-<%in _i18n_default.cgi %>
+#!/usr/bin/haserl
 <%
 beats() {
   echo -n "@$(echo "$(date -u -d "1970-01-01 $(TZ=UTC-1 date +%T)" +%s) * 10 / 864" | bc)"
@@ -156,5 +156,11 @@ report_command_success() {
   echo "<pre class=\"mb-0\">$2</pre>"
   echo "</div>"
 }
+
+source $PWD/locale/en.sh
+locale=$(cat /etc/web_locale)
+[ -z "$locale" ] && locale="en"
+[ "$locale" != "en" -a -f "$PWD/locale/$locale.sh" ] && source $PWD/locale/${locale}.sh
+
 check_password
 %>

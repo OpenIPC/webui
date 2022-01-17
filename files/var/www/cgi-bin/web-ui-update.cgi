@@ -8,7 +8,7 @@ tmp_file=/tmp/microbe.zip
 etag_file=/root/.ui.etag
 
 opts="-skL --etag-save ${etag_file}"
-[ -z "$POST_enforce" ] && opts="${opts} --etag-compare ${etag_file}"
+[ -z "$POST_enforce" -a -f "$etag_file" ] && opts="${opts} --etag-compare ${etag_file}"
 
 output="curl ${opts} -o ${tmp_file} ${url}"
 output="${output}<br>$(curl $opts -o $tmp_file $url 2>&1)"

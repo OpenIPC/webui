@@ -122,11 +122,11 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
           <p><b><%= $tMjConfigChanged  %>.</b></p>
           <p><a href="/cgi-bin/majestic-config-compare.cgi"><%= $tMjConfigSeeChanges %>.</a></p>
           <div class="alert alert-danger mb-0">
-            <p><b><%= $MjConfigReset %>.</b></p>
-            <p><%= $tMjConfigResetInfo %>.</p>
+            <p><b><%= $tMjConfigReset %>.</b></p>
+            <p><%= $tMjConfigResetInfo %></p>
             <p class="mb-0">
               <a class="btn btn-primary" href="/cgi-bin/majestic-config-backup.cgi"><%= $tMjConfigBackup %></a>
-              <a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi" title="<%= $tMjConfigResetTitle %>"><%= $MjConfigReset %></a>
+              <a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi" title="<%= $tMjConfigResetTitle %>"><%= $tMjConfigReset %></a>
             </p>
           </div>
         <% fi %>
@@ -153,7 +153,7 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
               <input class="form-control" type="file" name="upfile">
             </div>
           </div>
-          <button type="submit" class="btn btn-danger"><%= tUploadFile %></button>
+          <button type="submit" class="btn btn-danger"><%= $tUploadFile %></button>
         </form>
       </div>
     </div>
@@ -169,7 +169,7 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
               <input class="form-control" type="file" name="upfile">
             </div>
           </div>
-          <button type="submit" class="btn btn-danger"><%= tUploadFile %></button>
+          <button type="submit" class="btn btn-danger"><%= $tUploadFile %></button>
         </form>
       </div>
     </div>

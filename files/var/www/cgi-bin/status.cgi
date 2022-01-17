@@ -13,12 +13,12 @@ page_title=$tDeviceStatusTitle
 <div class="card-header"><%= $tDeviceInfoHeader %></div>
 <div class="card-body">
 <b><%= $tHardware %></b>
-<pre><% echo "${tSoC}:\t\t${soc}\n${tSoCFamily}:\t${soc_family}\n${tSensor}:\t\t${sensor}\n${tFlash}:\t\t${flash_size} MB"
-[ -n "$soc_temp" ] && echo -n "${tSoCTemp}:\t${soc_temp}°C" %></pre>
+<pre><% echo -e "${tSoC}:\t\t${soc}\n${tSoCFamily}:\t${soc_family}\n${tSensor}:\t\t${sensor}\n${tFlash}:\t\t${flash_size} MB"
+[ -n "$soc_temp" ] && echo -en "${tSoCTemp}:\t${soc_temp}°C" %></pre>
 <b><%= $tFirmware %></b>
-<pre><% echo "${tVersion}:\t${fw_version}-${fw_variant}\n${tBuild}:\t\t${fw_build}" %></pre>
+<pre><% echo -e "${tVersion}:\t${fw_version}-${fw_variant}\n${tBuild}:\t\t${fw_build}" %></pre>
 <b><%= $tSystem %></b>
-<pre><% echo "${tHostname}:\t${hostname}\n${tWanMac}:\t${wan_mac}" %></pre>
+<pre><% echo -e "${tHostname}:\t${hostname}\n${tWanMac}:\t${wan_mac}" %></pre>
 </div>
 </div>
 </div>

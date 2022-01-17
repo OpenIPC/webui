@@ -29,12 +29,18 @@ function refresh() {
 
         $$('form').forEach(el => el.autocomplete = 'off');
         $$('input[data-for]').forEach(el => el.addEventListener('click', ev => toggleAuto(ev.target)));
-        $$('.btn-danger, .btn-warning, .confirm').forEach(el => el.addEventListener('click', ev => (!confirm("Are you sure?")) ? ev.preventDefault() : null));
+        $$('.btn-danger, .btn-warning, .confirm').forEach(el => {
+            el.addEventListener('click', ev => (!confirm("Are you sure?")) ? ev.preventDefault() : null);
+        });
         $$('.refresh').forEach(el => el.addEventListener('click', refresh));
         $$('a[href^=http]').forEach(el => el.target = '_blank');
         $$('input.pat-host').forEach(el => el.pattern='^[a-zA-Z0-9-_.]+$');
         $$('input.pat-host-ip').forEach(el => el.pattern='^[a-zA-Z0-9-_.]+$');
-        $$('.log-scroll').forEach(el => el.addEventListener('change', ev => ev.target.scrollTop = ev.target.scrollHeight));
+
+        const resizeObserver = new ResizeObserver(entries => {
+            for (let entry of entries) entry.target.scroll(0, entry.target.scrollTopMax);
+        });
+        if ($('.log-scroll')) resizeObserver.observe($('.log-scroll'));
     }
 
     window.addEventListener('load', initAll);

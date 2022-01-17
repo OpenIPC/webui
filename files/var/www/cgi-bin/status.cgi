@@ -14,21 +14,21 @@ page_title=$tDeviceStatusTitle
 <div class="card-body">
 <b><%= $tHardware %></b>
 <pre>
-<%= $tSoC %>: <%= $soc %>
-<%= $tSoCFamily %>: <%= $soc_family %>
-<%= $tSensor %>: <%= $sensor %>
-<%= $tFlash %>: <%= $flash_size %> MB
-<% if [ -n "$soc_temp" ]; then %><%= $tSoCTemp %>: <%= $soc_temp %>°C<% fi %>
+<%= $tSoC %>: <%= $soc %><br>
+<%= $tSoCFamily %>: <%= $soc_family %><br>
+<%= $tSensor %>: <%= $sensor %><br>
+<%= $tFlash %>: <%= $flash_size %> MB<br>
+<% if [ -n "$soc_temp" ]; then %><%= $tSoCTemp %>: <%= $soc_temp %>°C<% fi %><br>
 </pre>
 <b><%= $tFirmware %></b>
 <pre>
-<%= $tVersion %>: <%= $fw_version %>-<%= $fw_variant %>
-<%= $tBuild %>: <%= $fw_build %>
+<%= $tVersion %>: <%= $fw_version %>-<%= $fw_variant %><br>
+<%= $tBuild %>: <%= $fw_build %><br>
 </pre>
 <b><%= $tSystem %></b>
 <pre class="mb-0">
-<%= $tHostname %>: <%= $hostname %>
-<%= $tWanMac %>: <%= $wan_mac %>
+<%= $tHostname %>: <%= $hostname %><br>
+<%= $tWanMac %>: <%= $wan_mac %><br>
 </pre>
 </div>
 </div>

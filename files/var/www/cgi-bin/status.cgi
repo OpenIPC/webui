@@ -13,23 +13,18 @@ page_title=$tDeviceStatusTitle
 <div class="card-header"><%= $tDeviceInfoHeader %></div>
 <div class="card-body">
 <b><%= $tHardware %></b>
-<pre>
-<%= $tSoC %>: <%= $soc %><br>
-<%= $tSoCFamily %>: <%= $soc_family %><br>
-<%= $tSensor %>: <%= $sensor %><br>
-<%= $tFlash %>: <%= $flash_size %> MB<br>
-<% if [ -n "$soc_temp" ]; then %><%= $tSoCTemp %>: <%= $soc_temp %>°C<% fi %><br>
-</pre>
+<pre><% echo "${tSoC}: ${soc}
+${tSoCFamily}: ${soc_family}
+${tSensor}: ${sensor}
+${tFlash}: ${flash_size} MB"
+[ -n "$soc_temp" ] && echo -n "${tSoCTemp}: ${soc_temp}°C"
+%></pre>
 <b><%= $tFirmware %></b>
-<pre>
-<%= $tVersion %>: <%= $fw_version %>-<%= $fw_variant %><br>
-<%= $tBuild %>: <%= $fw_build %><br>
-</pre>
+<pre><% echo "${tVersion}: ${fw_version}-${fw_variant}
+${tBuild}: ${fw_build}" %></pre>
 <b><%= $tSystem %></b>
-<pre class="mb-0">
-<%= $tHostname %>: <%= $hostname %><br>
-<%= $tWanMac %>: <%= $wan_mac %><br>
-</pre>
+<pre><% echo "${tHostname}: ${hostname}
+${tWanMac}: ${wan_mac}" %></pre>
 </div>
 </div>
 </div>

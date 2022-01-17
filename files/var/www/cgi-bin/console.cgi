@@ -1,13 +1,15 @@
 #!/usr/bin/haserl
-<% page_title="Web Console"
-cmd=$FORM_cmd %>
+<%
+page_title=$tWebConsole
+cmd=$FORM_cmd
+%>
 <%in _common.cgi %>
 <%in _header.cgi %>
 <div class="console">
   <div class="input-group mb-3">
     <div class="input-group-text">~#</div>
     <input class="form-control" type="text" id="cmd" value="<%= $cmd %>"
-      placeholder="Type a command and hit Enter" autofocus>
+      placeholder="<%= $tWebConsoleCmdPlaceholder %>" autofocus>
     <div class="input-group-text">
       <button type="button" class="btn btn-sm btn-white p-0" id="submit-cmd">⏎</button>
     </div>

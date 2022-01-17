@@ -1,3 +1,4 @@
+<%in _i18n_default.cgi %>
 <%
 beats() {
   echo -n "@$(echo "$(date -u -d "1970-01-01 $(TZ=UTC-1 date +%T)" +%s) * 10 / 864" | bc)"

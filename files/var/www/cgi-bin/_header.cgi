@@ -27,47 +27,47 @@ Content-Type: text/html; charset=UTF-8
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownInformation" href="#"
-            role="button" data-bs-toggle="dropdown" aria-expanded="false">Information</a>
+            role="button" data-bs-toggle="dropdown" aria-expanded="false"><%= $tMnuInformation %></a>
           <ul class="dropdown-menu" aria-labelledby="dropdownInformation">
-            <li><a class="dropdown-item" href="/cgi-bin/status.cgi">Overview</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/info-cron.cgi">Cron config</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/info-dmesg.cgi">Diagnostic message</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/info-httpd-config.cgi">HTTPd config</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/info-httpd.cgi">HTTPd environment</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/info-log.cgi">Log read</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/status.cgi"><%= $tMnuOverview %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info-cron.cgi"><%= $tMnuCron %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info-dmesg.cgi"><%= $tMnuDmesg %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info-httpd-config.cgi"><%= $tMnuHttpd %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info-httpd.cgi"><%= $tMnuHttpdEnv %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info-log.cgi"><%= $tMnuLog %></a></li>
           </ul>
         </li>
-        <li class="nav-item"><a class="nav-link" href="/cgi-bin/firmware.cgi">Firmware</a></li>
+        <li class="nav-item"><a class="nav-link" href="/cgi-bin/firmware.cgi"><%= $tMnuFirmware %></a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownNetwork" href="#"
-            role="button" data-bs-toggle="dropdown" aria-expanded="false">Settings</a>
+            role="button" data-bs-toggle="dropdown" aria-expanded="false"><%= $tMnuSettings %></a>
           <ul class="dropdown-menu" aria-labelledby="dropdownNetwork">
-            <li><a class="dropdown-item" href="/cgi-bin/network.cgi">Network Settings</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/network-ntp.cgi">NTP Settings</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/webui-password.cgi">Web UI Password</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/network.cgi"><%= $tMnuNetwork %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/network-ntp.cgi"><%= $tMnuNtp %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/webui-password.cgi"><%= $tMnuWebUi %></a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownMajestic" href="#"
             role="button" data-bs-toggle="dropdown" aria-expanded="false">Majestic</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownMajestic">
-            <li><a class="dropdown-item" href="/cgi-bin/majestic-settings-general.cgi">Settings</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/majestic-settings-services.cgi">Services</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/majestic-config-actions.cgi">Maintenance</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/preview-help.cgi">Information</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/majestic-settings-general.cgi"><%= $tMnuMjSettings %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/majestic-settings-services.cgi"><%= $tMnuMjServices %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/majestic-config-actions.cgi"><%= $tMnuMjMaintenance %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/preview-help.cgi"><%= $tMnuMjInformation %></a></li>
           </ul>
         </li>
         <li class="nav-item  dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownTools" href="#"
-            role="button" data-bs-toggle="dropdown" aria-expanded="false">Tools</a>
+            role="button" data-bs-toggle="dropdown" aria-expanded="false"><%= $tMnuTools %></a>
           <ul class="dropdown-menu" aria-labelledby="dropdownTools">
-            <li><a class="dropdown-item" href="/cgi-bin/tools.cgi">Ping & Traceroute</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/console.cgi">Web Console</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/tools.cgi"><%= $tMnuPingTrace %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/console.cgi"><%= $tMnuWebConsole %></a></li>
           </ul>
         </li>
         <li class="nav-item  dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownServices" href="#"
-            role="button" data-bs-toggle="dropdown" aria-expanded="false">Services</a>
+            role="button" data-bs-toggle="dropdown" aria-expanded="false"><%= $tMnuServices %></a>
           <ul class="dropdown-menu" aria-labelledby="dropdownServices">
             <li><a class="dropdown-item" href="/cgi-bin/plugin-bigbro.cgi">Big Bro</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/plugin-ipeye.cgi">IP Eye</a></li>
@@ -76,7 +76,7 @@ Content-Type: text/html; charset=UTF-8
         </li>
         <li class="nav-item  dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownPreview" href="#"
-            role="button" data-bs-toggle="dropdown" aria-expanded="false">Preview</a>
+            role="button" data-bs-toggle="dropdown" aria-expanded="false"><%= $tMnuPreview %></a>
           <ul class="dropdown-menu" aria-labelledby="dropdownPreview">
             <li><a class="dropdown-item" href="/cgi-bin/preview.cgi">JPEG</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/preview-mjpeg.cgi">MJPEG</a></li>

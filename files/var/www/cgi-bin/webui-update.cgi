@@ -15,7 +15,7 @@ output="${output}<br>$(curl $opts -o $tmp_file $url 2>&1)"
 if [ $? -ne 0 ]; then
   error="$output"
 elif [ ! -f "$tmp_file" ]; then
-  error="GitHub version matches the installed one. Nothing to update."
+  error="$tMsgSameVersion"
 fi
 %>
 <%in _header.cgi %>
@@ -70,10 +70,10 @@ else
   else
     rm ${etag_file}
     echo ""
-    echo "ATTENTION! There were errors!"
+    echo "$tMsgAttentionErrors"
   fi
 %>
 </pre>
-<a class="btn btn-primary" href="/">Go Home</a>
+<a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>
 <% fi %>
 <%in _footer.cgi %>

@@ -7,7 +7,7 @@ button() {
   echo "<img id=\"${id}\" src=\"/img/${1}\" alt=\"${2}\" title=\"${2}\">"
 }
 %>
-<div class="alert alert-danger">Motors not initialized.</div>
+<div class="alert alert-danger"><%= $tMsgPtzNotWorking %></div>
 <div class="control-board row">
 <div class="control col-lg-4">
 <% button "arrow-ul.svg" "Pan up left" %>

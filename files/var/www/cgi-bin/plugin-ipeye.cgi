@@ -3,7 +3,7 @@
 <%
 get_system_info
 plugin="ipeye"
-page_title="IP EYE Cloud"
+page_title="$tPageTitlePluginIpeye"
 %>
 <%in _header.cgi %>
 <div class="alert alert-info"><%= $tMsgProofOfConcept %></div>

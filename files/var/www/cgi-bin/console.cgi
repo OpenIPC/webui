@@ -1,6 +1,6 @@
 #!/usr/bin/haserl
 <%
-page_title=$tWebConsole
+page_title="$tWebConsole"
 cmd=$FORM_cmd
 %>
 <%in _common.cgi %>

@@ -1,13 +1,13 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title=$tWebuiSettingsPageTitle
+page_title="$tPageTitleWebuiSettings"
 %>
 <%in _header.cgi %>
 <div class="row">
 <div class="col-md-6 m-auto">
 <div class="card">
-<div class="card-header"><%= $tWebuiSettingsHeader %></div>
+<div class="card-header"><%= $tHeaderWebuiSettings %></div>
 <div class="card-body">
 <form action="/cgi-bin/webui-settings-update.cgi" method="post">
 <div class="row mb-1">
@@ -51,7 +51,7 @@ echo -n "<option value=\"${code}\"${selected}>${name}</option>"
 done %></select>
 </div>
 </div>
-<button type="submit" class="btn btn-primary"><%= $tFormSubmitButton %></button>
+<button type="submit" class="btn btn-primary"><%= $tButtonFormSubmit %></button>
 </form>
 </div>
 </div>

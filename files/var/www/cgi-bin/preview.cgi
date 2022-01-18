@@ -1,6 +1,7 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<% page_title="JPEG Preview"
+<%
+page_title="$tPageTitlePreview"
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 %>
 <%in _header.cgi %>

@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="Rebooting..."
+page_title="$tPageTitleReboot"
 command="reboot -d 3"
 output=$(reboot -d 3)
 if [ $? -ne 0 ]; then %>

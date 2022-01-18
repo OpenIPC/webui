@@ -2,7 +2,7 @@
 <%in _common.cgi %>
 <%
 get_system_info
-page_title="Video Preview"
+page_title="$tPageTitlePreviewVideo"
 %>
 <%in _header.cgi %>
 <div class="row preview">

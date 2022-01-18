@@ -2,8 +2,7 @@
 <%in _common.cgi %>
 <%
 get_system_info
-
-page_title="Available Endpoints"
+page_title="$tPageTitlePreviewHelp"
 %>
 <%in _header.cgi %>
 <p class="small">Detailed information available <a href="https://github.com/OpenIPC/firmware/wiki/majestic_streamer">in the wiki</a>.</p>

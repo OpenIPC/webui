@@ -11,15 +11,15 @@ get_hardware_info
 get_firmware_info
 get_software_info
 
-page_title="Updating Majestic"
+page_title="$tPageTitleMajesticGithub"
 mj_bz2_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.bz2"
 mj_bz2_file="/tmp/majestic.tar.bz2"
 mj_tmp_file="/tmp/majestic"
 
 if [ ! -f /rom/${mj_bin_file} ]; then
-  error="Majestic is not supported on this system."
+  error="$tMsgMajesticIsNotSupported"
 elif [ check_url -ne 1 ]; then
-  error="Cannot retrieve update from the server."
+  error="$tMsgCannotRetrieveUpdate"
 else
   free_space=$(df | grep /overlay | xargs | cut -d" " -f4)
   mj_filesize_old=0
@@ -31,7 +31,7 @@ else
   log="${log}bunzip2 -c ${mj_bz2_file} | tar -x -C /tmp/ ./majestic\n"
   log="${log}$(bunzip2 -c ${mj_bz2_file} | tar -x -C /tmp/ ./majestic 2>&1)"
   if [ $? -ne 0 ]; then
-    error="Cannot extract Majestic."
+    error="$tMsgCannotExtractMajestic"
     log="${log}rm -f ${mj_bz2_file}\n"
     log="${log}$(rm -f ${mj_bz2_file} 2>&1)"
     log="${log}rm -f ${mj_tmp_file}\n"
@@ -40,7 +40,7 @@ else
 #    mj_filesize_new=$(curl https://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.master.tar.meta)
     mj_filesize_new=$(ls -s ${mj_tmp_file} | xargs | cut -d " " -f 1)
     if [ $mj_filesize_new -gt $available_space ]; then
-      error="Not enough space to update Majestic. Required ${mj_filesize_new} KB, available ${available_space} KB."
+      error="$tMsgNoSpaceToExtractMajestic ${mj_filesize_new} KB > ${available_space} KB."
       log="${log}rm -f ${mj_tmp_file}\n"
       log="${log}$(rm -f ${mj_tmp_file} 2>&1)"
     fi
@@ -63,7 +63,7 @@ else
   echo "$(killall majestic 2>&1)"
   echo "mv -f ${mj_tmp_file} ${mj_bin_file}"
   echo "$(mv -f ${mj_tmp_file} ${mj_bin_file} 2>&1)"
-  echo "Rebooting..."
+  echo "$tMsgRebooting"
   echo "$(reboot)"
 fi
 %>

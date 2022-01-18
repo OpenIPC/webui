@@ -82,7 +82,7 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
             </select>
             <div class="form-check">
               <input class="form-check-input" type="checkbox" name="enforce" id="enforce" value="true">
-              <label class="form-check-label" for="enforce"><%= $tOverwriteSameVersion %>.</label>
+              <label class="form-check-label" for="enforce"><%= $tOverwriteSameVersion %></label>
             </div>
             <p class="mt-3 mb-0"><button type="submit" class="btn btn-warning"><%= $tButtonInstallUpdate %></button></p>
           </form>
@@ -102,9 +102,9 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
         </dl>
         <div class="alert alert-light">
         <% if [ -f /overlay/root/usr/bin/majestic ]; then %>
-          <p><b><%= $tMjInOverlay %>.</b> (<%= $mj_filesize_old %> KB)</p>
+          <p><b><%= $tMjInOverlay %></b> (<%= $mj_filesize_old %> KB)</p>
         <% else %>
-          <p><b><%= $tMjInBundle %>.</b></p>
+          <p><b><%= $tMjInBundle %></b></p>
         <% fi %>
         <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
           <form action="/cgi-bin/majestic-github.cgi" method="post">
@@ -116,13 +116,13 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
         </div>
         <div class="alert alert-light mb-0">
         <% if [ -z "$mj_config_diff" ]; then %>
-          <p><b><%= $tMjConfigUnchanged %>.</b></p>
-          <p class="mb-0"><a href="/cgi-bin/majestic-settings-general.cgi"><%= $tMjConfigEdit %>.</a></p>
+          <p><b><%= $tMjConfigUnchanged %></b></p>
+          <p class="mb-0"><a href="/cgi-bin/majestic-settings-general.cgi"><%= $tMjConfigEdit %></a></p>
         <% else %>
-          <p><b><%= $tMjConfigChanged  %>.</b></p>
-          <p><a href="/cgi-bin/majestic-config-compare.cgi"><%= $tMjConfigSeeChanges %>.</a></p>
+          <p><b><%= $tMjConfigChanged %></b></p>
+          <p><a href="/cgi-bin/majestic-config-compare.cgi"><%= $tMjConfigSeeChanges %></a></p>
           <div class="alert alert-danger mb-0">
-            <p><b><%= $tMjConfigReset %>.</b></p>
+            <p><b><%= $tMjConfigReset %></b></p>
             <p><%= $tMjConfigResetInfo %></p>
             <p class="mb-0">
               <a class="btn btn-primary" href="/cgi-bin/majestic-config-backup.cgi"><%= $tMjConfigBackup %></a>

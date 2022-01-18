@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="$tMjMaintenance"
+page_title="$tPageTitleMajesticMaintenance"
 %>
 <%in _header.cgi %>
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-3">

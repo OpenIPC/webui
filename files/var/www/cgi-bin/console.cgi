@@ -1,9 +1,9 @@
 #!/usr/bin/haserl
+<%in _common.cgi %>
 <%
-page_title="$tWebConsole"
+page_title="$tPageTitleWebConsole"
 cmd=$FORM_cmd
 %>
-<%in _common.cgi %>
 <%in _header.cgi %>
 <div class="console">
   <div class="input-group mb-3">

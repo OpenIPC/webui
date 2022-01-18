@@ -12,7 +12,7 @@ and [haserl][haserl]. Web UI listens on port 85.
 To add a missing language translation, please take a look at files in `/files/www/cgi-bin/locale/` directory.
 Use `en.sh` file as a template. It contains all the variables you need to assign proper values to.
 
-Make a copy of the file, give it a name according to [ISO 639-1 Code][https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes].
+Make a copy of the file, give it a name according to [ISO 639-1 Code][iso639].
 
 Language file is a shell script that starts with a shebang followed by the name of the language in a comment:
 ```
@@ -27,6 +27,7 @@ More documentation is available [in our wiki][wiki].
 
 [openipcfw]: https://github.com/OpenIPC/firmware
 [haserl]: http://haserl.sourceforge.net/
+[iso639]: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 [wiki]: https://github.com/OpenIPC/firmware/wiki/microbe-web
 
 -----

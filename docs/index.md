@@ -7,7 +7,23 @@ Microbe Web UI is a default web interface for [OpenIPC firmware][openipcfw].
 Microbe Web is lightweight but powerful interface written mostly in shell
 and [haserl][haserl]. Web UI listens on port 85.
 
-Documentation is available [in our wiki][wiki].
+### UI Translation
+
+To add a missing language translation, please take a look at files in `/files/www/cgi-bin/locale/` directory.
+Use `en.sh` file as a template. It contains all the variables you need to assign proper values to.
+
+Make a copy of the file, give it a name according to [ISO 639-1 Code][https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes].
+
+Language file is a shell script that starts with a shebang followed by the name of the language in a comment:
+```
+#!/bin/sh
+# name:Klingonese
+```
+then below goes a list of variables and their values that constitute the new language support.
+Change the values, test the new locale, then submit a patch or create a pull request.
+
+
+More documentation is available [in our wiki][wiki].
 
 [openipcfw]: https://github.com/OpenIPC/firmware
 [haserl]: http://haserl.sourceforge.net/

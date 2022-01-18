@@ -1,6 +1,8 @@
 #!/usr/bin/haserl
-<% page_title="Updating settings" %>
 <%in _common.cgi %>
+<%
+page_title="$tPageTitleNetworkUpdate"
+%>
 <%in _header.cgi %>
 <%
 if [ ! -z "$POST_hostname" ]; then
@@ -62,8 +64,8 @@ if [ ! -z "$POST_remote" ]; then
 fi
 %>
 <div class="alert alert-danger mt-5 mb-3">
-  <p>Restart needed to apply changes.</p>
-  <p class="mb-0"><a href="/cgi-bin/reboot.cgi" class="btn btn-danger">Reboot the camera now</a></p>
+  <p><%= $tMsgRestatNeeded %></p>
+  <p class="mb-0"><a href="/cgi-bin/reboot.cgi" class="btn btn-danger"><%= $tButtonReboot %></a></p>
 </div>
-<p><a href="/cgi-bin/network.cgi">Go back to settings</a></p>
+<p><a href="/cgi-bin/network.cgi"><%= $tButtonGoBackToSettings %></a></p>
 <%in _footer.cgi %>

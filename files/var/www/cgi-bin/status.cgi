@@ -13,7 +13,7 @@ page_title="$tPageTitleDeviceStatus"
       <div class="card-header"><%= $tHeaderDeviceInfo %></div>
       <div class="card-body">
         <b><%= $tHardware %></b>
-        <pre><% echo -e "${tSoC}:\t\t${soc}\n${tSoCFamily}:\t${soc_family}\n${tSensor}:\t\t${sensor}\n${tFlash}:\t\t${flash_size} MB"
+        <pre><% echo -e "${tSoC}:\t${soc}\n${tSoCFamily}:\t${soc_family}\n${tSensor}:\t\t${sensor}\n${tFlash}:\t\t${flash_size} MB"
         [ -n "$soc_temp" ] && echo -en "${tSoCTemp}:\t${soc_temp}°C" %></pre>
         <b><%= $tFirmware %></b>
         <pre><% echo -e "${tVersion}:\t${fw_version}-${fw_variant}\n${tBuild}:\t\t${fw_build}" %></pre>

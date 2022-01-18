@@ -2,7 +2,7 @@
 <%in _common.cgi %>
 <%
 get_system_info
-page_title="MJPEG Preview"
+page_title="$tPageTitlePreviewMjpeg"
 size=$(yaml-cli -g .mjpeg.size)
 [ -z "$size" ] && size="640x480"
 size_w=${size%x*}; size_h=${size#*x} %>

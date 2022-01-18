@@ -1,6 +1,8 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<% page_title="Erasing overlay" %>
+<%
+page_title="$tPageTitleFirmwareReset"
+%>
 <%in _header.cgi %>
 <%
 command="/usr/sbin/firstboot -s"
@@ -10,6 +12,6 @@ if [ $? -ne 0 ]; then
 else
   report_command_info "$command" "$output"
 %>
-<a class="btn btn-primary" href="/">Go Home</a>
+<a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>
 <% fi %>
 <%in _footer.cgi %>

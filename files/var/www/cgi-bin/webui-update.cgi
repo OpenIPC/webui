@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="Upgrading Web UI"
+page_title="$tPageTitleWebuiUpdate"
 
 url="https://github.com/OpenIPC/microbe-web/archive/refs/heads/${POST_version}.zip"
 tmp_file=/tmp/microbe.zip

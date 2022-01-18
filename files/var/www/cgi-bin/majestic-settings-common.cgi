@@ -89,7 +89,7 @@ for line in $mj; do
 done
 %>
 </div></div></div></div>
-<button type="submit" class="btn btn-primary">Save Changes</button>
+<button type="submit" class="btn btn-primary"><%= $tButtonFormSubmit %></button>
 </form>
 
 <script src="/js/majestic-settings.js"></script>

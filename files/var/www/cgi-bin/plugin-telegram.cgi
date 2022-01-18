@@ -49,7 +49,7 @@ fi
           <% if [ $(cat /etc/telegram.cfg | wc -l) -eq 2 ]; then %>
             <button type="button" class="btn btn-danger" data-method="delete">Reset configuration</button>
           <% else %>
-            <button type="submit" class="btn btn-primary">Save configuration</button>
+            <button type="submit" class="btn btn-primary"><%= $tButtonFormSubmit %></button>
           <% fi %>
         </form>
       </div>

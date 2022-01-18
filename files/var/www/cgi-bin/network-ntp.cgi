@@ -34,7 +34,7 @@ check_env_tz() {
               <input type="text" class="form-control" name="tz_data" id="tz_data" value="<%= $tz_data %>" readonly>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary mt-2">Save changes</button>
+          <button type="submit" class="btn btn-primary mt-2"><%= $tButtonFormSubmit %></button>
         </form>
       </div>
       <div class="card-body">
@@ -65,7 +65,7 @@ check_env_tz() {
               echo "</div>"
             done
           %>
-          <button type="submit" class="btn btn-primary mt-2">Save changes</button>
+          <button type="submit" class="btn btn-primary mt-2"><%= $tButtonFormSubmit %></button>
           <a class="btn btn-danger mt-2" href="/cgi-bin/network-ntp-reset.cgi">Reset to defaults</a>
         </form>
       </div>

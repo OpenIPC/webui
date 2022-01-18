@@ -5,7 +5,7 @@ get_hardware_info
 get_firmware_info
 get_software_info
 
-page_title=$tFirmwareUpdatesTitle
+page_title="$tPageTitleFirmware"
 mj_meta_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.meta"
 mj_config_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
 [ -f /overlay/root/${mj_bin_file} ] && mj_filesize_old=$(ls -s ${mj_bin_file} | xargs | cut -d" " -f1) || mj_filesize_old=0
@@ -16,13 +16,13 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
 %>
 <%in _header.cgi %>
 <div class="alert alert-danger">
-  <b><%= $tDestructiveActions %></b>
-  <p class="mb-0"><%= $tKnowWhatYouDo %></p>
+  <b><%= $tMsgDestructiveActions %></b>
+  <p class="mb-0"><%= $tMsgKnowWhatYouDo %></p>
 </div>
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
   <div class="col">
     <div class="card h-100">
-      <div class="card-header"><%= $tFirmwareHeader %></div>
+      <div class="card-header"><%= $tHeaderFirmware %></div>
       <div class="card-body">
         <dl class="row">
           <dt class="col-4"><%= $tInstalled %></dt>
@@ -35,34 +35,34 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
           <form action="/cgi-bin/firmware-update.cgi" method="post">
             <div class="form-check">
               <input class="form-check-input" type="checkbox" name="kernel" id="kernel" value="true" checked>
-              <label class="form-check-label" for="kernel"><%= $tUpgradeKernel %>.</label>
+              <label class="form-check-label" for="kernel"><%= $tLabelUpgradeKernel %></label>
             </div>
             <div class="form-check">
               <input class="form-check-input" type="checkbox" name="rootfs" id="rootfs" value="true" checked>
-              <label class="form-check-label" for="rootfs"><%= $tUpgradeRootfs %>.</label>
+              <label class="form-check-label" for="rootfs"><%= $tLabelUpgradeRootfs %></label>
             </div>
             <div class="form-check">
               <input class="form-check-input" type="checkbox" name="reset" id="reset" value="true">
-              <label class="form-check-label" for="reset"><%= $tResetFirmware %>.</label>
+              <label class="form-check-label" for="reset"><%= $tLabelResetFirmware %></label>
             </div>
             <div class="form-check">
               <input class="form-check-input" type="checkbox" name="noreboot" id="noreboot" value="true">
-              <label class="form-check-label" for="noreboot"><%= $tDoNotReboot %>.</label>
+              <label class="form-check-label" for="noreboot"><%= $tLabelDoNotReboot %></label>
             </div>
-            <p class="mt-3 mb-0"><button type="submit" class="btn btn-warning"><%= $tInstallUpdateButton %></button></p>
+            <p class="mt-3 mb-0"><button type="submit" class="btn btn-warning"><%= $tButtonInstallUpdate %></button></p>
           </form>
         </div>
         <div class="alert alert-danger mb-0">
-          <p><b><%= $tResetFirmware %>.</b></p>
+          <p><b><%= $tResetFirmware %></b></p>
           <p><%= $tResetFirmwareInfo %></p>
-          <p class="mb-0"><a class="btn btn-danger" href="/cgi-bin/firmware-reset.cgi" title="<%= $tResetFirmwareTitle %>"><%= $tResetFirmware %></a></p>
+          <p class="mb-0"><a class="btn btn-danger" href="/cgi-bin/firmware-reset.cgi" title="<%= $tResetFirmwareTitle %>"><%= $tButtonResetFirmware %></a></p>
         </div>
       </div>
     </div>
   </div>
   <div class="col">
     <div class="card h-100">
-      <div class="card-header"><%= $tWebUiHeader %></div>
+      <div class="card-header"><%= $tHeaderWebui %></div>
       <div class="card-body">
         <dl class="row">
           <dt class="col-4"><%= $tInstalled %></dt>
@@ -74,7 +74,7 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
         </dl>
         <div class="alert alert-light">
           <p><b><%= $tInstallUpdate %>.</b></p>
-          <form action="/cgi-bin/web-ui-update.cgi" method="post">
+          <form action="/cgi-bin/webui-update.cgi" method="post">
             <label class="form-label" for="version"><%= $tUpdateFromBranch %>:</label>
             <select class="form-select mb-2" name="version" id="version">
               <option value="master">stable</option>
@@ -84,7 +84,7 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
               <input class="form-check-input" type="checkbox" name="enforce" id="enforce" value="true">
               <label class="form-check-label" for="enforce"><%= $tOverwriteSameVersion %>.</label>
             </div>
-            <p class="mt-3 mb-0"><button type="submit" class="btn btn-warning"><%= $tInstallUpdateButton %></button></p>
+            <p class="mt-3 mb-0"><button type="submit" class="btn btn-warning"><%= $tButtonInstallUpdate %></button></p>
           </form>
         </div>
       </div>
@@ -108,7 +108,7 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
         <% fi %>
         <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
           <form action="/cgi-bin/majestic-github.cgi" method="post">
-            <p><button class="btn btn-warning"><%= $tInstallUpdateButton %></button></p>
+            <p><button class="btn btn-warning"><%= $tButtonInstallUpdate %></button></p>
           </form>
         <% else %>
           <div class="alert alert-warning"><%= $tMjNoSpace %></div>
@@ -136,7 +136,7 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
   </div>
   <div class="col">
     <div class="card h-100">
-      <div class="card-header"><%= $tCameraHeader %></div>
+      <div class="card-header"><%= $tHeaderCamera %></div>
       <div class="card-body">
         <a class="btn btn-warning" href="/cgi-bin/reboot.cgi"><%= $tRebootCamera %></a>
       </div>
@@ -144,7 +144,7 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
   </div>
   <div class="col">
     <div class="card h-100">
-      <div class="card-header"><%= $tUploadKernelHeader %></div>
+      <div class="card-header"><%= $tHeaderUploadKernel %></div>
       <div class="card-body">
         <form action="/cgi-bin/firmware-upload-kernel.cgi" method="post" enctype="multipart/form-data">
           <div class="row mb-3">
@@ -153,14 +153,14 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
               <input class="form-control" type="file" name="upfile">
             </div>
           </div>
-          <button type="submit" class="btn btn-danger"><%= $tUploadFile %></button>
+          <button type="submit" class="btn btn-danger"><%= $tButtonUploadFile %></button>
         </form>
       </div>
     </div>
   </div>
   <div class="col">
     <div class="card h-100">
-      <div class="card-header"><%= $tUploadRootfsHeader %></div>
+      <div class="card-header"><%= $tHeaderUploadRootfs %></div>
       <div class="card-body">
         <form action="/cgi-bin/firmware-upload-rootfs.cgi" method="post" enctype="multipart/form-data">
           <div class="row mb-3">
@@ -169,7 +169,7 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
               <input class="form-control" type="file" name="upfile">
             </div>
           </div>
-          <button type="submit" class="btn btn-danger"><%= $tUploadFile %></button>
+          <button type="submit" class="btn btn-danger"><%= $tButtonUploadFile %></button>
         </form>
       </div>
     </div>

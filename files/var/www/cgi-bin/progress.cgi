@@ -1,7 +1,9 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<% if [ -f /tmp/webjob.lock ]; then
-page_title="Please wait..." %>
+<%
+if [ -f /tmp/webjob.lock ]; then
+  page_title="$tPageTitleProgress"
+%>
 <%in _header.cgi %>
 <progress id="timer" max="20" value="0" class="w-100"></progress>
 <script>

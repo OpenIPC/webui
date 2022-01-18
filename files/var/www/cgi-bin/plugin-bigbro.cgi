@@ -2,7 +2,7 @@
 <%in _common.cgi %>
 <%
 plugin="bigbro"
-page_title="BigBro"
+page_title="PageTitlePluginBigbro"
 config_file="/etc/${plugin}.cfg"
 [ ! -f "$config_file" ] && touch ${config_file}
 
@@ -15,29 +15,26 @@ if [ -n "$POST_pin" ]; then
 fi
 %>
 <%in _header.cgi %>
-<div class="alert alert-info">
-Attention! This is only a proof of concept for the prospective subsystem of additional services.
-No real functionality here.
-</div>
+<div class="alert alert-info"><%= $tMsgProofOfConcept %></div>
 <%
 if [ -n "$GET_new" ]; then
-  page_title="Add a device"
+  page_title="$tPageTitlePluginBigbroAddDevice"
 %>
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-3">
   <div class="col">
     <div class="card h-100">
-      <div class="card-header">Add Device</div>
+      <div class="card-header"><%= $tHeaderAddDevice %></div>
       <div class="card-body">
         <form action="/cgi-bin/plugin-bigbro.cgi" method="post" enctype="multipart/form-data">
           <div class="row mb-3">
-            <p>Please enter access PIN to add a device.</p>
-            <label class="col-md-3 form-label" for="pin">Access PIN</label>
+            <p><%= $tTextAccessPin %></p>
+            <label class="col-md-3 form-label" for="pin"><%= $tLabelAccessPin %></label>
             <div class="col-md-9">
               <input class="form-control" type="text" name="pin" id="pin" pattern="[A-Za-z0-9]+">
-              <div class="hint">letters and numbers, no punctuation or special characters</div>
+              <div class="hint"><%= $tHintAccessPin %></div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Add Device</button>
+          <button type="submit" class="btn btn-primary"><%= $tButtonAddDevice %></button>
         </form>
       </div>
     </div>

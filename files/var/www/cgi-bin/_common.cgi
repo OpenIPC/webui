@@ -12,7 +12,7 @@ check_password() {
 
   password=$(awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf)
   if [ "12345" = "$password" ]; then
-    flash_save "danger" "You must set your own secure password!"
+    flash_save "danger" "$tMsgSetYourOwnPassword"
     redirect_to "$uri1"
   fi
 }
@@ -124,7 +124,7 @@ redirect_to() {
   echo ""
 }
 report_error() {
-  echo "<h2 class=\"text-danger\">Oops. Something happened.</h2>"
+  echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2>"
   echo "<div class=\"alert alert-danger mb-3\">$1</div>"
 }
 report_info() {
@@ -137,7 +137,7 @@ report_warning() {
   echo "<div class=\"alert alert-warning mb-3\">$1</div>"
 }
 report_command_error() {
-  echo "<h2 class=\"text-danger\">Oops. Something happened.</h2>"
+  echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2>"
   echo "<div class=\"alert alert-danger mb-3\">"
   echo "<b># $1</b>"
   echo "<pre class=\"mb-0\">$2</pre>"
@@ -150,7 +150,7 @@ report_command_info() {
   echo "</div>"
 }
 report_command_success() {
-  echo "<h2 class=\"text-success\">Command executed.</h2>"
+  echo "<h2 class=\"text-success\">$tMsgCommandExecuted</h2>"
   echo "<div class=\"alert alert-success mb-3\">"
   echo "<b># $1</b>"
   echo "<pre class=\"mb-0\">$2</pre>"

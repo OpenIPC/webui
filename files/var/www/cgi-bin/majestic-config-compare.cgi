@@ -17,7 +17,7 @@ if [ -z "$output" ]; then %>
 <% fi %>
 <p class="d-flex gap-2">
 <a class="btn btn-secondary" href="/cgi-bin/majestic-config-backup.cgi"><%= $tButtonDownloadConfig %></a>
-<a class="btn btn-secondary" href="/cgi-bin/majestic-config-aspatch.cgi"><%= $tButtonDownloadAsPath %></a>
+<a class="btn btn-secondary" href="/cgi-bin/majestic-config-aspatch.cgi"><%= $tButtonDownloadAsPatch %></a>
 <a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi"><%= $tButtonRestoreConfig %></a>
 </p>
 <%in _footer.cgi %>

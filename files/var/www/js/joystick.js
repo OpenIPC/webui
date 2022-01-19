@@ -21,7 +21,11 @@ function initControls() {
     if ($('#night-mode')) $('#night-mode').addEventListener('click', event => {
         event.preventDefault();
         event.target.src = (event.target.src.split('/').pop() == 'light-on.svg') ? '/img/light-off.svg' : '/img/light-on.svg';
-        sendToApi('/night/toggle');
+        // sendToApi('/night/toggle');
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/cgi-bin/night.cgi");
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.send("mode=toggle");
     });
 
     if ($('#send-to-telegram')) {

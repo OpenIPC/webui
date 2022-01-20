@@ -63,6 +63,7 @@ Content-Type: text/html; charset=UTF-8
           <ul class="dropdown-menu" aria-labelledby="dropdownTools">
             <li><a class="dropdown-item" href="/cgi-bin/tools.cgi"><%= $tMenuPingTrace %></a></li>
             <li><a class="dropdown-item" href="/cgi-bin/console.cgi"><%= $tMenuWebConsole %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/ssh-keys.cgi"><%= $tMenuSshKeys %></a></li>
           </ul>
         </li>
         <li class="nav-item  dropdown">

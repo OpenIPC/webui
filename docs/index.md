@@ -19,7 +19,7 @@ Documentation is available [in our wiki][wiki].
 
 OpenIPC offers two levels of support.
 
-- Free support through the community (via [chat](https://openipc.org/#telegram-chat-groups) and [mailing lists](https://github.com/OpenIPC/firmware/discussions)).
+- Free support through the community (via [chat](https://openipc.org/#telegram-chat-groups).
 - Paid commercial support (from the team of developers).
 
 Please consider subscribing for paid commercial support if you intend to use our product for business.

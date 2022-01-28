@@ -2,7 +2,7 @@
 <%in _common.cgi %>
 <%
 plugin="telegram"
-page_title="Telegram Bot"
+page_title="$tPageTitlePluginTelegram"
 config_file="/etc/${plugin}.cfg"
 [ ! -f "$config_file" ] && touch ${config_file}
 
@@ -21,35 +21,35 @@ fi
 <div class="row">
   <div class="col-md-6 mb-3">
     <div class="card">
-      <div class="card-header">Telegram Bot</div>
+      <div class="card-header"><%= $tHeaderTelegramBot %></div>
       <div class="card-body">
         <form action="/cgi-bin/plugin-telegram.cgi" method="post">
           <div class="row mb-3">
             <div class="col-2">
-              <label class="form-label" for="username">Token</label>
+              <label class="form-label" for="username"><%= $tLabelTelegramToken %></label>
             </div>
             <div class="col-auto">
               <input class="form-control" type="text" id="token" name="token" value="<%= $token %>" size="45"<% [ -n "$token" ] && echo -n " disabled" %>>
             </div>
             <div class="col-auto">
-              <span id="tokenHelpBlock" class="form-text">Your Telegram Bot authentication token.</span>
+              <span id="tokenHelpBlock" class="form-text"><%= $tHintTelegramToken %></span>
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-lg-2">
-              <label class="form-label" for="channel">Chat ID</label>
+              <label class="form-label" for="channel"><%= $tLabelTelegramChatId %></label>
             </div>
             <div class="col-auto">
               <input class="form-control" type="text" id="channel" name="channel" value="<%= $channel %>" size="15"<% [ -n "$channel" ] && echo -n " disabled" %>>
             </div>
             <div class="col-auto">
-              <span id="channelHelpBlock" class="form-text">Numeric ID of the channel you want the bot to post images to.</span>
+              <span id="channelHelpBlock" class="form-text"><%= $tHintTelegramChatId %></span>
             </div>
           </div>
           <% if [ $(cat /etc/telegram.cfg | wc -l) -eq 2 ]; then %>
-            <button type="button" class="btn btn-danger" data-method="delete">Reset configuration</button>
+            <button type="button" class="btn btn-danger" data-method="delete"><%= $tButtonResetConfig %></button>
           <% else %>
-            <button type="submit" class="btn btn-primary">Save configuration</button>
+            <button type="submit" class="btn btn-primary"><%= $tButtonFormSubmit %></button>
           <% fi %>
         </form>
       </div>
@@ -57,14 +57,14 @@ fi
   </div>
 <% if [ -z "$token" ]; then %>
   <div class="col mb-3">
-    <h5>To create a new channel for your Telegram bot:</h5>
+    <h5><%= $tMsgTelegramCreateChannelHeader %></h5>
     <ol>
-      <li>Start a chat with <a href="https://t.me/BotFather">BotFather</a>.</li>
-      <li>Enter <code>/start</code> to start a session.</li>
-      <li>Enter <code>/newbot</code> to create a new bot.</li>
-      <li>Give your bot channel a name, e.g. <i>cool_cam_bot</i>.</li>
-      <li>Give your bot a username, e.g. <i>CoolCamBot</i>.</li>
-      <li>Copy the token assigned to your new bot by the BotFather, and paste it to the form.</li>
+      <li><%= $tMsgTelegramCreateChannelStep1 %> <a href="https://t.me/BotFather">BotFather</a>.</li>
+      <li><%= $tMsgTelegramCreateChannelStep2 %></li>
+      <li><%= $tMsgTelegramCreateChannelStep3 %></li>
+      <li><%= $tMsgTelegramCreateChannelStep4 %></li>
+      <li><%= $tMsgTelegramCreateChannelStep5 %></li>
+      <li><%= $tMsgTelegramCreateChannelStep6 %></li>
     </ol>
   </div>
 <% fi %>

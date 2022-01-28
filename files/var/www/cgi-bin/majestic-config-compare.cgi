@@ -1,10 +1,9 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="Majestic configuration changes"
+page_title="$tPageTitleMajesticConfigCompare"
 command="diff /rom/etc/majestic.yaml /etc/majestic.yaml"
 output=$($command 2>&1)
-result=$?
 %>
 <%in _header.cgi %>
 <%
@@ -12,13 +11,13 @@ result=$?
 # checking exit status won't work here
 # checking for any output instead
 if [ -z "$output" ]; then %>
-<% report_info "No changes found." %>
+<% report_info "$tMsgNoChangesFound" %>
 <% else %>
 <% report_command_info "$command" "$output" %>
 <% fi %>
 <p class="d-flex gap-2">
-  <a class="btn btn-secondary" href="/cgi-bin/majestic-config-backup.cgi">Download config</a>
-  <a class="btn btn-secondary" href="/cgi-bin/majestic-config-aspatch.cgi">Save as patch</a>
-  <a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi">Restore original</a>
+<a class="btn btn-secondary" href="/cgi-bin/majestic-config-backup.cgi"><%= $tButtonDownloadConfig %></a>
+<a class="btn btn-secondary" href="/cgi-bin/majestic-config-aspatch.cgi"><%= $tButtonDownloadAsPatch %></a>
+<a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi"><%= $tButtonRestoreConfig %></a>
 </p>
 <%in _footer.cgi %>

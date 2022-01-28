@@ -1,7 +1,8 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<% page_title="MJPEG Preview"
-ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
+<%
+get_system_info
+page_title="$tPageTitlePreviewMjpeg"
 size=$(yaml-cli -g .mjpeg.size)
 [ -z "$size" ] && size="640x480"
 size_w=${size%x*}; size_h=${size#*x} %>
@@ -20,16 +21,10 @@ const SOI = new Uint8Array(2);
 const mjpeg_url = "http://<%= $ipaddr %>/mjpeg";
 SOI[0] = 0xFF;
 SOI[1] = 0xD8;
-
 let image = $('#preview');
-
 fetch(mjpeg_url).then(response => {
-  if (!response.ok) {
-      throw Error(response.status + ' ' + response.statusText)
-  }
-  if (!response.body) {
-      throw Error('ReadableStream not yet supported in this browser.')
-  }
+  if (!response.ok) throw Error(response.status + ' ' + response.statusText);
+  if (!response.body) throw Error('ReadableStream not yet supported in this browser.');
   const reader = response.body.getReader();
   let headers = '';
   let contentLength = -1;
@@ -79,5 +74,4 @@ const getLength = (headers) => {
   return contentLength;
 };
 </script>
-
 <%in _footer.cgi %>

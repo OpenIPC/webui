@@ -17,7 +17,7 @@ body > footer > .container {border-top: solid 1px #d3d3d3;font-size: 0.8rem;padd
 .card-body pre {background: #4c60d812;margin: 0.5rem 0 1rem;padding: 0.5rem 1rem;}
 .card dl dd, .card dl dt {border-bottom: solid 1px #ffffff;margin-bottom: 0;}
 
-.pre {white-space: pre;}
+pre, .pre {white-space: pre;font-size: 1rem; }
 
 form label {font-weight: 400;}
 form .row:not(:first-of-type) {border-top: solid 1px #ffffff;padding-top: 0.5rem;}

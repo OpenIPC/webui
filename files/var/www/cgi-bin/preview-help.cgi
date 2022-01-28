@@ -1,8 +1,8 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="Available Endpoints"
-ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
+get_system_info
+page_title="$tPageTitlePreviewHelp"
 %>
 <%in _header.cgi %>
 <p class="small">Detailed information available <a href="https://github.com/OpenIPC/firmware/wiki/majestic_streamer">in the wiki</a>.</p>

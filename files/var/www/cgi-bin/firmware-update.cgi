@@ -1,12 +1,12 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="Upgrading Firmware"
+page_title="$tPageTitleFirmwareUpdate"
 %>
 <%in _header.cgi %>
 <%
 if [ -f /tmp/webjob.lock ]; then
-  report_error "danger" "Another progress is running."
+  report_error "danger" "$tMsgAnotherProcessRunning"
 else
 %>
 <pre class="bg-light p-4 log-scroll">
@@ -21,6 +21,6 @@ else
   sysupgrade ${opts} 2>&1
 %>
 </pre>
-<a class="btn btn-primary" href="/">Go Home</a>
+<a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>
 <% fi %>
 <%in _footer.cgi %>

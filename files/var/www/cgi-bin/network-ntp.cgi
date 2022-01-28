@@ -1,17 +1,15 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="NTP Settings"
-tz_data=$(cat /etc/TZ)
-[ -z "$tz_data" ] && tz_data="GMT0"
-[ ! -f /etc/tzname ] && $(grep "$tz_data" /var/www/js/tz.js | head -1 | cut -d ":" -f 2 | cut -d "," -f 1 | tr -d "'" > /etc/tzname)
-tz_name=$(cat /etc/tzname)
+get_system_info
+
+page_title="$tPageTitleNtpSettings"
 
 check_env_tz() {
   if [ "$(cat /etc/TZ)" != "$TZ" ]; then
     echo "<div class=\"alert alert-danger\">" \
-      "<p><b>\$TZ in system environment needs updating.</b> Please restart the system!</p>" \
-      "<a class=\"btn btn-danger\" href=\"/cgi-bin/reboot.cgi\">Restart</a>" \
+      "<p><b>$tMsgTimezoneNeedsUpdating</b> $tMsgPleaseRestart</p>" \
+      "<a class=\"btn btn-danger\" href=\"/cgi-bin/reboot.cgi\">$tButtonRestart</a>" \
       "</div>"
   fi
 }
@@ -20,23 +18,23 @@ check_env_tz() {
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-4">
   <div class="col">
     <div class="card mb-3">
-      <h5 class="card-header">Timezone</h5>
+      <h5 class="card-header"><%= $tHeaderTimezone %></h5>
       <div class="card-body">
         <form action="/cgi-bin/network-tz-update.cgi" method="post">
           <div class="row mb-1">
-            <label class="col-md-4 form-label" for="tz_name">Zone name</label>
+            <label class="col-md-4 form-label" for="tz_name"><%= $tLabelZoneName %></label>
             <div class="col-md-8">
               <input class="form-control" name="tz_name" id="tz_name" list="tz_list" value="<%= $tz_name %>">
               <datalist id="tz_list"></datalist>
             </div>
           </div>
           <div class="row mb-1">
-            <label class="col-md-4 form-label" for="tz_data">Zone string</label>
+            <label class="col-md-4 form-label" for="tz_data"><%= $tLabelZoneData %></label>
             <div class="col-md-8">
               <input type="text" class="form-control" name="tz_data" id="tz_data" value="<%= $tz_data %>" readonly>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary mt-2">Save changes</button>
+          <button type="submit" class="btn btn-primary mt-2"><%= $tButtonFormSubmit %></button>
         </form>
       </div>
       <div class="card-body">
@@ -50,10 +48,9 @@ check_env_tz() {
       </div>
     </div>
   </div>
-
   <div class="col">
     <div class="card mb-3">
-      <h5 class="card-header">NTP Servers</h5>
+      <h5 class="card-header"><%= $tHeaderNtpServers %></h5>
       <div class="card-body">
         <form action="/cgi-bin/network-ntp-update.cgi" method="post">
           <%
@@ -61,15 +58,15 @@ check_env_tz() {
               x=$(expr $i + 1)
               ip=$(sed -n ${x}p /etc/ntp.conf | cut -d " " -f 2)
               echo "<div class=\"row mb-1\">"
-              echo "<label class=\"col-md-5 form-label\" for=\"ntp_server_${i}\">NTP Server ${x}</label>"
+              echo "<label class=\"col-md-5 form-label\" for=\"ntp_server_${i}\">$tLabelNtpServer ${x}</label>"
               echo "<div class=\"col-md-7\">"
               echo "<input class=\"form-control pat-host-ip\" type=\"text\" name=\"ntp_server[${i}]\" id=\"ntp_server_${i}\" value=\"${ip}\" placeholder=\"${i}.pool.ntp.org\">"
               echo "</div>"
               echo "</div>"
             done
           %>
-          <button type="submit" class="btn btn-primary mt-2">Save changes</button>
-          <a class="btn btn-danger mt-2" href="/cgi-bin/network-ntp-reset.cgi">Reset to defaults</a>
+          <button type="submit" class="btn btn-primary mt-2"><%= $tButtonFormSubmit %></button>
+          <a class="btn btn-danger mt-2" href="/cgi-bin/network-ntp-reset.cgi"><%= $tButtonResetToDefaults %></a>
         </form>
       </div>
       <div class="card-body">
@@ -79,7 +76,6 @@ check_env_tz() {
     </div>
   </div>
 </div>
-
 <script src="/js/tz.js" async></script>
 <script>
 function findTimezone(tz) {

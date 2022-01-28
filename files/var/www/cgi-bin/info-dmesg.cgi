@@ -6,5 +6,5 @@
 <pre class="bg-light p-4 log-scroll">
 <%= "$(dmesg)" %>
 </pre>
-<a class="btn btn-primary refresh">Refresh</a>
+<a class="btn btn-primary refresh"><%= $tButtonRefresh %></a>
 <%in _footer.cgi %>

@@ -1,12 +1,13 @@
 #!/usr/bin/haserl
 <%
-ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
+get_system_info
+
 button() {
   id=$(echo "${2// /-}" | tr '[:upper:]' '[:lower:]' | tr -cd '[:alnum:]-' )
   echo "<img id=\"${id}\" src=\"/img/${1}\" alt=\"${2}\" title=\"${2}\">"
 }
 %>
-<div class="alert alert-danger">Motors not initialized.</div>
+<div class="alert alert-danger"><%= $tMsgPtzNotWorking %></div>
 <div class="control-board row">
 <div class="control col-lg-4">
 <% button "arrow-ul.svg" "Pan up left" %>
@@ -23,7 +24,7 @@ button() {
 <% button "focus-plus.svg" "Focus: plus" %>
 <% button "focus-auto.svg" "Focus: auto" %>
 <% button "focus-minus.svg" "Focus: minus" %>
-<% [ "true" != "$(yaml-cli -g .nightMode.enabled)" ] && button "light-off.svg" "Night mode" %>
+<% [ "true" = "$(yaml-cli -g .nightMode.enabled)" ] && button "light-off.svg" "Night mode" %>
 <% [ -f /etc/telegram.cfg ] && [ $(cat /etc/telegram.cfg | wc -l) -eq 2 ] && button "telegram.svg" "Send to Telegram" %>
 </div>
 
@@ -54,50 +55,7 @@ button() {
 <% button "preset-9.svg" "Preset 9" %>
 </div>
 </div>
-
 <script>
-function reqListener() {
-  console.log(this.responseText);
-}
-
-function sendToApi(endpoint) {
-  const xhr = new XMLHttpRequest();
-  xhr.addEventListener("load", reqListener);
-  xhr.open("GET", "http://<%= $ipaddr %>" + endpoint);
-  xhr.send();
-}
-
-function initControls() {
-  $$('a[id^=pan-],a[id^=zoom-]').forEach(el => {
-    el.style.backgroundColor = 'red';
-    el.addEventListener('click', event => {
-      event.preventDefault();
-      alert('Sorry, this feature does not work, yet!');
-    });
-  });
-
-  if ($('#night-mode')) $('#night-mode').addEventListener('click', event => {
-    event.preventDefault();
-    event.target.src = (event.target.src.split('/').pop() == 'light-on.svg') ? '/img/light-off.svg' : '/img/light-on.svg';
-    sendToApi('/night/toggle');
-  });
-
-  if ($('#send-to-telegram')) {
-    $('#send-to-telegram').addEventListener('click', event => {
-      event.preventDefault();
-      if (!confirm('Are you sure?')) return false;
-      const xhr = new XMLHttpRequest();
-      xhr.open("GET", "/cgi-bin/telegram-bot-send.cgi");
-      xhr.send();
-    });
-  }
-
-  if ($('#speed')) $('#speed').addEventListener('click', event => {
-    event.preventDefault();
-    event.target.src = (event.target.src.split('/').pop() == 'speed-slow.svg') ? '/img/speed-fast.svg' : '/img/speed-slow.svg';
-    // sendToApi('/speed/toggle');
-  });
-}
-
-window.addEventListener('load', initControls);
+const ipaddr = '<%= $ipaddr %>';
 </script>
+<script src="/js/joystick.js"></script>

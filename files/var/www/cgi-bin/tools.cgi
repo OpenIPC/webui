@@ -1,8 +1,8 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="Monitoring Tools"
-interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
+get_system_info
+page_title="$tPageTitleTools"
 %>
 <%in _header.cgi %>
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-4">
@@ -51,11 +51,10 @@ interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
               <input class="form-control" type="number" min="1" max="30" step="1" name="duration" id="duration" value="5">
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Run</button>
+          <button type="submit" class="btn btn-primary"><%= $tButtonRun %></button>
         </form>
       </div>
     </div>
   </div>
 </div>
-
 <%in _footer.cgi %>

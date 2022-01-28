@@ -1,4 +1,5 @@
 <%in _common.cgi %>
+<% get_system_info %>
 <%in _mj.cgi %>
 <%in _header.cgi %>
 <form action="/cgi-bin/majestic-settings-update.cgi" method="post">
@@ -88,7 +89,7 @@ for line in $mj; do
 done
 %>
 </div></div></div></div>
-<button type="submit" class="btn btn-primary">Save Changes</button>
+<button type="submit" class="btn btn-primary"><%= $tButtonFormSubmit %></button>
 </form>
 
 <script src="/js/majestic-settings.js"></script>

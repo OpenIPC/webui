@@ -1,16 +1,18 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
+mj_conf=/etc/majestic.yaml
+orig_yaml=/tmp/majestic.yaml.original
 temp_yaml=/tmp/majestic.yaml
 
 if [ ! -z "$DEBUG" ]; then %>
 <%in _debug.cgi %>
 <%
-  cp -f /etc/majestic.yaml /tmp/majestic.yaml.original
+  cp -f ${mj_conf} ${orig_yaml}
 fi
 
-cp -f /etc/majestic.yaml $temp_yaml
-debug_message "cp -f /etc/majestic.yaml $temp_yaml"
+cp -f ${mj_conf} ${temp_yaml}
+debug_message "cp -f ${mj_conf} ${temp_yaml}"
 
 data="$(printenv|grep POST_)"
 IFS=$'\n' # make newlines the only separator
@@ -31,27 +33,27 @@ for name in $data; do
     fi
   fi
 
-  oldvalue=$(yaml-cli -g "$key" -i $temp_yaml)
+  oldvalue=$(yaml-cli -g "$key" -i ${temp_yaml})
   if [ -z "$value" ]; then
     if [ ! -z "$oldvalue" ]; then
-      yaml-cli -d $key -i $temp_yaml -o $temp_yaml
-      debug_message "yaml-cli -d $key -i $temp_yaml -o $temp_yaml"
+      yaml-cli -d $key -i ${temp_yaml} -o ${temp_yaml}
+      debug_message "yaml-cli -d $key -i ${temp_yaml} -o ${temp_yaml}"
     fi
   else
     if [ "$oldvalue" != "$value" ]; then
-      yaml-cli -s $key "$value" -i $temp_yaml -o $temp_yaml
-      debug_message "yaml-cli -s $key "$value" -i $temp_yaml -o $temp_yaml"
+      yaml-cli -s $key "$value" -i ${temp_yaml} -o ${temp_yaml}
+      debug_message "yaml-cli -s $key "$value" -i ${temp_yaml} -o ${temp_yaml}"
     fi
   fi
 done
 
-if [ ! -z $(diff -q $temp_yaml /etc/majestic.yaml) ]; then
-  cp -f $temp_yaml /etc/majestic.yaml
-  debug_message "cp -f $temp_yaml /etc/majestic.yaml"
+if [ ! -z $(diff -q ${temp_yaml} ${mj_conf}) ]; then
+  cp -f ${temp_yaml} ${mj_conf}
+  debug_message "cp -f ${temp_yaml} ${mj_conf}"
 fi
 
-rm $temp_yaml
-debug_message "rm $temp_yaml"
+rm ${temp_yaml}
+debug_message "rm ${temp_yaml}"
 
 if [ -z "$DEBUG" ]; then
   killall -1 majestic
@@ -61,9 +63,9 @@ if [ -z "$DEBUG" ]; then
     redirect_to "/cgi-bin/majestic-config-compare.cgi"
   fi
 else
-  debug_message "diff /tmp/majestic.yaml.original /etc/majestic.yaml"
-  diff /tmp/majestic.yaml.original /etc/majestic.yaml
-#  rm /tmp/majestic.yaml.original
+  debug_message "diff ${orig_yaml} ${mj_conf}"
+  diff ${orig_yaml} ${mj_conf}
+#  rm ${orig_yaml}
   debug_message "done."
 fi
 %>

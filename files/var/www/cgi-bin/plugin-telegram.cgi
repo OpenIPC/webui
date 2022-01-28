@@ -37,13 +37,13 @@ fi
           </div>
           <div class="row mb-3">
             <div class="col-lg-2">
-              <label class="form-label" for="channel"><%= tLabelTelegramChatId %></label>
+              <label class="form-label" for="channel"><%= $tLabelTelegramChatId %></label>
             </div>
             <div class="col-auto">
               <input class="form-control" type="text" id="channel" name="channel" value="<%= $channel %>" size="15"<% [ -n "$channel" ] && echo -n " disabled" %>>
             </div>
             <div class="col-auto">
-              <span id="channelHelpBlock" class="form-text"><%= tHintTelegramChatId %></span>
+              <span id="channelHelpBlock" class="form-text"><%= $tHintTelegramChatId %></span>
             </div>
           </div>
           <% if [ $(cat /etc/telegram.cfg | wc -l) -eq 2 ]; then %>

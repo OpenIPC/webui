@@ -4,8 +4,8 @@ beats() {
   echo -n "@$(echo "$(date -u -d "1970-01-01 $(TZ=UTC-1 date +%T)" +%s) * 10 / 864" | bc)"
 }
 check_password() {
-  uri1=/cgi-bin/webui-password.cgi
-  uri2=/cgi-bin/webui-password-update.cgi
+  uri1=/cgi-bin/webui-settings.cgi
+  uri2=/cgi-bin/webui-settings-update.cgi
   [ -z "$REQUEST_URI" ] && return
   [ "$REQUEST_URI" = "$uri1" ] && return
   [ "$REQUEST_URI" = "$uri2" ] && return

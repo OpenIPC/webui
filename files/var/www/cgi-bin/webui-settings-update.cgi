@@ -9,10 +9,9 @@ fi
 echo $language > /etc/web_locale
 
 if [ -z "$POST_password" ]; then
-  flash_save "warning" "$tMsgPasswordIsEmpty"
-#  flash_save "danger" "Password cannot be empty!"
-#  redirect_to "/cgi-bin/webui-settings.cgi"
-#  exit
+  flash_save "success" "$tMsgChangesSaved"
+  redirect_to "/cgi-bin/webui-settings.cgi"
+  exit
 elif [[ ! -z "$(echo "$POST_password" | grep " ")" ]]; then
   flash_save "danger" "$tMsgPasswordHasSpaces"
   redirect_to "/cgi-bin/webui-settings.cgi"

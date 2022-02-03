@@ -13,12 +13,23 @@ page_title="$tPageTitleDeviceStatus"
       <div class="card-header"><%= $tHeaderDeviceInfo %></div>
       <div class="card-body">
         <b><%= $tHardware %></b>
-        <pre><% echo -e "${tSoC}:\t${soc}\n${tSoCFamily}:\t${soc_family}\n${tSensor}:\t\t${sensor}\n${tFlash}:\t\t${flash_size} MB"
-        [ -n "$soc_temp" ] && echo -en "${tSoCTemp}:\t${soc_temp}°C" %></pre>
+        <pre><%
+        print2c "${tSoC}:" "${soc}"
+        print2c "${tSoCFamily}:" "${soc_family}"
+        print2c "${tSensor}:" "${sensor}"
+        print2c "${tFlash}:" "${flash_size} MB"
+        [ -n "$soc_temp" ] && print2c "${tSoCTemp}:" "${soc_temp}°C"
+        %></pre>
         <b><%= $tFirmware %></b>
-        <pre><% echo -e "${tVersion}:\t${fw_version}-${fw_variant}\n${tBuild}:\t\t${fw_build}" %></pre>
+        <pre><%
+        print2c "${tVersion}:" "${fw_version}-${fw_variant}"
+        print2c "${tBuild}:" "${fw_build}"
+        %></pre>
         <b><%= $tSystem %></b>
-        <pre class="mb-0"><% echo -e "${tHostname}:\t${hostname}\n${tWanMac}:\t${wan_mac}" %></pre>
+        <pre class="mb-0"><%
+        print2c "${tHostname}:" "${hostname}"
+        print2c "${tWanMac}:" "${wan_mac}"
+        %></pre>
       </div>
     </div>
   </div>

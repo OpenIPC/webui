@@ -70,9 +70,10 @@ Content-Type: text/html; charset=UTF-8
           <a class="nav-link dropdown-toggle" id="dropdownServices" href="#"
             role="button" data-bs-toggle="dropdown" aria-expanded="false"><%= $tMenuServices %></a>
           <ul class="dropdown-menu" aria-labelledby="dropdownServices">
-            <li><a class="dropdown-item" href="/cgi-bin/plugin-bigbro.cgi">Big Bro</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/plugin-ipeye.cgi">IP Eye</a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/plugin-telegram.cgi">Telegram Bot</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/plugin-bigbro.cgi"><%= $tMenuPluginBigbro %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/plugin-ipeye.cgi"><%= $tMenuPluginIpeye %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/plugin-telegram.cgi"><%= $tMenuPluginTelegram %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/plugin-vtun.cgi"><%= $tMenuPluginVtun %></a></li>
           </ul>
         </li>
         <li class="nav-item  dropdown">

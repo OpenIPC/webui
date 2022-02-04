@@ -6,16 +6,21 @@ page_title="$tPageTitlePluginTelegram"
 config_file="/etc/${plugin}.cfg"
 [ ! -f "$config_file" ] && touch ${config_file}
 
+if [ -n "$POST_action" ] && [ "$POST_action" = "reset" ]; then
+  mv ${config_file} ${config_file}.backup
+  redirect_to "/cgi-bin/plugin-telegram.cgi"
+fi
+
 if [ -n "$POST_token" ]; then
   token="$POST_token"
   channel="$POST_channel"
   echo "${token}" > ${config_file}
   echo "${channel}" >> ${config_file}
   redirect_to "/cgi-bin/plugin-telegram.cgi"
-else
-  token=$(sed -n 1p ${config_file})
-  channel=$(sed -n 2p ${config_file})
 fi
+
+token=$(sed -n 1p ${config_file})
+channel=$(sed -n 2p ${config_file})
 %>
 <%in _header.cgi %>
 <div class="row">
@@ -46,8 +51,8 @@ fi
               <span id="channelHelpBlock" class="form-text"><%= $tHintTelegramChatId %></span>
             </div>
           </div>
-          <% if [ $(cat /etc/telegram.cfg | wc -l) -eq 2 ]; then %>
-            <button type="button" class="btn btn-danger" data-method="delete"><%= $tButtonResetConfig %></button>
+          <% if [ $(cat /etc/telegram.cfg | wc -l) -ge 2 ]; then %>
+            <button type="submit" class="btn btn-danger" data-method="delete" name="action" value="reset"><%= $tButtonResetConfig %></button>
           <% else %>
             <button type="submit" class="btn btn-primary"><%= $tButtonFormSubmit %></button>
           <% fi %>

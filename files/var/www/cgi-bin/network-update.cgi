@@ -2,67 +2,44 @@
 <%in _common.cgi %>
 <%
 page_title="$tPageTitleNetworkUpdate"
+
+if [ -z "$POST_dhcp" ]; then
+  [ -z "$POST_ipaddr" ] && error="IP address cannot be empty."
+  [ -z "$POST_netmask" ] && error="Networking mask cannot be empty."
+  [ -z "$POST_gateway" ] && error="Gateway IP address cannot be empty."
+fi
+
+if [ -n "$error" ]; then
+  flash_save "danger" "$error"
+  redirect_to "/cgi-bin/network.cgi"
+fi
+
+tmp_file=/tmp/interfaces
+z="    "
+%>
+<%
+if [ -n "$POST_hostname" ]; then
+  oldhostname=$(cat /etc/hostname)
+  if [ "$POST_hostname" != "$oldhostname" ]; then
+    echo ${POST_hostname} > /etc/hostname
+    hostname ${POST_hostname}
+    sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${POST_hostname}/g' /etc/hosts
+    killall udhcpc
+    udhcpc -x hostname:${POST_hostname} -T 1 -t 5 -R -b -O search
+  fi
+fi
+
+cat /etc/network/interfaces > ${tmp_file}
+sed -i '/^auto eth0$/,/^$/d' ${tmp_file}
+echo -e "\nauto eth0" >> ${tmp_file}
+if [ ! -z "$POST_dhcp" ]; then
+  echo -e "iface eth0 inet dhcp\n" >> ${tmp_file}
+else
+  echo -e "iface eth0 inet static\n${z}address ${POST_ipaddr}\n${z}netmask ${POST_netmask}\n${z}gateway ${POST_gateway}\n" >> ${tmp_file}
+fi
+mv ${tmp_file} /etc/network/interfaces
 %>
 <%in _header.cgi %>
-<%
-if [ ! -z "$POST_hostname" ]; then
-  oldhostname=$(cat /etc/hostname)
-  if [ "$POST_hostname" = "$oldhostname" ]; then
-    report_warning "Same hostname. Skipping."
-  else
-    command="echo ${POST_hostname} > /etc/hostname"
-    result=$(echo ${POST_hostname} > /etc/hostname 2>&1)
-    report_command_info "$command" "$result"
-
-    command="hostname ${POST_hostname}"
-    result=$(hostname ${POST_hostname} 2>&1)
-    report_command_info "$command" "$result"
-
-    command="sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${POST_hostname}/g' /etc/hosts"
-    result=$(sed -i 's/127.0.1.1.*${oldhostname}/127.0.1.1\t${POST_hostname}/g' /etc/hosts 2>&1)
-    report_command_info "$command" "$result"
-
-    command="killall udhcpc"
-    result=$(killall udhcpc 2>&1)
-    report_command_info "$command" "$result"
-
-    command="udhcpc -x hostname:${POST_hostname} -T 1 -t 5 -R -b -O search"
-    result=$(udhcpc -x hostname:${POST_hostname} -T 1 -t 5 -R -b -O search 2>&1)
-    report_command_info "$command" "$result"
-  fi
-fi
-
-if [ ! -z "$POST_ipaddr" ]; then
-  if [ "$(yaml-cli -g .network.lan.ipaddr)" = "$POST_ipaddr" ]; then
-    report_warning "Same IP address. Skipping."
-  else
-    command="yaml-cli -s .network.lan.ipaddr ${POST_ipaddr}"
-    result=$(yaml-cli -s .network.lan.ipaddr ${POST_ipaddr} 2>&1)
-    report_command_info "$command" "$result"
-  fi
-fi
-
-if [ ! -z "$POST_netmask" ]; then
-  if [ "$(yaml-cli -g .network.lan.netmask)" = "$POST_netmask" ]; then
-    report_warning "Same IP network mask. Skipping."
-  else
-    command="yaml-cli -s .network.lan.netmask ${POST_netmask}"
-    result=$(yaml-cli -s .network.lan.netmask ${POST_netmask} 2>&1)
-    report_command_info "$command" "$result"
-  fi
-fi
-
-if [ ! -z "$POST_remote" ]; then
-  if [ "$POST_remote" = "__delete" ]; then
-    command="yaml-cli -d .openvpn.vpn1.remote"
-    result=$(yaml-cli -d .openvpn.vpn1.remote 2>&1)
-  else
-    command="yaml-cli -s .openvpn.vpn1.remote ${POST_remote}"
-    result=$(yaml-cli -s .openvpn.vpn1.remote ${POST_remote} 2>&1)
-  fi
-  report_command_info "$command" "$result"
-fi
-%>
 <div class="alert alert-danger mt-5 mb-3">
   <p><%= $tMsgRestatNeeded %></p>
   <p class="mb-0"><a href="/cgi-bin/reboot.cgi" class="btn btn-danger"><%= $tButtonReboot %></a></p>

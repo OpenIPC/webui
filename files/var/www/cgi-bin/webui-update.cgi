@@ -35,13 +35,13 @@ else
 
   upd_dir="${unzip_dir}/files"
   # copy newer files to web directory
-  for upd_file in $(find "${upd_dir}/var/www" -type f -or -type l); do
-    www_file=${upd_file#/tmp/microbe-web-${POST_version}/files}
-    diff ${www_file} ${upd_file} > /dev/null
+  for upd_file in $(find "${upd_dir}" -type f -or -type l); do
+    ovl_file=${upd_file#/tmp/microbe-web-${POST_version}/files}
+    diff ${ovl_file} ${upd_file} > /dev/null
     if [ 0 -ne $? ]; then
-      [ ! -d "${www_file%/*}" ] && mkdir -p "${www_file%/*}" 2>&1
-      echo "cp -f ${upd_file} ${www_file}"
-      cp -f ${upd_file} ${www_file} 2>&1
+      [ ! -d "${ovl_file%/*}" ] && mkdir -p "${ovl_file%/*}" 2>&1
+      echo "cp -f ${upd_file} ${ovl_file}"
+      cp -f ${upd_file} ${ovl_file} 2>&1
       [ $? -ne 0 ] && error=1
     fi
   done

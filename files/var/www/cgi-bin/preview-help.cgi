@@ -5,7 +5,7 @@ get_system_info
 page_title="$tPageTitlePreviewHelp"
 %>
 <%in _header.cgi %>
-<p class="small">Detailed information available <a href="https://github.com/OpenIPC/firmware/wiki/majestic_streamer">in the wiki</a>.</p>
+<p class="small">Detailed information available <a href="https://github.com/OpenIPC/wiki/blob/master/en/majestic-streamer.md">in the wiki</a>.</p>
 <div class="row row-cols-1 row-cols-md-2 g-4">
   <div class="col">
     <div class="card h-100 mb-3">

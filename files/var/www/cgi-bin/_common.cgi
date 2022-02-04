@@ -97,6 +97,9 @@ get_hardware_info() {
   fi
   soc_temp=$(ipcinfo --temp)
 }
+get_http_time() {
+  http_time=$(TZ=GMT date +"%a, %d %b %Y %T %Z")
+}
 get_software_info() {
   mj_bin_file="/usr/bin/majestic"
   mj_version=$(${mj_bin_file} -v)
@@ -113,19 +116,34 @@ get_system_info() {
   tz_name=$(cat /etc/tzname)
   wan_mac=$(cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address)
 }
+header_ok() {
+  get_http_time
+  echo "HTTP/1.1 200 OK
+Content-type: application/json; charset=UTF-8
+Cache-Control: no-store
+Pragma: no-cache
+Date: $http_time
+Server: httpd
+
+{}"
+}
 html_title() {
    [ ! -z "$1" ] && echo -n "$1 - "
   echo -n  "OpenIPC"
 }
 redirect_to() {
-  echo "HTTP/1.1 302 Moved Temporarily"
-  echo "Content-type: text/html; charset=UTF-8"
-  echo "Date: $(TZ=GMT date +"%a, %d %b %Y %T %Z")"
-  echo "Location: $1"
-  echo "Server: httpd"
-  echo "Status: 302 Moved Temporarily"
-  echo "$xheader"
-  echo ""
+  get_http_time
+  echo "HTTP/1.1 302 Moved Temporarily
+Content-type: text/html; charset=UTF-8
+Cache-Control: no-store
+Pragma: no-cache
+Date: $http_time
+Location: $1
+Server: httpd
+Status: 302 Moved Temporarily
+$xheader
+
+"
 }
 report_error() {
   echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2>"

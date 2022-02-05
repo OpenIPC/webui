@@ -40,7 +40,7 @@ mv ${tmp_file} /etc/network/interfaces
 %>
 <%in _header.cgi %>
 <div class="alert alert-danger mt-5 mb-3">
-  <p><%= $tMsgRestatNeeded %></p>
+  <p><%= $tMsgRestartNeeded %></p>
   <p class="mb-0"><a href="/cgi-bin/reboot.cgi" class="btn btn-danger"><%= $tButtonReboot %></a></p>
 </div>
 <p><a href="/cgi-bin/network.cgi"><%= $tButtonGoBackToSettings %></a></p>

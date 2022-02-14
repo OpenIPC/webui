@@ -9,10 +9,10 @@ netmask=$(ifconfig eth0 | grep "inet " | cut -d: -f4)
 gateway=$(ip r | grep default | cut -d' ' -f3)
 
 checked() {
-  [ -n "$dhcp" ] && echo " checked"
+  [ -n "$dhcp" ] && echo -n " checked"
 }
 disabled() {
-  [ -n "$dhcp" ] && echo " disabled"
+  [ -n "$dhcp" ] && echo -n " disabled"
 }
 %>
 <%in _header.cgi %>

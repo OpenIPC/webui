@@ -16,8 +16,7 @@ fi
 
 tmp_file=/tmp/interfaces
 z="    "
-%>
-<%
+
 if [ -n "$POST_hostname" ]; then
   oldhostname=$(cat /etc/hostname)
   if [ "$POST_hostname" != "$oldhostname" ]; then
@@ -35,13 +34,13 @@ echo -e "\nauto eth0" >> ${tmp_file}
 if [ ! -z "$POST_dhcp" ]; then
   echo -e "iface eth0 inet dhcp\n" >> ${tmp_file}
 else
-  echo -e "iface eth0 inet static\n${z}address ${POST_ipaddr}\n${z}netmask ${POST_netmask}\n${z}gateway ${POST_gateway}\n" >> ${tmp_file}
+  echo -e "iface eth0 inet static\n${z}address ${POST_ipaddr}\n${z}netmask ${POST_netmask}\n${z}gateway ${POST_gateway}\n${z}pre-up echo -e \"nameserver 77.88.8.8\\\nnameserver 8.8.4.4\\\n\" >/tmp/resolv.conf" >> ${tmp_file}
 fi
 mv ${tmp_file} /etc/network/interfaces
 %>
 <%in _header.cgi %>
 <div class="alert alert-danger mt-5 mb-3">
-  <p><%= $tMsgRestatNeeded %></p>
+  <p><%= $tMsgRestartNeeded %></p>
   <p class="mb-0"><a href="/cgi-bin/reboot.cgi" class="btn btn-danger"><%= $tButtonReboot %></a></p>
 </div>
 <p><a href="/cgi-bin/network.cgi"><%= $tButtonGoBackToSettings %></a></p>

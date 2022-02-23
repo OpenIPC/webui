@@ -8,7 +8,7 @@ else
 fi
 echo $language > /etc/web_locale
 
-if [ -z "$POST_password" ]; then
+if [ -z "$POST_password" ] && [ "12345" != "$password" ]; then
   flash_save "success" "$tMsgChangesSaved"
   redirect_to "/cgi-bin/webui-settings.cgi"
   exit

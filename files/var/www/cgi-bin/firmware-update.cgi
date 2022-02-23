@@ -16,7 +16,7 @@ else
   [ ! -z "$POST_rootfs"   ] && opts="${opts} -r"
   [ ! -z "$POST_reset"    ] && opts="${opts} -n"
   [ ! -z "$POST_noreboot" ] && opts="${opts} -x"
-  [ ! -z $(sysupgrade | grep force) ] && opts="${opts} --force"
+  [ ! -z "$POST_enforce"  ] && opts="${opts} --force_ver"
   echo "sysupgrade ${opts}"
   sysupgrade ${opts} 2>&1
 %>

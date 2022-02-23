@@ -7,6 +7,8 @@ dhcp=$(cat /etc/network/interfaces | grep "eth0 inet" | grep dhcp)
 ipaddr=$(ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $3}')
 netmask=$(ifconfig eth0 | grep "inet " | cut -d: -f4)
 gateway=$(ip r | grep default | cut -d' ' -f3)
+dns1=$(cat /etc/resolv.conf | grep nameserver | sed -n 1p | cut -d' ' -f2)
+dns2=$(cat /etc/resolv.conf | grep nameserver | sed -n 2p | cut -d' ' -f2)
 
 checked() {
   [ -n "$dhcp" ] && echo -n " checked"
@@ -56,13 +58,35 @@ disabled() {
               <input type="text" class="form-control" name="gateway" id="gateway" value="<%= $gateway %>"<% disabled %>>
             </div>
           </div>
+          <div class="row mb-1">
+            <label class="col-md-5 form-label" for="gateway"><%= $tLabelDns1 %></label>
+            <div class="col-md-7">
+              <input type="text" class="form-control" name="dns1" id="dns1" value="<%= $dns1 %>"<% disabled %>>
+            </div>
+          </div>
+          <div class="row mb-1">
+            <label class="col-md-5 form-label" for="gateway"><%= $tLabelDns2 %></label>
+            <div class="col-md-7">
+              <input type="text" class="form-control" name="dns2" id="dns2" value="<%= $dns2 %>"<% disabled %>>
+            </div>
+          </div>
           <button type="submit" class="btn btn-primary"><%= $tButtonFormSubmit %></button>
         </form>
       </div>
     </div>
   </div>
 </div>
+
 <div class="row">
+  <div class="col-12 mb-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <b># cat /etc/network/interfaces</b>
+	<pre><% cat /etc/network/interfaces %></pre>
+      </div>
+    </div>
+  </div>
+
   <div class="col-12 mb-3">
     <div class="card h-100">
       <div class="card-header"><%= $tHeaderNetworkAddress %></div>
@@ -114,6 +138,8 @@ $('#dhcp').addEventListener('change', (ev) => {
   $('#ipaddr').disabled = ev.target.checked
   $('#netmask').disabled = ev.target.checked
   $('#gateway').disabled = ev.target.checked
+  $('#dns1').disabled = ev.target.checked
+  $('#dns2').disabled = ev.target.checked
 });
 </script>
 <%in _footer.cgi %>

@@ -49,6 +49,10 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
               <input class="form-check-input" type="checkbox" name="noreboot" id="noreboot" value="true">
               <label class="form-check-label" for="noreboot"><%= $tLabelDoNotReboot %></label>
             </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="enforce" id="enforce" value="true">
+              <label class="form-check-label" for="enforce"><%= $tOverwriteSameVersion %></label>
+            </div>
             <p class="mt-3 mb-0"><button type="submit" class="btn btn-warning"><%= $tButtonInstallUpdate %></button></p>
           </form>
         </div>

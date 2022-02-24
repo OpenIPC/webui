@@ -7,6 +7,8 @@ if [ -z "$POST_dhcp" ]; then
   [ -z "$POST_ipaddr" ] && error="IP address cannot be empty."
   [ -z "$POST_netmask" ] && error="Networking mask cannot be empty."
   [ -z "$POST_gateway" ] && error="Gateway IP address cannot be empty."
+  [ -z "$POST_dns1" ] && error="Nameserver address cannot be empty."
+  [ -z "$POST_dns2" ] && error="Nameserver address cannot be empty."
 fi
 
 if [ -n "$error" ]; then
@@ -15,7 +17,6 @@ if [ -n "$error" ]; then
 fi
 
 tmp_file=/tmp/interfaces
-z="    "
 
 if [ -n "$POST_hostname" ]; then
   oldhostname=$(cat /etc/hostname)
@@ -30,11 +31,20 @@ fi
 
 cat /etc/network/interfaces > ${tmp_file}
 sed -i '/^auto eth0$/,/^$/d' ${tmp_file}
-echo -e "\nauto eth0" >> ${tmp_file}
 if [ ! -z "$POST_dhcp" ]; then
-  echo -e "iface eth0 inet dhcp\n" >> ${tmp_file}
+  echo "auto eth0
+iface eth0 inet dhcp
+    hwaddress ether \$(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)
+" >> ${tmp_file}
 else
-  echo -e "iface eth0 inet static\n${z}address ${POST_ipaddr}\n${z}netmask ${POST_netmask}\n${z}gateway ${POST_gateway}\n${z}pre-up echo -e \"nameserver 77.88.8.8\\\nnameserver 8.8.4.4\\\n\" >/tmp/resolv.conf" >> ${tmp_file}
+  echo "auto eth0
+iface eth0 inet static
+    hwaddress ether \$(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)
+    address ${POST_ipaddr}
+    netmask ${POST_netmask}
+    gateway ${POST_gateway}
+    pre-up echo -e \"nameserver ${POST_dns1}\nnameserver ${POST_dns2}\n\" >/tmp/resolv.conf
+" >> ${tmp_file}
 fi
 mv ${tmp_file} /etc/network/interfaces
 %>

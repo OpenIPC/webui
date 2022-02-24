@@ -1,12 +1,13 @@
 #!/usr/bin/haserl --upload-limit=5120 --upload-dir=/tmp
 <%in _common.cgi %>
+<%in _header.cgi %>
 <%
 maxsize=5242880
 magicnum="68737173"
 
 sysupgrade_date=$(ls -lc --full-time /usr/sbin/sysupgrade | xargs | cut -d " " -f 6)
 sysupgrade_date=$(date --date="$sysupgrade_date" +"%s")
-new_sysupgrade_date=$(date --date="2021-12-07" +"%s")
+new_sysupgrade_date=$(date --date="2022-02-22" +"%s")
 
 error=""
 if [ -z "$POST_upfile_name"  ]; then
@@ -21,14 +22,16 @@ elif [ "$sysupgrade_date" -lt "$new_sysupgrade_date" ]; then
   error="This feature requires the latest sysupgrade tool. Please upgrade firmware first."
 fi
 
-if [ ! -z "$error" ]; then %>
-<%in _header.cgi %>
-<% report_error "$error" %>
-<%in _footer.cgi %>
-<% else
-  redirect_to "/cgi-bin/progress.cgi"
-
-  mv ${POST_upfile} /tmp/${POST_upfile_name}
-  sysupgrade -f --rootfs=/tmp/${POST_upfile_name}
-fi
+if [ ! -z "$error" ]; then
+  report_error "$error"
+else
 %>
+<pre class="bg-light p-4 log-scroll">
+<%
+  mv ${POST_upfile} /tmp/${POST_upfile_name}
+  sysupgrade --rootfs=/tmp/${POST_upfile_name}
+%>
+</pre>
+<a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>
+<% fi %>
+<%in _footer.cgi %>

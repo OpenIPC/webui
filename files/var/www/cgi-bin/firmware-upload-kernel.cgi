@@ -1,5 +1,6 @@
 #!/usr/bin/haserl --upload-limit=2048 --upload-dir=/tmp
 <%in _common.cgi %>
+<%in _header.cgi %>
 <%
 maxsize=2097152
 magicnum="27051956"
@@ -17,18 +18,20 @@ elif [ "$(wc -c "$POST_upfile" | awk '{print $1}')" -gt "$maxsize" ]; then
   error="File \"${POST_upfile_name}\" is too large! Its size is $(wc -c "$POST_upfile" | awk '{print $1}') bytes, but it should be ${maxsize} bytes or less."
 elif [ "$magicnum" -ne "$(xxd -p -l 4 "$POST_upfile")" ]; then
   error="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 4 "$POST_upfile") != $magicnum"
-elif [ "$sysupgrade_date" -ge "$new_sysupgrade_date" ]; then
+elif [ "$sysupgrade_date" -lt "$new_sysupgrade_date" ]; then
   error="This feature requires the latest sysupgrade tool. Please upgrade firmware first."
 fi
 
-if [ ! -z "$error" ]; then %>
-<%in _header.cgi %>
-<% report_error "$error" %>
-<%in _footer.cgi %>
-<% else
-  redirect_to "/cgi-bin/progress.cgi"
-
-  mv ${POST_upfile} /tmp/${POST_upfile_name}
-  sysupgrade -f --kernel=/tmp/${POST_upfile_name}
-fi
+if [ ! -z "$error" ]; then
+  report_error "$error"
+else
 %>
+<pre class="bg-light p-4 log-scroll">
+<%
+  mv ${POST_upfile} /tmp/${POST_upfile_name}
+  sysupgrade --kernel=/tmp/${POST_upfile_name}
+%>
+</pre>
+<a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>
+<% fi %>
+<%in _footer.cgi %>

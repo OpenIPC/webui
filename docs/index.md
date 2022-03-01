@@ -81,4 +81,3 @@ Thank you.
 [maillist]: https://github.com/OpenIPC/firmware/discussions
 [oc]: https://opencollective.com/openipc/contribute/backer-14335/checkout
 [pp]: https://www.paypal.com/donate/?hosted_button_id=C6F7UJLA58MBS
-[ym]: https://openipc.org/donation/yoomoney.html

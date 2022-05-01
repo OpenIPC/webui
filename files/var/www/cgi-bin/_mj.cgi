@@ -46,7 +46,7 @@ mj="
 .records.enabled|Enable saving records||boolean|true,false|false|
 .records.path|Template for saving video records||string||/mnt/mmc/%Y/%m/%d/%H.mp4|Supports strftime() format.
 .records.maxUsage|Limit of available space usage|%|range|1-100|95|
-.video0.enabled|Enable Video0||boolean|true,false|true|
+.video0.enabled|Основной видеопоток||boolean|true,false|true|
 .video0.codec|Video0 codec||select|h264,h265|h264|
 .video0.size|Разрешение|px|string|1920x1080,1280x720,704x576|1920x1080|
 .video0.fps|Частота кадров|fps|number|1-60|25|
@@ -55,7 +55,7 @@ mj="
 .video0.gopMode|Group of Pictures (GOP) mode||select|normal,dual,smart|normal|
 .video0.rcMode|RC mode||select|avbr|avbr|
 .video0.crop|Crop video to size|px|string||0x0x960x540|
-.video1.enabled|Enable Video1||boolean|true,false|false|
+.video1.enabled|Дополнительный видеопоток||boolean|true,false|false|
 .video1.codec|Video1 codec||select|h264,h265|h264|
 .video1.size|Разрешение|px|string|1920x1080,1280x720,704x576|704x576|
 .video1.fps|Частота кадров|fps|number|1-60|15|

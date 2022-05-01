@@ -1,16 +1,16 @@
 <%
 # line format: parameter|label|units|type|o,p,t,i,o,n,s|placeholder|hint
 mj="
-.system.logLevel|Severity of logging||select|ERROR,WARN,INFO,DEBUG,TRACE|TRACE|
-.system.staticDir|Home directory for static files||string||/var/www/html|
-.system.webPort|Port for HTTP access||number|1-65535|80|
-.system.httpsPort|Port for HTTPS access||number|1-65535|443|
-.system.httpsCertificate|Path to public SSL certificate||string||/etc/ssl/certs/www.example.com.crt|
-.system.httpsCertificateKey|Path to private SSL key||string||/etc/ssl/private/www.example.com.key|
-.system.updateChannel|Channel to use for updates||select|testing,beta,stable,none|stable|
+.system.logLevel|Логирование||select|ERROR,WARN,INFO,DEBUG,TRACE|TRACE|
+.system.staticDir|Директория для файлов пользователя||string||/var/www/html|
+.system.webPort|HTTP-порт||number|1-65535|80|
+.system.httpsPort|HTTPS-порт||number|1-65535|443|
+.system.httpsCertificate|Директория публичного SSL-ключа||string||/etc/ssl/certs/www.example.com.crt|
+.system.httpsCertificateKey|Директория приватного SSL-ключа||string||/etc/ssl/private/www.example.com.key|
+.system.updateChannel|Канал для обновлений||select|testing,beta,stable,none|stable|
 .system.buffer|Maximum buffer size per client|KB|number||1024|
 .isp.memMode|Memory mode||select|normal,reduction|reduction|
-.isp.sensorConfig|Path to sensor configuration file||string||/etc/sensors/imx222_1080p_line.ini|
+.isp.sensorConfig|Файл конфигурации матрицы||string||/etc/sensors/imx222_1080p_line.ini|
 .isp.slowShutter|Slow shutter||select|disabled,low,medium,high|low|Automatic frame rate reduction mode.
 .isp.antiFlicker|Anti-flicker||select|disabled,50Hz,60Hz|disabled|Usually, the utility frequency in your grid line.
 .isp.alignWidth|Align width||number||8|
@@ -22,18 +22,18 @@ mj="
 .isp.ispGain|ISP gain||number|0.1-1.0|1|
 .isp.drc|Dynamic Range Compression (DRC) rate|:1|number|1-1000|300|
 .isp.rawMode|Raw feed mode||select|slow,fast,none|slow|
-.image.mirror|Flip image horizontally||boolean|true,false|false|
-.image.flip|Flip image vertically||boolean|true,false|false|
-.image.rotate|Rotate image clockwise||select|0°,90°,270°|0|
-.image.contrast|Image contrast|%|range|auto,1-100|auto|
-.image.hue|Image hue|%|range|1-100|50|
-.image.saturation|Image saturation|%|range|1-100|50|
-.image.luminance|Image luminance|%|range|auto,1-100|auto|
-.osd.enabled|Enable On-Screen Display (OSD)||boolean|true,false|false|
-.osd.font|Path to font file used in OSD||string||/usr/share/fonts/truetype/UbuntuMono-Regular.ttf|
-.osd.template|OSD template||string||%a %e %B %Y %H:%M:%S %Z|Supports strftime() format.
-.osd.posX|Horizontal position of OSD|px|number|-2000-2000|-100|
-.osd.posY|Vertical position of OSD|px|number|-2000-2000|-100|
+.image.mirror|Отразить по горизонтали||boolean|true,false|false|
+.image.flip|Отразить по вертикали||boolean|true,false|false|
+.image.rotate|Режим коридора||select|0°,90°,270°|0|
+.image.contrast|Контрастность|%|range|auto,1-100|auto|
+.image.hue|Цветовой оттенок|%|range|1-100|50|
+.image.saturation|Насыщенность|%|range|1-100|50|
+.image.luminance|Яркость|%|range|auto,1-100|auto|
+.osd.enabled|OSD-наложение информации||boolean|true,false|false|
+.osd.font|Директория шрифта для OSD||string||/usr/share/fonts/truetype/UbuntuMono-Regular.ttf|
+.osd.template|OSD-шаблон||string||%a %e %B %Y %H:%M:%S %Z|Supports strftime() format.
+.osd.posX|Позиция OSD по-горизонтали|px|number|-2000-2000|-100|
+.osd.posY|Позиция OSD по-вертикали|px|number|-2000-2000|-100|
 .osd.privacyMasks|Privacy masks|px|string||0x0x234x640,2124x0x468x1300|Coordinates of masked areas separated by commas.
 .nightMode.enabled|Enable night mode||boolean|true,false|false|
 .nightMode.irSensorPin|GPIO pin of signal from IR sensor||number|1-100|62|
@@ -68,25 +68,25 @@ mj="
 .jpeg.size|Snapshot size|px|string||1920x1080||
 .jpeg.qfactor|JPEG quality level|%|range|1-100|50|
 .jpeg.toProgressive|Progressive JPEG||boolean|true,false|false|
-.mjpeg.size|Video resolution|px|string||640x360|
+.mjpeg.size|Разрешение|px|string||640x360|
 .mjpeg.fps|Video framerate|fps|number|1-30|5|
 .mjpeg.bitrate|Video bitrate|kbps|number|1-4096|1024|
-.audio.enabled|Enable audio||boolean|true,false|false|
+.audio.enabled|Аудио||boolean|true,false|false|
 .audio.volume|Audio volume level|%|range|auto,1-100|auto|
 .audio.srate|Audio sampling rate|kHz|number|1-44100|8000|
 .audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,pcm,alaw,ulaw|opus|
 .audio.outputEnabled|Audio card||string||hw:3|
 .rtsp.enabled|Enable output||boolean|true,false|true||
-.rtsp.port|Port for RTSP protocol||number|1-65535|554|rtsp://[ip.add.re.ss]:[port]/stream={0,1}
+.rtsp.port|Порт RTSP||number|1-65535|554|rtsp://[ip.add.re.ss]:[port]/stream={0,1}
 .hls.enabled|Enable HTTP Live Streaming (HLS)||boolean|true,false|true|
-.youtube.enabled|Enable Youtube support||boolean|true,false|false|
-.youtube.key|Youtube API key||string||xxxx-xxxx-xxxx-xxxx-xxxx|
-.motionDetect.enabled|Enable motion detection||boolean|true,false|false|
+.youtube.enabled|Поддержка Youtube||boolean|true,false|false|
+.youtube.key|Ключ Yotube API||string||xxxx-xxxx-xxxx-xxxx-xxxx|
+.motionDetect.enabled|детекция движения||boolean|true,false|false|
 .motionDetect.profile|Motion detection profile||select|outdoor,indoor|outdoor|
 .motionDetect.visualize|Visualize motion detection||boolean|true,false|true|
 .motionDetect.debug|Enable debugging||boolean|true,false|true|
 .motionDetect.constraints|Regions of Interest (ROI) for motion detection.|px|string||0x0x1296x760|
-.ipeye.enabled|Enable IP EYE support||boolean|true,false|false|
+.ipeye.enabled|Поддержка IPEYE||boolean|true,false|false|
 .netip.enabled|Enable NETIP protocol support||boolean|true,false|false|
 .netip.user|NETIP user||string||admin|
 .netip.password-plain|NETIP password||string||12345|
@@ -94,9 +94,9 @@ mj="
 .netip.port|NETIP port||number|1-65535|34567|
 .netip.snapshots|NETIP snaphots||boolean|true,false|true|
 .netip.ignoreSetTime|Ignore set time||boolean|true,false|false|
-.onvif.enabled|Enable ONVIF protocol support||boolean|true,false|false|
-.watchdog.enabled|Enable watchdog||boolean|true,false|true|
-.watchdog.timeout|Watchdog timeout|sec|number|1-1000|10|
-.cloud.enabled|Enable cloud support||boolean|true,false|false|
+.onvif.enabled|Протокол ONVIF||boolean|true,false|false|
+.watchdog.enabled|Сторожевой таймер||boolean|true,false|true|
+.watchdog.timeout|Время тайм-аута|sec|number|1-1000|10|
+.cloud.enabled|Поддержка облака||boolean|true,false|false|
 "
 %>

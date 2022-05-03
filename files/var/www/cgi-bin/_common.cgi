@@ -51,51 +51,10 @@ get_firmware_info() {
 }
 get_hardware_info() {
   flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
-  sensor=$(ipcinfo --long_sensor)
-  soc=$(ipcinfo --chip_id)
-  if [ -z "$(ipcinfo | grep -- --family)" ]
-  then
-    case "$soc" in
-      gk7605v100 | gk7205v300 | gk7202v300 | gk7205v200)
-        soc_family="gk7205v200"
-        ;;
-      hi3516dv100 | hi3516av100)
-        soc_family="hi3516av100"
-        ;;
-      hi3516av200 | hi3519v101)
-        soc_family="hi3519v101"
-        ;;
-      hi3518ev100 | hi3516cv100)
-        soc_family="hi3516cv100"
-        ;;
-      hi3518cv200 | hi3518ev200 | hi3518ev201 | hi3516cv200)
-        soc_family="hi3516cv200"
-        ;;
-      hi3516ev100 | hi3516cv300)
-        soc_family="hi3516cv300"
-        ;;
-      hi3516dv300 | hi3516av300 | hi3516cv500)
-        soc_family="hi3516cv500"
-        ;;
-      hi3516ev200 | hi3518ev300 | hi3516dv200 | hi3516ev300)
-        soc_family="hi3516ev300"
-        ;;
-      nt98562 | nt98566)
-        soc_family="nt9856x"
-        ;;
-      ssc337 | ssc335)
-        soc_family="ssc335"
-        ;;
-      xm530 | xm550)
-        soc_family="xm550"
-        ;;
-      *)
-        soc_family="$soc"
-        ;;
-    esac
-  else
-    soc_family=$(ipcinfo --family)
-  fi
+  sensor=$(ipcinfo --short-sensor)
+  sensor_ini=$(ipcinfo --long-sensor)
+  soc=$(ipcinfo --chip-name)
+  soc_family=$(ipcinfo --family)
   soc_temp=$(ipcinfo --temp)
 }
 get_http_time() {

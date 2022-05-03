@@ -34,24 +34,24 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
           <p><b><%= $tInstallUpdate %>.</b></p>
           <form action="/cgi-bin/firmware-update.cgi" method="post">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="kernel" id="kernel" value="true" checked>
-              <label class="form-check-label" for="kernel"><%= $tLabelUpgradeKernel %></label>
+              <input class="form-check-input" type="checkbox" name="kernel" id="fw-kernel" value="true" checked>
+              <label class="form-check-label" for="fw-kernel"><%= $tLabelUpgradeKernel %></label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="rootfs" id="rootfs" value="true" checked>
-              <label class="form-check-label" for="rootfs"><%= $tLabelUpgradeRootfs %></label>
+              <input class="form-check-input" type="checkbox" name="rootfs" id="fw-rootfs" value="true" checked>
+              <label class="form-check-label" for="fw-rootfs"><%= $tLabelUpgradeRootfs %></label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="reset" id="reset" value="true">
-              <label class="form-check-label" for="reset"><%= $tLabelResetFirmware %></label>
+              <input class="form-check-input" type="checkbox" name="reset" id="fw-reset" value="true">
+              <label class="form-check-label" for="fw-reset"><%= $tLabelResetFirmware %></label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="noreboot" id="noreboot" value="true">
-              <label class="form-check-label" for="noreboot"><%= $tLabelDoNotReboot %></label>
+              <input class="form-check-input" type="checkbox" name="noreboot" id="fw-noreboot" value="true">
+              <label class="form-check-label" for="fw-noreboot"><%= $tLabelDoNotReboot %></label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="enforce" id="enforce" value="true">
-              <label class="form-check-label" for="enforce"><%= $tOverwriteSameVersion %></label>
+              <input class="form-check-input" type="checkbox" name="enforce" id="fw-enforce" value="true">
+              <label class="form-check-label" for="fw-enforce"><%= $tOverwriteSameVersion %></label>
             </div>
             <p class="mt-3 mb-0"><button type="submit" class="btn btn-warning"><%= $tButtonInstallUpdate %></button></p>
           </form>
@@ -79,14 +79,14 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
         <div class="alert alert-light">
           <p><b><%= $tInstallUpdate %>.</b></p>
           <form action="/cgi-bin/webui-update.cgi" method="post">
-            <label class="form-label" for="version"><%= $tUpdateFromBranch %>:</label>
-            <select class="form-select mb-2" name="version" id="version">
+            <label class="form-label" for="web-version"><%= $tUpdateFromBranch %>:</label>
+            <select class="form-select mb-2" name="version" id="web-version">
               <option value="master">stable</option>
               <option value="dev">development</option>
             </select>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="enforce" id="enforce" value="true">
-              <label class="form-check-label" for="enforce"><%= $tOverwriteSameVersion %></label>
+              <input class="form-check-input" type="checkbox" name="enforce" id="web-enforce" value="true">
+              <label class="form-check-label" for="web-enforce"><%= $tOverwriteSameVersion %></label>
             </div>
             <p class="mt-3 mb-0"><button type="submit" class="btn btn-warning"><%= $tButtonInstallUpdate %></button></p>
           </form>

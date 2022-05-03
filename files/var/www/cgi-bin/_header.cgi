@@ -57,7 +57,7 @@ Content-Type: text/html; charset=UTF-8
             <li><a class="dropdown-item" href="/cgi-bin/preview-help.cgi"><%= $tMenuMjInformation %></a></li>
           </ul>
         </li>
-        <li class="nav-item  dropdown">
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownTools" href="#"
             role="button" data-bs-toggle="dropdown" aria-expanded="false"><%= $tMenuTools %></a>
           <ul class="dropdown-menu" aria-labelledby="dropdownTools">
@@ -66,7 +66,7 @@ Content-Type: text/html; charset=UTF-8
             <li><a class="dropdown-item" href="/cgi-bin/ssh-keys.cgi"><%= $tMenuSshKeys %></a></li>
           </ul>
         </li>
-        <li class="nav-item  dropdown">
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownServices" href="#"
             role="button" data-bs-toggle="dropdown" aria-expanded="false"><%= $tMenuServices %></a>
           <ul class="dropdown-menu" aria-labelledby="dropdownServices">
@@ -76,7 +76,7 @@ Content-Type: text/html; charset=UTF-8
             <li><a class="dropdown-item" href="/cgi-bin/plugin-vtun.cgi"><%= $tMenuPluginVtun %></a></li>
           </ul>
         </li>
-        <li class="nav-item  dropdown">
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownPreview" href="#"
             role="button" data-bs-toggle="dropdown" aria-expanded="false"><%= $tMenuPreview %></a>
           <ul class="dropdown-menu" aria-labelledby="dropdownPreview">

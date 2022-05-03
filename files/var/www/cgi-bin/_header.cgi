@@ -1,5 +1,11 @@
+#!/usr/bin/haserl
 Content-Type: text/html; charset=UTF-8
 
+<%
+get_hardware_info
+get_firmware_info
+get_system_info
+%>
 <!DOCTYPE html>
 <html lang="<%= $locale %>">
 <head>
@@ -89,6 +95,11 @@ Content-Type: text/html; charset=UTF-8
     </div>
   </div>
 </nav>
+<div class="bg-light text-end x-small p-2">
+  <div class="container">
+    <%= "$soc ($soc_family family), $sensor, $flash_size MB Flash. ${fw_version}-${fw_variant}. $hostname, $wan_mac" %>
+  </div>
+</div>
 <main>
   <div class="container p-3">
     <h2><%= $page_title %></h2>

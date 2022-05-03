@@ -1,9 +1,6 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-get_hardware_info
-get_firmware_info
-get_system_info
 page_title="$tPageTitleDeviceStatus"
 %>
 <%in _header.cgi %>
@@ -16,7 +13,7 @@ page_title="$tPageTitleDeviceStatus"
         <pre><%
         print2c "${tSoC}:" "${soc}"
         print2c "${tSoCFamily}:" "${soc_family}"
-        print2c "${tSensor}:" "${sensor}"
+        print2c "${tSensor}:" "${sensor_ini}"
         print2c "${tFlash}:" "${flash_size} MB"
         [ -n "$soc_temp" ] && print2c "${tSoCTemp}:" "${soc_temp}°C"
         %></pre>

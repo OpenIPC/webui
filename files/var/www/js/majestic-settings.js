@@ -37,4 +37,18 @@ window.addEventListener('load', () => {
             if (password !== '') $('#netip-password').value = generateSofiaHash(password);
         });
     }
+
+    if ($('#rtsp-enabled')) {
+        $('#rtsp-enabled').addEventListener('change', (event) => {
+            $('#rtsp-user').required = event.target.checked;
+            $('#rtsp-password-plain').required = event.target.checked;
+        });
+    }
+
+    if ($('#rtsp-password-plain')) {
+        $('form').addEventListener('submit', (event) => {
+            const password = $('#rtsp-password-plain').value.trim();
+            if (password !== '') $('#rtsp-password').value = password;
+        });
+    }
 });

@@ -77,6 +77,9 @@ mj="
 .audio.codec||select|mp3,opus,pcm,alaw,ulaw|opus|
 .audio.outputEnabled||string||hw:3|
 .rtsp.enabled||boolean|true,false|true||
+.rtsp.user||string||admin|
+.rtsp.password-plain||string||12345|
+.rtsp.password||hidden||12345|
 .rtsp.port||number|1-65535|554|rtsp://[ip.add.re.ss]:[port]/stream={0,1}
 .hls.enabled||boolean|true,false|true|
 .youtube.enabled||boolean|true,false|false|

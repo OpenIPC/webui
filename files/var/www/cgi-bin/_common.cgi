@@ -44,17 +44,33 @@ flash_append() {
   echo "$1:$2" >> /tmp/webui-flash.txt
 }
 get_firmware_info() {
-  fw_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 | tr -d /\"/)
-  fw_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/)
-  [ -z "$fw_variant" ] && fw_variant="lite"
-  fw_build=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/)
+  if [ ! -f /tmp/fwinfo.txt ]; then
+    fw_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 | tr -d /\"/)
+    fw_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/)
+    [ -z "$fw_variant" ] && fw_variant="lite"
+    fw_build=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/)
+    echo -e "$fw_version\n$fw_variant\n$fw_build" > /tmp/fwinfo.txt
+  else
+    fw_version=$(sed -n 1p /tmp/fwinfo.txt)
+    fw_variant=$(sed -n 2p /tmp/fwinfo.txt)
+    fw_build=$(sed -n 3p /tmp/fwinfo.txt)
+  fi
 }
 get_hardware_info() {
-  flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
-  sensor=$(ipcinfo --short-sensor)
-  sensor_ini=$(ipcinfo --long-sensor)
-  soc=$(ipcinfo --chip-name)
-  soc_family=$(ipcinfo --family)
+  if [ ! -f /tmp/hwinfo.txt ]; then
+    soc=$(ipcinfo --chip-name)
+    soc_family=$(ipcinfo --family)
+    sensor=$(ipcinfo --short-sensor)
+    sensor_ini=$(ipcinfo --long-sensor)
+    flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
+    echo -e "$soc\n$soc_family\n$sensor\n$sensor_ini\n$flash_size" > /tmp/hwinfo.txt
+  else
+    soc=$(sed -n 1p /tmp/hwinfo.txt)
+    soc_family=$(sed -n 2p /tmp/hwinfo.txt)
+    sensor=$(sed -n 3p /tmp/hwinfo.txt)
+    sensor_ini=$(sed -n 4p /tmp/hwinfo.txt)
+    flash_size=$(sed -n 5p /tmp/hwinfo.txt)
+  fi
   soc_temp=$(ipcinfo --temp)
 }
 get_http_time() {

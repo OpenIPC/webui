@@ -27,12 +27,14 @@ check_env_tz() {
               <input class="form-control" name="tz_name" id="tz_name" list="tz_list" value="<%= $tz_name %>">
               <datalist id="tz_list"></datalist>
             </div>
+            <i class="hint"><%= $tHintZoneName %></i>
           </div>
           <div class="row mb-1">
             <label class="col-md-4 form-label" for="tz_data"><%= $tLabelZoneData %></label>
             <div class="col-md-8">
               <input type="text" class="form-control" name="tz_data" id="tz_data" value="<%= $tz_data %>" readonly>
             </div>
+            <i class="hint"><%= $tHintZoneData %></i>
           </div>
           <button type="submit" class="btn btn-primary mt-2"><%= $tButtonFormSubmit %></button>
         </form>

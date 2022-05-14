@@ -49,7 +49,7 @@ page_title="$tPageTitlePluginIpeye"
     </div>
   </div>
   <div class="col order-sm-1 order-xl-2">
-    <p><img src="/img/logo-ipeye.png" alt="IP EYE Logo"></p>
+    <p><img src="/img/logo-ipeye.png" alt="IPEYE Logo"></p>
     <p><a href="https://www.ipeye.ru/">www.ipeye.ru</a></p>
     <p>Don't have an account? <a href="https://www.ipeye.ru/">Sign-up here</a></p>
   </div>

@@ -71,10 +71,12 @@ get_hardware_info() {
     sensor_ini=$(sed -n 4p /tmp/hwinfo.txt)
     flash_size=$(sed -n 5p /tmp/hwinfo.txt)
   fi
-  soc_temp=$(ipcinfo --temp)
 }
 get_http_time() {
   http_time=$(TZ=GMT date +"%a, %d %b %Y %T %Z")
+}
+get_soc_temp() {
+  soc_temp=$(ipcinfo --temp)
 }
 get_software_info() {
   mj_bin_file="/usr/bin/majestic"

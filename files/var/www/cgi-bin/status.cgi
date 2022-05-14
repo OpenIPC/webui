@@ -1,6 +1,7 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
+get_soc_temp
 page_title="$tPageTitleDeviceStatus"
 %>
 <%in _header.cgi %>

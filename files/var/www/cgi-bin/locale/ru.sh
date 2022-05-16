@@ -1,6 +1,7 @@
 #!/bin/sh
 #name:Russian
 
+tAltMjpegPreview="Поток MJPEG. Если поток не отображается, значит либо браузер его не поддерживает, либо поток не идёт."
 tBuild="Сборка"
 tButtonAddCameraToCloud="Добавить камеру в облако"
 tButtonAddDevice="Добавить устройство"

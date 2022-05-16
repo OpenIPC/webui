@@ -9,7 +9,7 @@ size_w=${size%x*}; size_h=${size#*x} %>
 <%in _header.cgi %>
 <div class="row preview">
 <div class="col mb-4">
-<img src="http://<%= $ipaddr %>/mjpeg" class="d-block img-fluid" style="width:<%= $size_w %>px" alt="<%= $tAltMjpegPreview %>">
+<img src="http://<%= $ipaddr %>/mjpeg" class="d-block img-fluid bg-light p-5" alt="<%= $tAltMjpegPreview %>" style="height:<%= $size_h %>px;width:<%= $size_w %>px">
 <audio autoplay controls style="width:<%= $size_w %>px" class="d-block img-fluid">
 <source src="http://<%= $ipaddr %>/audio.opus" type="audio/ogg; codecs=opus">
 <source src="http://<%= $ipaddr %>/audio.mp3" type="audio/mpeg">

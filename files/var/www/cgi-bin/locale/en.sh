@@ -1,6 +1,7 @@
 #!/bin/sh
 #name:English
 
+tAltMjpegPreview="MJPEG Preview. If you don't see it, it's not supported by your browser, or MJPEG steam does not work."
 tBuild="Build"
 tButtonAddCameraToCloud="Add camera to the cloud"
 tButtonAddDevice="Add device"

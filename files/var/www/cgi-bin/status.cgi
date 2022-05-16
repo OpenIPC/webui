@@ -63,7 +63,7 @@ page_title="$tPageTitleDeviceStatus"
     <div class="card mb-3">
       <div class="card-header"><%= $tHeaderTopProcesses %></div>
       <div class="card-body">
-        <pre class="mb-0"><%= "$(ps aux | sort -nrk 3,3 | head -n 20)" %></pre>
+        <pre class="mb-0"><%= "$(top -n 1 | sed '/top -n/d' | sed '1,4d' | head -20 )" %></pre>
       </div>
     </div>
   </div>

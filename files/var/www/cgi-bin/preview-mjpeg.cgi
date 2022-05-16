@@ -10,13 +10,11 @@ size_w=${size%x*}; size_h=${size#*x} %>
 <div class="row preview">
 <div class="col mb-4">
 <img src="http://<%= $ipaddr %>/mjpeg" class="img-fluid" width="<%= $size_w %>" height="<%= $size_h %>" alt="MJPEG Preview">
-<div>
-<audio autoplay controls>
+<audio autoplay controls style="width:<%= $size_w %>px" class="d-block img-fluid">
 <source src="http://<%= $ipaddr %>/audio.opus" type="audio/ogg; codecs=opus">
 <source src="http://<%= $ipaddr %>/audio.mp3" type="audio/mpeg">
-Your browser does not support the <code>audio</code> element.
+Your browser does not support the audio element.
 </audio>
-</div>
 </div>
 </div>
 <%in _joystick.cgi %>

@@ -1,6 +1,8 @@
 #!/usr/bin/haserl
-<% page_title="logread" %>
 <%in _common.cgi %>
+<%
+page_title="$tPageTitleLog"
+%>
 <%in _header.cgi %>
 <b># logread</b>
 <pre class="bg-light p-4 log-scroll">

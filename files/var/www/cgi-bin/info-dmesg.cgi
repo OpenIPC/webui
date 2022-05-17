@@ -1,6 +1,8 @@
 #!/usr/bin/haserl
-<% page_title="dmesg" %>
 <%in _common.cgi %>
+<%
+page_title="$tPageTitleDmesg"
+%>
 <%in _header.cgi %>
 <b># dmesg</b>
 <pre class="bg-light p-4 log-scroll">

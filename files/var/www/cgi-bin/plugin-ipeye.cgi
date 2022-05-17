@@ -21,7 +21,7 @@ page_title="$tPageTitlePluginIpeye"
 <div class="row row-cols-1 row-cols-xl-2 g-4 mb-3">
   <div class="col order-sm-2 order-xl-1">
     <div class="card h-100">
-      <div class="card-header"><%= tHeaderAddFeed %></div>
+      <div class="card-header"><%= $tHeaderAddFeed %></div>
       <div class="card-body">
         <form>
           <div class="form-group mb-3">

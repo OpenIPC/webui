@@ -12,7 +12,7 @@ page_title="$tPageTitleTools"
 <div class="card-body">
 <form action="/cgi-bin/tools-do.cgi" method="post">
 <div class="row mb-2">
-<label class="form-label col-md-6" for="action"><%= tLabelPingAction %></label>
+<label class="form-label col-md-6" for="action"><%= $tLabelPingAction %></label>
 <div class="col-md-6">
 <select class="form-select" name="action" id="action">
 <% for i in ping trace; do echo -n "<option>${i}</option>"; done %>

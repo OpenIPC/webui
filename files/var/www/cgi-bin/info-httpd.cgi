@@ -1,6 +1,8 @@
 #!/usr/bin/haserl
-<% page_title="printenv" %>
 <%in _common.cgi %>
+<%
+page_title="$tPageTitleHttpdEnv"
+%>
 <%in _header.cgi %>
 <b># printenv</b>
 <pre class="bg-light p-4 log-scroll">

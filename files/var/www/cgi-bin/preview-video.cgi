@@ -12,7 +12,7 @@ page_title="$tPageTitlePreviewVideo"
 <source src="http://<%= $ipaddr %>/video.m3u8" type="application/x-mpegURL">
 <source src="rtsp://<%= $ipaddr %>/stream=0" type="application/x-rtsp">
 <source src="http://<%= $ipaddr %>/video.mp4" type="video/mp4">
-<%= tMsgAudioTagNotSupported %>
+<%= $tMsgVideoTagNotSupported %>
 </video>
 </div>
 </div>

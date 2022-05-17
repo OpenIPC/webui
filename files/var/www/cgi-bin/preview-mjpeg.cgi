@@ -13,7 +13,7 @@ size_w=${size%x*}; size_h=${size#*x} %>
 <audio autoplay controls style="width:<%= $size_w %>px" class="d-block img-fluid">
 <source src="http://<%= $ipaddr %>/audio.opus" type="audio/ogg; codecs=opus">
 <source src="http://<%= $ipaddr %>/audio.mp3" type="audio/mpeg">
-<%= tMsgAudioTagNotSupported %>
+<%= $tMsgAudioTagNotSupported %>
 </audio>
 </div>
 </div>

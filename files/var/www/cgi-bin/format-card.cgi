@@ -14,22 +14,24 @@ else
     command="umount $card_partition"
     output="${output}\n$(umount $card_partition 2>&1)"
     [ $? -ne 0 ] && error="$tMsgCannotUnmountCardPartition"
-  else
+  fi
+
+  if [ -z "$error" ]; then
     command="mkfs.vfat -v -n OpenIPC $card_partition"
     output="${output}\n$(mkfs.vfat -v -n OpenIPC $card_partition 2>&1)"
-    if [ $? -ne 0 ]; then
-      error="$tMsgCannotFormatCardPartition"
-    else
-      command="mount $card_partition $mount_point"
-      output="${output}\n$(mount $card_partition $mount_point 2>&1)"
-      [ $? -ne 0 ] && error="$tMsgCannotRemountCardPartition"
-    fi
+    [ $? -ne 0 ] && error="$tMsgCannotFormatCardPartition"
+  fi
+
+  if [ -z "$error" ]; then
+    command="mount $card_partition $mount_point"
+    output="${output}\n$(mount $card_partition $mount_point 2>&1)"
+    [ $? -ne 0 ] && error="$tMsgCannotRemountCardPartition"
   fi
 fi
 
-if [ ! -z "$error" ]; then
+if [ -n "$error" ]; then
   report_error "$error"
-  [ ! -z "$command" ] && report_command_info "$command" "$output"
+  [ -n "$command" ] && report_command_info "$command" "$output"
 else
 %>
 <pre class="bg-light p-4 log-scroll">

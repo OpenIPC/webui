@@ -41,6 +41,7 @@ get_system_info
             <li><a class="dropdown-item" href="/cgi-bin/info-httpd-config.cgi"><%= $tMenuHttpd %></a></li>
             <li><a class="dropdown-item" href="/cgi-bin/info-httpd.cgi"><%= $tMenuHttpdEnv %></a></li>
             <li><a class="dropdown-item" href="/cgi-bin/info-log.cgi"><%= $tMenuLog %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/info-overlay.cgi"><%= $tMenuOverlay %></a></li>
           </ul>
         </li>
         <li class="nav-item"><a class="nav-link" href="/cgi-bin/firmware.cgi"><%= $tMenuFirmware %></a></li>

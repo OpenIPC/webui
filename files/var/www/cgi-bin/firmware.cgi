@@ -56,11 +56,7 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
             <p class="mt-3 mb-0"><button type="submit" class="btn btn-warning"><%= $tButtonInstallUpdate %></button></p>
           </form>
         </div>
-        <div class="alert alert-danger mb-0">
-          <p><b><%= $tResetFirmware %></b></p>
-          <p><%= $tResetFirmwareInfo %></p>
-          <p class="mb-0"><a class="btn btn-danger" href="/cgi-bin/firmware-reset.cgi" title="<%= $tResetFirmwareTitle %>"><%= $tButtonResetFirmware %></a></p>
-        </div>
+<%in parts/reset-firmware.cgi %>
       </div>
     </div>
   </div>

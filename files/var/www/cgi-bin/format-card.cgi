@@ -4,7 +4,7 @@
 <%
 page_title="$tPageTitleFormatCard"
 card_partition="/dev/mmcblk0p1"
-
+mount_point="/mnt/mmcblk0p1"
 error=""
 output=""
 if [ ! -b $card_partition ]; then
@@ -20,8 +20,8 @@ else
     if [ $? -ne 0 ]; then
       error="$tMsgCannotFormatCardPartition"
     else
-      command="mount $card_partition"
-      output="${output}\n$(mount $card_partition 2>&1)"
+      command="mount $card_partition $mount_point"
+      output="${output}\n$(mount $card_partition $mount_point 2>&1)"
       [ $? -ne 0 ] && error="$tMsgCannotRemountCardPartition"
     fi
   fi
@@ -33,7 +33,7 @@ if [ ! -z "$error" ]; then
 else
 %>
 <pre class="bg-light p-4 log-scroll">
-<%= $output %>
+<% echo -e "$output" %>
 </pre>
 <% fi %>
 <a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>

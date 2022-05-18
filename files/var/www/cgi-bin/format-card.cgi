@@ -10,7 +10,7 @@ else
 %>
 <pre class="bg-light p-4 log-scroll">
 <%
-umount $card_partition && mkfs.vfat -v -n OpenIPC $card_partition || echo "Cannot unmount $card_partition"
+umount $card_partition && mkfs.vfat -v -n OpenIPC $card_partition && mount $card_partition || echo "Cannot unmount $card_partition"
 %>
 </pre>
 <% fi %>

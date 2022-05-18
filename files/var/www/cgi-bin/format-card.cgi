@@ -10,7 +10,7 @@ output=""
 if [ ! -b $card_partition ]; then
   error="$tMsgNoCardPartition"
 else
-  if [ "$(grep $card_partition /dev/mtab)" ]; then
+  if [ "$(grep $card_partition /etc/mtab)" ]; then
     command="umount $card_partition"
     output="${output}\n$(umount $card_partition 2>&1)"
     [ $? -ne 0 ] && error="$tMsgCannotUnmountCardPartition"

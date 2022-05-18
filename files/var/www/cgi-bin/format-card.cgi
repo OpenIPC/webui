@@ -1,8 +1,14 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<%in _header.cgi %>
 <%
 page_title="$tPageTitleFormatCard"
+%>
+<%in _header.cgi %>
+<div class="alert alert-danger">
+<b>ATTENTION! SD card formatting takes time.</b>
+<p class="mb-0">Please do not refresh this page, wait until partition formatting is finished.</p>
+</div>
+<%
 card_partition="/dev/mmcblk0p1"
 mount_point="/mnt/mmcblk0p1"
 error=""

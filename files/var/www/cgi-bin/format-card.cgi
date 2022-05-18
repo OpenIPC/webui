@@ -10,10 +10,10 @@ output=""
 if [ ! -b $card_partition ]; then
   error="$tMsgNoCardPartition"
 else
-  command="umount $card_partition"
-  output="${output}\n$(umount $card_partition 2>&1)"
-  if [ $? -ne 0 ]; then
-    error="$tMsgCannotUnmountCardPartition"
+  if [ "$(grep $card_partition /dev/mtab)" ]; then
+    command="umount $card_partition"
+    output="${output}\n$(umount $card_partition 2>&1)"
+    [ $? -ne 0 ] && error="$tMsgCannotUnmountCardPartition"
   else
     command="mkfs.vfat -v -n OpenIPC $card_partition"
     output="${output}\n$(mkfs.vfat -v -n OpenIPC $card_partition 2>&1)"
@@ -22,9 +22,7 @@ else
     else
       command="mount $card_partition"
       output="${output}\n$(mount $card_partition 2>&1)"
-      if [ $? -ne 0 ]; then
-        error="$tMsgCannotRemountCardPartition"
-      fi
+      [ $? -ne 0 ] && error="$tMsgCannotRemountCardPartition"
     fi
   fi
 fi

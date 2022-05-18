@@ -13,7 +13,7 @@ function ord(str){return str.charCodeAt(0)}
 function chr(n){return String.fromCharCode(n)}
 
 function generateSofiaHash(text) {
-    let h = '';
+    let h = "";
     let md5 = MD5(text);
     for (let i = 0; i <= 7; i++) {
         let n = (ord(md5[2 * i]) + ord(md5[2 * i + 1])) % 62;
@@ -23,32 +23,32 @@ function generateSofiaHash(text) {
     return h;
 }
 
-window.addEventListener('load', () => {
-    if ($('#netip-enabled')) {
-        $('#netip-enabled').addEventListener('change', (event) => {
-            $('#netip-user').required = event.target.checked;
-            $('#netip-password-plain').required = event.target.checked;
+window.addEventListener("load", () => {
+    if ($("#netip-enabled")) {
+        $("#netip-enabled").addEventListener("change", (event) => {
+            $("#netip-user").required = event.target.checked;
+            $("#netip-password-plain").required = event.target.checked;
         });
     }
 
-    if ($('#netip-password-plain')) {
-        $('form').addEventListener('submit', (event) => {
-            const password = $('#netip-password-plain').value.trim();
-            if (password !== '') $('#netip-password').value = generateSofiaHash(password);
+    if ($("#netip-password-plain")) {
+        $("form").addEventListener("submit", (event) => {
+            const password = $("#netip-password-plain").value.trim();
+            if (password !== "") $("#netip-password").value = generateSofiaHash(password);
         });
     }
 
-    if ($('#rtsp-enabled')) {
-        $('#rtsp-enabled').addEventListener('change', (event) => {
-            $('#rtsp-user').required = event.target.checked;
-            $('#rtsp-password-plain').required = event.target.checked;
+    if ($("#rtsp-enabled")) {
+        $("#rtsp-enabled").addEventListener("change", (event) => {
+            $("#rtsp-user").required = event.target.checked;
+            $("#rtsp-password-plain").required = event.target.checked;
         });
     }
 
-    if ($('#rtsp-password-plain')) {
-        $('form').addEventListener('submit', (event) => {
-            const password = $('#rtsp-password-plain').value.trim();
-            if (password !== '') $('#rtsp-password').value = password;
+    if ($("#rtsp-password-plain")) {
+        $("form").addEventListener("submit", (event) => {
+            const password = $("#rtsp-password-plain").value.trim();
+            if (password !== "") $("#rtsp-password").value = password;
         });
     }
 });

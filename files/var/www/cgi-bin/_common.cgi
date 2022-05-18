@@ -139,7 +139,7 @@ report_command_error() {
   echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2><div class=\"alert alert-danger mb-3\"><b># $1</b><pre class=\"mb-0\">$2</pre></div>"
 }
 report_command_info() {
-  echo "<div class=\"alert alert-info mb-3\"><b># $1</b><pre class=\"mb-0\">$2</pre></div>"
+  echo -e "<div class=\"alert alert-info mb-3\"><b># $1</b><pre class=\"mb-0\">$2</pre></div>"
 }
 report_command_success() {
   echo "<h2 class=\"text-success\">$tMsgCommandExecuted</h2><div class=\"alert alert-success mb-3\"><b># $1</b><pre class=\"mb-0\">$2</pre></div>"

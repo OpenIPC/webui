@@ -2,16 +2,40 @@
 <%in _common.cgi %>
 <%in _header.cgi %>
 <%
-page_title=$tPageTitleFormatCard
+page_title="$tPageTitleFormatCard"
 card_partition="/dev/mmcblk0p1"
+
+error=""
+output=""
 if [ ! -b $card_partition ]; then
-  report_error "$tMsgNoCardPartition"
+  error="$tMsgNoCardPartition"
+else
+  command="umount $card_partition"
+  output="${output}\n$(umount $card_partition 2>&1)"
+  if [ $? -ne 0 ]; then
+    error="$tMsgCannotUnmountCardPartition"
+  else
+    command="mkfs.vfat -v -n OpenIPC $card_partition"
+    output="${output}\n$(mkfs.vfat -v -n OpenIPC $card_partition 2>&1)"
+    if [ $? -ne 0 ]; then
+      error="$tMsgCannotFormatCardPartition"
+    else
+      command="mount $card_partition"
+      output="${output}\n$(mount $card_partition 2>&1)"
+      if [ $? -ne 0 ]; then
+        error="$tMsgCannotRemountCardPartition"
+      fi
+    fi
+  fi
+fi
+
+if [ ! -z "$error" ]; then
+  report_error "$error"
+  [ ! -z "$command" ] && report_command_info "$command" "$output"
 else
 %>
 <pre class="bg-light p-4 log-scroll">
-<%
-umount $card_partition && mkfs.vfat -v -n OpenIPC $card_partition && mount $card_partition || echo "Cannot unmount $card_partition"
-%>
+<%= $output %>
 </pre>
 <% fi %>
 <a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>

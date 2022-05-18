@@ -6,7 +6,7 @@
     --bs-blue: #4c60d8;
 }
 
-.x-small { font-size:.75em; }
+.x-small { font-size:.75em;}
 
 body > nav.navbar {background: var(--bs-blue);color: #ffffff;}
 body > header {background: var(--bs-blue);}
@@ -20,7 +20,7 @@ body > footer > .container {border-top: solid 1px #d3d3d3;font-size: 0.8rem;padd
 .card-body pre span.title {display:inline-block;width:8rem;}
 .card dl dd, .card dl dt {border-bottom: solid 1px #ffffff;margin-bottom: 0;}
 
-pre, .pre {white-space: pre;font-size: 1rem; }
+pre, .pre {white-space: pre;font-size: 1rem;}
 
 form label {font-weight: 400;}
 form .row:not(:first-of-type) {border-top: solid 1px #ffffff;padding-top: 0.5rem;}
@@ -47,8 +47,8 @@ input[type=range][orient=vertical] {height: 175px;padding: 0 5px;-webkit-appeara
 
 .control-board {text-align: center;}
 .control {display: grid;gap: 1rem;justify-content: center;margin: 2rem auto;place-items: center;}
-.control img {cursor: pointer;height: 2.5rem;width: 2.5rem; filter: sepia(50%) hue-rotate(231deg) saturate(800%) invert(75%) brightness(100%) contrast(100%); }
-.control img:hover {filter: sepia(0%) hue-rotate(0deg) saturate(800%) invert(50%) brightness(50%) contrast(50%); }
+.control img {cursor: pointer;height: 2.5rem;width: 2.5rem;filter: sepia(50%) hue-rotate(231deg) saturate(800%) invert(75%) brightness(100%) contrast(100%);}
+.control img:hover {filter: sepia(0%) hue-rotate(0deg) saturate(800%) invert(50%) brightness(50%) contrast(50%);}
 .control img:active {filter: none;}
 
 .control #focus-plus {grid-column-start: 1;grid-column-end: 1;grid-row-start: 1;grid-row-end: 1;}

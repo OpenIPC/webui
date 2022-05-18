@@ -32,17 +32,14 @@ function deleteKey() {
 case "$POST_action" in
   backup)
     saveKey "ecdsa"
-    saveKey "rsa"
     redirect_to "/cgi-bin/ssh-keys.cgi"
     ;;
   restore)
     restoreKey "ecdsa"
-    restoreKey "rsa"
     redirect_to "/cgi-bin/ssh-keys.cgi"
     ;;
   delete)
     deleteKey "ecdsa"
-    deleteKey "rsa"
     redirect_to "/cgi-bin/ssh-keys.cgi"
     ;;
   *)
@@ -83,10 +80,6 @@ case "$POST_action" in
 
 <div class="alert alert-secondary" style="overflow-wrap: anywhere;">
 <% fw_printenv key_ecdsa %>
-</div>
-
-<div class="alert alert-secondary" style="overflow-wrap: anywhere;">
-<% fw_printenv key_rsa %>
 </div>
 
 <%in _footer.cgi %>

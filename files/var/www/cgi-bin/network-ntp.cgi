@@ -7,10 +7,11 @@ page_title="$tPageTitleNtpSettings"
 
 check_env_tz() {
   if [ "$(cat /etc/TZ)" != "$TZ" ]; then
-    echo "<div class=\"alert alert-danger\">" \
+    echo "<div class=\"alert alert-danger mb-3\">" \
       "<p><b>$tMsgTimezoneNeedsUpdating</b> $tMsgPleaseRestart</p>" \
-      "<a class=\"btn btn-danger\" href=\"/cgi-bin/reboot.cgi\">$tButtonRestart</a>" \
-      "</div>"
+      "<p class=\"mb-0\">"
+    button_link_to "$tButtonRestart" "/cgi-bin/reboot.cgi" "danger"
+    echo "</p></div>"
   fi
 }
 %>

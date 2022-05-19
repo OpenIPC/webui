@@ -4,14 +4,11 @@ print2c() {
   # printf "%-24s|%16s|\n" "${1}" "${2}"
   echo -en "<span class=\"title\">$1</span><span>$2</span>\n"
 }
-alert_danger() {
-  echo "<div class=\"alert alert-danger mb-3\"><b>$1</b> <p class=\"mb-0\">$2</p></div>"
-}
-alert_warning() {
-  echo "<div class=\"alert alert-warning mb-3\"><b>$1</b> <p class=\"mb-0\">$2</p></div>"
-}
 beats() {
   echo -n "@$(echo "$(date -u -d "1970-01-01 $(TZ=UTC-1 date +%T)" +%s) * 10 / 864" | bc)"
+}
+button_link_to() {
+  echo "<a class=\"btn btn-$3\" href=\"$2\">$1</a>"
 }
 check_password() {
   uri1=/cgi-bin/webui-settings.cgi
@@ -39,7 +36,10 @@ flash_read() {
   [ -z "$flash" ] && return
   type=$(echo $flash | cut -d ":" -f 1)
   message=$(echo $flash | cut -d ":" -f 2)
-  echo "<div class=\"alert alert-${type} alert-dismissible fade show\" role=\"alert\">${message} <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></div>"
+  echo "<div class=\"alert alert-${type} alert-dismissible fade show\" role=\"alert\">" \
+    "${message} " \
+    "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>" \
+    "</div>"
   flash_delete
 }
 flash_save() {
@@ -130,7 +130,8 @@ $xheader
 "
 }
 report_error() {
-  echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2><div class=\"alert alert-danger mb-3\">$1</div>"
+  echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2>" \
+    "<div class=\"alert alert-danger mb-3\">$1</div>"
 }
 report_info() {
   echo "<div class=\"alert alert-info mb-3\">$1</div>"
@@ -139,13 +140,24 @@ report_log() {
   echo -e "<pre class=\"bg-light p-3\">$1</pre>"
 }
 report_command_error() {
-  echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2><div class=\"alert alert-danger mb-3\"><b># $1</b><pre class=\"mb-0\">$2</pre></div>"
+  echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2>" \
+    "<div class=\"alert alert-danger mb-3\">" \
+    "<b># $1</b>" \
+    "<pre class=\"mb-0\">$2</pre>" \
+    "</div>"
 }
 report_command_info() {
-  echo -e "<div class=\"alert alert-info mb-3\"><b># $1</b><pre class=\"mb-0\">$2</pre></div>"
+  echo -e "<div class=\"alert alert-info mb-3\">" \
+    "<b># $1</b>" \
+    "<pre class=\"mb-0\">$2</pre>" \
+    "</div>"
 }
 report_command_success() {
-  echo "<h2 class=\"text-success\">$tMsgCommandExecuted</h2><div class=\"alert alert-success mb-3\"><b># $1</b><pre class=\"mb-0\">$2</pre></div>"
+  echo "<h2 class=\"text-success\">$tMsgCommandExecuted</h2>" \
+    "<div class=\"alert alert-success mb-3\">" \
+    "<b># $1</b>" \
+    "<pre class=\"mb-0\">$2</pre>" \
+    "</div>"
 }
 
 source $PWD/locale/en.sh

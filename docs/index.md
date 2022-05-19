@@ -58,6 +58,14 @@ consider participating.
 You can improve existing code and send us patches. You can add new features
 missing from our code.
 
+Please make changes against the `dev` branch of the project, that's where the
+most recent code resides. Keep your codebase fresh pulling changes from the
+repo frequently, merging them into your local repo, and rebasing your code to
+eliminate conflicts. Remember that you write for embedded linux thus please keep
+your code as small and opimized as possible. Avoid using extra libraries like
+jQuery, pure JavaScript is quite enough. Use valid HTML5 code. Avoid using
+deprecated tags and attributes.
+
 You can help us to write a better documentation, proofread and correct our
 websites.
 
@@ -69,9 +77,7 @@ You can make a financial contribution to the project at [Open Collective][oc].
 
 Thank you.
 
-<p align="center">
-<a href="https://opencollective.com/openipc/contribute/backer-14335/checkout" target="_blank"><img src="https://opencollective.com/webpack/donate/button@2x.png?color=blue" width="375" alt="Open Collective donate button"></a>
-</p>
+<p style="text-align:center"><a href="https://opencollective.com/openipc/contribute/backer-14335/checkout" target="_blank"><img src="https://opencollective.com/webpack/donate/button@2x.png?color=blue" width="375" alt="Open Collective donate button"></a></p>
 
 [openipcfw]: https://github.com/OpenIPC/firmware
 [haserl]: http://haserl.sourceforge.net/

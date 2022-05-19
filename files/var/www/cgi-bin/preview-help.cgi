@@ -54,7 +54,7 @@ page_title="$tPageTitlePreviewHelp"
           </dd>
           <dt>http://<%= $ipaddr %>/image.heif</dt>
           <dd>Snapshot in HEIF format.</dd>
-          <dt>http://<%= $ipaddr %>/image.yuv</dt>
+          <dt>http://<%= $ipaddr %>/image.yuv420</dt>
           <dd>Snapshot in YUV420 format</dd>
           <dt>http://<%= $ipaddr %>/image.dng</dt>
           <dd>Snapshot in Adobe DNG format (raw)<br>

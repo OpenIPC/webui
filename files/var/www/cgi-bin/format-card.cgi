@@ -6,14 +6,20 @@ page_title="$tPageTitleFormatCard"
 <%in _header.cgi %>
 <%
 if [ -z "$(lsmod | grep mmc)" ]; then
-  alert_danger "$tMsgCardNotFound"
+  echo "<div class=\"alert alert-danger mb-3\">" \
+    "<p><b>$tMsgCardNotFoundTitle</b></p>" \
+    "<p class=\"mb-0\">$tMsgCardNotFound</p>" \
+    "</div>"
 else
   card_partition="/dev/mmcblk0p1"
   mount_point="/mnt/mmcblk0p1"
   error=""
   output=""
   if [ -n "$POST_doFormatCard" ]; then
-    alert_danger $tMsgCardFormattingTakesTime $tMsgCardFormattingWait
+    echo "<div class=\"alert alert-danger mb-3\">" \
+      "<p><b>$tMsgCardFormattingTakesTime</b></p>" \
+      "<p class=\"mb-0\">$tMsgCardFormattingWait</p>" \
+      "</div>"
     if [ ! -b $card_partition ]; then
       error="$tMsgNoCardPartition"
     else
@@ -43,16 +49,19 @@ else
 </pre>
 <% fi %>
 <a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>
-<% else %>
-<%
-command="df -h | grep $card_partition"
-output="$(df -h | grep $card_partition 2>&1)"
-report_command_info "$command" "$output"
-alert_danger "$tMsgCardFormattingDanger" "$tMsgCardFormattingBackup"
+<% else
+    command="df -h | grep $card_partition"
+    output="$(df -h | grep $card_partition 2>&1)"
+    report_command_info "$command" "$output"
+    echo "<div class=\"alert alert-danger mb-3\">" \
+      "<p><b>$tMsgCardFormattingDanger</b></p>" \
+      "<p>$tMsgCardFormattingBackup</p>" \
+      "<form action=\"format-card.cgi\" method=\"post\">" \
+      "<input type=\"hidden\" name=\"doFormatCard\" value=\"true\">" \
+      "<input type=\"submit\" value=\"$tButtonFormatCard\" class=\"btn btn-danger\">" \
+      "</form>" \
+      "</div>"
+  fi
+fi
 %>
-<form action="format-card.cgi" method="post">
-<input type="hidden" name="doFormatCard" value="true">
-<p class="mb-0"><input type="submit" value="<%= $tButtonFormatCard %>" class="btn btn-danger"></p>
-</form>
-<% fi; fi %>
 <%in _footer.cgi %>

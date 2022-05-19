@@ -29,7 +29,7 @@ else
 <pre class="bg-light p-4 log-scroll">
 <%
   mv ${POST_upfile} /tmp/${POST_upfile_name}
-  sysupgrade --rootfs=/tmp/${POST_upfile_name} --force_ver
+  sysupgrade --rootfs=/tmp/${POST_upfile_name} --force_ver --force_all
 %>
 </pre>
 <a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>

@@ -15,9 +15,9 @@ free_space=$(df | grep /overlay | xargs | cut -d" " -f4)
 available_space=$(( $free_space + $mj_filesize_old - 1 ))
 %>
 <%in _header.cgi %>
-<div class="alert alert-danger">
-  <b><%= $tMsgDestructiveActions %></b>
-  <p class="mb-0"><%= $tMsgKnowWhatYouDo %></p>
+<div class="alert alert-danger mb-3">
+<p><b><%= $tMsgDestructiveActions %></b></p>
+<p class="mb-0"><%= $tMsgKnowWhatYouDo %></p>
 </div>
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
   <div class="col">
@@ -56,7 +56,7 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
             <p class="mt-3 mb-0"><button type="submit" class="btn btn-warning"><%= $tButtonInstallUpdate %></button></p>
           </form>
         </div>
-<%in parts/reset-firmware.cgi %>
+        <%in parts/reset-firmware.cgi %>
       </div>
     </div>
   </div>
@@ -121,12 +121,12 @@ available_space=$(( $free_space + $mj_filesize_old - 1 ))
         <% else %>
           <p><b><%= $tMjConfigChanged %></b></p>
           <p><a href="/cgi-bin/majestic-config-compare.cgi"><%= $tMjConfigSeeChanges %></a></p>
-          <div class="alert alert-danger mb-0">
+          <div class="alert alert-danger">
             <p><b><%= $tMjConfigReset %></b></p>
             <p><%= $tMjConfigResetInfo %></p>
             <p class="mb-0">
               <a class="btn btn-primary" href="/cgi-bin/majestic-config-backup.cgi"><%= $tMjConfigBackup %></a>
-              <a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi" title="<%= $tMjConfigResetTitle %>"><%= $tMjConfigReset %></a>
+              <a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi" title="<%= $tMjConfigResetTitle %>"><%= $tButtonMjReset %></a>
             </p>
           </div>
         <% fi %>

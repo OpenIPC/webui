@@ -4,6 +4,12 @@ print2c() {
   # printf "%-24s|%16s|\n" "${1}" "${2}"
   echo -en "<span class=\"title\">$1</span><span>$2</span>\n"
 }
+alert_danger() {
+  echo "<div class=\"alert alert-danger mb-3\"><b>$1</b> <p class=\"mb-0\">$2</p></div>"
+}
+alert_warning() {
+  echo "<div class=\"alert alert-warning mb-3\"><b>$1</b> <p class=\"mb-0\">$2</p></div>"
+}
 beats() {
   echo -n "@$(echo "$(date -u -d "1970-01-01 $(TZ=UTC-1 date +%T)" +%s) * 10 / 864" | bc)"
 }
@@ -131,9 +137,6 @@ report_info() {
 }
 report_log() {
   echo -e "<pre class=\"bg-light p-3\">$1</pre>"
-}
-report_warning() {
-  echo "<div class=\"alert alert-warning mb-3\">$1</div>"
 }
 report_command_error() {
   echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2><div class=\"alert alert-danger mb-3\"><b># $1</b><pre class=\"mb-0\">$2</pre></div>"

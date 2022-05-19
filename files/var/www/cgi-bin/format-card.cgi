@@ -4,9 +4,10 @@
 page_title="$tPageTitleFormatCard"
 %>
 <%in _header.cgi %>
+<% if [ -n "$POST_doFormatCard" ]; then %>
 <div class="alert alert-danger">
-<b>ATTENTION! SD card formatting takes time.</b>
-<p class="mb-0">Please do not refresh this page, wait until partition formatting is finished.</p>
+<b><%= $tMsgCardFormattingTakesTime %></b>
+<p class="mb-0"><%= $tMsgCardFormattingWait %></p>
 </div>
 <%
 card_partition="/dev/mmcblk0p1"
@@ -45,4 +46,14 @@ else
 </pre>
 <% fi %>
 <a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>
+<% else %>
+<div class="alert alert-danger">
+<b><%= $tMsgCardFormattingDanger %></b>
+<p><%= $tMsgCardFormattingBackup %></p>
+<form action="format-card.cgi" method="post">
+<input type="hidden" name="doFormatCard" value="true">
+<p class="mb-0"><input type="submit" value="<%= $tButtonFormatCard %>" class="btn btn-danger"></p>
+</form>
+</div>
+<% fi %>
 <%in _footer.cgi %>

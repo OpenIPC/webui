@@ -12,8 +12,9 @@ if [ $? -ne 0 ]; then
     "<p class=\"mb-0\">$tMsgCardNotFound</p>" \
     "</div>"
 else
-  card_partition="/dev/mmcblk0p1"
-  mount_point="/mnt/mmcblk0p1"
+  card_device="/dev/mmcblk0"
+  card_partition="${card_device}p1"
+  mount_point="${card_partition//dev/mnt}"
   error=""
   output=""
   if [ -n "$POST_doFormatCard" ]; then
@@ -28,6 +29,11 @@ else
         command="umount $card_partition"
         output="${output}\n$(umount $card_partition 2>&1)"
         [ $? -ne 0 ] && error="$tMsgCannotUnmountCardPartition"
+      fi
+      if [ -z "$error" ]; then
+        command="echo -e "o\nn\np\n1\n\n\nw" | fdisk /dev/mmcblk0"
+        output="${output}\n$(echo -e "o\nn\np\n1\n\n\nw" | fdisk /dev/mmcblk0 2>&1)"
+        [ $? -ne 0 ] && error="$tMsgCannotCreatePartition"
       fi
       if [ -z "$error" ]; then
         command="mkfs.vfat -v -n OpenIPC $card_partition"
@@ -51,8 +57,8 @@ else
 <% fi %>
 <a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>
 <% else
-    command="df -h | sed -n 1p/${card_partition//\//\\\\/}/p"
-    output="$(df -h | sed -n 1p/${card_partition//\//\\\\/}/p 2>&1)"
+    command="df -h | sed -n 1p/${card_partition////\\\/}/p"
+    output="$(df -h | sed -n 1p/${card_partition////\\\/}/p)"
     report_command_info "$command" "$output"
     echo "<div class=\"alert alert-danger mb-3\">" \
       "<p><b>$tMsgCardFormattingDanger</b></p>" \

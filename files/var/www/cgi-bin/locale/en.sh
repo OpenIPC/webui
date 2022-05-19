@@ -244,6 +244,7 @@ tMjRestoreInfo="Restore your custom Majestic configuration from a backup copy of
 tMsgAnotherProcessRunning="Another progress is running."
 tMsgAttentionErrors="ATTENTION! There were errors!"
 tMsgAudioTagNotSupported="Your browser does not support HTML5 audio."
+tMsgCannotCreatePartition="Cannot create an SD card partition."
 tMsgCannotExtractMajestic="Cannot extract Majestic."
 tMsgCannotFormatCardPartition="Cannot format SD card partition."
 tMsgCannotReadUploadedFile="Cannot read uploded file!"

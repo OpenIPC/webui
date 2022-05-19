@@ -52,8 +52,8 @@ page_title="$tPageTitleDeviceStatus"
     <div class="card h-100">
       <div class="card-header"><%= $tHeaderResources %></div>
       <div class="card-body">
-        <b># df</b>
-        <pre class="mb-0"><% df %></pre>
+        <b># df -T</b>
+        <pre class="mb-0"><% df -T %></pre>
       </div>
     </div>
   </div>
@@ -63,7 +63,8 @@ page_title="$tPageTitleDeviceStatus"
     <div class="card mb-3">
       <div class="card-header"><%= $tHeaderTopProcesses %></div>
       <div class="card-body">
-        <pre class="mb-0"><%= "$(top -n 1 | sed '/top -n/d' | sed '1,4d' | head -20 )" %></pre>
+        <b># top -n 1 | sed '/top -n/d' | sed '1,4d' | head -20</b>
+        <pre class="mb-0"><%= "$(top -n 1 | sed '/top -n/d' | sed '1,4d' | head -20)" %></pre>
       </div>
     </div>
   </div>

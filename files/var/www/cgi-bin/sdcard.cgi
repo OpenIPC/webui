@@ -28,8 +28,8 @@ else
       [ $? -ne 0 ] && error="$tMsgCannotUnmountCardPartition"
     fi
     if [ -z "$error" ]; then
-      command="echo -e "o\nn\np\n1\n\n\nw" | fdisk /dev/mmcblk0"
-      output="${output}\n$(echo -e "o\nn\np\n1\n\n\nw" | fdisk /dev/mmcblk0 2>&1)"
+      command="echo -e "o\nn\np\n1\n\n\nw" | fdisk $card_device"
+      output="${output}\n$(echo -e "o\nn\np\n1\n\n\nw" | fdisk $card_device 2>&1)"
       [ $? -ne 0 ] && error="$tMsgCannotCreatePartition"
     fi
     if [ -z "$error" ]; then

@@ -71,7 +71,7 @@ get_system_info
             <li><a class="dropdown-item" href="/cgi-bin/tools.cgi"><%= $tMenuPingTrace %></a></li>
             <li><a class="dropdown-item" href="/cgi-bin/console.cgi"><%= $tMenuWebConsole %></a></li>
             <li><a class="dropdown-item" href="/cgi-bin/ssh-keys.cgi"><%= $tMenuSshKeys %></a></li>
-            <li><a class="dropdown-item" href="/cgi-bin/format-card.cgi">Format SD card</a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/sdcard.cgi"><%= $tMenuSdCard %></a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">

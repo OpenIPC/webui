@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="$tPageTitleFormatCard"
+page_title="$tPageTitleSdCard"
 %>
 <%in _header.cgi %>
 <%
@@ -59,7 +59,7 @@ else
     echo "<div class=\"alert alert-danger mb-3\">" \
       "<p><b>$tMsgCardFormattingDanger</b></p>" \
       "<p>$tMsgCardFormattingBackup</p>" \
-      "<form action=\"format-card.cgi\" method=\"post\">" \
+      "<form action=\"sdcard.cgi\" method=\"post\">" \
       "<input type=\"hidden\" name=\"doFormatCard\" value=\"true\">" \
       "<input type=\"submit\" value=\"$tButtonFormatCard\" class=\"btn btn-danger\">" \
       "</form>" \

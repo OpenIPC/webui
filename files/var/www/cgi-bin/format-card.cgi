@@ -22,29 +22,25 @@ else
       "<p><b>$tMsgCardFormattingTakesTime</b></p>" \
       "<p class=\"mb-0\">$tMsgCardFormattingWait</p>" \
       "</div>"
-    if [ ! -b $card_partition ]; then
-      error="$tMsgNoCardPartition"
-    else
-      if [ "$(grep $card_partition /etc/mtab)" ]; then
-        command="umount $card_partition"
-        output="${output}\n$(umount $card_partition 2>&1)"
-        [ $? -ne 0 ] && error="$tMsgCannotUnmountCardPartition"
-      fi
-      if [ -z "$error" ]; then
-        command="echo -e "o\nn\np\n1\n\n\nw" | fdisk /dev/mmcblk0"
-        output="${output}\n$(echo -e "o\nn\np\n1\n\n\nw" | fdisk /dev/mmcblk0 2>&1)"
-        [ $? -ne 0 ] && error="$tMsgCannotCreatePartition"
-      fi
-      if [ -z "$error" ]; then
-        command="mkfs.vfat -v -n OpenIPC $card_partition"
-        output="${output}\n$(mkfs.vfat -v -n OpenIPC $card_partition 2>&1)"
-        [ $? -ne 0 ] && error="$tMsgCannotFormatCardPartition"
-      fi
-      if [ -z "$error" ]; then
-        command="mount $card_partition $mount_point"
-        output="${output}\n$(mount $card_partition $mount_point 2>&1)"
-        [ $? -ne 0 ] && error="$tMsgCannotRemountCardPartition"
-      fi
+    if [ "$(grep $card_partition /etc/mtab)" ]; then
+      command="umount $card_partition"
+      output="${output}\n$(umount $card_partition 2>&1)"
+      [ $? -ne 0 ] && error="$tMsgCannotUnmountCardPartition"
+    fi
+    if [ -z "$error" ]; then
+      command="echo -e "o\nn\np\n1\n\n\nw" | fdisk /dev/mmcblk0"
+      output="${output}\n$(echo -e "o\nn\np\n1\n\n\nw" | fdisk /dev/mmcblk0 2>&1)"
+      [ $? -ne 0 ] && error="$tMsgCannotCreatePartition"
+    fi
+    if [ -z "$error" ]; then
+      command="mkfs.vfat -v -n OpenIPC $card_partition"
+      output="${output}\n$(mkfs.vfat -v -n OpenIPC $card_partition 2>&1)"
+      [ $? -ne 0 ] && error="$tMsgCannotFormatCardPartition"
+    fi
+    if [ -z "$error" ]; then
+      command="mount $card_partition $mount_point"
+      output="${output}\n$(mount $card_partition $mount_point 2>&1)"
+      [ $? -ne 0 ] && error="$tMsgCannotRemountCardPartition"
     fi
     if [ -n "$error" ]; then
       report_error "$error"

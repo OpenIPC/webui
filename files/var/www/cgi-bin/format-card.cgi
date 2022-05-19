@@ -5,7 +5,8 @@ page_title="$tPageTitleFormatCard"
 %>
 <%in _header.cgi %>
 <%
-if [ -z "$(ls /dev/mmc* >/dev/null 2>&1)" ]; then
+ls /dev/mmc* >/dev/null 2>&1
+if [ $? -ne 0 ]; then
   echo "<div class=\"alert alert-danger mb-3\">" \
     "<p><b>$tMsgCardNotFoundTitle</b></p>" \
     "<p class=\"mb-0\">$tMsgCardNotFound</p>" \

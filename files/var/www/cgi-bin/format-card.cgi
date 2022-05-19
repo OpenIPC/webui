@@ -5,7 +5,7 @@ page_title="$tPageTitleFormatCard"
 %>
 <%in _header.cgi %>
 <%
-if [ ! -z "$(lsmod | grep mmc)" ]; then
+if [ -z "$(lsmod | grep mmc)" ]; then
   alert_danger "$tMsgCardNotFound"
 else
   card_partition="/dev/mmcblk0p1"

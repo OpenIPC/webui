@@ -51,8 +51,8 @@ else
 <% fi %>
 <a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>
 <% else
-    command="df -h | grep $card_partition"
-    output="$(df -h | grep $card_partition 2>&1)"
+    command="df -h | sed -n 1p/${card_partition//\//\\\\/}/p"
+    output="$(df -h | sed -n 1p/${card_partition//\//\\\\/}/p 2>&1)"
     report_command_info "$command" "$output"
     echo "<div class=\"alert alert-danger mb-3\">" \
       "<p><b>$tMsgCardFormattingDanger</b></p>" \

@@ -95,6 +95,7 @@ function updateTimezone() {
 function useBrowserTimezone(event) {
   event.preventDefault();
   $('#tz_name').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  updateTimezone();
 }
 window.addEventListener('load', () => {
   if (navigator.userAgent.includes('Android') && navigator.userAgent.includes('Firefox')) {
@@ -124,7 +125,6 @@ window.addEventListener('load', () => {
   $('#tz_name').addEventListener('selectionchange', updateTimezone);
   $('#tz_name').addEventListener('change', updateTimezone);
   $('#tz_from_browser').addEventListener('click', useBrowserTimezone);
-
   updateTimezone();
 });
 </script>

@@ -5,7 +5,7 @@
 <form action="/cgi-bin/majestic-settings-update.cgi" method="post">
 <div class="row row-cols-1 row-cols-xl-2 row-cols-xxl-3 g-4 mb-3">
 <%
-mj=$(echo "$mj" | sed "s/ /_/g" | grep -E $only)
+mj=$(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only")
 for line in $mj; do
   param=${line%%|*}
   fullname=${param#.}

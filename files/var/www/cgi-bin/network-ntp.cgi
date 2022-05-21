@@ -28,7 +28,7 @@ check_env_tz() {
               <input class="form-control" name="tz_name" id="tz_name" list="tz_list" value="<%= $tz_name %>">
               <datalist id="tz_list"></datalist>
             </div>
-            <i class="hint"><%= $tHintZoneName %></i>
+            <i class="hint"><%= $tHintZoneName %> <a href="#" id="tz_from_browser"><%= $tHintZoneNameFromBrowser %></a>.</i>
           </div>
           <div class="row mb-1">
             <label class="col-md-4 form-label" for="tz_data"><%= $tLabelZoneData %></label>
@@ -92,6 +92,10 @@ function updateTimezone() {
     $('#tz_data').value = tz[0].value;
   }
 }
+function useBrowserTimezone(event) {
+  event.preventDefault();
+  $('#tz_name').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
 window.addEventListener('load', () => {
   if (navigator.userAgent.includes('Android') && navigator.userAgent.includes('Firefox')) {
     const inp = $('#tz_name');
@@ -119,6 +123,8 @@ window.addEventListener('load', () => {
   $('#tz_name').addEventListener('focus', ev => ev.target.select());
   $('#tz_name').addEventListener('selectionchange', updateTimezone);
   $('#tz_name').addEventListener('change', updateTimezone);
+  $('#tz_from_browser').addEventListener('click', useBrowserTimezone);
+
   updateTimezone();
 });
 </script>

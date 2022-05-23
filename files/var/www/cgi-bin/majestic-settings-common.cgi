@@ -25,15 +25,15 @@ for line in $mj; do
   placeholder=${line%%|*}
   line=${line#*|}
 
-  hint=${line%%|*}
-  line=${line#*|}
-
   value=$(yaml-cli -g "$param")
 
   # Localized label
   fullname=${fullname//./_}
   fullname=${fullname//-/_}
   eval label="\$tMjLbl_${fullname}"
+
+  # Locacalized hint
+  eval hint="\$tMjHint_${fullname}"
 
   if [ "$olddomain" != "$domain" ]; then
     [ -n "$olddomain" ] && echo -n '</div></div></div>'

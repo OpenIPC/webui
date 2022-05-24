@@ -30,7 +30,7 @@ for line in $mj; do
   # Localized label
   fullname=${fullname//./_}
   fullname=${fullname//-/_}
-  eval label="\$tMjLbl_${fullname}"
+  eval label="\$tMjLabel_${fullname}"
 
   # Locacalized hint
   eval hint="\$tMjHint_${fullname}"

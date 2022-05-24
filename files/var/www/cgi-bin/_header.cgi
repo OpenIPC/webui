@@ -58,6 +58,7 @@ get_system_info
           <a class="nav-link dropdown-toggle" id="dropdownMajestic" href="#"
             role="button" data-bs-toggle="dropdown" aria-expanded="false">Majestic</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownMajestic">
+            <li><a class="dropdown-item" href="/cgi-bin/majestic-settings.cgi"><%= $tMenuMjSettings %> (new UI)</a></li>
             <li><a class="dropdown-item" href="/cgi-bin/majestic-settings-general.cgi"><%= $tMenuMjSettings %></a></li>
             <li><a class="dropdown-item" href="/cgi-bin/majestic-settings-services.cgi"><%= $tMenuMjServices %></a></li>
             <li><a class="dropdown-item" href="/cgi-bin/majestic-config-actions.cgi"><%= $tMenuMjMaintenance %></a></li>

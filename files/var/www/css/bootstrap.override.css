@@ -43,7 +43,7 @@ input[type=range][orient=vertical] {height: 175px;padding: 0 5px;-webkit-appeara
 #beta {font-size: 0.82rem;font-weight: 700;left: 8rem;position: absolute;top: 1.25rem;transform: rotate(-105deg);}
 #beta span {background: gold;color: black;display: block;line-height: 3em;text-align: center;transform: rotate(22.5deg);width: 3em;}
 
-.log-scroll {max-height: 50vh;min-height: 100%;overflow: auto;}
+.log-scroll {height: 50vh;overflow: auto;}
 
 .control-board {text-align: center;}
 .control {display: grid;gap: 1rem;justify-content: center;margin: 2rem auto;place-items: center;}

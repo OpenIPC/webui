@@ -38,7 +38,7 @@ function refresh() {
         $$('input.pat-host-ip').forEach(el => el.pattern='^[a-zA-Z0-9-_.]+$');
 
         const resizeObserver = new ResizeObserver(entries => {
-            for (let entry of entries) entry.target.scroll(0, entry.target.scrollTopMax);
+            entries.forEach(entry => entry.target.scrollTo(0, entry.target.scrollHeight));
         });
         if ($('.log-scroll')) resizeObserver.observe($('.log-scroll'));
     }

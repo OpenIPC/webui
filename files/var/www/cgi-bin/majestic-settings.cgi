@@ -13,7 +13,7 @@ mj=$(echo "$mj" | sed "s/ /_/g")
 <div class="container-fluid">
 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
   aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-<img src="/img/majestic-logo.png" alt="Image: Majestic Logo" width="32" height="32">
+<img src="/img/majestic-logo.png" alt="Image: Majestic Logo" width="32" height="32" class="me-2">
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 <ul class="navbar-nav me-auto mb-2 mb-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 15em;">
 <%

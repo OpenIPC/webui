@@ -10,9 +10,7 @@ if [ ! -f /rom/${mj_bin_file} ]; then
 fi
 
 conf_file=/etc/coredump.config
-if [ ! -f "$conf_file" ]; then
-  error="$tMjDebugErrorConfigNotFound"
-fi
+# [ ! -f "$conf_file" ] && error="$tMjDebugErrorConfigNotFound"
 
 if [ "$REQUEST_METHOD" == "POST" ]; then
   savedumps="$POST_coredump_enabled"

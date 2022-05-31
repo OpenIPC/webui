@@ -62,6 +62,7 @@ get_system_info
             <li><a class="dropdown-item" href="/cgi-bin/majestic-settings-general.cgi"><%= $tMenuMjSettings %></a></li>
             <li><a class="dropdown-item" href="/cgi-bin/majestic-settings-services.cgi"><%= $tMenuMjServices %></a></li>
             <li><a class="dropdown-item" href="/cgi-bin/majestic-config-actions.cgi"><%= $tMenuMjMaintenance %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/majestic-debug.cgi"><%= $tMenuMjDebug %></a></li>
             <li><a class="dropdown-item" href="/cgi-bin/preview-help.cgi"><%= $tMenuMjInformation %></a></li>
           </ul>
         </li>

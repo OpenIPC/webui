@@ -22,6 +22,8 @@ body > footer > .container {border-top: solid 1px #d3d3d3;font-size: 0.8rem;padd
 
 pre, .pre {white-space: pre;font-size: 1rem;}
 
+code {font-size: 1em;}
+
 form label {font-weight: 400;}
 form .row:not(:first-of-type) {border-top: solid 1px #ffffff;padding-top: 0.5rem;}
 form .input-group-text {min-width: 4rem;}

@@ -66,9 +66,9 @@ field_password() {
 
 field_switch() {
   name=$1
-  eval "value=\$${name}"
+  eval "value=\$${name}"; [ "true" = "$value" ] && checked=" checked" || checked=""
   eval "label=\$tLabel_${name}"
-  [ "true" = "$value" ] && checked=" checked" || checked=""
+  eval "hint=\$tHint_${name}"; [ -n "$hint" ] && hint="<p class=\"hint\">${hint}</p>"
   echo "<div class=\"row mb-2 boolean\">" \
     "<label for=\"${name}\" class=\"col-md-5 form-check-label\">${label//_/ }</label>" \
     "<div class=\"col-md-7\">" \
@@ -76,6 +76,7 @@ field_switch() {
     "<input type=\"hidden\" name=\"${name}\" id=\"${name}-false\" value=\"false\">" \
     "<input type=\"checkbox\" name=\"${name}\" id=\"${name}\" ${checked} role=\"switch\" value=\"true\" class=\"form-check-input\">" \
     "</div>" \
+    "${hint}" \
     "</div>" \
     "</div>"
 }
@@ -85,10 +86,12 @@ field_text() {
   [ -n $2 ] && extras=" ${2}"
   eval "value=\$${name}"
   eval "label=\$tLabel_${name}"
+  eval "hint=\$tHint_${name}"; [ -n "$hint" ] && hint="<p class=\"hint\">${hint}</p>"
   echo "<div class=\"row mb-2 string\">" \
     "<label for=\"${name}\" class=\"col-md-5 col-form-label\">${label//_/ }</label>" \
     "<div class=\"col-md-7\">" \
     "<input type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" class=\"form-control\"${extras}>" \
+    "${hint}" \
     "</div>" \
     "</div>"
 }

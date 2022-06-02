@@ -87,7 +87,7 @@ if [ -n "$error" ]; then
   report_error "$error"
   report_log "$log"
 else
-  if [ ! -z "$(grep coredump.config /etc/init.d/S95hisilicon)" ]; then
+  if [ -z "$(grep sendcoredump.sh /etc/init.d/S95hisilicon)" ]; then
 %>
 <div class="alert alert-warning">
 <p><b>This service requires a slight modification of /etc/init.d/S95hisilicon file.</b></p>

@@ -88,3 +88,8 @@ input[type=range][orient=vertical] {height: 175px;padding: 0 5px;-webkit-appeara
 .control #image-rotate-90-cw {grid-column-start: 2;grid-column-end: 2;grid-row-start: 1;grid-row-end: 1;}
 .control #image-flip {grid-column-start: 1;grid-column-end: 1;grid-row-start: 2;grid-row-end: 2;}
 .control #image-mirror {grid-column-start: 2;grid-column-end: 2;grid-row-start: 2;grid-row-end: 2;}
+
+.card-body { position: relative; }
+.social { position: absolute; right: 0.25rem; top: -0.75rem; text-align: right; }
+.social a { background: white; border-radius: 50%; display: inline-flex; padding: 2px; }
+.social a img { max-height: 1.25rem; vertical-align: text-bottom; }

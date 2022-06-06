@@ -95,6 +95,17 @@ get_system_info
             <li><a class="dropdown-item" href="/cgi-bin/preview-video.cgi">Video</a></li>
           </ul>
         </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownHelp" href="#"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false"><%= $tMenuHelp %></a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownHelp">
+            <li><a class="dropdown-item" href="https://openipc.org/wiki/"><%= $tMenuWiki %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/help-telegram.cgi"><%= $tMenuTelegram %></a></li>
+            <li><a class="dropdown-item" href="/cgi-bin/help-about.cgi"><%= $tMenuAbout %></a></li>
+          </ul>
+        </li>
+
       </ul>
     </div>
   </div>

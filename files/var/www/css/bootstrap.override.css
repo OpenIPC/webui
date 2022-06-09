@@ -8,6 +8,8 @@
 
 .x-small { font-size:.75em;}
 
+h6 { font-weight: 700; }
+
 body > nav.navbar {background: var(--bs-blue);color: #ffffff;}
 body > header {background: var(--bs-blue);}
 body > main > .container > h2 {font-weight: 700;color: var(--bs-blue);margin: 1rem 0 1.5rem;}

@@ -3,6 +3,12 @@
 <%
 page_title="$tPageTitleSshKeys"
 
+function readKey() {
+  if [ -n "$(fw_printenv key_${1})" ]; then
+    echo "<div class=\"alert alert-secondary\" style=\"overflow-wrap: anywhere;\">$(fw_printenv key_${1})</div>"
+  fi
+}
+
 function saveKey() {
   if [ -n "$(fw_printenv key_${1})" ]; then
     flash_save "warning" "${1} $tMsgSshKeyExists"
@@ -31,56 +37,40 @@ function deleteKey() {
 
 case "$POST_action" in
   backup)
-    saveKey "ecdsa"
+    saveKey "ed25519"
     redirect_to "/cgi-bin/ssh-keys.cgi"
     ;;
   restore)
-    restoreKey "ecdsa"
+    restoreKey "ed25519"
     redirect_to "/cgi-bin/ssh-keys.cgi"
     ;;
   delete)
-    deleteKey "ecdsa"
+    deleteKey "ed25519"
     redirect_to "/cgi-bin/ssh-keys.cgi"
     ;;
   *)
 %>
 <%in _header.cgi %>
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
-  <div class="col">
-    <div class="card h-100">
-      <div class="card-body">
-        <form action="/cgi-bin/ssh-keys.cgi" method="post">
-          <p><%= $tMsgSshKeyBackup %></p>
-          <button type="submit" name="action" value="backup" class="btn btn-danger"><%= $tButtonSshKeyBackup %></button>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card h-100">
-      <div class="card-body">
-        <p><%= $tMsgSshKeyRestore %></p>
-        <form action="/cgi-bin/ssh-keys.cgi" method="post">
-          <button type="submit" name="action" value="restore" class="btn btn-danger"><%= $tButtonSshKeyRestore %></button>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card h-100">
-      <div class="card-body">
-        <p><%= $tMsgSshKeyDelete %></p>
-        <form action="/cgi-bin/ssh-keys.cgi" method="post">
-          <button type="submit" name="action" value="delete" class="btn btn-danger"><%= $tButtonSshKeyDelete %></button>
-        </form>
-      </div>
-    </div>
-  </div>
+<div class="col"><div class="card h-100"><div class="card-body">
+<form action="/cgi-bin/ssh-keys.cgi" method="post">
+<p><%= $tMsgSshKeyBackup %></p>
+<% button_submit_action "backup" "$tButtonSshKeyBackup" %>
+</form>
+</div></div></div>
+<div class="col"><div class="card h-100"><div class="card-body">
+<p><%= $tMsgSshKeyRestore %></p>
+<form action="/cgi-bin/ssh-keys.cgi" method="post">
+<% button_submit_action "restore" "$tButtonSshKeyRestore" %>
+</form>
+</div></div></div>
+<div class="col"><div class="card h-100"><div class="card-body">
+<p><%= $tMsgSshKeyDelete %></p>
+<form action="/cgi-bin/ssh-keys.cgi" method="post">
+<% button_submit_action "delete" "$tButtonSshKeyDelete" %>
+</form>
+</div></div></div>
 </div>
-
-<div class="alert alert-secondary" style="overflow-wrap: anywhere;">
-<% fw_printenv key_ecdsa %>
-</div>
-
+<% readKey "ed25519" %>
 <%in _footer.cgi %>
 <% esac %>

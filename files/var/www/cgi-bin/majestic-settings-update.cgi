@@ -17,7 +17,7 @@ debug_message "cp -f ${mj_conf} ${temp_yaml}"
 data="$(printenv|grep POST_)"
 IFS=$'\n' # make newlines the only separator
 for name in $data; do
-  key=".$(echo $name | sed 's/^POST_//' | cut -d= -f1 | sed 's/-/./g')"
+  key=".$(echo $name | sed 's/^POST_mj_//' | cut -d= -f1 | sed 's/_/./g')"
   value="$(echo $name | cut -d= -f2)"
 
   # validation and normalization

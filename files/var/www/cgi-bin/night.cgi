@@ -13,10 +13,5 @@ case "$POST_mode" in
   *)
     ;;
 esac
-echo "HTTP/1.1 200 OK"
-echo "Date: $(TZ=GMT date +"%a, %d %b %Y %T %Z")"
-echo "Content-Type: text/plain; charset=utf-8"
-echo "Server: httpd"
-echo ""
-echo "200 OK"
+echo -e "HTTP/1.1 200 OK\nDate: $(TZ=GMT date +\"%a, %d %b %Y %T %Z\")\nContent-Type: text/plain; charset=utf-8\nServer: httpd\n\n200 OK"
 %>

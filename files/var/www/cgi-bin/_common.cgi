@@ -1,22 +1,9 @@
 #!/usr/bin/haserl
+<%in _html.cgi %>
+<%in _bootstrap.cgi %>
 <%
-print2c() {
-  # printf "%-24s|%16s|\n" "${1}" "${2}"
-  echo -en "<span class=\"title\">$1</span><span>$2</span>\n"
-}
-
 beats() {
   echo -n "@$(echo "$(date -u -d "1970-01-01 $(TZ=UTC-1 date +%T)" +%s) * 10 / 864" | bc)"
-}
-
-button_link_to() {
-  echo "<a class=\"btn btn-$3\" href=\"$2\">$1</a>"
-}
-
-button_submit() {
-  value=$1
-  [ -z "$value" ] && value=$tButtonFormSubmit
-  echo "<button type=\"submit\" class=\"btn btn-primary mt-3\">${value}</button>"
 }
 
 check_password() {
@@ -38,62 +25,8 @@ debug_message() {
   echo "$(date +"%F %T") $1" >> /tmp/webui.log
 }
 
-field_checkbox() {
-  name=$1
-  eval "value=\$${name}"
-  eval "label=\$tLabel_${name}"
-  [ "true" = "$value" ] && checked=" checked" || checked=""
-  echo "<div class=\"mb-2 boolean\">" \
-    "<div class=\"form-check\">" \
-    "<input type=\"hidden\" name=\"${name}\" id=\"${name}-false\" value=\"false\">" \
-    "<input type=\"checkbox\" name=\"${name}\" id=\"${name}\" ${checked} value=\"true\" class=\"form-check-input\">" \
-    "<label for=\"${name}\" class=\"form-check-label\">${label//_/ }</label>" \
-    "</div>" \
-    "</div>"
-}
-
-field_password() {
-  name=$1
-  eval "value=\$${name}"
-  eval "label=\$tLabel_${name}"
-  echo "<div class=\"row mb-2 password\">" \
-    "<label for=\"${name}\" class=\"col-md-5 col-form-label\">${label//_/ }</label>" \
-    "<div class=\"col-md-7\">" \
-    "<input type=\"password\" name=\"${name}\" id=\"${name}\" value=\"${value}\" class=\"form-control\">" \
-    "</div>" \
-    "</div>"
-}
-
-field_switch() {
-  name=$1
-  eval "value=\$${name}"; [ "true" = "$value" ] && checked=" checked" || checked=""
-  eval "label=\$tLabel_${name}"
-  eval "hint=\$tHint_${name}"; [ -n "$hint" ] && hint="<p class=\"hint\">${hint}</p>"
-  echo "<div class=\"row mb-2 boolean\">" \
-    "<label for=\"${name}\" class=\"col-md-5 form-check-label\">${label//_/ }</label>" \
-    "<div class=\"col-md-7\">" \
-    "<div class=\"form-check form-switch\">" \
-    "<input type=\"hidden\" name=\"${name}\" id=\"${name}-false\" value=\"false\">" \
-    "<input type=\"checkbox\" name=\"${name}\" id=\"${name}\" ${checked} role=\"switch\" value=\"true\" class=\"form-check-input\">" \
-    "</div>" \
-    "${hint}" \
-    "</div>" \
-    "</div>"
-}
-
-field_text() {
-  name=$1
-  [ -n $2 ] && extras=" ${2}"
-  eval "value=\$${name}"
-  eval "label=\$tLabel_${name}"
-  eval "hint=\$tHint_${name}"; [ -n "$hint" ] && hint="<p class=\"hint\">${hint}</p>"
-  echo "<div class=\"row mb-2 string\">" \
-    "<label for=\"${name}\" class=\"col-md-5 col-form-label\">${label//_/ }</label>" \
-    "<div class=\"col-md-7\">" \
-    "<input type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" class=\"form-control\"${extras}>" \
-    "${hint}" \
-    "</div>" \
-    "</div>"
+flash_append() {
+  echo "$1:$2" >> /tmp/webui-flash.txt
 }
 
 flash_delete() {
@@ -106,21 +39,13 @@ flash_read() {
   [ -z "$flash" ] && return
   type=$(echo $flash | cut -d ":" -f 1)
   message=$(echo $flash | cut -d ":" -f 2)
-  echo -e \
-    "<div class=\"alert alert-${type} alert-dismissible fade show\" role=\"alert\">\n" \
-    " ${message}\n" \
-    " <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>\n" \
-    "</div>\n"
+  echo "<div class=\"alert alert-${type} alert-dismissible fade show\" role=\"alert\">${message} <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></div>"
   flash_delete
 }
 
 flash_save() {
   xheader="X-ErrorMessage: $2"
   echo "$1:$2" > /tmp/webui-flash.txt
-}
-
-flash_append() {
-  echo "$1:$2" >> /tmp/webui-flash.txt
 }
 
 get_firmware_info() {
@@ -193,8 +118,12 @@ Server: httpd
 }
 
 html_title() {
-   [ ! -z "$1" ] && echo -n "$1 - "
+  [ -n "$1" ] && echo -n "$1 - "
   echo -n  "OpenIPC"
+}
+
+print2c() {
+  echo "<span class=\"title\">${1}</span><span>${2}</span>"
 }
 
 redirect_to() {
@@ -208,44 +137,43 @@ Location: $1
 Server: httpd
 Status: 302 Moved Temporarily
 $xheader
-
 "
 }
 
 report_error() {
-  echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2>" \
-    "<div class=\"alert alert-danger mb-3\">$1</div>"
+  echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2>"
+  alert "$1" "danger"
 }
 
 report_info() {
-  echo "<div class=\"alert alert-info mb-3\">$1</div>"
+  alert "$1"
 }
 
 report_log() {
-  echo -e "<pre class=\"bg-light p-3\">$1</pre>"
+  pre "$1" "class=\"bg-light p-3 log-scroll\""
 }
 
 report_command_error() {
-  echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2>" \
-    "<div class=\"alert alert-danger mb-3\">" \
-    "<b># $1</b>" \
-    "<pre class=\"mb-0\">$2</pre>" \
-    "</div>"
+  echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2>"
+  alert_ "danger"
+  b "# $1"
+  pre "$2"
+  _alert
 }
 
 report_command_info() {
-  echo -e "<div class=\"alert alert-info mb-3\">" \
-    "<b># $1</b>" \
-    "<pre class=\"mb-0\">$2</pre>" \
-    "</div>"
+  alert_
+  b "# $1"
+  pre "$2"
+  _alert
 }
 
 report_command_success() {
-  echo "<h2 class=\"text-success\">$tMsgCommandExecuted</h2>" \
-    "<div class=\"alert alert-success mb-3\">" \
-    "<b># $1</b>" \
-    "<pre class=\"mb-0\">$2</pre>" \
-    "</div>"
+  h2 "$tMsgCommandExecuted" "success"
+  alert_ "success"
+  b "# $1"
+  pre "$2"
+  _alert
 }
 
 source $PWD/locale/en.sh

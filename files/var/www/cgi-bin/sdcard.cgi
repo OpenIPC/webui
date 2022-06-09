@@ -7,10 +7,10 @@ page_title="$tPageTitleSdCard"
 <%
 ls /dev/mmc* >/dev/null 2>&1
 if [ $? -ne 0 ]; then
-  echo "<div class=\"alert alert-danger mb-3\">" \
-    "<p><b>$tMsgCardNotFoundTitle</b></p>" \
-    "<p class=\"mb-0\">$tMsgCardNotFound</p>" \
-    "</div>"
+  alert_ "danger"
+  h6 "$tMsgCardNotFoundTitle"
+  p "$tMsgCardNotFound"
+  _alert
 else
   card_device="/dev/mmcblk0"
   card_partition="${card_device}p1"
@@ -18,10 +18,11 @@ else
   error=""
   output=""
   if [ -n "$POST_doFormatCard" ]; then
-    echo "<div class=\"alert alert-danger mb-3\">" \
-      "<p><b>$tMsgCardFormattingTakesTime</b></p>" \
-      "<p class=\"mb-0\">$tMsgCardFormattingWait</p>" \
-      "</div>"
+    alert_ "danger"
+    h6 "$tMsgCardFormattingTakesTime"
+    p "$tMsgCardFormattingWait"
+    _alert
+
     if [ "$(grep $card_partition /etc/mtab)" ]; then
       command="umount $card_partition"
       output="${output}\n$(umount $card_partition 2>&1)"
@@ -46,24 +47,22 @@ else
       report_error "$error"
       [ -n "$command" ] && report_command_info "$command" "$output"
     else
-%>
-<pre class="bg-light p-4 log-scroll">
-<% echo -e "$output" %>
-</pre>
-<% fi %>
-<a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>
-<% else
+      report_log "$output"
+    fi
+    button_home
+  else
     command="df -h | sed -n 1p/${card_partition////\\\/}/p"
     output="$(df -h | sed -n 1p/${card_partition////\\\/}/p)"
     report_command_info "$command" "$output"
-    echo "<div class=\"alert alert-danger mb-3\">" \
-      "<p><b>$tMsgCardFormattingDanger</b></p>" \
-      "<p>$tMsgCardFormattingBackup</p>" \
-      "<form action=\"sdcard.cgi\" method=\"post\">" \
-      "<input type=\"hidden\" name=\"doFormatCard\" value=\"true\">" \
-      "<input type=\"submit\" value=\"$tButtonFormatCard\" class=\"btn btn-danger\">" \
-      "</form>" \
-      "</div>"
+    alert_ "danger"
+    h6 "$tMsgCardFormattingDanger"
+    p "$tMsgCardFormattingBackup"
+    form_ "sdcard.cgi" "post"
+    doFormatCard="true"
+    field_hidden "doFormatCard"
+    button_submit "$tButtonFormatCard" "danger"
+    _form
+    _alert
   fi
 fi
 %>

@@ -87,77 +87,42 @@ if [ -n "$error" ]; then
   report_error "$error"
   report_log "$log"
 else
-  if [ -z "$(grep sendcoredump.sh /etc/init.d/S95hisilicon)" ]; then
-%>
-<div class="alert alert-warning">
-<p><b>This service requires a slight modification of /etc/init.d/S95hisilicon file.</b></p>
-<p>Please insert the following code inside <code>load_majestic()</code> block,
- right before <code>start-stop-daemon</code> line:</p>
-<pre class="bg-light p-3 text-black">
-if [ $(grep ^savedumps /etc/coredump.config | cut -d= -f2) == "true" ]; then
-  ulimit -c unlimited && echo "| /usr/sbin/sendcoredump.sh" > /proc/sys/kernel/core_pattern
+  [ -z "$(grep sendcoredump.sh /etc/init.d/S95hisilicon)" ] && alert "$tMsgCoreDumpModificationRequired" "warning"
+
+  form_ "/cgi-bin/majestic-debug.cgi" "post"
+    div_ "class=\"row row-cols-1 row-cols-xl-2 g-4 mb-4\""
+      col_first
+        alert "$tAlertMjDebugDescription" "info"
+        card_ "$tHeaderMjDebug"
+          field_switch "coredump_enabled"
+          field_text "coredump_name"
+          field_text "coredump_email"
+          field_text "coredump_telegram"
+          field_checkbox "coredump_consent"
+        _card
+      col_next
+        card_ "$tHeaderMjDebugUploadS3"
+          field_switch "coredump_send2devs"
+        _card
+        card_ "$tHeaderMjDebugUploadTftp"
+          field_switch "coredump_send2tftp"
+          field_text "coredump_tftphost"
+        _card
+        card_ "$tHeaderMjDebugUploadFtp"
+          field_switch "coredump_send2ftp"
+          field_text "coredump_ftphost"
+          field_text "coredump_ftppath"
+          field_text "coredump_ftpuser"
+          field_password "coredump_ftppass"
+        _card
+        card_ "$tHeaderMjDebugSave4Web"
+          field_switch "coredump_save4web"
+        _card
+        [ -f "/root/coredump.tgz" ] && alert "$tMsgCoreDumpExists" "danger"
+      col_last
+    _div
+    button_submit
+  _form
 fi
-</pre>
-</div>
-<% fi %>
-
-<form action="/cgi-bin/majestic-debug.cgi" method="post">
-  <div class="row row-cols-1 row-cols-xl-2 g-4 mb-4">
-    <div class="col">
-      <div class="alert alert-info">
-        <%= $tAlertMjDebugDescription %>
-      </div>
-      <div class="card mb-3">
-        <h5 class="card-header"><%= $tHeaderMjDebug %></h5>
-        <div class="card-body">
-          <% field_switch "coredump_enabled" %>
-          <% field_text "coredump_name" %>
-          <% field_text "coredump_email" %>
-          <% field_text "coredump_telegram" %>
-          <% field_checkbox "coredump_consent" %>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card mb-3">
-        <h5 class="card-header"><%= $tHeaderMjDebugUploadS3 %></h5>
-        <div class="card-body">
-          <% field_switch "coredump_send2devs" %>
-        </div>
-      </div>
-      <div class="card mb-3">
-        <h5 class="card-header"><%= $tHeaderMjDebugUploadTftp %></h5>
-        <div class="card-body">
-          <% field_switch "coredump_send2tftp" %>
-          <% field_text "coredump_tftphost" %>
-        </div>
-      </div>
-      <div class="card mb-3">
-        <h5 class="card-header"><%= $tHeaderMjDebugUploadFtp %></h5>
-        <div class="card-body">
-          <% field_switch "coredump_send2ftp" %>
-          <% field_text "coredump_ftphost" %>
-          <% field_text "coredump_ftppath" %>
-          <% field_text "coredump_ftpuser" %>
-          <% field_password "coredump_ftppass" %>
-        </div>
-      </div>
-      <div class="card mb-3">
-        <h5 class="card-header"><%= $tHeaderMjDebugSave4Web %></h5>
-        <div class="card-body">
-          <% field_switch "coredump_save4web" %>
-        </div>
-      </div>
-    <% if [ -f "/root/coredump.tgz" ]; then %>
-      <div class="alert alert-danger">
-        <h5>There is a core dump saved on the camera!</h5>
-        <p class="mb-0">Please retrieve and delete file <b>/root/coredump.tgz</b> from the camera.</p>
-      </div>
-    <% fi %>
-    </div>
-  </div>
-
-  <% button_submit %>
-</form>
-<% fi %>
+%>
 <%in _footer.cgi %>

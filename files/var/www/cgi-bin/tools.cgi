@@ -51,7 +51,7 @@ page_title="$tPageTitleTools"
 <input class="form-control" type="number" min="1" max="30" step="1" name="duration" id="duration" value="5">
 </div>
 </div>
-<button type="submit" class="btn btn-primary"><%= $tButtonRun %></button>
+<% button_submit "$tButtonRun" %>
 </form>
 </div>
 </div>

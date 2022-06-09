@@ -4,11 +4,15 @@
 page_title="$tPageTitlePreview"
 %>
 <%in _header.cgi %>
-<div class="row preview">
-  <div class="col position-relative mb-4">
-    <img id="preview" src="http://<%= $ipaddr %>/image.jpg" class="img-fluid" width="1280" height="720" alt="">
-  </div>
-</div>
+<%
+div_ "class=\"row preview\""
+  div_ "class=\"col position-relative mb-4\""
+%>
+<img id="preview" src="http://<%= $ipaddr %>/image.jpg" class="img-fluid" width="1280" height="720" alt="">
+<%
+  _div
+_div
+%>
 <%in _joystick.cgi %>
 <script>
 function sleep(ms) {

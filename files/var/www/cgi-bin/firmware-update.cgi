@@ -8,19 +8,17 @@ page_title="$tPageTitleFirmwareUpdate"
 if [ -f /tmp/webjob.lock ]; then
   report_error "danger" "$tMsgAnotherProcessRunning"
 else
-%>
-<pre class="bg-light p-4 log-scroll">
-<%
   opts=""
-  [ ! -z "$POST_kernel"   ] && opts="${opts} -k"
-  [ ! -z "$POST_rootfs"   ] && opts="${opts} -r"
-  [ ! -z "$POST_reset"    ] && opts="${opts} -n"
-  [ ! -z "$POST_noreboot" ] && opts="${opts} -x"
-  [ ! -z "$POST_enforce"  ] && opts="${opts} --force_ver"
+  [ "$POST_fw_kernel" = "true" ] && opts="${opts} -k"
+  [ "$POST_fw_rootfs" = "true" ] && opts="${opts} -r"
+  [ "$POST_fw_reset" = "true" ] && opts="${opts} -n"
+  [ "$POST_fw_noreboot" = "true" ] && opts="${opts} -x"
+  [ "$POST_fw_enforce" = "true" ] && opts="${opts} --force_ver"
+  echo "<pre class=\"bg-light p-4 log-scroll\">"
   echo "sysupgrade ${opts}"
   sysupgrade ${opts} 2>&1
+  echo "</pre>"
+  button_home
+fi
 %>
-</pre>
-<a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>
-<% fi %>
 <%in _footer.cgi %>

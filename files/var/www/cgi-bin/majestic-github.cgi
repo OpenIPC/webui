@@ -55,17 +55,15 @@ if [ ! -z "$error" ]; then
   report_error "$error"
   report_log "$log"
 else
-%>
-<pre class="bg-light p-4 log-scroll">
-<%
-  echo -e "$log"
-  echo "killall majestic"
-  echo "$(killall majestic 2>&1)"
-  echo "mv -f ${mj_tmp_file} ${mj_bin_file}"
-  echo "$(mv -f ${mj_tmp_file} ${mj_bin_file} 2>&1)"
-  echo "$tMsgRebooting"
-  echo "$(reboot)"
+  pre_ "class=\"bg-light p-4 log-scroll\""
+    echo -e "$log"
+    echo "killall majestic"
+    echo "$(killall majestic 2>&1)"
+    echo "mv -f ${mj_tmp_file} ${mj_bin_file}"
+    echo "$(mv -f ${mj_tmp_file} ${mj_bin_file} 2>&1)"
+    echo "$tMsgRebooting"
+    echo "$(reboot)"
+  _pre
 fi
 %>
-</pre>
 <%in _footer.cgi %>

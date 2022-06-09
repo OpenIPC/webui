@@ -4,8 +4,8 @@
 page_title="$tPageTitleHttpdConfig"
 %>
 <%in _header.cgi %>
-<b># cat /etc/httpd.conf</b>
-<pre class="bg-light p-4 log-scroll">
-<% cat /etc/httpd.conf %>
-</pre>
+<%
+b "# cat /etc/httpd.conf"
+report_log "$(cat /etc/httpd.conf)"
+%>
 <%in _footer.cgi %>

@@ -4,8 +4,8 @@
 page_title="$tPageTitleHttpdEnv"
 %>
 <%in _header.cgi %>
-<b># printenv</b>
-<pre class="bg-light p-4 log-scroll">
-<% printenv | sort %>
-</pre>
+<%
+b "# printenv"
+report_log "$(printenv | sort)"
+%>
 <%in _footer.cgi %>

@@ -9,15 +9,18 @@ sysupgrade_date=$(ls -lc --full-time /usr/sbin/sysupgrade | xargs | cut -d " " -
 sysupgrade_date=$(date --date="$sysupgrade_date" +"%s")
 new_sysupgrade_date=$(date --date="2022-02-22" +"%s")
 
+file="$POST_rootfs_file"
+name="$POST_rootfs_file_name"
+
 error=""
-if [ -z "$POST_upfile_name"  ]; then
+if [ -z "$name"  ]; then
   error="No file found! Did you forget to upload?"
-elif [ ! -r "$POST_upfile" ]; then
-  error="Cannot read file \"${POST_upfile_name}\" from \"${POST_upfile}\"!"
-elif [ "$(wc -c "$POST_upfile" | awk '{print $1}')" -gt "$maxsize" ]; then
-  error="File \"${POST_upfile_name}\" is too large! Its size is $(wc -c "$POST_upfile" | awk '{print $1}') bytes, but it should be ${maxsize} bytes or less."
-elif [ "$magicnum" -ne "$(xxd -p -l 4 "$POST_upfile")" ]; then
-  error="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 4 "$POST_upfile") != $magicnum"
+elif [ ! -r "$file" ]; then
+  error="Cannot read file \"${name}\" from \"${file}\"!"
+elif [ "$(wc -c "$file" | awk '{print $1}')" -gt "$maxsize" ]; then
+  error="File \"${name}\" is too large! Its size is $(wc -c "$file" | awk '{print $1}') bytes, but it should be ${maxsize} bytes or less."
+elif [ "$magicnum" -ne "$(xxd -p -l 4 "$file")" ]; then
+  error="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 4 "$file") != $magicnum"
 elif [ "$sysupgrade_date" -lt "$new_sysupgrade_date" ]; then
   error="This feature requires the latest sysupgrade tool. Please upgrade firmware first."
 fi
@@ -25,13 +28,11 @@ fi
 if [ ! -z "$error" ]; then
   report_error "$error"
 else
+  echo "<pre class=\"bg-light p-4 log-scroll\">"
+  mv ${file} /tmp/${name}
+  sysupgrade --rootfs=/tmp/${name} --force_ver --force_all
+  echo "</pre>"
+  button_home
+fi
 %>
-<pre class="bg-light p-4 log-scroll">
-<%
-  mv ${POST_upfile} /tmp/${POST_upfile_name}
-  sysupgrade --rootfs=/tmp/${POST_upfile_name} --force_ver --force_all
-%>
-</pre>
-<a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>
-<% fi %>
 <%in _footer.cgi %>

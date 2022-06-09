@@ -11,7 +11,7 @@ if [ $? -ne 0 ]; then
   report_command_error "$command" "$output"
 else
   report_command_info "$command" "$output"
+  button_home
+fi
 %>
-<a class="btn btn-primary" href="/"><%= $tButtonGoHome %></a>
-<% fi %>
 <%in _footer.cgi %>

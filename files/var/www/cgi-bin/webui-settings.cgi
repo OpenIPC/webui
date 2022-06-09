@@ -51,7 +51,7 @@ echo -n "<option value=\"${code}\"${selected}>${name}</option>"
 done %></select>
 </div>
 </div>
-<button type="submit" class="btn btn-primary"><%= $tButtonFormSubmit %></button>
+<% button_submit %>
 </form>
 </div>
 </div>

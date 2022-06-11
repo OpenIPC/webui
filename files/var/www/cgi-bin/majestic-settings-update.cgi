@@ -25,7 +25,6 @@ for name in $data; do
   [ "$key" = ".track" ] && continue
   [ "$key" = ".reset" ] && continue
   [ "$key" = ".netip.password.plain" ] && continue
-  [ "$key" = ".rtsp.password.plain" ] && continue
   if [ "$key" = ".image.rotate" ]; then
     if [ "$value" = "0°" ]; then
       value="none"

@@ -82,9 +82,6 @@ mj="
 .audio.outputEnabled||boolean|true,false|false
 .rtsp.enabled||boolean|true,false|true|
 .rtsp.port||number|1-65535|554
-.rtsp.user||string||admin
-.rtsp.password_plain||string||12345
-.rtsp.password||hidden||12345
 .hls.enabled||boolean|true,false|true
 .youtube.enabled||boolean|true,false|false
 .youtube.key||string||xxxx-xxxx-xxxx-xxxx-xxxx

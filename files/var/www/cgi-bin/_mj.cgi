@@ -83,7 +83,7 @@ mj="
 .rtsp.enabled||boolean|true,false|true|
 .rtsp.port||number|1-65535|554
 .rtsp.user||string||admin
-.rtsp.password-plain||string||12345
+.rtsp.password_plain||string||12345
 .rtsp.password||hidden||12345
 .hls.enabled||boolean|true,false|true
 .youtube.enabled||boolean|true,false|false
@@ -96,7 +96,7 @@ mj="
 .ipeye.enabled||boolean|true,false|false
 .netip.enabled||boolean|true,false|false
 .netip.user||string||admin
-.netip.password-plain||string||12345
+.netip.password_plain||string||12345
 .netip.password||hidden||6V0Y4HLF
 .netip.port||number|1-65535|34567
 .netip.snapshots||boolean|true,false|true

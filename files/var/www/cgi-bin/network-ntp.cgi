@@ -57,21 +57,24 @@ _div
 <script src="/js/tz.js" async></script>
 <script>
 function findTimezone(tz) {
-  return tz.name == $("#tz_name").value;
+  return tz.n == $("#tz_name").value;
 }
+
 function updateTimezone() {
   const tz = TZ.filter(findTimezone);
   if (tz.length == 0) {
     $("#tz_data").value = "";
   } else {
-    $("#tz_data").value = tz[0].value;
+    $("#tz_data").value = tz[0].v;
   }
 }
+
 function useBrowserTimezone(event) {
   event.preventDefault();
   $("#tz_name").value = Intl.DateTimeFormat().resolvedOptions().timeZone;
   updateTimezone();
 }
+
 window.addEventListener('load', () => {
   if (navigator.userAgent.includes("Android") && navigator.userAgent.includes("Firefox")) {
     const inp = $("#tz_name");
@@ -82,8 +85,8 @@ window.addEventListener('load', () => {
     sel.options.add(new Option());
     let opt;
     TZ.forEach(function(tz) {
-      opt = new Option(tz.name);
-      opt.selected = (tz.name == inp.value);
+      opt = new Option(tz.n);
+      opt.selected = (tz.n == inp.value);
       sel.options.add(opt);
     });
     inp.replaceWith(sel);
@@ -92,7 +95,7 @@ window.addEventListener('load', () => {
     el.innerHTML="";
     TZ.forEach(function(tz) {
       const o = document.createElement("option");
-      o.value = tz.name;
+      o.value = tz.n;
       el.appendChild(o);
     });
   }

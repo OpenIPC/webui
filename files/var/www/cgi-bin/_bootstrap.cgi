@@ -280,6 +280,8 @@ field_text() {
   eval "hint=\"\$tHint_${name}\"";
   eval "placeholder=\"\$tPlaceholder_${name}\"";
 
+  input="<input type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" class=\"form-control\" placeholder=\"${placeholder}\"${extras}>"
+
   [ -z "$text" ] && text="Missing translation for \$tLabel_${name}"
   [ "$name" != "isp_sensorConfig" ] && placeholder=${placeholder//_/ }
 
@@ -287,7 +289,7 @@ field_text() {
   label "${text//_/ }" "for=\"${name}\" class=\"col-md-5 col-form-label\""
   div_ "class=\"col-md-7\""
   div_ "class=\"input-group\""
-  echo "<input type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" class=\"form-control\" placeholder=\"${placeholder}\"${extras}>"
+  echo "$input"
   [ -n "$units" ] && span "$units" "class=\"input-group-text\""
   _div
   [ -n "$hint" ] && help "$hint"

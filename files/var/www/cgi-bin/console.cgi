@@ -5,14 +5,19 @@ page_title="$tPageTitleWebConsole"
 cmd=$FORM_cmd
 %>
 <%in _header.cgi %>
-<div class="console">
-<div class="input-group mb-3">
-<div class="input-group-text">~#</div>
+<%
+div_ "class=\"console\""
+div_ "class=\"input-group mb-3\""
+div "~#" "class=\"input-group-text\""
+%>
 <input class="form-control" type="text" id="cmd" value="<%= $cmd %>" placeholder="<%= $tWebConsoleCmdPlaceholder %>" autofocus>
-<div class="input-group-text"><% button "⏎" "sm btn-white p-0" "id=\"submit-cmd\"" %></div>
-</div>
-<% pre "" "class=\"bg-light p-4 log-scroll\" id=\"code\"" %>
-</div>
+<div class="input-group-text p-0"><button type="button" class="btn btn-sm btn-white" "id="submit-cmd">⏎</button></div>
+<%
+_div
+pre "" "class=\"bg-light p-4 log-scroll\" id=\"code\""
+_div
+%>
+
 <script>
 jx = {
   handler: false,

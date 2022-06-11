@@ -5,15 +5,14 @@ page_title="$tPageTitlePreview"
 %>
 <%in _header.cgi %>
 <%
-div_ "class=\"row preview\""
-  div_ "class=\"col position-relative mb-4\""
-%>
-<img id="preview" src="http://<%= $ipaddr %>/image.jpg" class="img-fluid" width="1280" height="720" alt="">
-<%
-  _div
-_div
+row_ "preview"
+  col_ "col position-relative mb-4"
+    image "http://${ipaddr}/image.jpg" "id=\"preview\" class=\"img-fluid\" width=\"1280\" height=\"720\""
+  _col
+_row
 %>
 <%in _joystick.cgi %>
+
 <script>
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));

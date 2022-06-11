@@ -7,31 +7,31 @@ page_title="$tPageTitlePluginIpeye"
 %>
 <%in _header.cgi %>
 <%
-alert "$tMsgProofOfConcept"
+alert "$tMsgProofOfConcept" "warning"
 
 if [ "$(yaml-cli -g .ipeye.enabled)" = "true" ]; then
-  div_ "class=\"row row-cols-1 row-cols-xl-2 g-4 mb-3\""
-    div_ "class=\"col order-2 order-xl-1\""
+  row_ "row-cols-1 row-cols-xl-2 g-4 mb-3"
+    col_ "order-2 order-xl-1"
       card_ "$tHeaderAddFeed"
-        form_
+        form_ "#" "post"
           field_text "ipeye_login"
           field_text "ipeye_password"
           field_text "ipeye_password"
           ipeye_camera_name="$hostname"
           field_text "ipeye_camera_name"
-          ipeye_rtsp_feed_options="rtsp://${ipaddr}/stream=0 rtsp://${ipaddr}/stream=1"
           field_select "ipeye_rtsp_feed"
-          button_submit "$tButtonAddCameraToCloud"
+          button_submit "$tButtonAddCameraToCloud" "primary"
         _form
       _card
-    _div
-    div_ "class=\"col order-1 order-xl-2\""
-      p "<img src=\"/img/logo-ipeye.png\" alt=\"IPEYE Logo\">"
+    _col
+    col_ "order-1 order-xl-2"
+      p "$(image "/img/logo-ipeye.png" "title=\"IPEYE Logo\"")"
       p "$(link_to "www.ipeye.ru" "https://www.ipeye.ru/")"
       p "Don't have an account? $(link_to "Sign-up here" "https://www.ipeye.ru/")"
-    _div
-  _div
+    _col
+  _row
 %>
+
 <script>
 function handleSubmit(event) {
   event.preventDefault();

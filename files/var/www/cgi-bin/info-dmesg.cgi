@@ -5,8 +5,7 @@ page_title="$tPageTitleDmesg"
 %>
 <%in _header.cgi %>
 <%
-b "# dmesg"
-report_log "$(dmesg)"
+ex "dmesg"
 button_refresh
 %>
 <%in _footer.cgi %>

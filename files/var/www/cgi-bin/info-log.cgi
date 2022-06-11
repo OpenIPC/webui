@@ -5,8 +5,7 @@ page_title="$tPageTitleLog"
 %>
 <%in _header.cgi %>
 <%
-b "# logread"
-report_log "$(logread | tail -100)"
+ex "/sbin/logread"
 button_refresh
 %>
 <%in _footer.cgi %>

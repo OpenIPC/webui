@@ -4,8 +4,5 @@
 page_title="$tPageTitleHttpdEnv"
 %>
 <%in _header.cgi %>
-<%
-b "# printenv"
-report_log "$(printenv | sort)"
-%>
+<% ex "/bin/printenv" %>
 <%in _footer.cgi %>

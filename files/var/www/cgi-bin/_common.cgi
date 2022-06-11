@@ -20,9 +20,9 @@ check_password() {
   fi
 }
 
-debug_message() {
-  # [ "$HTTP_MODE" = "development" ] &&
-  echo "$(date +"%F %T") $1" >> /tmp/webui.log
+ex() {
+  h6 "# ${1}"
+  report_log "$(eval $1 2>&1)"
 }
 
 flash_append() {
@@ -146,11 +146,12 @@ report_error() {
 }
 
 report_info() {
-  alert "$1"
+  alert "$1" "info"
 }
 
+# report_log "text" "extras"
 report_log() {
-  pre "$1" "class=\"bg-light p-3 log-scroll\""
+  pre "$1" "class=\"small\" ${2}"
 }
 
 report_command_error() {
@@ -162,7 +163,7 @@ report_command_error() {
 }
 
 report_command_info() {
-  alert_
+  alert_ "info"
   b "# $1"
   pre "$2"
   _alert
@@ -171,11 +172,56 @@ report_command_info() {
 report_command_success() {
   h2 "$tMsgCommandExecuted" "success"
   alert_ "success"
-  b "# $1"
+  p "# ${1}" "class=\"fw-bold\""
   pre "$2"
   _alert
 }
 
+t_default() {
+  eval "echo \$tDefault_${1}"
+}
+
+t_label() {
+  eval "echo \$tLabel_${1}"
+}
+
+t_checked() {
+  [ "$2" = "$(t_value "$1")" ] && echo "checked"
+}
+
+t_hint() {
+  eval "echo \$tHint_${1}"
+}
+
+t_placeholder() {
+#  if [ "$1" = "isp_sensorConfig" ]; then
+    eval "echo \$tPlaceholder_${1}"
+#  else
+#    eval "echo \${tPlaceholder_${1}//_/ }"
+#  fi
+}
+
+t_readonly() {
+  [ "$2" = "$(t_value "$1")" ] && echo "readonly"
+}
+
+t_selected() {
+  [ "$2" = "$(t_value "$1")" ] && echo "selected"
+}
+
+t_options() {
+  eval "echo \${tOptions_${1}//,/ }"
+}
+
+t_units() {
+  eval "echo \$tUnits_${1}"
+}
+
+t_value() {
+  eval "echo \$${1}"
+}
+
+source $PWD/_settings.sh
 source $PWD/locale/en.sh
 locale=$(cat /etc/web_locale)
 [ -z "$locale" ] && locale="en"

@@ -8,7 +8,7 @@ page_title="$tPageTitlePreviewHelp"
 <%
 p "Detailed information available $(link_to "in the wiki" "https://github.com/OpenIPC/wiki/blob/master/en/majestic-streamer.md")."
 
-div_ "class=\"row row-cols-1 row-cols-md-2 g-4\""
+div_ "class=\"row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3\""
   col_card_ "Web Pages"
     dl_
       dt "http://${ipaddr}/"

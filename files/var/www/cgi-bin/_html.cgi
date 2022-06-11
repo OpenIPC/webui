@@ -11,6 +11,10 @@ tag() {
   fi
 
   echo "<${tag}${extras}>${text}</${tag}>"
+
+  tag=""
+  text=""
+  extras=""
 }
 
 div_() { echo "<div ${1}>"; }

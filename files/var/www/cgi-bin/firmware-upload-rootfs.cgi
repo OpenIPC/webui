@@ -28,10 +28,10 @@ fi
 if [ ! -z "$error" ]; then
   report_error "$error"
 else
-  echo "<pre class=\"bg-light p-4 log-scroll\">"
+  pre_ "class=\"bg-light p-4 log-scroll\""
   mv ${file} /tmp/${name}
   sysupgrade --rootfs=/tmp/${name} --force_ver --force_all
-  echo "</pre>"
+  _pre
   button_home
 fi
 %>

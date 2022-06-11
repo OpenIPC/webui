@@ -15,11 +15,13 @@ body > header {background: var(--bs-blue);}
 body > main > .container > h2 {font-weight: 700;color: var(--bs-blue);margin: 1rem 0 1.5rem;}
 body > footer > .container {border-top: solid 1px #d3d3d3;font-size: 0.8rem;padding-top: 1rem;}
 
+pre {background: #4c60d812;margin: 0.5rem 0 1rem;padding: 0.5rem 1rem;}
+pre span.title {display:inline-block;width:8rem;}
+
+
 .card-header {border-bottom: solid 1px var(--bs-blue);color: var(--bs-blue);font-weight: 700;text-align: right;text-transform: uppercase;}
 .card:not(.danger) .card-body {background: #4c60d811;}
 .card-body > div.row {padding: 0.5rem 0 0;}
-.card-body pre {background: #4c60d812;margin: 0.5rem 0 1rem;padding: 0.5rem 1rem;}
-.card-body pre span.title {display:inline-block;width:8rem;}
 .card dl dd, .card dl dt {border-bottom: solid 1px #ffffff;margin-bottom: 0;}
 
 pre, .pre {white-space: pre;font-size: 1rem;}

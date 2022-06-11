@@ -21,7 +21,7 @@ network_dns_2=$(cat /etc/resolv.conf | grep nameserver | sed -n 2p | cut -d' ' -
 %>
 <%in _header.cgi %>
 <%
-div_ "class=\"row row-cols-1 row-cols-md-2 g-4 mb-4\""
+row_ "row-cols-1 row-cols-md-2 g-4 mb-4"
   col_card_ "$tHeaderSettings"
     form_ "/cgi-bin/network-update.cgi" "post"
       action="update"
@@ -33,43 +33,19 @@ div_ "class=\"row row-cols-1 row-cols-md-2 g-4 mb-4\""
       field_text "network_gateway" "$disabled"
       field_text "network_dns_1" "$disabled"
       field_text "network_dns_2" "$disabled"
-      button_submit
+      button_submit "$tButtonFormSubmit" "primary"
     _form
   _col_card
-_div
+_row
 
-div_ "class=\"row g-4 mb-4\""
-  col_card_ "$tHeaderNetworkInterfaces"
-    b "# cat /etc/network/interfaces"
-    pre "$(cat /etc/network/interfaces)"
-  _col_card
-
-  col_card_ "$tHeaderNetworkAddress"
-    b "# ip address"
-    pre "$(ip address | sed "s/</\&lt;/g" | sed "s/>/\&gt;/g")"
-  _col_card
-
-  col_card_ "$tHeaderNetworkRouting"
-    b "# ip route list"
-    pre "$(ip route list)"
-  _col_card
-
-  col_card_ "$tHeaderNetworkStatus"
-    b "# netstat -tulpan"
-    pre "$(netstat -tulpan)"
-  _col_card
-
-  col_card_ "$tHeaderDnsResolver"
-    b "# cat /etc/resolv.conf"
-    pre "$(cat /etc/resolv.conf 2>&1)"
-  _col_card
-
-  col_card_ "$tHeaderNtpConfig"
-    b "# cat /etc/ntp.conf"
-    pre "$(cat /etc/ntp.conf 2>&1)"
-  _col_card
-
-_div
+row_ "g-4 mb-4"
+  col_card "$tHeaderNetworkInterfaces" "$(ex "cat /etc/network/interfaces")"
+  col_card "$tHeaderNetworkAddress" "$(ex "ip address")"
+  col_card "$tHeaderNetworkStatus" "$(ex "netstat -tulpan")"
+  col_card "$tHeaderNetworkRouting" "$(ex "ip route list")"
+  col_card "$tHeaderDnsResolver" "$(ex "cat /etc/resolv.conf")"
+  col_card "$tHeaderNtpConfig" "$(ex "cat /etc/ntp.conf")"
+_row
 %>
 
 <script>

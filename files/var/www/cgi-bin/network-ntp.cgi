@@ -15,24 +15,21 @@ if [ "$(cat /etc/TZ)" != "$TZ" ]; then
   _alert
 fi
 
-div_ "class=\"row row-cols-1 row-cols-lg-2 g-4 mb-4\""
+row_ "row-cols-1 row-cols-lg-2 g-4 mb-4"
   echo "<datalist id=\"tz_list\"></datalist>"
 
   col_card_ "$tHeaderTimezone"
     form_ "/cgi-bin/network-tz-update.cgi" "post"
       field_text "tz_name" "list=\"tz_list\""
       field_text "tz_data" "readonly"
-      button_submit
+      button_submit "$tButtonFormSubmit" "primary"
     _form
   _col_card
 
   col_card_ "TimeZone Settings"
-    b "# cat /etc/TZ"
-    pre "$(cat /etc/TZ)"
-    b "# echo $TZ"
-    pre "$TZ"
-    b "# date"
-    pre "$(date)"
+    ex "cat /etc/TZ"
+    ex "echo \$TZ"
+    ex "/bin/date"
   _col_card
 
   col_card_ "$tHeaderNtpServers"
@@ -42,16 +39,15 @@ div_ "class=\"row row-cols-1 row-cols-lg-2 g-4 mb-4\""
         eval "ntp_server_${i}=$(sed -n ${x}p /etc/ntp.conf | cut -d " " -f 2)"
         field_text "ntp_server_${i}" "placeholder=\"${i}.pool.ntp.org\" data-pattern=\"host-ip\""
       done
-      button_submit
+      button_submit "$tButtonFormSubmit" "primary"
     _form
   _col_card
 
   col_card_ "NTP Settings"
-    b "# cat /etc/ntp.conf"
-    pre "$(cat /etc/ntp.conf)"
+    ex "cat /etc/ntp.conf"
     button_link_to "$tButtonResetToDefaults" "/cgi-bin/network-ntp-reset.cgi" "danger"
   _col_card
-_div
+_row
 %>
 
 <script src="/js/tz.js" async></script>

@@ -4,33 +4,38 @@
 if [ -z "$POST_language" ]; then
   language="en"
 else
-  language="$POST_language"
+  language="$POST_webui_language"
 fi
 echo $language > /etc/web_locale
 
-if [ -z "$POST_password" ] && [ "12345" != "$password" ]; then
+default_password=$(grep admin /rom/etc/httpd.conf | cut -d: -f3)
+old_password=$(grep admin /etc/httpd.conf | cut -d: -f3)
+new_password="$POST_webui_password"
+new_password_confirmation="$POST_webui_password_confirmation"
+
+if [ -z "$new_password" ] && [ "$default_password" != "$old_password" ]; then
   flash_save "success" "$tMsgChangesSaved"
   redirect_to "/cgi-bin/webui-settings.cgi"
   exit
-elif [[ ! -z "$(echo "$POST_password" | grep " ")" ]]; then
+elif [[ ! -z "$(echo "$new_password" | grep " ")" ]]; then
   flash_save "danger" "$tMsgPasswordHasSpaces"
   redirect_to "/cgi-bin/webui-settings.cgi"
   exit
-elif [ "5" -ge "${#POST_password}" ]; then
+elif [ "5" -ge "${#new_password}" ]; then
   flash_save "danger" "$tMsgPasswordIsTooShort"
   redirect_to "/cgi-bin/webui-settings.cgi"
   exit
-elif [ -z "$POST_passwordconfirmation" ]; then
+elif [ -z "$new_password_confirmation" ]; then
   flash_save "danger" "$tMsgPasswordNeedsConfirmation"
   redirect_to "/cgi-bin/webui-settings.cgi"
   exit
-elif [ "$POST_password" != "$POST_passwordconfirmation" ]; then
+elif [ "$new_password" != "$new_password_confirmation" ]; then
   flash_save "danger" "$tMsgPasswordDosntMatch"
   redirect_to "/cgi-bin/webui-settings.cgi"
   exit
 fi
 
-result=$(sed -i s/:admin:.*/:admin:${POST_password}/ /etc/httpd.conf 2>&1)
+result=$(sed -i s/:admin:.*/:admin:${new_password}/ /etc/httpd.conf 2>&1)
 if [ $? -eq 0 ]; then
   flash_delete
   flash_save "success" "$tMsgChangesSaved"

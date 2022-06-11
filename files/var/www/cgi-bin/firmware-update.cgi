@@ -14,11 +14,9 @@ else
   [ "$POST_fw_reset" = "true" ] && opts="${opts} -n"
   [ "$POST_fw_noreboot" = "true" ] && opts="${opts} -x"
   [ "$POST_fw_enforce" = "true" ] && opts="${opts} --force_ver"
-  echo "<pre class=\"bg-light p-4 log-scroll\">"
-  echo "sysupgrade ${opts}"
-  sysupgrade ${opts} 2>&1
-  echo "</pre>"
+  ex "sysupgrade ${opts}"
   button_home
+  button_reboot
 fi
 %>
 <%in _footer.cgi %>

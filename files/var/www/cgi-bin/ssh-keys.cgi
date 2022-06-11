@@ -4,14 +4,12 @@
 page_title="$tPageTitleSshKeys"
 
 function readKey() {
-  if [ -n "$(fw_printenv key_${1})" ]; then
-    echo "<div class=\"alert alert-secondary\" style=\"overflow-wrap: anywhere;\">$(fw_printenv key_${1})</div>"
-  fi
+  [ -n "$(fw_printenv key_${1})" ] && alert "$(fw_printenv key_${1})" "secondary" "style=\"overflow-wrap: anywhere;\""
 }
 
 function saveKey() {
   if [ -n "$(fw_printenv key_${1})" ]; then
-    flash_save "warning" "${1} $tMsgSshKeyExists"
+    flash_save "danger" "${1} $tMsgSshKeyExists"
   else
     fw_setenv key_${1} $(dropbearconvert dropbear openssh /etc/dropbear/dropbear_${1}_host_key - 2>/dev/null | base64 | tr -d '\n')
   fi
@@ -51,26 +49,31 @@ case "$POST_action" in
   *)
 %>
 <%in _header.cgi %>
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
-<div class="col"><div class="card h-100"><div class="card-body">
-<form action="/cgi-bin/ssh-keys.cgi" method="post">
-<p><%= $tMsgSshKeyBackup %></p>
-<% button_submit_action "backup" "$tButtonSshKeyBackup" %>
-</form>
-</div></div></div>
-<div class="col"><div class="card h-100"><div class="card-body">
-<p><%= $tMsgSshKeyRestore %></p>
-<form action="/cgi-bin/ssh-keys.cgi" method="post">
-<% button_submit_action "restore" "$tButtonSshKeyRestore" %>
-</form>
-</div></div></div>
-<div class="col"><div class="card h-100"><div class="card-body">
-<p><%= $tMsgSshKeyDelete %></p>
-<form action="/cgi-bin/ssh-keys.cgi" method="post">
-<% button_submit_action "delete" "$tButtonSshKeyDelete" %>
-</form>
-</div></div></div>
-</div>
-<% readKey "ed25519" %>
+<%
+div_ "class=\"row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4\""
+  col_card_ "Key Backup"
+    form_ "/cgi-bin/ssh-keys.cgi" "post"
+      p "$tMsgSshKeyBackup"
+      button_submit_action "backup" "$tButtonSshKeyBackup"
+    _form
+  _col_card
+
+  col_card_ "Key Restore"
+    p "$tMsgSshKeyRestore"
+    form_ "/cgi-bin/ssh-keys.cgi" "post"
+      button_submit_action "restore" "$tButtonSshKeyRestore"
+    _form
+  _col_card
+
+  col_card_ "Key Delete"
+    p "$tMsgSshKeyDelete"
+    form_ "/cgi-bin/ssh-keys.cgi" "post"
+      button_submit_action "delete" "$tButtonSshKeyDelete"
+    _form
+  _col_card
+_div
+
+readKey "ed25519"
+%>
 <%in _footer.cgi %>
 <% esac %>

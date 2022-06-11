@@ -25,13 +25,12 @@ div_ "class=\"row row-cols-1 row-cols-xl-2 g-4 mb-3\""
   col_card_ "$tHeaderVtun"
     form_ "/cgi-bin/plugin-vtun.cgi" "post"
       if [ -f "$service_file" ]; then
-        b "$service_file"
-        pre "$(cat $service_file)"
-        button_submit_delete "reset" "$tButtonResetConfig"
+        ex "cat $service_file"
+        button_submit_action "reset" "$tButtonResetConfig" "data-method=\"delete\""
       else
         extras=""; [ -n "$vtun_server" ] && extras="${extras} disabled"
         field_text "vtun_server" "$extras"
-        button_submit
+        button_submit "$tButtonFormSubmit" "primary"
       fi
     _form
   _col_card

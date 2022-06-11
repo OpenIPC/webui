@@ -121,7 +121,7 @@ else
         [ -f "/root/coredump.tgz" ] && alert "$tMsgCoreDumpExists" "danger"
       col_last
     _div
-    button_submit
+    button_submit "$tButtonFormSubmit" "primary"
   _form
 fi
 %>

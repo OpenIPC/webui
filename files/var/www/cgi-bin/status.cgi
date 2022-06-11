@@ -5,54 +5,50 @@ get_soc_temp
 page_title="$tPageTitleDeviceStatus"
 %>
 <%in _header.cgi %>
-<div class="row">
+<%
+row_
+  col_card_ "$tHeaderDeviceInfo"
+    b "$tHardware"
+    pre_ "class=\"small\""
+      print2c "${tSoC}:" "${soc}"
+      print2c "${tSoCFamily}:" "${soc_family}"
+      print2c "${tSensor}:" "${sensor_ini}"
+      print2c "${tFlash}:" "${flash_size} MB"
+      [ -n "$soc_temp" ] && print2c "${tSoCTemp}:" "${soc_temp}°C"
+    _pre
 
-<% col_card_ "$tHeaderDeviceInfo" %>
-<b><%= $tHardware %></b>
-<pre><%
-print2c "${tSoC}:" "${soc}"
-print2c "${tSoCFamily}:" "${soc_family}"
-print2c "${tSensor}:" "${sensor_ini}"
-print2c "${tFlash}:" "${flash_size} MB"
-[ -n "$soc_temp" ] && print2c "${tSoCTemp}:" "${soc_temp}°C"
-%></pre>
-<b><%= $tFirmware %></b>
-<pre><%
-print2c "${tVersion}:" "${fw_version}-${fw_variant}"
-print2c "${tBuild}:" "${fw_build}"
-%></pre>
-<b><%= $tSystem %></b>
-<pre class="mb-0"><%
-print2c "${tHostname}:" "${hostname}"
-print2c "${tWanMac}:" "${wan_mac}"
-%></pre>
-</div></div></div>
+    b "$tFirmware"
+    pre_ "class=\"small\""
+      print2c "${tVersion}:" "${fw_version}-${fw_variant}"
+      print2c "${tBuild}:" "${fw_build}"
+    _pre
 
-<% col_card_ "$tHeaderSystemInfo" %>
-<b># date</b>
-<% pre "$(date)" %>
-<p class="small">
-<a href="/cgi-bin/network-ntp.cgi"><%= $tEditTimezone %></a> |
-<a href="/cgi-bin/ntp-update.cgi"><%= $tSyncTime %></a>
-</p>
-<b># uptime</b>
-<% pre "$(/usr/bin/uptime)" %>
-<b># cat /proc/meminfo | grep Mem</b>
-<% pre "$(cat /proc/meminfo | grep Mem)" %>
-</div></div></div>
+    b "$tSystem"
+    pre_ "class=\"small mb-0\""
+      print2c "${tHostname}:" "${hostname}"
+      print2c "${tWanMac}:" "${wan_mac}"
+    _pre
+  _col_card
 
-<% col_card_ "$tHeaderResources" %>
-<b># df -T</b>
-<% pre "$(df -T)" %>
-</div></div></div>
+  col_card_ "$tHeaderSystemInfo"
+    ex "/bin/date"
+    div_ "class=\"small mb-3\""
+      link_to "$tEditTimezone" "/cgi-bin/network-ntp.cgi"
+      link_to "$tSyncTime" "/cgi-bin/ntp-update.cgi"
+    _div
+    ex "/usr/bin/uptime"
+    ex "cat /proc/meminfo | grep Mem"
+  _col_card
 
-</div>
-<div class="row">
+  col_card_ "$tHeaderResources"
+    ex "df -T"
+  _col_card
+_row
 
-<% col_card_ "$tHeaderTopProcesses" %>
-<b># top -n 1 -b | sed '/top -n/d' | sed '1,4d' | head -20</b>
-<% pre "$(top -n 1 -b | sed '/top -n/d' | sed '1,4d' | head -20)" "class=\"mb-0\"" %>
-</div></div></div>
-
-</div>
+row_
+  col_card_ "$tHeaderTopProcesses"
+    ex "top -n 1 -b | sed '/top -n/d' | sed '1,4d' | head -20"
+  _col_card
+_row
+%>
 <%in _footer.cgi %>

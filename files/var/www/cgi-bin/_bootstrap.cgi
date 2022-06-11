@@ -1,303 +1,215 @@
 #!/usr/bin/haserl
 <%
-# alert "text" "type" "extras"
-alert() {
-  alert_ "$2" "$3"
-  echo "$1"
-  _alert
-}
+label_cols="col-md-4"
+input_cols="col-md-8"
 
 # alert_ "type" "extras"
-alert_() {
-  type="info"; [ -n "$1" ] && type="$1"
-  extras=""; [ -n "$2" ] && extras=" ${2}"
-  div_ "class=\"alert alert-${type}\"${extras}"
-}
-
-# _alert
-_alert() {
-  _div
-}
+alert_() { div_ "class=\"alert alert-${1}\" ${2}"; }
+_alert() { _div; }
+# alert "text" "type" "extras"
+alert() { alert_ "$2" "$3"; echo -e "$1"; _alert; }
 
 # button "text" "type" "extras"
-button() {
-  type="$2"; [ -z "$type" ] && type="primary"
-  extras=""; [ -z "$3" ] && extras=" ${3}"
-  echo "<button type=\"button\" class=\"btn btn-${type}\"${extras}>${1}</button>"
-}
+button() { echo "<button type=\"button\" class=\"btn btn-${2}\" ${3}>${1}</button>"; }
 
 # button_link_to "text" "url" "type" "extras"
-button_link_to() {
-  type="$3"; [ -z "$type" ] && type="primary"
-  extras=""; [ -z "$4" ] && extras=" ${4}"
-  echo "<a class=\"btn btn-${type}\" href=\"${2}\">${1}</a>"
-}
+button_link_to() { echo "<a class=\"btn btn-${3}\" href=\"${2}\" ${4}>${1}</a>"; }
 
-# button_submit "text" "type"
-button_submit() {
-  text="$1"; [ -z "$text" ] && text="$tButtonFormSubmit"
-  type="$2"; [ -z "$type" ] && type="primary"
-  echo "<button type=\"submit\" class=\"btn btn-${type} mt-3\">${text}</button>"
-}
+# button_submit "text" "type" "extras"
+button_submit() { echo "<button type=\"submit\" class=\"btn btn-${2} mt-3\" ${3}>${1}</button>"; }
 
-# button_submit_action "action" "text"
-button_submit_action() {
-  echo "<button type=\"submit\" class=\"btn btn-danger\" name=\"action\" value=\"${1}\">${2}</button>"
-}
+# button_submit_action "action" "text" "extras"
+button_submit_action() { echo "<button type=\"submit\" class=\"btn btn-danger\" name=\"action\" value=\"${1}\" ${3}>${2}</button>"; }
 
-# button_submit_delete "action" "text"
-button_submit_delete() {
-  echo "<button type=\"submit\" class=\"btn btn-danger\" name=\"action\" value=\"${1}\" data-method=\"delete\">${2}</button>"
-}
-
-# button_home
-button_home() {
-  button_link_to "$tButtonGoHome" "/"
-}
+button_home() { button_link_to "$tButtonGoHome" "/" "primary"; }
+button_reboot() { button_link_to "$tButtonReboot" "/cgi-bin/reboot.cgi" "danger"; }
 
 # button_refresh
-button_refresh() {
-  echo "<a class=\"btn btn-primary refresh\">${tButtonRefresh}</a>"
-}
+button_refresh() { link_to "$tButtonRefresh" "#" "class=\"btn btn-primary refresh\""; }
 
-# card_header "text"
-card_header() {
-  div "$1" "class=\"card-header\""
-}
+# row_ "class"
+row_() { div_ "class=\"row ${1}\""; }
+_row() { _div; }
+row() { row_ "$2"; echo "$1"; _row; }
+
+# col_ "class"
+col_() { div_ "class=\"${1:=col}\""; }
+_col() { _div; }
 
 # card_ "text"
-card_() {
-  div_ "class=\"card mb-3\""
-  card_header "$1"
-  div_ "class=\"card-body\""
-}
+card_() { div_ "class=\"card mb-3 ${2}\""; card_header "$1"; card_body_; }
+_card() { _div; _div; }
 
-# _card
-_card() {
-  _div
-  _div
-}
+# card_header "text"
+card_header() { div "$1" "class=\"card-header\""; }
+
+card_body_() { div_ "class=\"card-body\""; }
+_card_body() { _div; }
+card_body() { card_body_; _card_body; }
+
 
 # col_card "text"
-col_card_() {
-  div_ "class=\"col mb-3\""
-  div_ "class=\"card h-100\""
-  card_header "$1"
-  div_ "class=\"card-body\""
-}
-
-# _col_card
-_col_card() {
-  _div
-  _div
-  _div
-}
+col_card_() { col_ "mb-3"; card_ "$1" "h-100"; }
+_col_card() { _card; _col; }
+col_card() { col_card_ "$1"; echo "$2"; _col_card; }
 
 # col_first
-col_first() {
-  div_ "class=\"col\""
-}
+col_first() { div_ "class=\"col\""; }
+col_last() { _div; }
+col_next() { col_last; col_first; }
 
-# col_lastr
-col_last() {
-  _div
-}
-
-# col_next
-col_next() {
-  col_last
-  col_first
-}
-
-# dd_cols "text" "extras"
-dd_cols() {
-  extras=""; [ -n "$2" ] && extras=" ${2}"
-  dd "$1" "class=\"col-8 text-end\"${extras}"
-}
-
-# dt_cols "text" "extras"
-dt_cols() {
-  extras=""; [ -n "$2" ] && extras=" ${2}"
-  dt "$1" "class=\"col-4\"${extras}"
-}
-
-# dropdown_to "text" "url"
-dropdown_to() {
-  tag "li" "<a class=\"dropdown-item\" href=\"${2}\">${1}</a>"
-}
+# container "text"
+container_() { div_ "class=\"container\""; }
+_container() { _div; }
+container() { container_; echo "$1"; _container; }
 
 # field_checbox "name" "extras"
 field_checkbox() {
-  name="$1"
-  extras=""; [ -n "$2" ] && extras=" ${2}"
-  eval "value=\"\$${name}\""
-  eval "text=\"\$tLabel_${name}\""; [ -z "$text" ] && text="Please translate \$tLabel_${name}"
-  [ "true" = "$value" ] && checked=" checked" || checked=""
-
   div_ "class=\"mb-2 boolean\""
-  div_ "class=\"form-check\""
-  echo "<input type=\"hidden\" name=\"${name}\" id=\"${name}-false\" value=\"false\">"
-  echo "<input type=\"checkbox\" name=\"${name}\" id=\"${name}\" ${checked} value=\"true\" class=\"form-check-input\"${extras}>"
-  label "${text//_/ }" "for=\"${name}\" class=\"form-check-label\""
-  _div
+    div_ "class=\"form-check\""
+      echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}-false\" value=\"false\">"
+      echo "<input type=\"checkbox\" name=\"${1}\" id=\"${1}\" $(t_checked "$1" "true") value=\"true\" class=\"form-check-input\" ${2}>"
+      label "$(t_label "$1")" "for=\"${1}\" class=\"form-check-label\""
+    _div
   _div
 }
 
 # field_file "name"
 field_file() {
-  name="$1"
-  eval "text=\"\$tLabel_${name}\""
-  eval "placeholder=\"\$tPlaceholder_${name}\""
-
-  div_ "class=\"row mb-2 file\""
-  label "${text//_/ }" "for=\"${name}\" class=\"col-md-3 form-label\""
-  div_ "class=\"col-md-9\""
-  echo "<input type=\"file\" name=\"${name}\" id=\"${name}\" placeholder=\"${placeholder}\" class=\"form-control\">"
-  _div
-  _div
+  row_ "mb-2 file"
+    label "$(t_label "$1")" "for=\"${1}\" class=\"col-md-3 form-label\""
+    col_ "col-md-9"
+      echo "<input type=\"file\" name=\"${1}\" id=\"${1}\" placeholder=\"$(t_placeholder "$1")\" class=\"form-control\">"
+    _col
+  _row
 }
 
 # field_hidden "name"
 field_hidden() {
-  name="$1"
-  eval "value=\"\$${name}\""
-
-  echo "<input type=\"hidden\" name=\"${name}\" id=\"${name}\" value=\"${value}\">"
+  echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}\" value=\"$(t_value "$1")\">";
 }
 
 # field_number "name"
 field_number() {
-  name="$1"
-  eval "value=\"\$${name}\""
-  eval "text=\"\$tLabel_${name}\""; [ -z "$text" ] && text="Please translate \$tLabel_${name}"
-
-  div_ "class=\"row mb-2 number\""
-  label "${text//_/ }" "for=\"${name}\" class=\"col-md-5 col-form-label\""
-  div_ "class=\"col-md-7\""
-  div_ "class=\"input-group\""
-  echo "<input class=\"form-control text-end\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\">"
-  [ -n "$units" ] && span "$units" "class=\"input-group-text\""
-  _div
-  [ -n "$hint" ] && help "$hint"
-  _div
-  _div
+  row_ "mb-2 number"
+    label "$(t_label "$1")" "for=\"${1}\" class=\"${label_cols} col-form-label\""
+    col_ "$input_cols"
+      div_ "class=\"input-group\""
+        echo "<input class=\"form-control text-end\" type=\"text\" name=\"${1}\" id=\"${1}\" value=\"$(t_value "$1")\" placeholder=\"$(t_placeholder "$1")\">"
+        units "$1"
+      _div
+      help "$1"
+    _col
+  _row
 }
 
 # field_password "name"
 field_password() {
-  name="$1"
-  eval "text=\"\$tLabel_${name}\""
-  eval "value=\"\$${name}\""
-
-  div_ "class=\"row mb-2 password\""
-  label "${text//_/ }" "for=\"${name}\" class=\"col-md-5 col-form-label\""
-  div_ "class=\"col-md-7\""
-  echo "<input type=\"password\" name=\"${name}\" id=\"${name}\" value=\"${value}\" class=\"form-control\">"
-  _div
-  _div
+  row_ "mb-2 password"
+    label "$(t_label "$1")" "for=\"${1}\" class=\"${label_cols} col-form-label\""
+    col_ "$input_cols"
+      echo "<input type=\"password\" name=\"${1}\" id=\"${1}\" value=\"$(t_value "$1")\" class=\"form-control\" placeholder=\"$(t_placeholder "$1")\">"
+    _col
+  _row
 }
 
 # field_range "name"
 field_range() {
-  name="$1"
-  eval "text=\"\$tLabel_${name}\""
-  eval "value=\"\$${name}\""
-  readonly=""; [ "auto" = "$value" ] && readonly=" readonly"
-
-  div_ "class=\"row mb-2 range\""
-  label "${text//_/ }" "for=\"${name}\" class=\"col-md-5 col-form-label\""
-  div_ "class=\"col-md-7\""
-  div_ "class=\"input-group\""
-  if [ ! -z $(echo "${options}" | grep -E auto) ]; then
-    [ "auto" = "$value" ] && checked=" checked" || checked=""
-    span_ "class=\"input-group-text\""
-    label "<input class=\"form-check-input auto-value\" type=\"checkbox\" data-for=\"${name}\" data-value=\"${default}\"${checked}> auto"
-    _span
-  fi
-  echo "<input class=\"form-control text-end range\" type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" placeholder=\"${placeholder}\" data-units=\"${units}\"${readonly}>"
-  [ -n "$units" ] && span "${units}" "class=\"input-group-text\""
-  _div
-  [ -n "$hint" ] && help "$hint"
-  _div
-  _div
+  row_ "mb-2 range"
+    label "$(t_label "$1")" "for=\"${1}\" class=\"${label_cols} col-form-label\""
+    col_ "$input_cols"
+      div_ "class=\"input-group\""
+        if [ -n "$(t_options "$1" | grep -E auto)" ]; then
+          span_ "class=\"input-group-text\""
+            label "<input class=\"form-check-input auto-value\" type=\"checkbox\" data-for=\"${1}\" data-value=\"$(t_default "$1")\" $(t_checked "$1" "auto")> auto"
+          _span
+        fi
+        echo "<input class=\"form-control text-end range\" type=\"text\" name=\"${1}\" id=\"${1}\" value=\"$(t_value "$1")\" placeholder=\"$(t_placeholder "$1")\" data-units=\"$(t_units "$1")\" $(t_readonly "$1" "auto")>"
+        units "$1"
+      _div
+      help "$1"
+    _col
+  _row
 }
 
 # field_select "name"
 field_select() {
-  name="$1"
-  eval "text=\"\$tLabel_${name}\""
-  eval "hint=\"\$tHint_${name}\"";
-  eval "options=\"\$${name}_options\""
-  eval "placeholder=\"\$tPlaceholder_${name}\"";
-  eval "value=\"\$${name}\""
-
-  div_ "class=\"row mb-2 select\""
-  label "${text//_/ }" "for=\"${name}\" class=\"col-md-5 col-form-label\""
-  div_ "class=\"col-md-7\""
-  div_ "class=\"input-group\""
-  echo "<select class=\"form-select\" id=\"${name}\" name=\"${name}\">"
-  echo "<option value=\"\"></option>"
-  for item in $options; do
-    option_name="${item}"
-    option_value="${item}"; [ -z "$option_value" ] && option_value="$option_name"
-    selected=""; [ -n "$value" ] && [ "$option_value" = "$value" ] && selected=" selected"
-    echo "<option value=\"${option_value}\"${selected}>${option_name}</option>"
-  done
-  echo "</select>"
-  [ -n "$units" ] && span "${units}" "class=\"input-group-text\""
-  _div
-  [ -n "$hint" ] && help "$hint"
-  _div
-  _div
+  row_ "mb-2 select"
+    label "$(t_label "$1")" "for=\"${1}\" class=\"${label_cols} col-form-label\""
+    col_ "$input_cols"
+      div_ "class=\"input-group\""
+        echo "<select class=\"form-select\" id=\"${1}\" name=\"${1}\">"
+        [ -z "$(t_value "$1")" ] && echo "<option value=\"\"></option>"
+        for o in $(t_options "$1"); do
+          _v="${o%|*}"; _n="${o#*|}"
+          echo "<option value=\"${_v}\" $(t_selected "$1" "${_v}")>${_n}</option>"
+          unset _v; unset _n
+        done
+        echo "</select>"
+        units "$1"
+      _div
+      help "$1"
+    _col
+  _row
 }
 
 # field_swith "name"
 field_switch() {
-  name="$1"
-  eval "value=\"\$${name}\"";
-  eval "text=\"\$tLabel_${name}\""
-  eval "hint=\"\$tHint_${name}\""; [ -n "$hint" ] && hint="<p class=\"hint\">${hint}</p>"
-  checked=""; [ "true" = "$value" ] && checked=" checked"
-
-  div_ "class=\"row mb-2 boolean\""
-  label "${text//_/ }" "for=\"${name}\" class=\"col-md-5 form-check-label border-bottom\""
-  div_ "class=\"col-md-7\""
-  div_ "class=\"form-check form-switch\""
-  echo "<input type=\"hidden\" name=\"${name}\" id=\"${name}-false\" value=\"false\">"
-  echo "<input type=\"checkbox\" name=\"${name}\" id=\"${name}\"${checked} role=\"switch\" value=\"true\" class=\"form-check-input\">"
-  _div
-  [ -n "$hint" ] && help "$hint"
-  _div
-  _div
+  row_ "mb-2 boolean"
+    label "$(t_label "$1")" "for=\"${1}\" class=\"${label_cols} form-check-label\""
+    col_ "$input_cols"
+      div_ "class=\"form-check form-switch\""
+        echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}-false\" value=\"false\">"
+        echo "<input type=\"checkbox\" name=\"${1}\" id=\"${1}\" $(t_checked "$1" "true") role=\"switch\" value=\"true\" class=\"form-check-input\">"
+      _div
+      help "$1"
+    _col
+  _row
 }
 
 # field_text "name"
 field_text() {
-  name="$1"
-  extras=""; [ -n "$2" ] && extras=" ${2}"
-  eval "value=\"\$${name}\""
-  eval "text=\"\$tLabel_${name}\"";
-  eval "hint=\"\$tHint_${name}\"";
-  eval "placeholder=\"\$tPlaceholder_${name}\"";
-
-  input="<input type=\"text\" name=\"${name}\" id=\"${name}\" value=\"${value}\" class=\"form-control\" placeholder=\"${placeholder}\"${extras}>"
-
-  [ -z "$text" ] && text="Missing translation for \$tLabel_${name}"
-  [ "$name" != "isp_sensorConfig" ] && placeholder=${placeholder//_/ }
-
-  div_ "class=\"row mb-2 string\""
-  label "${text//_/ }" "for=\"${name}\" class=\"col-md-5 col-form-label\""
-  div_ "class=\"col-md-7\""
-  div_ "class=\"input-group\""
-  echo "$input"
-  [ -n "$units" ] && span "$units" "class=\"input-group-text\""
-  _div
-  [ -n "$hint" ] && help "$hint"
-  _div
-  _div
+  row_ "mb-2 string"
+    label "$(t_label "$1")" "for=\"${1}\" class=\"${label_cols} col-form-label\""
+    col_ "$input_cols"
+      div_ "class=\"input-group\""
+        echo "<input type=\"text\" name=\"${1}\" id=\"${1}\" value=\"$(t_value "$1")\" class=\"form-control\" placeholder=\"$(t_placeholder "$1")\" ${2}>"
+        units "$1"
+      _div
+      help "$1"
+    _col
+  _row
 }
 
-help() {
-  p "${1//_/ }" "class=\"hint text-secondary\""
+help() { [ -n "$(t_hint "$1")" ] && p "$(t_hint "$1")" "class=\"hint text-secondary\""; }
+
+nav_() { A "nav" "$1"; }
+_nav() { Z "nav"; }
+
+navbar_() { nav_ "class=\"navbar navbar-light bg-light mb-3 ${1}\""; }
+_navbar() { _nav; }
+
+# nav_dropdown_ "text" "name"
+nav_dropdown_() {
+  li_ "class=\"nav-item dropdown\""
+    link_to "$(eval echo \$tMenu${1})" "#" "class=\"nav-link dropdown-toggle\" id=\"dropdown${1}\" role=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\""
+  ul_ "class=\"dropdown-menu\" aria-labelledby=\"dropdown${1}\""
 }
+_nav_dropdown() { _ul; _li; }
+
+# nav_dropdown_item "text" "url"
+nav_dropdown_item() { link_to "$1" "$2" "class=\"dropdown-item\""; }
+
+# nav_dropdown_to "text" "url"
+nav_dropdown_to() { li "$(nav_dropdown_item "${1}" "${2}")"; }
+
+nav_item() { li "$1" "class=\"nav-item\""; }
+nav_link() { link_to "$1" "$2" "class=\"nav-link\""; }
+nav_item_link() { nav_item "$(nav_link "$1" "$2")"; }
+
+# navbar_toggler "id"
+navbar_toggler() { echo "<button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#${1}\" aria-controls=\"${1}\" aria-expanded=\"false\" aria-label=\"Toggle navigation\"><span class=\"navbar-toggler-icon\"></span></button>"; }
+
+
+units() { [ -n "$(t_units "$1")" ] && span "$(t_units "$1")" "class=\"input-group-text\""; }
 %>

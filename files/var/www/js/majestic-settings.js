@@ -24,31 +24,31 @@ function generateSofiaHash(text) {
 }
 
 window.addEventListener("load", () => {
-    if ($("#netip-enabled")) {
-        $("#netip-enabled").addEventListener("change", (event) => {
-            $("#netip-user").required = event.target.checked;
-            $("#netip-password-plain").required = event.target.checked;
+    if ($("#mj_netip_enabled")) {
+        $("#mj_netip_enabled").addEventListener("change", (event) => {
+            $("#mj_netip_user").required = event.target.checked;
+            $("#mj_netip_password_plain").required = event.target.checked;
         });
     }
 
-    if ($("#netip-password-plain")) {
+    if ($("#mj_netip_password_plain")) {
         $("form").addEventListener("submit", (event) => {
-            const password = $("#netip-password-plain").value.trim();
-            if (password !== "") $("#netip-password").value = generateSofiaHash(password);
+            const password = $("#mj_netip_password_plain").value.trim();
+            if (password !== "") $("#mj_netip_password").value = generateSofiaHash(password);
         });
     }
 
-    if ($("#rtsp-enabled")) {
-        $("#rtsp-enabled").addEventListener("change", (event) => {
-            $("#rtsp-user").required = event.target.checked;
-            $("#rtsp-password-plain").required = event.target.checked;
+    if ($("#mj_rtsp_enabled")) {
+        $("#mj_rtsp_enabled").addEventListener("change", (event) => {
+            $("#mj_rtsp_user").required = event.target.checked;
+            $("#mj_rtsp_password_plain").required = event.target.checked;
         });
     }
 
-    if ($("#rtsp-password-plain")) {
+    if ($("#mj_rtsp_password_plain")) {
         $("form").addEventListener("submit", (event) => {
-            const password = $("#rtsp-password-plain").value.trim();
-            if (password !== "") $("#rtsp-password").value = password;
+            const password = $("#mj_rtsp_password_plain").value.trim();
+            if (password !== "") $("#mj_rtsp_password").value = password;
         });
     }
 });

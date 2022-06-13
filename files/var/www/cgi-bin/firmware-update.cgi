@@ -14,6 +14,7 @@ else
   [ "$POST_fw_reset" = "true" ] && opts="${opts} -n"
   [ "$POST_fw_noreboot" = "true" ] && opts="${opts} -x"
   [ "$POST_fw_enforce" = "true" ] && opts="${opts} --force_ver"
+
   ex "sysupgrade ${opts}"
   button_home
   button_reboot

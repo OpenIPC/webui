@@ -21,7 +21,11 @@ check_password() {
 
 ex() {
   h6 "# ${1}"
-  report_log "$(eval $1 2>&1)"
+  # NB! Don't use $() here, it forks process and delays output.
+  # report_log "$(eval $1 2>&1)"
+  pre_ "class=\"small\""
+    eval $1 | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g" 2>&1
+  _pre
 }
 
 flash_file=/tmp/webui-flash.txt

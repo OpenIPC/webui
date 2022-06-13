@@ -1,4 +1,3 @@
-let tock = 0;
 let max = 0;
 
 function $(n) {
@@ -37,14 +36,15 @@ function refresh() {
         $$('input.pat-host').forEach(el => el.pattern='^[a-zA-Z0-9-_.]+$');
         $$('input.pat-host-ip').forEach(el => el.pattern='^[a-zA-Z0-9-_.]+$');
 
-        $$('pre').forEach(el => {
-            if (el.clientHeight > document.documentElement.clientHeight/2) el.classList.add("log-scroll")
-        });
-
         const resizeObserver = new ResizeObserver(entries => {
-            entries.forEach(entry => entry.target.scrollTo(0, entry.target.scrollHeight));
+            entries.forEach(entry => {
+                if (entry.target.clientHeight > document.documentElement.clientHeight/2) {
+                    entry.target.classList.add("log-scroll");
+                    entry.target.scrollTo(0, entry.target.scrollHeight);
+                }
+            });
         });
-        if ($('.log-scroll')) resizeObserver.observe($('.log-scroll'));
+        $$('pre').forEach(el => resizeObserver.observe(el));
     }
 
     window.addEventListener('load', initAll);

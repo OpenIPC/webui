@@ -7,16 +7,15 @@ beats() {
 }
 
 check_password() {
-  uri1=/cgi-bin/webui-settings.cgi
-  uri2=/cgi-bin/webui-settings-update.cgi
   [ -z "$REQUEST_URI" ] && return
-  [ "$REQUEST_URI" = "$uri1" ] && return
-  [ "$REQUEST_URI" = "$uri2" ] && return
+  [ "$REQUEST_URI" = "/cgi-bin/webui-settings.cgi" ] && return
+  [ "$REQUEST_URI" = "/cgi-bin/webui-settings-update.cgi" ] && return
 
-  password=$(awk -F ':' '/cgi-bin/ {print $3}' /etc/httpd.conf)
-  if [ "12345" = "$password" ]; then
+  default_password=$(grep admin /rom/etc/httpd.conf | cut -d: -f3)
+  password=$(grep admin /etc/httpd.conf | cut -d: -f3)
+  if [ "$default_password" = "$password" ]; then
     flash_save "danger" "$tMsgSetYourOwnPassword"
-    redirect_to "$uri1"
+    redirect_to "/cgi-bin/webui-settings.cgi"
   fi
 }
 
@@ -25,36 +24,27 @@ ex() {
   report_log "$(eval $1 2>&1)"
 }
 
-flash_append() {
-  echo "$1:$2" >> /tmp/webui-flash.txt
-}
-
-flash_delete() {
-  :> /tmp/webui-flash.txt
-}
-
+flash_file=/tmp/webui-flash.txt
+flash_append() { echo "$1:$2" >> "$flash_file"; }
+flash_delete() { :> "$flash_file"; }
 flash_read() {
-  [ ! -f /tmp/webui-flash.txt ] && return
-  flash=$(cat /tmp/webui-flash.txt)
+  [ ! -f "$flash_file" ] && return
+  flash=$(cat "$flash_file")
   [ -z "$flash" ] && return
-  type=$(echo $flash | cut -d ":" -f 1)
-  message=$(echo $flash | cut -d ":" -f 2)
-  echo "<div class=\"alert alert-${type} alert-dismissible fade show\" role=\"alert\">${message} <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></div>"
+  alert_ "$(echo $flash | cut -d ":" -f 1) alert-dismissible fade show" "role=\"alert\""
+    echo "$(echo $flash | cut -d ":" -f 2)"
+    button "" "close" "data-bs-dismiss=\"alert\" aria-label=\"Close\""
+   _alert
   flash_delete
 }
-
-flash_save() {
-  xheader="X-ErrorMessage: $2"
-  echo "$1:$2" > /tmp/webui-flash.txt
-}
+flash_save() { echo "${1}:${2}" > "$flash_file"; }
 
 get_firmware_info() {
   if [ ! -f /tmp/fwinfo.txt ]; then
     fw_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 | tr -d /\"/)
     fw_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/)
-    [ -z "$fw_variant" ] && fw_variant="lite"
     fw_build=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/)
-    echo -e "$fw_version\n$fw_variant\n$fw_build" > /tmp/fwinfo.txt
+    echo -e "$fw_version\n${fw_variant:=lite}\n$fw_build" > /tmp/fwinfo.txt
   else
     fw_version=$(sed -n 1p /tmp/fwinfo.txt)
     fw_variant=$(sed -n 2p /tmp/fwinfo.txt)
@@ -221,11 +211,14 @@ t_value() {
   eval "echo \$${1}"
 }
 
+reload_locale() {
+  source $PWD/locale/${locale:=en}.sh
+}
+
 source $PWD/_settings.sh
 source $PWD/locale/en.sh
 locale=$(cat /etc/web_locale)
 [ -z "$locale" ] && locale="en"
-[ "$locale" != "en" -a -f "$PWD/locale/$locale.sh" ] && source $PWD/locale/${locale}.sh
-
+reload_locale
 check_password
 %>

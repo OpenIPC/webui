@@ -1,12 +1,9 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-if [ -z "$POST_language" ]; then
-  language="en"
-else
-  language="$POST_webui_language"
-fi
-echo $language > /etc/web_locale
+locale="${POST_webui_language:=en}"
+echo "$locale" > /etc/web_locale
+reload_locale
 
 default_password=$(grep admin /rom/etc/httpd.conf | cut -d: -f3)
 old_password=$(grep admin /etc/httpd.conf | cut -d: -f3)

@@ -80,7 +80,7 @@ tOptions_mj_watchdog_enabled="true,false"
 tOptions_mj_watchdog_timeout="1-1000"
 tOptions_mj_youtube_enabled="true,false"
 tOptions_tools_action="ping,trace"
-tOptions_web_version="master,dev"
+tOptions_web_version="master|Stable,dev|Development"
 tOptions_ipeye_rtsp_feed="rtsp://${ipaddr}/stream=0,rtsp://${ipaddr}/stream=1"
 
 tPlaceholder_mj_audio_codec="opus"

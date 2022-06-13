@@ -47,9 +47,8 @@ card_body_() { div_ "class=\"card-body\""; }
 _card_body() { _div; }
 card_body() { card_body_; _card_body; }
 
-
 # col_card "text"
-col_card_() { col_ "mb-3"; card_ "$1" "h-100"; }
+col_card_() { col_ "col mb-3"; card_ "$1" "h-100"; }
 _col_card() { _card; _col; }
 col_card() { col_card_ "$1"; echo "$2"; _col_card; }
 

@@ -1,4 +1,4 @@
-#!/usr/bin/haserl --upload-limit=1024 --upload-dir=/tmp
+#!/usr/bin/haserl --upload-limit=200 --upload-dir=/tmp
 <%in _common.cgi %>
 <%
 page_title="$tPageTitleSensor"

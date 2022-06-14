@@ -15,7 +15,9 @@ else
   [ "$POST_fw_noreboot" = "true" ] && opts="${opts} -x"
   [ "$POST_fw_enforce" = "true" ] && opts="${opts} --force_ver"
 
-  ex "sysupgrade ${opts}"
+  pre_ "class=\"bg-light p-4 log-scroll\""
+    sysupgrade $opts
+  _pre
   button_home
   button_reboot
 fi

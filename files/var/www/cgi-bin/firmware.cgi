@@ -5,15 +5,36 @@ get_hardware_info
 get_firmware_info
 get_software_info
 
-fw_date=$(curl -ILs https://github.com/OpenIPC/firmware/releases/download/latest/openipc.hi3518ev100-br.tgz | grep Last-Modified | cut -d" " -f2-)
+page_title="$tPageTitleFirmware"
+
+# firmware data
+fw_date=$(curl -ILs https://github.com/OpenIPC/firmware/releases/download/latest/openipc.${soc}-br.tgz | grep Last-Modified | cut -d" " -f2-)
 fw_date=$(date -d "$fw_date" -D "%a, %d %b %Y %T GMT" +"2.2.%m.%d")
 
-page_title="$tPageTitleFirmware"
-mj_meta_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.meta"
+# majestic data
 mj_config_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
-[ -f /overlay/root/${mj_bin_file} ] && mj_filesize_old=$(ls -s ${mj_bin_file} | xargs | cut -d" " -f1) || mj_filesize_old=0
-mj_filesize_new=$(curl -s ${mj_meta_url})
-mj_filesize_new=$(echo $mj_filesize_new / 1024 | bc)
+
+# NB! size in allocated blocks.
+mj_filesize_old=$(ls -s $mj_bin_file | xargs | cut -d " " -f 1)
+
+# re-download metafile if older than 1 hour
+mj_meta_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.meta"
+mj_meta_file=/tmp/mj_meta.txt
+mj_meta_file_timestamp=$(date +%s --date "$(ls -lc --full-time $mj_meta_file | xargs | cut -d " " -f 6,7)")
+mj_meta_file_expiration=$(( $(date +%s) + 3600 ))
+if [ ! -f "$mj_meta_file" ] || [ "$mj_meta_file_timestamp" -gt "$mj_meta_file_expiration" ]; then
+  curl -s $mj_meta_url -o $mj_meta_file
+fi
+# parse version, date and file size
+if [ "$(wc -l $mj_meta_file | cut -d " " -f 1)" = "1" ]; then
+  mj_filesize_new=$(sed -n 1p $mj_meta_file)
+else
+  mj_version_new=$(sed -n 1p $mj_meta_file)
+  mj_filesize_new=$(sed -n 2p $mj_meta_file)
+fi
+# NB! size in bytes, but since blocks are 1024 bytes each, we are safe here for now.
+mj_filesize_new=$(( ($mj_filesize_new + 1024) / 1024 )) # Rounding up since $(()) sucks at floats.
+
 free_space=$(df | grep /overlay | xargs | cut -d" " -f4)
 available_space=$(( $free_space + $mj_filesize_old - 1 ))
 %>
@@ -76,25 +97,31 @@ row_ "row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4"
     dl_ "class=\"row\""
       dt "$tInstalled" "class=\"col-4\""
       dd "$mj_version" "class=\"col-8 text-end\""
+      dt "File size" "class=\"col-4\""
+      dd "$mj_filesize_old KB" "class=\"col-8 text-end\""
+
       dt "$tLatest" "class=\"col-4\""
-      dd "" "class=\"col-8 text-end\" id=\"mj-ver-master\""
+      dd "$mj_version_new" "class=\"col-8 text-end\""
+      dt "File size" "class=\"col-4\""
+      dd "$mj_filesize_new KB" "class=\"col-8 text-end\""
     _dl
 
     alert_ "light"
-      if [ -f /overlay/root/usr/bin/majestic ]; then
+      if [ -f "/overlay/root/${mj_mj_bin_file}" ]; then
         h6 "$tMjInOverlay ($mj_filesize_old KB)"
       else
         h6 "$tMjInBundle"
       fi
+
+      if [ "$mj_filesize_new" -le "$available_space" ]; then
+        form_ "/cgi-bin/majestic-github.cgi" "post"
+          button "$tButtonInstallUpdate" "warning"
+        _form
+      else
+        alert "$tMjNoSpace" "warning"
+      fi
     _alert
 
-    if [ "$mj_filesize_new" -le "$available_space" ]; then
-      form_ "/cgi-bin/majestic-github.cgi" "post"
-        button "$tButtonInstallUpdate" "warning"
-      _form
-    else
-      alert "$tMjNoSpace" "warning"
-    fi
 
     if [ -z "$mj_config_diff" ]; then
       alert_ "light"
@@ -127,7 +154,7 @@ row_ "row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4"
     _form
   _col_card
 
-  col_card_ $tHeaderUploadRootfs
+  col_card_ "$tHeaderUploadRootfs"
     form_ "/cgi-bin/firmware-upload-rootfs.cgi" "post" "enctype=\"multipart/form-data\""
       field_file "rootfs_file"
       button_submit "$tButtonUploadFile" "danger"

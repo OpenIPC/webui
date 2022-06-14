@@ -21,7 +21,7 @@ check_password() {
 
 ex() {
   h6 "# ${1}"
-  # NB! Don't use $() here, it forks process and delays output.
+  # NB! Don't use $() here, it forks process and stalls output.
   # report_log "$(eval $1 2>&1)"
   pre_ "class=\"small\""
     eval $1 | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g" 2>&1
@@ -44,33 +44,38 @@ flash_read() {
 flash_save() { echo "${1}:${2}" > "$flash_file"; }
 
 get_firmware_info() {
-  if [ ! -f /tmp/fwinfo.txt ]; then
+  file=/tmp/fwinfo.txt
+  if [ ! -f "$_file" ]; then
     fw_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 | tr -d /\"/)
     fw_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/)
     fw_build=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/)
-    echo -e "$fw_version\n${fw_variant:=lite}\n$fw_build" > /tmp/fwinfo.txt
+    [ -z "$fw_variant" ] && fw_variant="lite"
+    echo -e "$fw_version\n${fw_variant}\n$fw_build" > $_file
   else
-    fw_version=$(sed -n 1p /tmp/fwinfo.txt)
-    fw_variant=$(sed -n 2p /tmp/fwinfo.txt)
-    fw_build=$(sed -n 3p /tmp/fwinfo.txt)
+    fw_version=$(sed -n 1p $_file)
+    fw_variant=$(sed -n 2p $_file)
+    fw_build=$(sed -n 3p $_file)
   fi
+  unset _file
 }
 
 get_hardware_info() {
-  if [ ! -f /tmp/hwinfo.txt ]; then
+  _file=/tmp/hwinfo.txt
+  if [ ! -f "$_file" ]; then
     soc=$(ipcinfo --chip-name)
     soc_family=$(ipcinfo --family)
     sensor=$(ipcinfo --short-sensor)
     sensor_ini=$(ipcinfo --long-sensor)
     flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
-    echo -e "$soc\n$soc_family\n$sensor\n$sensor_ini\n$flash_size" > /tmp/hwinfo.txt
+    echo -e "$soc\n$soc_family\n$sensor\n$sensor_ini\n$flash_size" > $_file
   else
-    soc=$(sed -n 1p /tmp/hwinfo.txt)
-    soc_family=$(sed -n 2p /tmp/hwinfo.txt)
-    sensor=$(sed -n 3p /tmp/hwinfo.txt)
-    sensor_ini=$(sed -n 4p /tmp/hwinfo.txt)
-    flash_size=$(sed -n 5p /tmp/hwinfo.txt)
+    soc=$(sed -n 1p $_file)
+    soc_family=$(sed -n 2p $_file)
+    sensor=$(sed -n 3p $_file)
+    sensor_ini=$(sed -n 4p $_file)
+    flash_size=$(sed -n 5p $_file)
   fi
+  unset _file
 }
 
 get_http_time() {

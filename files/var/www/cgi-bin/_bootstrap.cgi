@@ -76,9 +76,10 @@ field_checkbox() {
 # field_file "name"
 field_file() {
   row_ "mb-2 file"
-    label "$(t_label "$1")" "for=\"${1}\" class=\"col-md-3 form-label\""
-    col_ "col-md-9"
+    label "$(t_label "$1")" "for=\"${1}\" class=\"${label_cols} form-label\""
+    col_ "$input_cols"
       echo "<input type=\"file\" name=\"${1}\" id=\"${1}\" placeholder=\"$(t_placeholder "$1")\" class=\"form-control\">"
+      help "$1"
     _col
   _row
 }

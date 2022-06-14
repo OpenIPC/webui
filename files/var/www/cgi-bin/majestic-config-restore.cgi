@@ -13,6 +13,7 @@ elif [ "$(wc -c "$POST_mj_restore_file" | awk '{print $1}')" -gt "$maxsize" ]; t
 #elif [ "$magicnum" -ne "$(xxd -p -l 10 "$POST_mj_restore_file")" ]; then
 #  error="$tMsgUploadedFileHasWrongMagic $(xxd -p -l 10 "$POST_mj_restore_file") != $magicnum"
 fi
+
 if [ ! -z "$error" ]; then %>
 <%in _header.cgi %>
 <% report_error "$error" %>

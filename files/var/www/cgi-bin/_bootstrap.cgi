@@ -1,8 +1,5 @@
 #!/usr/bin/haserl
 <%
-label_cols="col-md-4"
-input_cols="col-md-8"
-
 # alert_ "type" "extras"
 alert_() { div_ "class=\"alert alert-${1}\" ${2}"; }
 _alert() { _div; }
@@ -33,7 +30,7 @@ _row() { _div; }
 row() { row_ "$2"; echo "$1"; _row; }
 
 # col_ "class"
-col_() { div_ "class=\"${1:=col}\""; }
+col_() { div_ "class=\"col ${1}\""; }
 _col() { _div; }
 
 # card_ "text"
@@ -48,40 +45,39 @@ _card_body() { _div; }
 card_body() { card_body_; _card_body; }
 
 # col_card "text"
-col_card_() { col_ "col mb-3"; card_ "$1" "h-100"; }
+col_card_() { col_; card_ "$1" "h-100"; }
 _col_card() { _card; _col; }
 col_card() { col_card_ "$1"; echo "$2"; _col_card; }
 
 # col_first
-col_first() { div_ "class=\"col\""; }
-col_last() { _div; }
-col_next() { col_last; col_first; }
+col_first() { col_; }
+col_next() { _col; col_; }
+col_last() { _col; }
 
 # container "text"
 container_() { div_ "class=\"container\""; }
 _container() { _div; }
 container() { container_; echo "$1"; _container; }
 
-# field_checbox "name" "extras"
+field_() { div_ "class=\"mb-2 $1\""; }
+_field() { _div; }
+
+# field_checkbox "name" "extras"
 field_checkbox() {
-  div_ "class=\"mb-2 boolean\""
-    div_ "class=\"form-check\""
-      echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}-false\" value=\"false\">"
-      echo "<input type=\"checkbox\" name=\"${1}\" id=\"${1}\" $(t_checked "$1" "true") value=\"true\" class=\"form-check-input\" ${2}>"
-      label "$(t_label "$1")" "for=\"${1}\" class=\"form-check-label\""
-    _div
-  _div
+  field_ "boolean form-check"
+    echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}-false\" value=\"false\">"
+    echo "<input type=\"checkbox\" name=\"${1}\" id=\"${1}\" $(t_checked "$1" "true") value=\"true\" class=\"form-check-input\" ${2}>"
+    label "$(t_label "$1")" "for=\"${1}\" class=\"form-check-label\""
+  _field
 }
 
 # field_file "name"
 field_file() {
-  row_ "mb-2 file"
-    label "$(t_label "$1")" "for=\"${1}\" class=\"${label_cols} form-label\""
-    col_ "$input_cols"
-      echo "<input type=\"file\" name=\"${1}\" id=\"${1}\" placeholder=\"$(t_placeholder "$1")\" class=\"form-control\">"
-      help "$1"
-    _col
-  _row
+  field_ "file"
+    label "$(t_label "$1")" "for=\"${1}\""
+    echo "<input type=\"file\" name=\"${1}\" id=\"${1}\" placeholder=\"$(t_placeholder "$1")\" class=\"form-control\">"
+    help "$1"
+  _field
 }
 
 # field_hidden "name"
@@ -91,94 +87,82 @@ field_hidden() {
 
 # field_number "name"
 field_number() {
-  row_ "mb-2 number"
-    label "$(t_label "$1")" "for=\"${1}\" class=\"${label_cols} col-form-label\""
-    col_ "$input_cols"
-      div_ "class=\"input-group\""
-        echo "<input class=\"form-control text-end\" type=\"text\" name=\"${1}\" id=\"${1}\" value=\"$(t_value "$1")\" placeholder=\"$(t_placeholder "$1")\">"
-        units "$1"
-      _div
-      help "$1"
-    _col
-  _row
+  field_ "number"
+    label "$(t_label "$1")" "for=\"${1}\""
+    div_ "class=\"input-group\""
+      echo "<input class=\"form-control text-end\" type=\"text\" name=\"${1}\" id=\"${1}\" value=\"$(t_value "$1")\" placeholder=\"$(t_placeholder "$1")\">"
+      units "$1"
+    _div
+    help "$1"
+  _field
 }
 
 # field_password "name"
 field_password() {
-  row_ "mb-2 password"
-    label "$(t_label "$1")" "for=\"${1}\" class=\"${label_cols} col-form-label\""
-    col_ "$input_cols"
-      echo "<input type=\"password\" name=\"${1}\" id=\"${1}\" value=\"$(t_value "$1")\" class=\"form-control\" placeholder=\"$(t_placeholder "$1")\">"
-    _col
-  _row
+  field_ "password"
+    label "$(t_label "$1")" "for=\"${1}\" class=\"form-label\""
+    echo "<input type=\"password\" name=\"${1}\" id=\"${1}\" value=\"$(t_value "$1")\" class=\"form-control\" placeholder=\"$(t_placeholder "$1")\">"
+  _field
 }
 
 # field_range "name"
 field_range() {
-  row_ "mb-2 range"
-    label "$(t_label "$1")" "for=\"${1}\" class=\"${label_cols} col-form-label\""
-    col_ "$input_cols"
-      div_ "class=\"input-group\""
-        if [ -n "$(t_options "$1" | grep -E auto)" ]; then
-          span_ "class=\"input-group-text\""
-            label "<input class=\"form-check-input auto-value\" type=\"checkbox\" data-for=\"${1}\" data-value=\"$(t_default "$1")\" $(t_checked "$1" "auto")> auto"
-          _span
-        fi
-        echo "<input class=\"form-control text-end range\" type=\"text\" name=\"${1}\" id=\"${1}\" value=\"$(t_value "$1")\" placeholder=\"$(t_placeholder "$1")\" data-units=\"$(t_units "$1")\" $(t_readonly "$1" "auto")>"
-        units "$1"
-      _div
-      help "$1"
-    _col
-  _row
+  field_ "range"
+    label "$(t_label "$1")" "for=\"${1}\" class=\"form-label\""
+    div_ "class=\"input-group\""
+      if [ -n "$(t_options "$1" | grep -E auto)" ]; then
+        span_ "class=\"input-group-text\""
+          label "<input class=\"form-check-input auto-value\" type=\"checkbox\" data-for=\"${1}\" data-value=\"$(t_default "$1")\" $(t_checked "$1" "auto")> auto"
+        _span
+      fi
+      echo "<input class=\"form-control text-end range\" type=\"text\" name=\"${1}\" id=\"${1}\" value=\"$(t_value "$1")\" placeholder=\"$(t_placeholder "$1")\" data-units=\"$(t_units "$1")\" $(t_readonly "$1" "auto")>"
+      units "$1"
+    _div
+    help "$1"
+  _field
 }
 
 # field_select "name"
 field_select() {
-  row_ "mb-2 select"
-    label "$(t_label "$1")" "for=\"${1}\" class=\"${label_cols} col-form-label\""
-    col_ "$input_cols"
-      div_ "class=\"input-group\""
-        echo "<select class=\"form-select\" id=\"${1}\" name=\"${1}\">"
-        [ -z "$(t_value "$1")" ] && echo "<option value=\"\"></option>"
-        for o in $(t_options "$1"); do
-          _v="${o%|*}"; _n="${o#*|}"
-          echo "<option value=\"${_v}\" $(t_selected "$1" "${_v}")>${_n}</option>"
-          unset _v; unset _n
-        done
-        echo "</select>"
-        units "$1"
-      _div
-      help "$1"
-    _col
-  _row
+  field_ "select"
+    label "$(t_label "$1")" "for=\"${1}\" class=\"form-label\""
+    div_ "class=\"input-group\""
+      echo "<select class=\"form-select\" id=\"${1}\" name=\"${1}\">"
+      [ -z "$(t_value "$1")" ] && echo "<option value=\"\"></option>"
+      for o in $(t_options "$1"); do
+        _v="${o%|*}"; _n="${o#*|}"
+        echo "<option value=\"${_v}\" $(t_selected "$1" "${_v}")>${_n}</option>"
+        unset _v; unset _n
+      done
+      echo "</select>"
+      units "$1"
+    _div
+    help "$1"
+  _field
 }
 
 # field_swith "name"
 field_switch() {
-  row_ "mb-2 boolean"
-    label "$(t_label "$1")" "for=\"${1}\" class=\"${label_cols} form-check-label\""
-    col_ "$input_cols"
-      div_ "class=\"form-check form-switch\""
-        echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}-false\" value=\"false\">"
-        echo "<input type=\"checkbox\" name=\"${1}\" id=\"${1}\" $(t_checked "$1" "true") role=\"switch\" value=\"true\" class=\"form-check-input\">"
-      _div
-      help "$1"
-    _col
-  _row
+  field_ "boolean"
+    div_ "class=\"form-check form-switch\""
+      echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}-false\" value=\"false\">"
+      echo "<input type=\"checkbox\" name=\"${1}\" id=\"${1}\" $(t_checked "$1" "true") role=\"switch\" value=\"true\" class=\"form-check-input\">"
+      label "$(t_label "$1")" "for=\"${1}\" class=\"form-check-label\""
+    _div
+    help "$1"
+  _field
 }
 
 # field_text "name"
 field_text() {
-  row_ "mb-2 string"
-    label "$(t_label "$1")" "for=\"${1}\" class=\"${label_cols} col-form-label\""
-    col_ "$input_cols"
-      div_ "class=\"input-group\""
-        echo "<input type=\"text\" name=\"${1}\" id=\"${1}\" value=\"$(t_value "$1")\" class=\"form-control\" placeholder=\"$(t_placeholder "$1")\" ${2}>"
-        units "$1"
-      _div
-      help "$1"
-    _col
-  _row
+  field_ "string"
+    label "$(t_label "$1")" "for=\"${1}\" class=\"form-label\""
+    div_ "class=\"input-group\""
+      echo "<input type=\"text\" name=\"${1}\" id=\"${1}\" value=\"$(t_value "$1")\" class=\"form-control\" placeholder=\"$(t_placeholder "$1")\" ${2}>"
+      units "$1"
+    _div
+    help "$1"
+  _field
 }
 
 help() { [ -n "$(t_hint "$1")" ] && p "$(t_hint "$1")" "class=\"hint text-secondary\""; }
@@ -209,7 +193,6 @@ nav_item_link() { nav_item "$(nav_link "$1" "$2")"; }
 
 # navbar_toggler "id"
 navbar_toggler() { echo "<button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#${1}\" aria-controls=\"${1}\" aria-expanded=\"false\" aria-label=\"Toggle navigation\"><span class=\"navbar-toggler-icon\"></span></button>"; }
-
 
 units() { [ -n "$(t_units "$1")" ] && span "$(t_units "$1")" "class=\"input-group-text\""; }
 %>

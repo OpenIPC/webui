@@ -55,7 +55,7 @@ fi
 <%
 [ -n "$error" ] && report_error "$error"
 
-row_ "row-cols-1 row-cols-lg-2 g-4 mb-4"
+row_ "row-cols-1 row-cols-lg-2 g-3 mb-3"
   col_card_ "$tHeaderSensorDrivers"
     alert_ "light"
       h6 "Upload sensor driver"

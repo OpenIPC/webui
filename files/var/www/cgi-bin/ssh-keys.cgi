@@ -50,7 +50,7 @@ case "$POST_action" in
 %>
 <%in _header.cgi %>
 <%
-div_ "class=\"row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4\""
+div_ "class=\"row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-3\""
   col_card_ "Key Backup"
     form_ "/cgi-bin/ssh-keys.cgi" "post"
       p "$tMsgSshKeyBackup"

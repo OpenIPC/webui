@@ -15,7 +15,7 @@ if [ "$(cat /etc/TZ)" != "$TZ" ]; then
   _alert
 fi
 
-row_ "row-cols-1 row-cols-lg-2 g-4 mb-4"
+row_ "row-cols-1 row-cols-lg-2 g-3 mb-3"
   echo "<datalist id=\"tz_list\"></datalist>"
 
   col_card_ "$tHeaderTimezone"

@@ -12,15 +12,16 @@ for i in locale/*.sh; do
   tOptions_webui_language="${tOptions_webui_language},${code}|${name}"
 done
 
+webui_username="admin"
+webui_language="$locale"
+
 row_
-  col_ "col-md-6 m-auto"
+  col_ "col-md-6 col-xl-4"
     card_ "$tHeaderWebuiSettings"
       form_ "/cgi-bin/webui-settings-update.cgi" "post"
-        webui_username="admin"
         field_text "webui_username" "autocomplete=\"username\" disabled"
         field_password "webui_password" "autocomplete=\"new-password\""
         field_password "webui_password_confirmation" "autocomplete=\"new-password\""
-        webui_language="$locale"
         field_select "webui_language"
         button_submit "$tButtonFormSubmit" "primary"
       _form

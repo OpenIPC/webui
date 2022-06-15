@@ -8,7 +8,6 @@ mj="
 .system.httpsPort|number
 .system.httpsCertificate|string
 .system.httpsCertificateKey|string
-.system.updateChannel|select
 .system.buffer|number
 .isp.sensorConfig|string
 .isp.memMode|select
@@ -86,7 +85,6 @@ mj="
 .youtube.enabled|boolean
 .youtube.key|string
 .motionDetect.enabled|boolean
-.motionDetect.profile|select
 .motionDetect.visualize|boolean
 .motionDetect.debug|boolean
 .motionDetect.constraints|string

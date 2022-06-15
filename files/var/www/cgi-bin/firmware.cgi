@@ -8,14 +8,16 @@ get_software_info
 page_title="$tPageTitleFirmware"
 
 # firmware data
-fw_date=$(curl -ILs https://github.com/OpenIPC/firmware/releases/download/latest/openipc.${soc}-br.tgz | grep Last-Modified | cut -d" " -f2-)
-fw_date=$(date -d "$fw_date" -D "%a, %d %b %Y %T GMT" +"2.2.%m.%d")
-
-# majestic data
-mj_config_diff=$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)
+fw_date=$(date -D "%a, %d %b %Y %T GMT" +"2.2.%m.%d" --date "$(curl -ILs https://github.com/OpenIPC/firmware/releases/download/latest/openipc.${soc}-br.tgz | grep Last-Modified | cut -d" " -f2-)")
 
 # NB! size in allocated blocks.
-mj_filesize_old=$(ls -s $mj_bin_file | xargs | cut -d " " -f 1)
+mj_filesize_fw=$(ls -s $mj_bin_file | xargs | cut -d " " -f 1)
+if [ -f /overlay/$mj_bin_file ]; then
+  mj_filesize_overlay=$(ls -s /overlay/$mj_bin_file | xargs | cut -d " " -f 1)
+  mj_filesize_old=$mj_filesize_overlay
+else
+  mj_filesize_old=$mj_filesize_fw
+fi
 
 # re-download metafile if older than 1 hour
 mj_meta_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.meta"
@@ -33,10 +35,10 @@ else
   mj_filesize_new=$(sed -n 2p $mj_meta_file)
 fi
 # NB! size in bytes, but since blocks are 1024 bytes each, we are safe here for now.
-mj_filesize_new=$(( ($mj_filesize_new + 1024) / 1024 )) # Rounding up since $(()) sucks at floats.
+mj_filesize_new=$(( ($mj_filesize_new + 1024) / 1024 )) # Rounding up by priming, since $(()) sucks at floats.
 
 free_space=$(df | grep /overlay | xargs | cut -d" " -f4)
-available_space=$(( $free_space + $mj_filesize_old - 1 ))
+available_space=$(( $free_space + $mj_filesize_overlay - 1 ))
 %>
 <%in _header.cgi %>
 <%
@@ -45,12 +47,12 @@ alert_ "danger"
   p "$tMsgKnowWhatYouDo"
 _alert
 
-row_ "row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4"
+row_ "row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-3"
   col_card_ "$tHeaderFirmware"
-    dl_ "class=\"row\""
+    dl_ "class=\"row small\""
       dt "$tInstalled" "class=\"col-4\""
       dd "$fw_version" "class=\"col-8 text-end\""
-      dt "$tLatest" "class=\"col-4\""
+      dt "$tLastAvailable" "class=\"col-4\""
       dd "$fw_date" "class=\"col-8 text-end\" id=\"firmware-master-ver\""
     _dl
 
@@ -74,7 +76,7 @@ row_ "row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4"
   _col_card
 
   col_card_ "$tHeaderWebui"
-    dl_ "class=\"row\""
+    dl_ "class=\"row small\""
       dt "$tInstalled" "class=\"col-4\""
       dd "$ui_version" "class=\"col-8 text-end\""
       dt "$tStable" "class=\"col-4\""
@@ -94,21 +96,16 @@ row_ "row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4"
   _col_card
 
   col_card_ "Majestic"
-    dl_ "class=\"row\""
+    dl_ "class=\"row small\""
       dt "$tInstalled" "class=\"col-4\""
       dd "$mj_version" "class=\"col-8 text-end\""
-      dt "File size" "class=\"col-4\""
-      dd "$mj_filesize_old KB" "class=\"col-8 text-end\""
-
-      dt "$tLatest" "class=\"col-4\""
+      dt "$tLastAvailable" "class=\"col-4\""
       dd "$mj_version_new" "class=\"col-8 text-end\""
-      dt "File size" "class=\"col-4\""
-      dd "$mj_filesize_new KB" "class=\"col-8 text-end\""
     _dl
 
     alert_ "light"
       if [ -f "/overlay/root/${mj_mj_bin_file}" ]; then
-        h6 "$tMjInOverlay ($mj_filesize_old KB)"
+        h6 "$tMjInOverlay ($mj_filesize_overlay KB)"
       else
         h6 "$tMjInBundle"
       fi
@@ -119,11 +116,12 @@ row_ "row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4"
         _form
       else
         alert "$tMjNoSpace" "warning"
+        # ${mj_filesize_new}K
       fi
     _alert
 
 
-    if [ -z "$mj_config_diff" ]; then
+    if [ -z "$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)" ]; then
       alert_ "light"
         h6 "$tMjConfigUnchanged"
         link_to "$tMjConfigEdit" "/cgi-bin/majestic-settings.cgi"
@@ -164,11 +162,14 @@ _row
 %>
 
 <script>
+const GH_URL="https://github.com/OpenIPC/";
+const GH_API="https://api.github.com/repos/OpenIPC/";
+
 function checkUpdates() {
-  //queryRelease();
   queryBranch('microbe-web', 'master');
   queryBranch('microbe-web', 'dev');
 }
+
 function queryBranch(repo, branch) {
   var oReq = new XMLHttpRequest();
   oReq.addEventListener("load", function(){
@@ -176,30 +177,15 @@ function queryBranch(repo, branch) {
     const sha_short = d.commit.sha.slice(0,7);
     const date = d.commit.commit.author.date.slice(0,10);
     const link = document.createElement('a');
-    link.href = 'https://github.com/OpenIPC/' + repo + '/commits/' + branch;
+    link.href = GH_URL + repo + '/commits/' + branch;
     link.target = '_blank';
     link.textContent = branch + '+' + sha_short + ', ' + date;
     const el = $('#' + repo + '-' + branch + '-ver').appendChild(link);
   });
-  oReq.open("GET", 'https://api.github.com/repos/OpenIPC/' + repo + '/branches/' + branch);
+  oReq.open("GET", GH_API + repo + '/branches/' + branch);
   oReq.send();
 }
-function queryRelease() {
-  var oReq = new XMLHttpRequest();
-  oReq.addEventListener("load", function(){
-    const d = JSON.parse(this.response);
-    const asset = d[0].assets.find(a => a['name'] === 'openipc.<%= $soc %>-br.tgz');
-    const date = asset.created_at.slice(0,10);
-    const sha_short = asset.target_commitish.slice(0,7);
-    const link = document.createElement('a');
-    link.href = 'https://github.com/OpenIPC/firmware/commits/master';
-    link.target = '_blank';
-    link.textContent = 'master+' + sha_short + ', ' + date;
-    const el = $('#firmware-master-ver').appendChild(link);
-  });
-  oReq.open("GET", 'https://api.github.com/repos/OpenIPC/firmware/releases');
-  oReq.send();
-}
+
 window.addEventListener('load', checkUpdates);
 </script>
 <%in _footer.cgi %>

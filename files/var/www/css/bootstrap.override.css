@@ -27,8 +27,9 @@ pre, .pre {white-space:pre;}
 
 code {font-size:1em;}
 
-form label {font-weight:400;}
-form .row:not(:first-of-type) {border-top:solid 1px #ffffff;padding-top:0.5rem;}
+
+/*form .row:not(:first-of-type) {border-top:solid 1px #ffffff;padding-top:0.5rem;}*/
+.col-form-label, .form-check-label {font-size:0.9rem; font-weight:400;}
 form .input-group-text {min-width:4rem;}
 form .form-control::placeholder {color:#c2c2d9;}
 form .hint {font-size:0.82rem;margin-top:0.2rem;margin-bottom:0;}

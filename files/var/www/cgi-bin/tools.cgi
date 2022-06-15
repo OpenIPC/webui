@@ -14,7 +14,7 @@ tools_interface="${POST_tools_interface:=auto}"
 tools_packet_size="${POST_tools_packet_size:=56}" # 56-1500 for ping, 38-32768 for trace
 tools_duration="${POST_tools_duration:=5}"
 
-row_ "row-cols-1 row-cols-xl-2 g-4 mb-4"
+row_ "row-cols-1 row-cols-lg-2 row-cols-xl-3 g-3 mb-3"
   col_card_ "$tHeaderPing"
     form_ "/cgi-bin/tools.cgi" "post"
       field_select "tools_action"

@@ -3,11 +3,11 @@
 conf_file=/etc/coredump.config
 core_file=dump.core
 info_file=info.txt
-
+log_file=/root/coredump.log
 log() {
-  echo "$(date +%s) $1" >> /root/coredump.log
+  echo "$(date +"%F %T") $1" >> $log_file
 }
-:>/root/coredump.log
+:>$log_file
 
 log "Majectic crashed"
 
@@ -81,8 +81,11 @@ if [ "$(grep ^send2ftp $conf_file | cut -d= -f2)" == "true" ]; then
 fi
 
 if [ "$(grep save4web $conf_file | cut -d= -f2)" == "true" ]; then
-  log "Saving locally"
-  mv "$bundle_name" "/root/coredump.tgz"
+  localpath=$(grep ^localpath $conf_file | cut -d= -f2)
+  [ -z "$localpath" ] && localpath="/root"
+  [ ! -d "$localpath" ] && mkdir -p "$localpath"
+  log "Saving locally to ${localpath}/coredump.tgz"
+  mv "$bundle_name" "${localpath}/coredump.tgz"
   log "done"
 else
   rm "$bundle_name"

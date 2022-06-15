@@ -6,7 +6,7 @@ page_title="$tPageTitleDeviceStatus"
 %>
 <%in _header.cgi %>
 <%
-row_
+row_ "row-cols-1 row-cols-lg-2 g-3 mb-3"
   col_card_ "$tHeaderDeviceInfo"
     b "$tHardware"
     pre_ "class=\"small\""
@@ -29,7 +29,6 @@ row_
       print2c "${tWanMac}:" "${wan_mac}"
     _pre
   _col_card
-
   col_card_ "$tHeaderSystemInfo"
     ex "/bin/date"
     div_ "class=\"small mb-3\""
@@ -39,13 +38,15 @@ row_
     ex "/usr/bin/uptime"
     ex "cat /proc/meminfo | grep Mem"
   _col_card
+_row
 
+row_ "row-cols-1 g-3 mb-3"
   col_card_ "$tHeaderResources"
     ex "df -T"
   _col_card
 _row
 
-row_
+row_ "row-cols-1 g-3 mb-3"
   col_card_ "$tHeaderTopProcesses"
     ex "top -n 1 -b | sed '/top -n/d' | sed '1,4d' | head -20"
   _col_card

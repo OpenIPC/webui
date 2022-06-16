@@ -1,9 +1,8 @@
 #!/usr/bin/haserl
-<% page_title="cron" %>
 <%in _common.cgi %>
+<%
+page_title="$tPageTitleCron"
+%>
 <%in _header.cgi %>
-<b># cat /etc/crontabs/root</b>
-<pre class="bg-light p-4 log-scroll">
-<% cat /etc/crontabs/root %>
-</pre>
+<% ex "cat /etc/crontabs/root" %>
 <%in _footer.cgi %>

@@ -1,0 +1,8 @@
+# OpenIPC Team members in following format: Username | GitHub PhotoID | Projects | GitHub name | Telegram name
+FlyRouter|88846|Project Coordination|ZigFisher|FlyRouter
+widgetii|6576495|Majestic Streamer, IPCtool|widgetii|widgetii
+dimerrr|106577375|U-Boot, Kernels, Coupler, IPCtool|dimerrr|dimerrr
+John|21039610|Linux|p0i5k|p0i5k
+Hirrolot|40539574|SmolRTSP|Hirrolot|hirrolot
+cronyx|2557102|Linux|cronyx|cronyx
+themactep|37488|Web UI|themactep|themactep

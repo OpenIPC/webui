@@ -1,102 +1,104 @@
 <%
-# line format: parameter|label|units|type|o,p,t,i,o,n,s|placeholder|hint
+# line format: parameter|type
 mj="
-.system.logLevel|Severity of logging||select|ERROR,WARN,INFO,DEBUG,TRACE|TRACE|
-.system.staticDir|Home directory for static files||string||/var/www/html|
-.system.webPort|Port for HTTP access||number|1-65535|80|
-.system.httpsPort|Port for HTTPS access||number|1-65535|443|
-.system.httpsCertificate|Path to public SSL certificate||string||/etc/ssl/certs/www.example.com.crt|
-.system.httpsCertificateKey|Path to private SSL key||string||/etc/ssl/private/www.example.com.key|
-.system.updateChannel|Channel to use for updates||select|testing,beta,stable,none|stable|
-.system.buffer|Maximum buffer size per client|KB|number||1024|
-.isp.memMode|Memory mode||select|normal,reduction|reduction|
-.isp.sensorConfig|Path to sensor configuration file||string||/etc/sensors/imx222_1080p_line.ini|
-.isp.slowShutter|Slow shutter||select|disabled,low,medium,high|low|Automatic frame rate reduction mode.
-.isp.antiFlicker|Anti-flicker||select|disabled,50Hz,60Hz|disabled|Usually, the utility frequency in your grid line.
-.isp.alignWidth|Align width||number||8|
-.isp.blkCnt|Block count||number|1-32|4|Use 4 for small memory systems, 10+ for performant SoCs.
-.isp.threadStackSize|Thread stack size|KB|number|1-32|16|
-.isp.exposure|Sensor exposure time|&micro;s|range|auto,1-500000|auto|From 1 to 500000.
-.isp.aGain|Sensor analog gain||number|0.1-1.0|1|
-.isp.dGain|Sensor digital gain||number|0.1-1.0|1|
-.isp.ispGain|ISP gain||number|0.1-1.0|1|
-.isp.drc|Dynamic Range Compression (DRC) rate|:1|number|1-1000|300|
-.isp.rawMode|Raw feed mode||select|slow,fast,none|slow|
-.image.mirror|Flip image horizontally||boolean|true,false|false|
-.image.flip|Flip image vertically||boolean|true,false|false|
-.image.rotate|Rotate image clockwise||select|0°,90°,270°|0|
-.image.contrast|Image contrast|%|range|auto,1-100|auto|
-.image.hue|Image hue|%|range|1-100|50|
-.image.saturation|Image saturation|%|range|1-100|50|
-.image.luminance|Image luminance|%|range|auto,1-100|auto|
-.osd.enabled|Enable On-Screen Display (OSD)||boolean|true,false|false|
-.osd.font|Path to font file used in OSD||string||/usr/share/fonts/truetype/UbuntuMono-Regular.ttf|
-.osd.template|OSD template||string||%a %e %B %Y %H:%M:%S %Z|Supports strftime() format.
-.osd.posX|Horizontal position of OSD|px|number|-2000-2000|-100|
-.osd.posY|Vertical position of OSD|px|number|-2000-2000|-100|
-.osd.privacyMasks|Privacy masks|px|string||0x0x234x640,2124x0x468x1300|Coordinates of masked areas separated by commas.
-.nightMode.enabled|Enable night mode||boolean|true,false|false|
-.nightMode.irSensorPin|GPIO pin of signal from IR sensor||number|1-100|62|
-.nightMode.irSensorPinInvert|IR sensor is inverted||boolean|true,false|false|
-.nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|1-100|1|
-.nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|1-100|2|
-.nightMode.pinSwitchDelayUs|Delay before triggering IRcut filter||number|0-1000|150|
-.nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|1-100|65|
-.nightMode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1-1000|300|
-.records.enabled|Enable saving records||boolean|true,false|false|
-.records.path|Template for saving video records||string||/mnt/mmc/%Y/%m/%d/%H.mp4|Supports strftime() format.
-.records.maxUsage|Limit of available space usage|%|range|1-100|95|
-.video0.enabled|Enable Video0||boolean|true,false|true|
-.video0.codec|Video0 codec||select|h264,h265|h264|
-.video0.size|Video resolution|px|string|1920x1080,1280x720,704x576|1920x1080|
-.video0.fps|Video frame rate|fps|number|1-60|25|
-.video0.bitrate|Video bitrate|kbps|number|1-4096|4096|
-.video0.gopSize|Send I-frame each 1 second||number|1-20|1|
-.video0.gopMode|Group of Pictures (GOP) mode||select|normal,dual,smart|normal|
-.video0.rcMode|RC mode||select|avbr|avbr|
-.video0.crop|Crop video to size|px|string||0x0x960x540|
-.video1.enabled|Enable Video1||boolean|true,false|false|
-.video1.codec|Video1 codec||select|h264,h265|h264|
-.video1.size|Video1 resolution|px|string|1920x1080,1280x720,704x576|704x576|
-.video1.fps|Video1 frame rate|fps|number|1-60|15|
-.video1.bitrate|Video1 bitrate|kbps|number|1-4096|2048|
-.video1.gopSize|Send I-frame each 1 second||number|1-20|1|
-.video1.gopMode|GOP mode||select|normal,dual,smart|normal|
-.video1.rcMode|RC mode||select|avbr|avbr|
-.video1.crop|Crop video to size|px|string||0x0x960x540|
-.jpeg.enabled|Enable JPEG support||boolean|true,false|true|
-.jpeg.size|Snapshot size|px|string||1920x1080||
-.jpeg.qfactor|JPEG quality level|%|range|1-100|50|
-.jpeg.toProgressive|Progressive JPEG||boolean|true,false|false|
-.mjpeg.size|Video resolution|px|string||640x360|
-.mjpeg.fps|Video framerate|fps|number|1-30|5|
-.mjpeg.bitrate|Video bitrate|kbps|number|1-4096|1024|
-.audio.enabled|Enable audio||boolean|true,false|false|
-.audio.volume|Audio volume level|%|range|auto,1-100|auto|
-.audio.srate|Audio sampling rate|kHz|number|1-44100|8000|
-.audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,pcm,alaw,ulaw|opus|
-.audio.outputEnabled|Audio card||string||hw:3|
-.rtsp.enabled|Enable output||boolean|true,false|true||
-.rtsp.port|Port for RTSP protocol||number|1-65535|554|rtsp://[ip.add.re.ss]:[port]/stream={0,1}
-.hls.enabled|Enable HTTP Live Streaming (HLS)||boolean|true,false|true|
-.youtube.enabled|Enable Youtube support||boolean|true,false|false|
-.youtube.key|Youtube API key||string||xxxx-xxxx-xxxx-xxxx-xxxx|
-.motionDetect.enabled|Enable motion detection||boolean|true,false|false|
-.motionDetect.profile|Motion detection profile||select|outdoor,indoor|outdoor|
-.motionDetect.visualize|Visualize motion detection||boolean|true,false|true|
-.motionDetect.debug|Enable debugging||boolean|true,false|true|
-.motionDetect.constraints|Regions of Interest (ROI) for motion detection.|px|string||0x0x1296x760|
-.ipeye.enabled|Enable IP EYE support||boolean|true,false|false|
-.netip.enabled|Enable NETIP protocol support||boolean|true,false|false|
-.netip.user|NETIP user||string||admin|
-.netip.password-plain|NETIP password||string||12345|
-.netip.password|NETIP password hash||hidden||6V0Y4HLF|
-.netip.port|NETIP port||number|1-65535|34567|
-.netip.snapshots|NETIP snaphots||boolean|true,false|true|
-.netip.ignoreSetTime|Ignore set time||boolean|true,false|false|
-.onvif.enabled|Enable ONVIF protocol support||boolean|true,false|false|
-.watchdog.enabled|Enable watchdog||boolean|true,false|true|
-.watchdog.timeout|Watchdog timeout|sec|number|1-1000|10|
-.cloud.enabled|Enable cloud support||boolean|true,false|false|
+.system.logLevel|select
+.system.webAdmin|boolean
+.system.staticDir|string
+.system.webPort|number
+.system.httpsPort|number
+.system.httpsCertificate|string
+.system.httpsCertificateKey|string
+.system.buffer|number
+.isp.sensorConfig|string
+.isp.memMode|select
+.isp.slowShutter|select
+.isp.antiFlicker|select
+.isp.blkCnt|number
+.isp.exposure|range
+.isp.aGain|number
+.isp.dGain|number
+.isp.ispGain|number
+.isp.drc|number
+.isp.lowDelay|boolean
+.isp.rawMode|select
+.isp.iqProfile|string
+.image.mirror|boolean
+.image.flip|boolean
+.image.rotate|select
+.image.contrast|range
+.image.hue|range
+.image.saturation|range
+.image.luminance|range
+.osd.enabled|boolean
+.osd.font|string
+.osd.template|string
+.osd.posX|number
+.osd.posY|number
+.osd.privacyMasks|string
+.nightMode.enabled|boolean
+.nightMode.irSensorPin|number
+.nightMode.irSensorPinInvert|boolean
+.nightMode.irCutPin1|number
+.nightMode.irCutPin2|number
+.nightMode.pinSwitchDelayUs|number
+.nightMode.backlightPin|number
+.nightMode.drcOverride|number
+.records.enabled|boolean
+.records.path|string
+.records.maxUsage|range
+.video0.enabled|boolean
+.video0.codec|select
+.video0.size|string
+.video0.fps|number
+.video0.bitrate|number
+.video0.gopSize|number
+.video0.gopMode|select
+.video0.rcMode|select
+.video0.crop|string
+.video0.sliceUnits|number
+.video1.enabled|boolean
+.video1.codec|select
+.video1.size|string
+.video1.fps|number
+.video1.bitrate|number
+.video1.gopSize|number
+.video1.gopMode|select
+.video1.rcMode|select
+.video1.crop|string
+.video1.sliceUnits|number
+.jpeg.enabled|boolean
+.jpeg.size|string
+.jpeg.qfactor|range
+.jpeg.toProgressive|boolean
+.mjpeg.size|string
+.mjpeg.fps|number
+.mjpeg.bitrate|number
+.audio.enabled|boolean
+.audio.volume|range
+.audio.srate|number
+.audio.codec|select
+.audio.device|string
+.audio.outputEnabled|boolean
+.rtsp.enabled|boolean
+.rtsp.port|number
+.hls.enabled|boolean
+.youtube.enabled|boolean
+.youtube.key|string
+.motionDetect.enabled|boolean
+.motionDetect.visualize|boolean
+.motionDetect.debug|boolean
+.motionDetect.constraints|string
+.ipeye.enabled|boolean
+.netip.enabled|boolean
+.netip.user|string
+.netip.password_plain|string
+.netip.password|hidden
+.netip.port|number
+.netip.snapshots|boolean
+.netip.ignoreSetTime|boolean
+.onvif.enabled|boolean
+.watchdog.enabled|boolean
+.watchdog.timeout|number
+.cloud.enabled|boolean
 "
 %>

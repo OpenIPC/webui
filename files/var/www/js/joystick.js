@@ -5,44 +5,44 @@ function reqListener() {
 function sendToApi(endpoint) {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener("load", reqListener);
-    xhr.open("GET", 'http://' + ipaddr + endpoint);
+    xhr.open("GET", "http://" + ipaddr + endpoint);
     xhr.setRequestHeader("Authorization", "Basic " + btoa("admin:"));
     xhr.send();
 }
 
 function initControls() {
-    $$('a[id^=pan-],a[id^=zoom-]').forEach(el => {
-        el.addEventListener('click', event => {
+    $$("a[id^=pan-],a[id^=zoom-]").forEach(el => {
+        el.addEventListener("click", event => {
             event.preventDefault();
-            alert('Sorry, this feature does not work, yet!');
+            alert("Sorry, this feature does not work, yet!");
         });
     });
 
-    if ($('#night-mode')) $('#night-mode').addEventListener('click', event => {
+    if ($("#night-mode")) $("#night-mode").addEventListener("click", event => {
         event.preventDefault();
-        event.target.src = (event.target.src.split('/').pop() == 'light-on.svg') ? '/img/light-off.svg' : '/img/light-on.svg';
-        // sendToApi('/night/toggle');
+        event.target.src = (event.target.src.split("/").pop() == "light-on.svg") ? "/img/light-off.svg" : "/img/light-on.svg";
+        // sendToApi("/night/toggle");
         const xhr = new XMLHttpRequest();
         xhr.open("POST", "/cgi-bin/night.cgi");
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.send("mode=toggle");
     });
 
-    if ($('#send-to-telegram')) {
-        $('#send-to-telegram').addEventListener('click', event => {
+    if ($("#send-to-telegram")) {
+        $("#send-to-telegram").addEventListener("click", event => {
             event.preventDefault();
-            if (!confirm('Are you sure?')) return false;
+            if (!confirm("Are you sure?")) return false;
             const xhr = new XMLHttpRequest();
             xhr.open("GET", "/cgi-bin/telegram-bot-send.cgi");
             xhr.send();
         });
     }
 
-    if ($('#speed')) $('#speed').addEventListener('click', event => {
+    if ($("#speed")) $("#speed").addEventListener("click", event => {
         event.preventDefault();
-        event.target.src = (event.target.src.split('/').pop() == 'speed-slow.svg') ? '/img/speed-fast.svg' : '/img/speed-slow.svg';
-        // sendToApi('/speed/toggle');
+        event.target.src = (event.target.src.split("/").pop() == "speed-slow.svg") ? "/img/speed-fast.svg" : "/img/speed-slow.svg";
+        // sendToApi("/speed/toggle");
     });
 }
 
-window.addEventListener('load', initControls);
+window.addEventListener("load", initControls);

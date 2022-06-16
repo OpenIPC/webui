@@ -1,8 +1,8 @@
 #!/bin/sh
 file=/etc/majestic.yaml
-echo "Content-Type: application/x-yaml"
-echo "Content-Length: $(ls -l $file | xargs | cut -d " " -f 5)"
-echo "Content-Encoding: gzip"
-echo "Content-Disposition: attachment; filename=\"$(basename $file)\""
-echo ""
+echo "Content-Type: application/x-yaml
+Content-Length: $(ls -l $file | xargs | cut -d' ' -f5)
+Content-Encoding: gzip
+Content-Disposition: attachment; filename=\"$(basename $file)\"
+"
 gzip -c $file

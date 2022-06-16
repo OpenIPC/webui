@@ -5,56 +5,51 @@ get_system_info
 page_title="$tPageTitleTools"
 %>
 <%in _header.cgi %>
-<div class="row row-cols-1 row-cols-xl-2 g-4 mb-4">
-  <div class="col">
-    <div class="card h-100 mb-3">
-      <h5 class="card-header">Ping Quality</h5>
-      <div class="card-body">
-        <form action="/cgi-bin/tools-do.cgi" method="post">
-          <div class="row mb-2">
-            <label class="form-label col-md-6" for="action">Action</label>
-            <div class="col-md-6">
-              <select class="form-select" name="action" id="action">
-                <% for i in ping trace; do echo -n "<option>${i}</option>"; done %>
-              </select>
-            </div>
-          </div>
-          <div class="row mb-2">
-            <label class="col-md-6 form-label" for="target">Target FQDN or IP address</label>
-            <div class="col-md-6">
-              <input class="form-control pat-host-ip" type="text" name="target" id="target" value="4.2.2.1" placeholder="FQDN or IP address" required>
-            </div>
-          </div>
-          <div class="row mb-2">
-            <label class="col-md-6 form-label" for="iface">Use network interface</label>
-            <div class="col-md-6">
-              <select class="form-select" name="iface" id="iface">
-                <option>auto</option>
-                <% for i in $interfaces; do echo -n "<option>${i}</option>"; done %>
-              </select>
-            </div>
-          </div>
-          <div class="row mb-2">
-            <label class="col-md-6 form-label" for="size">Packet size</label>
-            <div class="col-md-6">
-              <div class="input-group">
-                <span class="input-group-text">
-                  <label><input type="checkbox" class="form-check-input auto-value" data-for="size" data-value=""> default</label>
-                </span>
-                <input class="form-control" type="number" min="56" max="1500" step="1" name="size" id="size" value="56">
-              </div>
-            </div>
-          </div>
-          <div class="row mb-2">
-            <label class="col-md-6 form-label" for="duration">Number of packets</label>
-            <div class="col-md-6">
-              <input class="form-control" type="number" min="1" max="30" step="1" name="duration" id="duration" value="5">
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary"><%= $tButtonRun %></button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+<%
+tOptions_tools_interface="auto,${interfaces}"
+
+tools_action="${POST_tools_action:=ping}"
+tools_target="${POST_tools_target:=4.2.2.1}"
+tools_interface="${POST_tools_interface:=auto}"
+tools_packet_size="${POST_tools_packet_size:=56}" # 56-1500 for ping, 38-32768 for trace
+tools_duration="${POST_tools_duration:=5}"
+
+row_ "row-cols-1 row-cols-lg-2 row-cols-xl-3 g-3 mb-3"
+  col_card_ "$tHeaderPing"
+    form_ "/cgi-bin/tools.cgi" "post"
+      field_select "tools_action"
+      field_text "tools_target" "data-pattern=\"pat-host-ip\" required"
+      field_select "tools_interface" "data-pattern=\"pat-host-ip\" required"
+      field_number "tools_packet_size"
+      field_number "tools_duration" "min=1 max=30 step=1"
+      button_submit "$tButtonRun" "primary"
+    _form
+  _col_card
+
+  if [ "POST" = "$REQUEST_METHOD" ]; then
+    case "$tools_action" in
+      ping)
+        cmd="ping"
+        [ "auto" != "$tools_interface" ] && cmd="${cmd} -I ${tools_interface}"
+        cmd="${cmd} -s ${tools_packet_size}"
+        cmd="${cmd} -c ${tools_duration}"
+        cmd="${cmd} ${tools_target}"
+        col_card "Ping Quality" "$(ex "$cmd")"
+        ;;
+      trace)
+        cmd="traceroute"
+        # order is important!
+        cmd="${cmd} -q ${tools_duration}"
+        cmd="${cmd} -w 1"
+        [ "auto" != "$tools_interface" ] && cmd="${cmd} -i ${POST_tools_interface}"
+        cmd="${cmd} ${tools_target}"
+        cmd="${cmd} ${tools_packet_size}"
+        col_card "Traceroute Quality" "$(ex "$cmd")"
+        ;;
+      *)
+        ;;
+    esac
+  fi
+_row
+%>
 <%in _footer.cgi %>

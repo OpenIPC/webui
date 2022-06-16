@@ -8,12 +8,12 @@ get_software_info
 page_title="$tPageTitleFirmware"
 
 # firmware data
-fw_date=$(date -D "%a, %d %b %Y %T GMT" +"2.2.%m.%d" --date "$(curl -ILs https://github.com/OpenIPC/firmware/releases/download/latest/openipc.${soc}-br.tgz | grep Last-Modified | cut -d" " -f2-)")
+fw_date=$(date -D "%a, %d %b %Y %T GMT" +"2.2.%m.%d" --date "$(curl -ILs https://github.com/OpenIPC/firmware/releases/download/latest/openipc.${soc}-br.tgz | grep Last-Modified | cut -d' ' -f2-)")
 
 # NB! size in allocated blocks.
-mj_filesize_fw=$(ls -s $mj_bin_file | xargs | cut -d " " -f 1)
-if [ -f /overlay/$mj_bin_file ]; then
-  mj_filesize_overlay=$(ls -s /overlay/$mj_bin_file | xargs | cut -d " " -f 1)
+mj_filesize_fw=$(ls -s $mj_bin_file | xargs | cut -d' ' -f1)
+if [ -f "/overlay/$mj_bin_file" ]; then
+  mj_filesize_overlay=$(ls -s /overlay/$mj_bin_file | xargs | cut -d' ' -f1)
   mj_filesize_old=$mj_filesize_overlay
 else
   mj_filesize_old=$mj_filesize_fw
@@ -22,13 +22,13 @@ fi
 # re-download metafile if older than 1 hour
 mj_meta_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.meta"
 mj_meta_file=/tmp/mj_meta.txt
-mj_meta_file_timestamp=$(date +%s --date "$(ls -lc --full-time $mj_meta_file | xargs | cut -d " " -f 6,7)")
+mj_meta_file_timestamp=$(date +%s --date "$(ls -lc --full-time $mj_meta_file | xargs | cut -d' ' -f6,7)")
 mj_meta_file_expiration=$(( $(date +%s) + 3600 ))
 if [ ! -f "$mj_meta_file" ] || [ "$mj_meta_file_timestamp" -gt "$mj_meta_file_expiration" ]; then
   curl -s $mj_meta_url -o $mj_meta_file
 fi
 # parse version, date and file size
-if [ "$(wc -l $mj_meta_file | cut -d " " -f 1)" = "1" ]; then
+if [ "$(wc -l $mj_meta_file | cut -d' ' -f1)" = "1" ]; then
   mj_filesize_new=$(sed -n 1p $mj_meta_file)
 else
   mj_version_new=$(sed -n 1p $mj_meta_file)
@@ -37,7 +37,8 @@ fi
 # NB! size in bytes, but since blocks are 1024 bytes each, we are safe here for now.
 mj_filesize_new=$(( ($mj_filesize_new + 1024) / 1024 )) # Rounding up by priming, since $(()) sucks at floats.
 
-free_space=$(df | grep /overlay | xargs | cut -d" " -f4)
+free_space=$(df | grep /overlay | xargs | cut -d' ' -f4)
+free_space=$(df /overlay | tail -1 | xargs | awk '{print $5}')
 available_space=$(( $free_space + $mj_filesize_overlay - 1 ))
 %>
 <%in _header.cgi %>

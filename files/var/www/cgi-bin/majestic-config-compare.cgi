@@ -2,11 +2,11 @@
 <%in _common.cgi %>
 <%
 page_title="$tPageTitleMajesticConfigCompare"
-command="diff /rom/etc/majestic.yaml /etc/majestic.yaml"
-output=$($command 2>&1)
 %>
 <%in _header.cgi %>
 <%
+command="diff /rom/etc/majestic.yaml /etc/majestic.yaml"
+output=$($command 2>&1)
 # diff returns 0 on no difference, 1 on difference, 2+ on errors
 # checking exit status won't work here
 # checking for any output instead

@@ -4,21 +4,21 @@
 plugin="telegram"
 page_title="$tPageTitlePluginTelegram"
 config_file="/etc/${plugin}.cfg"
-[ ! -f "$config_file" ] && touch ${config_file}
+[ ! -f "$config_file" ] && touch $config_file
 
 if [ -n "$POST_action" ] && [ "$POST_action" = "reset" ]; then
-  mv ${config_file} ${config_file}.backup
+  mv $config_file ${config_file}.backup
   redirect_to "/cgi-bin/plugin-telegram.cgi"
 fi
 
 if [ -n "$POST_token" ]; then
-  echo "$POST_token" > ${config_file}
-  echo "$POST_channel" >> ${config_file}
+  echo "$POST_token" > $config_file
+  echo "$POST_channel" >> $config_file
   redirect_to "/cgi-bin/plugin-telegram.cgi"
 fi
 
-telegram_token=$(sed -n 1p ${config_file})
-telegram_channel=$(sed -n 2p ${config_file})
+telegram_token=$(sed -n 1p $config_file)
+telegram_channel=$(sed -n 2p $config_file)
 %>
 <%in _header.cgi %>
 <%

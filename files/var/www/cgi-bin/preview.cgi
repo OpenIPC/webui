@@ -6,7 +6,7 @@ page_title="$tPageTitlePreview"
 <%in _header.cgi %>
 <%
 row_ "preview"
-  col_ "col position-relative mb-4"
+  col_ "position-relative mb-4"
     image "http://${ipaddr}/image.jpg" "id=\"preview\" class=\"img-fluid\" width=\"1280\" height=\"720\""
   _col
 _row

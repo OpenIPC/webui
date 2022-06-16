@@ -35,13 +35,13 @@ flash_read() {
   [ ! -f "$flash_file" ] && return
   flash=$(cat "$flash_file")
   [ -z "$flash" ] && return
-  alert_ "$(echo $flash | cut -d ":" -f 1) alert-dismissible fade show" "role=\"alert\""
-    echo "$(echo $flash | cut -d ":" -f 2)"
+  alert_ "$(echo $flash | cut -d':' -f1) alert-dismissible fade show" "role=\"alert\""
+    echo "$(echo $flash | cut -d':' -f2)"
     button "" "close" "data-bs-dismiss=\"alert\" aria-label=\"Close\""
    _alert
   flash_delete
 }
-flash_save() { echo "${1}:${2}" > "$flash_file"; }
+flash_save() { echo "${1}:${2}" > $flash_file; }
 
 get_firmware_info() {
   file=/tmp/fwinfo.txt
@@ -87,8 +87,8 @@ get_soc_temp() {
 }
 
 get_software_info() {
-  mj_bin_file="/usr/bin/majestic"
-  mj_version=$(${mj_bin_file} -v)
+  mj_bin_file=/usr/bin/majestic
+  mj_version=$($mj_bin_file -v)
   [ -f /var/www/.version ] && ui_version=$(cat /var/www/.version)
 }
 
@@ -99,7 +99,7 @@ get_system_info() {
   macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/ //g" | uniq)
   tz_data=$(cat /etc/TZ)
   [ -z "$tz_data" ] && tz_data="GMT0"
-  [ ! -f /etc/tzname ] && $(grep "$tz_data" /var/www/js/tz.js | head -1 | cut -d ":" -f 2 | cut -d "," -f 1 | tr -d "'" > /etc/tzname)
+  [ ! -f /etc/tzname ] && $(grep "$tz_data" /var/www/js/tz.js | head -1 | cut -d':' -f2 | cut -d',' -f1 | tr -d "'" > /etc/tzname)
   tz_name=$(cat /etc/tzname)
   wan_mac=$(cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address)
 }

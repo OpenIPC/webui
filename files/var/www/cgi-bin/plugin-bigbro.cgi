@@ -4,13 +4,13 @@
 plugin="bigbro"
 page_title="$tPageTitlePluginBigbro"
 config_file="/etc/${plugin}.cfg"
-[ ! -f "$config_file" ] && touch ${config_file}
+[ ! -f "$config_file" ] && touch $config_file
 
 if [ -n "$POST_pin" ]; then
   pin="$POST_pin"
   signature=$(echo -ne "$pin" | md5sum | awk '{print $1}')
-  sed -d /^${pin}:/ ${config_file}
-  echo "${pin}:${signature}" >> ${config_file}
+  sed -d /^${pin}:/ $config_file
+  echo "${pin}:${signature}" >> $config_file
   redirect_to "?pin=${pin}"
 fi
 %>
@@ -31,7 +31,7 @@ if [ -n "$GET_new" ]; then
   _row
 elif [ -n "$GET_pin" ]; then
   pin="$GET_pin"
-  signature=$(grep "^${pin}" ${config_file} | cut -d: -f2)
+  signature=$(grep "^${pin}" $config_file | cut -d: -f2)
   h3 "$pin"
   p "$signature"
   link_to "List of devices" "?"
@@ -39,7 +39,7 @@ else
   h3 "List of devices"
   link_to "add a device" "?new=device"
   dl_
-    for device in $(cat ${config_file}); do
+    for device in $(cat $config_file); do
       dt "$(link_to "${device%:*}" "?pin=${device%:*}")"
       dd "${device##*:}"
     done

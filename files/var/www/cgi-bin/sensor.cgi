@@ -9,9 +9,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   if [ -n "$POST_sensor_driver_file" ]; then
     type="driver"
     magicnum="7f454c460101"
-    file="$POST_sensor_driver_file"
-    file_name="$POST_sensor_driver_file_name"
-    file_path="$POST_sensor_driver_file_path"
+    file=$POST_sensor_driver_file
+    file_name=$POST_sensor_driver_file_name
+    file_path=$POST_sensor_driver_file_path
     if [ -z "$file_name" ]; then
       error="$tMsgNoUploadedFileFound"
     elif [ "$magicnum" != $(xxd -p -l 6 $file) ]; then
@@ -23,9 +23,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
   if [ -n "$POST_sensor_config_file" ]; then
     type="config"
-    file="$POST_sensor_config_file"
-    file_name="$POST_sensor_config_file_name"
-    file_path="$POST_sensor_config_file_path"
+    file=$POST_sensor_config_file
+    file_name=$POST_sensor_config_file_name
+    file_path=$POST_sensor_config_file_path
     if [ -z "$file_name" ]; then
       error="$tMsgNoUploadedFileFound"
     elif [ -n $(grep "\[sensor\]" $file) ]; then

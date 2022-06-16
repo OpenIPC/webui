@@ -36,7 +36,7 @@ row_ "row-cols-1 row-cols-lg-2 g-3 mb-3"
     form_ "/cgi-bin/network-ntp-update.cgi" "post"
       for i in 0 1 2 3; do
         x=$(expr $i + 1)
-        eval "ntp_server_${i}=$(sed -n ${x}p /etc/ntp.conf | cut -d " " -f 2)"
+        eval "ntp_server_${i}=$(sed -n ${x}p /etc/ntp.conf | cut -d' ' -f2)"
         field_text "ntp_server_${i}" "placeholder=\"${i}.pool.ntp.org\" data-pattern=\"host-ip\""
       done
       button_submit "$tButtonFormSubmit" "primary"

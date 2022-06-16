@@ -5,7 +5,7 @@ page_title="$tPageTitleMajesticDebug"
 
 get_software_info
 
-if [ ! -f /rom/${mj_bin_file} ]; then
+if [ ! -f "/rom/${mj_bin_file}" ]; then
   flash_save "danger" "$tMsgMajesticIsNotSupported"
   redirect_to "/cgi-bin/status.cgi"
 fi

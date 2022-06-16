@@ -9,8 +9,8 @@ size_h=${size#*x}
 %>
 <%in _header.cgi %>
 <%
-div_ "class=\"row preview\""
-  div_ "class=\"col mb-4\""
+row_ "preview"
+  col_ "mb-4"
 %>
 <img src="http://<%= $ipaddr %>/mjpeg" class="d-block img-fluid bg-light" alt="<%= $tAltMjpegPreview %>" height="<%= $size_h %>" width="<%= $size_w %>">
 <audio autoplay controls style="width:<%= $size_w %>px" class="d-block img-fluid">
@@ -19,8 +19,8 @@ div_ "class=\"row preview\""
 <%= $tMsgAudioTagNotSupported %>
 </audio>
 <%
-  _div
-_div
+  _col
+_row
 %>
 <%in _joystick.cgi %>
 <%in _footer.cgi %>

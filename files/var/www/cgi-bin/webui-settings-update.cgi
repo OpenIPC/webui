@@ -14,7 +14,7 @@ if [ -z "$new_password" ] && [ "$default_password" != "$old_password" ]; then
   flash_save "success" "$tMsgChangesSaved"
   redirect_to "/cgi-bin/webui-settings.cgi"
   exit
-elif [[ ! -z "$(echo "$new_password" | grep " ")" ]]; then
+elif [ -n "$(echo "$new_password" | grep " ")" ]; then
   flash_save "danger" "$tMsgPasswordHasSpaces"
   redirect_to "/cgi-bin/webui-settings.cgi"
   exit

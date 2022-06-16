@@ -82,4 +82,15 @@ pre() {
   # replace <, >, &, ", and ' with HTML entities
   tag "pre" "$(echo "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g")" "$2"
 }
+
+video_source() {
+  echo "<source src=\"${1}\" type=\"${2}\">"
+}
+
+video_() {
+  echo "<video autoplay controls ${1}>"
+}
+_video() {
+  echo "</video>";
+}
 %>

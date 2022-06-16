@@ -5,7 +5,7 @@ mj_conf=/etc/majestic.yaml
 orig_yaml=/tmp/majestic.yaml.original
 temp_yaml=/tmp/majestic.yaml
 
-cp -f "$mj_conf" "$temp_yaml"
+cp -f $mj_conf $temp_yaml
 
 IFS=$'\n' # make newlines the only separator
 for name in $(printenv|grep POST_); do
@@ -22,7 +22,7 @@ for name in $(printenv|grep POST_); do
     [ "$value" = "0" ] && value="none"
   fi
 
-  oldvalue=$(yaml-cli -g "$key" -i ${temp_yaml})
+  oldvalue=$(yaml-cli -g "$key" -i $temp_yaml)
   if [ -z "$value" ]; then
     [ -n "$oldvalue" ] && yaml-cli -d $key -i "$temp_yaml" -o "$temp_yaml"
   else
@@ -30,9 +30,9 @@ for name in $(printenv|grep POST_); do
   fi
 done
 
-[ -n "$(diff -q ${temp_yaml} ${mj_conf})" ] && cp -f "$temp_yaml" "$mj_conf"
+[ -n "$(diff -q $temp_yaml $mj_conf)" ] && cp -f $temp_yaml $mj_conf
 
-rm ${temp_yaml}
+rm $temp_yaml
 
 if [ -z "$DEBUG" ]; then
   killall -1 majestic
@@ -42,7 +42,7 @@ if [ -z "$DEBUG" ]; then
     redirect_to "/cgi-bin/majestic-config-compare.cgi"
   fi
 else
-  diff "$orig_yaml" "$mj_conf"
+  diff $orig_yaml $mj_conf
 #  rm "$orig_yaml"
 fi
 %>

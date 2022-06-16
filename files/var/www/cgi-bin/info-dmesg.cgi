@@ -5,7 +5,7 @@ page_title="$tPageTitleDmesg"
 %>
 <%in _header.cgi %>
 <%
-ex "dmesg"
+ex "/bin/dmesg"
 button_refresh
 %>
 <%in _footer.cgi %>

@@ -5,32 +5,32 @@
 maxsize=5242880
 magicnum="68737173"
 
-sysupgrade_date=$(ls -lc --full-time /usr/sbin/sysupgrade | xargs | cut -d " " -f 6)
-sysupgrade_date=$(date --date="$sysupgrade_date" +"%s")
-new_sysupgrade_date=$(date --date="2022-02-22" +"%s")
+sysupgrade_date=$(ls -lc --full-time /usr/sbin/sysupgrade | xargs | cut -d' ' -f6)
+sysupgrade_date=$(date +"%s" --date="$sysupgrade_date")
+new_sysupgrade_date=$(date +"%s" --date="2022-02-22")
 
-file="$POST_rootfs_file"
-name="$POST_rootfs_file_name"
+file=$POST_rootfs_file
+file_name=$POST_rootfs_file_name
 
 error=""
-if [ -z "$name"  ]; then
-  error="No file found! Did you forget to upload?"
+if [ -z "$file_name"  ]; then
+  error="$tMsgNoUploadedFileFound"
 elif [ ! -r "$file" ]; then
-  error="Cannot read file \"${name}\" from \"${file}\"!"
-elif [ "$(wc -c "$file" | awk '{print $1}')" -gt "$maxsize" ]; then
-  error="File \"${name}\" is too large! Its size is $(wc -c "$file" | awk '{print $1}') bytes, but it should be ${maxsize} bytes or less."
-elif [ "$magicnum" -ne "$(xxd -p -l 4 "$file")" ]; then
-  error="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 4 "$file") != $magicnum"
+  error="$tMsgCannotReadUploadedFile"
+elif [ "$(wc -c $file | awk '{print $1}')" -gt "$maxsize" ]; then
+  error="$tMsgUploadedFileIsTooLarge $(wc -c $file | awk '{print $1}') > ${maxsize}."
+elif [ "$magicnum" -ne "$(xxd -p -l 4 $file)" ]; then
+  error="$tMsgUploadedFileHasWrongMagic $(xxd -p -l 4 $file) != $magicnum"
 elif [ "$sysupgrade_date" -lt "$new_sysupgrade_date" ]; then
   error="This feature requires the latest sysupgrade tool. Please upgrade firmware first."
 fi
 
-if [ ! -z "$error" ]; then
+if [ -n "$error" ]; then
   report_error "$error"
 else
   pre_ "class=\"bg-light p-4 log-scroll\""
-  mv ${file} /tmp/${name}
-  sysupgrade --rootfs=/tmp/${name} --force_ver --force_all
+    mv $file /tmp/${file_name}
+    sysupgrade --rootfs=/tmp/${file_name} --force_ver --force_all
   _pre
   button_home
 fi

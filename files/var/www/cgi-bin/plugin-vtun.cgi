@@ -8,14 +8,14 @@ service_file=/etc/init.d/S98vtun
 if [ -n "$POST_action" ] && [ "$POST_action" = "reset" ]; then
   killall tunnel
   killall vtund
-  rm ${service_file}
+  rm $service_file
   redirect_to "/cgi-bin/plugin-vtun.cgi"
 fi
 
 if [ -n "$POST_vtun_server" ]; then
-  echo -e "#!/bin/sh\n\ntunnel $POST_vtun_server" > ${service_file}
-  chmod +x ${service_file}
-  ${service_file}
+  echo -e "#!/bin/sh\n\ntunnel $POST_vtun_server" > $service_file
+  chmod +x $service_file
+  $service_file
   redirect_to "/cgi-bin/plugin-vtun.cgi"
 fi
 %>

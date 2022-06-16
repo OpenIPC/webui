@@ -101,7 +101,7 @@ if [ -n "$error" ]; then
   report_error "$error"
 fi
 
-if [ -z "$(grep sendcoredump.sh /etc/init.d/S95hisilicon)" ]; then
+if [ -z "$(grep sendcoredump.sh /etc/init.d/S95*)" ]; then
   alert "$tMsgCoreDumpModificationRequired" "warning"
 fi
 

@@ -1,6 +1,7 @@
 #!/bin/sh
 
 config_file="/etc/telegram.cfg"
+curl_timeout=100
 
 if [ -n "$1" ] && [ -n "$2" ]; then
   force="true"
@@ -19,21 +20,26 @@ fi
 # exit if plugin is not enabled and not ran with parameters
 [ "$force" != "true" ] && [ "$telegram_enabled" != "true" ] && exit 0
 
-hostname=$(hostname -s)
-datetime=$(date +"%F %T")
-epochtime=$(date +"%s")
 snapshot="/tmp/telegram_snap.jpg"
 
-curl -s -k http://127.0.0.1/image.jpg?t=${epochtime} -o $snapshot
+# get image from camera
+curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
 if [ $? -eq 0 ]; then
-  ls -l $snapshot
-  result=$(curl --silent --insecure -X POST "https://api.telegram.org/bot${telegram_token}/sendPhoto?chat_id=${telegram_channel}" -H "Content-Type: multipart/form-data" -F "photo=@${snapshot}" -F "caption=${hostname}, ${datetime}")
-  rm -f $snapshot
+  curl_options="--silent --insecure --connect-timeout ${curl_timeout} --max-time ${curl_timeout}"
+
+  # SOCK5 proxy, if needed
+  if [ "$socks5_enabled" = "1" ]; then
+    curl_options="${curl_options} --socks5-hostname ${telegram_socks5_server}:${telegram_socks5_port} --proxy-user ${telegram_socks5_login}:${telegram_socks5_password}"
+  fi
+
+  url="https://api.telegram.org/bot${telegram_token}/sendPhoto?chat_id=${telegram_channel}"
+  result=$(curl $curl_options --request POST $url -H "Content-Type: multipart/form-data" -F "photo=@${snapshot}" -F "caption=$(hostname -s), $(date +"%F %T")")
   if [ "${result:1:6}" = '"ok":f' ]; then
     echo "Cannot post snapshot to Telegram."
     echo $result
     exit 1
   fi
+  rm -f $snapshot
 else
   echo "Cannot get a snapshot."
   exit 1

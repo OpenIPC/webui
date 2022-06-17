@@ -16,7 +16,7 @@ fi
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   :> $config_file
-  for v in enabled token channel; do
+  for v in enabled token channel socks5_enabled socks5_server socks5_port socks5_login socks5_password; do
     eval echo "${plugin}_${v}=\\\"\$POST_${plugin}_${v}\\\"" >> $config_file
   done
   redirect_to $url
@@ -32,6 +32,11 @@ row_ "row-cols-1 row-cols-xxl-3 g-3"
       field_switch "telegram_enabled"
       field_text "telegram_token"
       field_text "telegram_channel"
+      field_switch "telegram_socks5_enabled"
+      field_text "telegram_socks5_server"
+      field_number "telegram_socks5_port"
+      field_text "telegram_socks5_login"
+      field_text "telegram_socks5_password"
       button_submit "$tButtonFormSubmit" "primary"
     _form
   _col_card

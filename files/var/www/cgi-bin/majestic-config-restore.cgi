@@ -1,4 +1,4 @@
-#!/usr/bin/haserl --upload-limit=1024 --upload-dir=/tmp
+#!/usr/bin/haserl --upload-limit=20 --upload-dir=/tmp
 <%in _common.cgi %>
 <%
 config_file=/etc/majestic.yaml
@@ -6,6 +6,7 @@ magicnum="23206d616a6573746963"
 
 file=$POST_mj_restore_file
 file_name=$POST_mj_restore_file_name
+file_path=$POST_mj_restore_file_path
 
 error=""
 if [ -z "$file_name" ]; then

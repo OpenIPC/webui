@@ -55,6 +55,16 @@ function refresh() {
                 xhr.send();
             });
         }
+
+        if ($("#send-to-yadisk")) {
+            $("#send-to-yadisk").addEventListener("click", event => {
+                event.preventDefault();
+                if (!confirm("Are you sure?")) return false;
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", "/cgi-bin/yadisk-bot-send.cgi");
+                xhr.send();
+            });
+        }
     }
 
     window.addEventListener('load', initAll);

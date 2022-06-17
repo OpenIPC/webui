@@ -9,7 +9,7 @@ url=/cgi-bin/plugin-${plugin}.cgi
 if [ "POST" = "$REQUEST_METHOD" ]; then
   :> $config_file
   for v in enabled login password path socks5_enabled socks5_server socks5_port socks5_login socks5_password; do
-    eval echo "${plugin}_${v}=\"\$POST_${plugin}_${v}\"" >> $config_file
+    eval echo "${plugin}_${v}=\\\"\$POST_${plugin}_${v}\\\"" >> $config_file
   done
   redirect_to $url
 fi

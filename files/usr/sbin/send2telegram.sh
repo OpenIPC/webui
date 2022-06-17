@@ -2,15 +2,13 @@
 
 config_file="/etc/telegram.cfg"
 
-if [ -n "$1" ] && [ -n "$2" ]
-then
+if [ -n "$1" ] && [ -n "$2" ]; then
   channel=${1}
   token=${2}
 else
-  if [ -f "$config_file" ]
-  then
-    token=$(sed -n 1p ${config_file})
-    channel=$(sed -n 2p ${config_file})
+  if [ -f "$config_file" ]; then
+    token=$(sed -n 1p $config_file)
+    channel=$(sed -n 2p $config_file)
   else
     echo -e "Usage: $0 <channel-id> <token>\n or create ${config_file} config file."
     exit 1

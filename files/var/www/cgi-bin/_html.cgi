@@ -80,7 +80,7 @@ link_to() {
 # pre "text" "extras"
 pre() {
   # replace <, >, &, ", and ' with HTML entities
-  tag "pre" "$(echo "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g")" "$2"
+  tag "pre" "$(echo -e "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g")" "$2"
 }
 
 video_source() {

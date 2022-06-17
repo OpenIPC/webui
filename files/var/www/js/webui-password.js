@@ -6,3 +6,5 @@ $$('.toggle-password').forEach(el => {
     $('#password').focus();
   })
 });
+
+if (window.navigator.language.startsWith('ru')) $('#webui_language').value='ru';

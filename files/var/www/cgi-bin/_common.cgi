@@ -217,13 +217,12 @@ t_value() {
 }
 
 reload_locale() {
-  source $PWD/locale/${locale:=en}.sh
+  [ -n "$locale" ] && source $PWD/locale/${locale}.sh
 }
 
 source $PWD/_settings.sh
 source $PWD/locale/en.sh
 locale=$(cat /etc/web_locale)
-[ -z "$locale" ] && locale="en"
 reload_locale
 check_password
 %>

@@ -25,8 +25,6 @@ form_ $url "post"
       field_text "yadisk_login"
       field_text "yadisk_password"
       field_text "yadisk_path"
-    _col_card
-    col_card_ "$tHeaderYandexDiskProxy"
       field_switch "yadisk_socks5_enabled"
       field_text "yadisk_socks5_server"
       field_number "yadisk_socks5_port"
@@ -37,6 +35,12 @@ form_ $url "post"
       pre_
         echo "$(cat $config_file)"
       _pre
+    _col_card
+    col_card_ "Preview"
+      image "http://${ipaddr}/image.jpg" "id=\"preview\" class=\"img-fluid mb-3\" width=\"1280\" height=\"720\""
+      if [ -n "$yadisk_login" ] && [ -n "$yadisk_password" ]; then
+        link_to "Send to Yandex Disk" "#" "class=\"btn btn-primary \" id=\"send-to-yadisk\""
+      fi
     _col_card
   _row
 

@@ -38,7 +38,6 @@ fi
 mj_filesize_new=$(( ($mj_filesize_new + 1024) / 1024 )) # Rounding up by priming, since $(()) sucks at floats.
 
 free_space=$(df | grep /overlay | xargs | cut -d' ' -f4)
-free_space=$(df /overlay | tail -1 | xargs | awk '{print $5}')
 available_space=$(( $free_space + $mj_filesize_overlay - 1 ))
 %>
 <%in _header.cgi %>
@@ -113,14 +112,12 @@ row_ "row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-3"
 
       if [ "$mj_filesize_new" -le "$available_space" ]; then
         form_ "/cgi-bin/majestic-github.cgi" "post"
-          button "$tButtonInstallUpdate" "warning"
+          button_submit "$tButtonInstallUpdate" "warning"
         _form
       else
         alert "$tMjNoSpace" "warning"
-        # ${mj_filesize_new}K
       fi
     _alert
-
 
     if [ -z "$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)" ]; then
       alert_ "light"

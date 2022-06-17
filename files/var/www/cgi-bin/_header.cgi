@@ -64,6 +64,7 @@ nav_ "class=\"navbar navbar-expand-lg navbar-dark sticky-top\""
           nav_dropdown_to "$tMenuPluginIpeye" "/cgi-bin/plugin-ipeye.cgi"
           nav_dropdown_to "$tMenuPluginTelegram" "/cgi-bin/plugin-telegram.cgi"
           nav_dropdown_to "$tMenuPluginVtun" "/cgi-bin/plugin-vtun.cgi"
+          nav_dropdown_to "$tMenuPluginYandexDisk" "/cgi-bin/plugin-yadisk.cgi"
         _nav_dropdown
         nav_dropdown_ "Preview"
           nav_dropdown_to "JPEG" "/cgi-bin/preview.cgi"

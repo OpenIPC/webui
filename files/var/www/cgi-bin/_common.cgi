@@ -140,7 +140,7 @@ $xheader
 }
 
 report_error() {
-  echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2>"
+  h2 "$tMsgSomethingHappened" "class=\"text-danger\""
   alert "$1" "danger"
 }
 
@@ -154,26 +154,22 @@ report_log() {
 }
 
 report_command_error() {
-  echo "<h2 class=\"text-danger\">$tMsgSomethingHappened</h2>"
+  h2 "$tMsgSomethingHappened" "class=\"text-danger\""
   alert_ "danger"
-  b "# $1"
+  h6 "# $1"
   pre "$2"
   _alert
 }
 
 report_command_info() {
-  alert_ "info"
-  b "# $1"
+  h6 "# $1"
   pre "$2"
-  _alert
 }
 
 report_command_success() {
   h2 "$tMsgCommandExecuted" "success"
-  alert_ "success"
-  p "# ${1}" "class=\"fw-bold\""
+  h6 "# ${1}"
   pre "$2"
-  _alert
 }
 
 t_default() {
@@ -221,13 +217,12 @@ t_value() {
 }
 
 reload_locale() {
-  source $PWD/locale/${locale:=en}.sh
+  [ -n "$locale" ] && source $PWD/locale/${locale}.sh
 }
 
 source $PWD/_settings.sh
 source $PWD/locale/en.sh
 locale=$(cat /etc/web_locale)
-[ -z "$locale" ] && locale="en"
 reload_locale
 check_password
 %>

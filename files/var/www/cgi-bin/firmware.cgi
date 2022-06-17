@@ -112,7 +112,7 @@ row_ "row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-3"
 
       if [ "$mj_filesize_new" -le "$available_space" ]; then
         form_ "/cgi-bin/majestic-github.cgi" "post"
-          button "$tButtonInstallUpdate" "warning"
+          button_submit "$tButtonInstallUpdate" "warning"
         _form
       else
         alert "$tMjNoSpace" "warning"

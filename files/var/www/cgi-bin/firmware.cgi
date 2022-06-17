@@ -116,7 +116,6 @@ row_ "row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-3"
         _form
       else
         alert "$tMjNoSpace" "warning"
-        # ${mj_filesize_new}K
       fi
     _alert
 

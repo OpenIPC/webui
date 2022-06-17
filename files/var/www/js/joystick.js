@@ -28,16 +28,6 @@ function initControls() {
         xhr.send("mode=toggle");
     });
 
-    if ($("#send-to-telegram")) {
-        $("#send-to-telegram").addEventListener("click", event => {
-            event.preventDefault();
-            if (!confirm("Are you sure?")) return false;
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", "/cgi-bin/telegram-bot-send.cgi");
-            xhr.send();
-        });
-    }
-
     if ($("#speed")) $("#speed").addEventListener("click", event => {
         event.preventDefault();
         event.target.src = (event.target.src.split("/").pop() == "speed-slow.svg") ? "/img/speed-fast.svg" : "/img/speed-slow.svg";

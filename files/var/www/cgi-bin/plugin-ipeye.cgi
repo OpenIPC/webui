@@ -4,6 +4,7 @@
 get_system_info
 plugin="ipeye"
 page_title="$tPageTitlePluginIpeye"
+url=/cgi-bin/plugin-${plugin}.cgi
 %>
 <%in _header.cgi %>
 <%
@@ -13,7 +14,7 @@ if [ "$(yaml-cli -g .ipeye.enabled)" = "true" ]; then
   row_ "row-cols-1 row-cols-xl-2 g-4 mb-3"
     col_ "order-2 order-xl-1"
       card_ "$tHeaderAddFeed"
-        form_ "#" "post"
+        form_ $url "post"
           field_text "ipeye_login"
           field_text "ipeye_password"
           field_text "ipeye_password"

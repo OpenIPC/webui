@@ -45,11 +45,7 @@ form_ $url "post"
     _col_card
   _row
   
-#  if [ $(cat $config_file | wc -l) -ge 2 ]; then
-#    button_submit_action "reset" "$tButtonResetConfig" "data-method=\"delete\""
-#  else
-    button_submit "$tButtonFormSubmit" "primary"
-#  fi
+  button_submit "$tButtonFormSubmit" "primary"
 _form
 %>
 <%in _footer.cgi %>

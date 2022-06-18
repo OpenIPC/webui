@@ -140,7 +140,7 @@ $xheader
 }
 
 report_error() {
-  h2 "$tMsgSomethingHappened" "class=\"text-danger\""
+  h4 "$tMsgSomethingHappened" "class=\"text-danger\""
   alert "$1" "danger"
 }
 

@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-page_title="$tPageTitleSshKeys"
+page_title="$tPT_SshKeys"
 
 function readKey() {
   [ -n "$(fw_printenv key_${1})" ] && alert "$(fw_printenv key_${1})" "secondary" "style=\"overflow-wrap: anywhere;\""
@@ -50,30 +50,8 @@ case "$POST_action" in
 %>
 <%in _header.cgi %>
 <%
-div_ "class=\"row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-3\""
-  col_card_ "Key Backup"
-    form_ "/cgi-bin/ssh-keys.cgi" "post"
-      p "$tMsgSshKeyBackup"
-      button_submit_action "backup" "$tButtonSshKeyBackup"
-    _form
-  _col_card
-
-  col_card_ "Key Restore"
-    p "$tMsgSshKeyRestore"
-    form_ "/cgi-bin/ssh-keys.cgi" "post"
-      button_submit_action "restore" "$tButtonSshKeyRestore"
-    _form
-  _col_card
-
-  col_card_ "Key Delete"
-    p "$tMsgSshKeyDelete"
-    form_ "/cgi-bin/ssh-keys.cgi" "post"
-      button_submit_action "delete" "$tButtonSshKeyDelete"
-    _form
-  _col_card
-_div
-
+render "ssh-keys"
 readKey "ed25519"
 %>
-<%in _footer.cgi %>
+<%in p/footer.cgi %>
 <% esac %>

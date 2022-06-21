@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;700&display=swap');
+
+:root {
+    --bs-body-font-family: "IBM Plex Sans", sans-serif;
+    --bs-font-monospace: "IBM Plex Mono", monospace;
+    --bs-blue: #4c60d8;
+}
+
+.x-small {
+    font-size: 0.8125rem;
+}
+
+body > main > .container > h2 {
+    font-weight: 700;
+    color: var(--bs-blue);
+    margin: 1rem 0 1.5rem;
+}
+
+body > nav.navbar, body > header {
+    background: var(--bs-blue);
+    color: #ffffff;
+}
+
+body > footer > .container {
+    border-top: solid 1px #d3d3d3;
+}
+
+h6 {
+    font-weight: 700;
+}
+
+pre {
+    background: #4c60d812;
+    margin: 0.5rem 0 1rem;
+    padding: 0.5rem 1rem;
+}
+
+pre span.title {
+    display: inline-block;
+    width: 8rem;
+}
+
+.card:not(.danger) .card-body {
+    background: #4c60d811;
+}
+
+.card-header {
+    border-bottom: solid 1px var(--bs-blue);
+    color: var(--bs-blue);
+    text-align: right;
+    text-transform: uppercase;
+}
+
+.card dl dd, .card dl dt {
+    border-bottom: solid 1px #ffffff;
+    margin-bottom: 0;
+}
+
+.dropdown-item {
+    font-size:0.9rem;
+}
+
+.form-control.font-monospace {
+    font-size: 0.875rem;
+}
+
+.form-control::placeholder {
+    color: #c2c2d9;
+}
+
+.form-range {
+    height: 2.5rem;
+}
+
+.form-range::-moz-range-track {
+    width: 90%;
+}
+
+.hint {
+    font-size: 0.875rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0;
+}
+
+.card-body {
+    position: relative;
+}
+
+.social {
+    position: absolute;
+    right: 0.25rem;
+    top: -0.75rem;
+    text-align: right;
+}
+
+.social a {
+    background: white;
+    border-radius: 50%;
+    display: inline-flex;
+    padding: 2px;
+}
+
+.social a img {
+    max-height: 1.25rem;
+    vertical-align: text-bottom;
+}
+
+/*
+.card-body > div.row {padding:0.5rem 0 0;}
+pre, .pre {white-space:pre;}
+.col-form-label, .form-check-label {font-size:0.9rem; font-weight:400;}
+form .input-group-text {min-width:4rem;}
+form .range-value {text-align:right;}
+#refresh {cursor:pointer;flex-grow:1;font-size:0.8rem;padding:0.5rem 1rem;text-align:right;}
+.log-scroll {height:50vh;overflow:auto;}
+*/

@@ -1,7 +1,7 @@
 #!/usr/bin/haserl --upload-limit=200 --upload-dir=/tmp
 <%in _common.cgi %>
 <%
-page_title="$tPageTitleSensor"
+page_title="$tPT_Sensor"
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   error=""
@@ -56,27 +56,27 @@ fi
 [ -n "$error" ] && report_error "$error"
 
 row_ "row-cols-1 row-cols-lg-2 g-3 mb-3"
-  col_card_ "$tHeaderSensorDrivers"
+  col_card_ "$tHD_SensorDrivers"
     alert_ "light"
       h6 "Upload sensor driver"
-      form_ "/cgi-bin/sensor-upload.cgi" "post" "enctype=\"multipart/form-data\""
+      form_upload_ "/cgi-bin/sensor-upload.cgi"
         field_file "sensor_driver_file"
-        button_submit "$tButtonUploadFile" "primary"
+        button_submit "$tB_UploadFile" "primary"
       _form
     _alert
     ex "ls /usr/lib/sensors/"
   _col_card
 
-  col_card_ "$tHeaderSensorConfigs"
+  col_card_ "$tHD_SensorConfigs"
     alert_ "light"
       h6 "Upload sensor config"
-      form_ "/cgi-bin/sensor-upload.cgi" "post" "enctype=\"multipart/form-data\""
+      form_upload_ "/cgi-bin/sensor-upload.cgi"
         field_file "sensor_config_file"
-        button_submit "$tButtonUploadFile" "primary"
+        button_submit "$tB_UploadFile" "primary"
       _form
     _alert
     ex "ls /etc/sensors/"
   _col_card
 _row
 %>
-<%in _footer.cgi %>
+<%in p/footer.cgi %>

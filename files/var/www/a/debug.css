@@ -1,0 +1,12 @@
+:root {
+    --bs-blue: #990000;
+}
+
+.offcanvas,
+.offcanvas-lg,
+.offcanvas-md,
+.offcanvas-sm,
+.offcanvas-xl,
+.offcanvas-xxl {
+    --bs-offcanvas-width:30vw;
+}

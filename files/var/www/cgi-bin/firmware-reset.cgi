@@ -1,17 +1,15 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<%
-page_title="$tPageTitleFirmwareReset"
-%>
+<% page_title="$t_fwreset_0" %>
 <%in _header.cgi %>
 <%
-command="/usr/sbin/sysupgrade -n"
-output=$(/usr/sbin/sysupgrade -n 2>&1)
+_c="/usr/sbin/sysupgrade -n"
+_o=$($_c 2>&1)
 if [ $? -ne 0 ]; then
-  report_command_error "$command" "$output"
+report_command_error "$_c" "$_o"
 else
-  report_command_info "$command" "$output"
-  button_home
+report_command_info "$_c" "$_o"
+button_home
 fi
 %>
-<%in _footer.cgi %>
+<%in p/footer.cgi %>

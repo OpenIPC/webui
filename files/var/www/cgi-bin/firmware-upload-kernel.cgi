@@ -9,30 +9,30 @@ sysupgrade_date=$(ls -lc --full-time /usr/sbin/sysupgrade | xargs | cut -d' ' -f
 sysupgrade_date=$(date +"%s" --date="$sysupgrade_date")
 new_sysupgrade_date=$(date +"%s" --date="2021-12-07")
 
-file=$POST_kernel_file
-file_name=$POST_kernel_file_name
+file="$POST_kernel_file"
+file_name="$POST_kernel_file_name"
 
 error=""
 if [ -z "$file_name"  ]; then
-  error="$tMsgNoUploadedFileFound"
+  error="$t_form_error_1"
 elif [ ! -r "$file" ]; then
-  error="$tMsgCannotReadUploadedFile"
+  error="$t_form_error_2"
 elif [ "$(wc -c $file | awk '{print $1}')" -gt "$maxsize" ]; then
-  error="$tMsgUploadedFileIsTooLarge $(wc -c $file | awk '{print $1}') > ${maxsize}."
+  error="$t_form_error_3 $(wc -c $file | awk '{print $1}') > ${maxsize}."
 elif [ "$magicnum" -ne "$(xxd -p -l 4 $file)" ]; then
-  error="$tMsgUploadedFileHasWrongMagic $(xxd -p -l 4 $file) != $magicnum"
+  error="$t_form_error_4 $(xxd -p -l 4 $file) != $magicnum"
 elif [ "$sysupgrade_date" -lt "$new_sysupgrade_date" ]; then
-  error="This feature requires the latest sysupgrade tool. Please upgrade firmware first."
+  error="$t_form_error_5"
 fi
 
 if [ -n "$error" ]; then
   report_error "$error"
 else
-  pre_ "class=\"bg-light p-4 log-scroll\""
-    mv $file /tmp/${file_name}
+  pre_ "bg-light p-4 log-scroll"
+    xl "mv $file /tmp/${file_name}"
     sysupgrade --kernel=/tmp/${file_name} --force_ver
   _pre
   button_home
 fi
 %>
-<%in _footer.cgi %>
+<%in p/footer.cgi %>

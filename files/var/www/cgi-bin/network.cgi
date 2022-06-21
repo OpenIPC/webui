@@ -1,66 +1,64 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-get_system_info
-page_title="$tPageTitleNetworkAdministration"
+page_title="$t_network_0"
 
-network_hostname=$hostname
-
-if [ "$(cat /etc/network/interfaces | grep "eth0 inet" | grep dhcp)" ]; then
-  network_dhcp="true"
-  disabled="disabled";
-else
-  network_dhcp="false"
-  disabled="";
-fi
-network_ip_address=$(ifconfig eth0 | grep "inet " | tr ':' ' ' | awk '{print $3}')
-network_netmask=$(ifconfig eth0 | grep "inet " | cut -d: -f4)
-network_gateway=$(ip r | grep default | cut -d' ' -f3)
-network_dns_1=$(cat /etc/resolv.conf | grep nameserver | sed -n 1p | cut -d' ' -f2)
-network_dns_2=$(cat /etc/resolv.conf | grep nameserver | sed -n 2p | cut -d' ' -f2)
+network_dhcp="$dhcp"
+network_hostname="$hostname"
+network_ip_address="$ipaddr"
+network_netmask="$netmask"
+network_gateway="$gateway"
+network_dns_1="$dns_1"
+network_dns_2="$dns_2"
 %>
 <%in _header.cgi %>
-<%
-row_ "mb-3"
-  col_ "col-md-6 col-lg-4"
-    card_ "$tHeaderSettings"
-      form_ "/cgi-bin/network-update.cgi" "post"
-        action="update"
-        field_hidden "action"
-        field_text "network_hostname" "data-pattern=\"host\""
-        field_switch "network_dhcp"
-        field_text "network_ip_address" "$disabled"
-        field_text "network_netmask" "$disabled"
-        field_text "network_gateway" "$disabled"
-        field_text "network_dns_1" "$disabled"
-        field_text "network_dns_2" "$disabled"
-        button_submit "$tButtonFormSubmit" "primary"
-      _form
-    _card
-  _col
-  col_ "col-md-6 col-lg-8"
-    row_ "row-cols-1 g-3"
-      col_card "$tHeaderDnsResolver" "$(ex "cat /etc/resolv.conf")"
-      col_card "$tHeaderNetworkRouting" "$(ex "ip route list")"
-      col_card "$tHeaderNtpConfig" "$(ex "cat /etc/ntp.conf")"
-    _row
-  _col
-_row
 
-row_ "row-cols-1 g-3 mb-3"
-  col_card "$tHeaderNetworkInterfaces" "$(ex "cat /etc/network/interfaces")"
-  col_card "$tHeaderNetworkAddress" "$(ex "ip address")"
-  col_card "$tHeaderNetworkStatus" "$(ex "netstat -tulpan")"
-_row
+<div class="row mb-3">
+<div class="col-md-6 col-lg-4">
+<div class="card">
+<div class="card-header"><%= $t_network_1 %></div>
+<div class="card-body">
+<%
+form_ "/cgi-bin/network-update.cgi"
+action="update"
+field_hidden "action"
+field_text "network_hostname" "data-pattern=host"
+field_switch "network_dhcp"
+field_text "network_ip_address"
+field_text "network_netmask"
+field_text "network_gateway"
+field_text "network_dns_1"
+field_text "network_dns_2"
+button_submit "$t_btn_submit" "primary"
+_form
 %>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-lg-8">
+<div class="row row-cols-1 g-3">
+<%
+col_card "$t_network_2" "$(ex "cat /etc/resolv.conf")"
+col_card "$t_network_3" "$(ex "ip route list")"
+col_card "$t_network_4" "$(ex "cat /etc/ntp.conf")"
+%>
+</div>
+</div>
+</div>
+
+<div class="row row-cols-1 g-3 mb-3">
+<%
+col_card "$t_network_5" "$(ex "cat /etc/network/interfaces")"
+col_card "$t_network_6" "$(ex "ip address")"
+col_card "$t_network_7" "$(ex "netstat -tulpan")"
+%>
+</div>
 
 <script>
-$('#network_dhcp[type=checkbox]').addEventListener('change', (ev) => {
-  $('#network_ip_address').disabled = ev.target.checked
-  $('#network_netmask').disabled = ev.target.checked
-  $('#network_gateway').disabled = ev.target.checked
-  $('#network_dns_1').disabled = ev.target.checked
-  $('#network_dns_2').disabled = ev.target.checked
-});
+function toggleDhcp() {
+  $('#network_ip_address').disabled = $('#network_netmask').disabled = $('#network_gateway').disabled = $('#network_dns_1').disabled = $('#network_dns_2').disabled = $('#network_dhcp[type=checkbox]').checked;
+}
+$('#network_dhcp[type=checkbox]').addEventListener('change', toggleDhcp);
+toggleDhcp();
 </script>
-<%in _footer.cgi %>
+<%in p/footer.cgi %>

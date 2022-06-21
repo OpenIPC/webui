@@ -43,6 +43,6 @@ if [ -z "$DEBUG" ]; then
   fi
 else
   diff $orig_yaml $mj_conf
-#  rm "$orig_yaml"
+  rm $orig_yaml
 fi
 %>

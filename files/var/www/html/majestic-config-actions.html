@@ -1,0 +1,43 @@
+<div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-4 g-3 mb-3">
+<div class="col">
+<div class="card mb-3 h-100">
+<div class="card-header">Backup</div>
+<div class="card-body">
+<p>Download a copy of the actual majestic.yaml file to back up the changes you have done to the default Majestic configuration.</p>
+<a class="btn btn-primary" href="/cgi-bin/majestic-config-backup.cgi">Download config</a>
+</div>
+</div>
+</div>
+<div class="col">
+<div class="card mb-3 h-100">
+<div class="card-header">Restore</div>
+<div class="card-body"><p>Restore Majestic configuration from a backup copy of majestic.yaml file.</p>
+<form action="/cgi-bin/majestic-config-restore.cgi" method="post" enctype="multipart/form-data">
+<div class="mb-2 file">
+<label class="form-label" for="mj_restore_file">Backup file</label>
+<input type="file" name="mj_restore_file" id="mj_restore_file" class="form-control form-control" placeholder="majestic.yaml" value="">
+</div>
+<button type=submit class="btn btn-danger mt-3">Upload config</button>
+</form>
+</div>
+</div>
+</div>
+<div class="col">
+<div class="card mb-3 h-100">
+<div class="card-header">Changes</div>
+<div class="card-body">
+<p>Compare your recent configuration of Majestic with the original configuration supplied with the firmware.</p>
+<a class="btn btn-primary" href="/cgi-bin/majestic-config-compare.cgi">Review changes</a>
+</div>
+</div>
+</div>
+<div class="col">
+<div class="card mb-3 h-100">
+<div class="card-header">Reset</div>
+<div class="card-body">
+<p>Reset Majestic configuration to its original state, as supplied with the firmware.</p>
+<a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi">Reset settings</a>
+</div>
+</div>
+</div>
+</div>

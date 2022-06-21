@@ -1,0 +1,39 @@
+<div class="mb-2 select">
+<label class="form-label" for="tools_action">Action</label>
+<div class="input-group">
+<select class=form-select id="tools_action" name="tools_action">
+<option value="ping">ping</option>
+<option value="trace">trace</option>
+</select>
+</div>
+</div>
+<div class="mb-2 string">
+<label class="form-label" for="tools_target">Target FQDN or IP address</label>
+<div class="input-group">
+<input class="form-control" id="tools_target" name="tools_target" placeholder="FQDN or IP address" type="text" value="4.2.2.1">
+</div>
+</div>
+<div class="mb-2 select">
+<label class="form-label" for="tools_interface">Use network interface</label>
+<div class="input-group">
+<select class=form-select id="tools_interface" name="tools_interface">
+<option selected value="auto">auto</option>
+<option value="eth0">eth0</option>
+<option value="lo">lo</option>
+</select>
+</div>
+</div>
+<div class="mb-2 number">
+<label class="form-label" for="tools_packet_size">Packet size</label>
+<div class="input-group">
+<input class="form-control form-control text-end" id="tools_packet_size" name="tools_packet_size" placeholder="" type="text" value="56">
+<span class="input-group-text">Byte</span>
+</div>
+</div>
+<div class="mb-2 number">
+<label class="form-label" for="tools_duration">Number of packets</label>
+<div class="input-group">
+<input class="form-control form-control text-end" id="tools_duration" name="tools_duration" placeholder="" type="text" value="5">
+</div>
+</div>
+<button class="btn btn-primary mt-3" type=submit>Run</button>

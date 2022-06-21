@@ -16,41 +16,53 @@ eval $(grep = $config_file)
 
 webdav_mkdir()  {
   url="${url}/${1}"
-  echo "curl $curl_options --request MKCOL $url"
-  curl $curl_options --request MKCOL "$url"
+  result=$(curl $curl_options --request MKCOL "$url")
+  if [ "${result:1:6}" = '"ok":f' ]; then
+    echo "Cannot create folder at Yandex Disk."
+    echo $result
+    exit 1
+  fi
 }
 
 webdav_upload() {
   url="${url}/$(TZ=$(cat /etc/TZ) date +"%G%m%d-%H%M%S").jpg"
-  echo "curl $curl_options --upload-file $1 $url"
-  curl $curl_options --request PUT --upload-file "$1" "$url"
+  result=$(curl $curl_options --request PUT --upload-file "$1" "$url")
+  if [ "${result:1:6}" = '"ok":f' ]; then
+    echo "Cannot upload snapshot to Yandex Disk."
+    echo $result
+    exit 1
+  fi
 }
 
 url="https://webdav.yandex.ru"
-tmp_file=/tmp/snap.jpg
-
-# curl_options="--insecure --connect-timeout ${curl_timeout} --max-time ${curl_timeout}" # --silent
+snapshot="/tmp/yadisk_snap.jpg"
 
 # get image from camera
-curl $curl_options "http://127.0.0.1/image.jpg" --output "$tmp_file" --silent
+curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
+if [ $? -eq 0 ]; then
+  curl_options="--silent --insecure --connect-timeout ${curl_timeout} --max-time ${curl_timeout}"
 
-# Yandex Disk user's credentials
-curl_options="${curl_options} --user ${yadisk_login}:${yadisk_password}"
-# SOCK5 proxy, if needed
-if [ "$socks5_enabled" = "1" ]; then
-  curl_options="${curl_options} --socks5-hostname ${yadisk_socks5_server}:${yadisk_socks5_port} --proxy-user ${yadisk_socks5_login}:${yadisk_socks5_password}"
+  # Yandex Disk user's credentials
+  curl_options="${curl_options} --user ${yadisk_login}:${yadisk_password}"
+
+  # SOCK5 proxy, if needed
+  if [ "$socks5_enabled" = "1" ]; then
+    curl_options="${curl_options} --socks5-hostname ${yadisk_socks5_server}:${yadisk_socks5_port} --proxy-user ${yadisk_socks5_login}:${yadisk_socks5_password}"
+  fi
+
+  # create path to destination directory
+  subdirs="${yadisk_path// /_}"
+  subdirs="$(echo "$yadisk_path" | sed "s/$/\//")"
+  while [ -n "$subdirs" ]; do
+    subdir="${subdirs%%/*}"
+    [ -n "$subdir" ] && webdav_mkdir "$subdir"
+    subdirs="${subdirs#*/}"
+  done
+  # upload file
+  webdav_upload "$snapshot"
+else
+  echo "Cannot get a snapshot."
+  exit 1
 fi
-
-# create path to destication directory
-subdirs="${yadisk_path// /_}"
-subdirs="$(echo "$yadisk_path" | sed "s/$/\//")"
-while [ -n "$subdirs" ]; do
-  subdir="${subdirs%%/*}"
-  [ -n "$subdir" ] && webdav_mkdir "$subdir"
-  subdirs="${subdirs#*/}"
-done
-
-# save file
-webdav_upload "$tmp_file"
 
 exit 0

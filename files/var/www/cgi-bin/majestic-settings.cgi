@@ -2,84 +2,86 @@
 <%in _common.cgi %>
 <%in _mj.cgi %>
 <%
-get_system_info
-page_title="$tPageTitleMajesticSettings"
+page_title="$t_mjsettings_0"
 only="$GET_group"
 [ -z "$only" ] && only="system"
 mj=$(echo "$mj" | sed "s/ /_/g")
 %>
 <%in _header.cgi %>
+<nav class="navbar navbar-light bg-light mb-3 navbar-expand-xxl">
+<div class="container-fluid">
+<button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button">
+<span class="navbar-toggler-icon"></span>
+</button>
+<img alt="Image: Majestic logo" class="me-2" height="32" src="/a/majestic-logo.png" width="32">
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+<ul class="navbar-nav me-auto mb-2 mb-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 15em;">
 <%
-navbar_ "navbar-expand-md"
-  div_ "class=\"container-fluid\""
-    navbar_toggler "navbarSupportedContent"
-    image "/img/majestic-logo.png" "width=32 height=32 class=me-2"
-    div_ "class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\""
-      ul_ "class=\"navbar-nav me-auto mb-2 mb-lg-0 navbar-nav-scroll\" style=\"--bs-scroll-height: 15em;\""
-        for line in $mj; do
-          param=${line%%|*}; fullname=${param#.}; domain=${fullname%.*}
-          if [ "$olddomain" != "$domain" ]; then
-            olddomain="$domain"; active=""; [ "$domain" == "$only" ] && active=" active"
-            eval "title=\"\$tMjNav_$domain\""
-            li "$(link_to "$title" "?group=${domain}" "class=\"nav-link${active}\"")" "class=\"nav-item small\""
-          fi
-        done
-      _ul
-    _div
-  _div
-_navbar
-
-eval title="\$tMjTitle_${only}"
+for line in $mj; do
+  param=${line%%|*}; fullname=${param#.}; domain=${fullname%.*}
+  if [ "$olddomain" != "$domain" ]; then
+    olddomain="$domain"; active=""; [ "$domain" == "$only" ] && active=" active"
+    eval "title=\"\$tM_mj_$domain\""
+    li "$(link_to "$title" "?group=${domain}" "nav-link${active}")" "nav-item small"
+  fi
+done
+%>
+</ul>
+</div>
+</div>
+</nav>
+<%
+eval title="\$tT_mj_${only}"
 [ -z "$title" ] && title=$only
 
-h3 "$title" "class=\"my-4\""
+h3 "$title" "my-4"
 
-row_ "row-cols-1 row-cols-xl-2 g-4 mb-3"
-  col_card_ "Settings"
-    form_ "/cgi-bin/majestic-settings-update.cgi" "post"
+row_ "row-cols-1 row-cols-md-2 g-3 mb-3"
+  col_card_ "$t_mjsettings_1"
+    form_ "/cgi-bin/majestic-settings-update.cgi"
       mj=$(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only")
       config=""
-    for line in $mj; do
-      param=${line%%|*}; fullname=${param#.}; domain=${fullname%.*}; name=mj_${fullname//./_}; line=${line#*|}
-      type=${line%%|*}; line=${line#*|}
+      for line in $mj; do
+        param=${line%%|*}; fullname=${param#.}; domain=${fullname%.*}; name=mj_${fullname//./_}; line=${line#*|}
+        type=${line%%|*}; line=${line#*|}
 
-      eval "$name=\"$(yaml-cli -g "$param")\""
-      config="${config}\n${param}: $(yaml-cli -g "$param")"
-      case "$type" in
-        boolean)
-          field_switch "$name"
-          ;;
-        hidden)
-          field_hidden "$name"
-          ;;
-        number)
-          field_number "$name"
-          ;;
-        range)
-          field_range "$name"
-          ;;
-        select)
-          field_select "$name"
-          ;;
-        string)
-          field_text "$name"
-          ;;
-        *)
-          ;;
-      esac
-    done
+        eval "$name=\"$(yaml-cli -g "$param")\""
+        config="${config}\n${param}: $(yaml-cli -g "$param")"
+        case "$type" in
+          boolean)
+            field_switch "$name"
+            ;;
+          hidden)
+            field_hidden "$name"
+            ;;
+          number)
+            field_number "$name"
+            ;;
+          range)
+            field_range "$name"
+            ;;
+          select)
+            field_select "$name"
+            ;;
+          string)
+            field_text "$name"
+            ;;
+          *)
+            ;;
+        esac
+      done
 
-    button_submit "$tButtonFormSubmit" "primary"
+      button_submit "$t_btn_submit" "primary"
     _form
   _col_card
 
-  col_card_ "Config excerpt"
+  col_card_ "$t_mjsettings_2"
     pre "$(echo -e "$config")"
   _col_card
 _row
 %>
 
-<script src="/js/majestic-settings.js"></script>
+<script src="/a/majestic-settings.js"></script>
 <script>
   if ($("#mj_isp_sensorConfig")) {
     const inp = $("#mj_isp_sensorConfig");
@@ -97,4 +99,4 @@ _row
     inp.replaceWith(sel);
   }
 </script>
-<%in _footer.cgi %>
+<%in p/footer.cgi %>

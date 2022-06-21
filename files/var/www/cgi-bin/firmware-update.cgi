@@ -1,12 +1,10 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<%
-page_title="$tPageTitleFirmwareUpdate"
-%>
+<% page_title="$t_fwupdate_0" %>
 <%in _header.cgi %>
 <%
 if [ -f /tmp/webjob.lock ]; then
-  report_error "danger" "$tMsgAnotherProcessRunning"
+  report_error "danger" "$t_fwupdate_1"
 else
   opts=""
   [ "$POST_fw_kernel" = "true" ] && opts="${opts} -k"
@@ -15,11 +13,11 @@ else
   [ "$POST_fw_noreboot" = "true" ] && opts="${opts} -x"
   [ "$POST_fw_enforce" = "true" ] && opts="${opts} --force_ver"
 
-  pre_ "class=\"bg-light p-4 log-scroll\""
+  pre_ "bg-light p-4 log-scroll"
     sysupgrade $opts
   _pre
   button_home
   button_reboot
 fi
 %>
-<%in _footer.cgi %>
+<%in p/footer.cgi %>

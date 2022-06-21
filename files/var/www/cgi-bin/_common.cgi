@@ -1,36 +1,386 @@
 #!/usr/bin/haserl
-<%in _html.cgi %>
-<%in _bootstrap.cgi %>
 <%
+# tag "tag" "text" "css" "extras"
+tag() {
+  _tag="$1"; _txt="$2"; _css="$3"; _xtr="$4"
+  [ -n "$_css" ] && _css=" class=\"${_css}\""
+  [ -n "$_xtr" ] && _xtr=" ${_xtr}"
+  echo -e "<${_tag}${_css}${_xtr}>${_txt}</${_tag}>\n"
+  unset _tag; unset _txt; unset _css; unset _xtr
+}
+
+# A "tag" "classes" "extras"
+A() {
+  _c="$2"; [ -n "$_c" ] && _c=" class=\"${_c}\""
+  _x="$3"; [ -n "$_x" ] && _x=" ${_x}"
+  echo "<${1}${_c}${_x}>"
+  unset _c; unset _x
+}
+
+Z() {
+  echo "</${1}>"
+}
+
+# tag "text" "classes" "extras"
+b()     { tag "b"     "$1" "$2" "$3"; }
+dd()    { tag "dd"    "$1" "$2" "$3"; }
+div()   { tag "div"   "$1" "$2" "$3"; }
+dt()    { tag "dt"    "$1" "$2" "$3"; }
+h1()    { tag "h1"    "$1" "$2" "$3"; }
+h2()    { tag "h2"    "$1" "$2" "$3"; }
+h3()    { tag "h3"    "$1" "$2" "$3"; }
+h4()    { tag "h4"    "$1" "$2" "$3"; }
+h5()    { tag "h5"    "$1" "$2" "$3"; }
+h6()    { tag "h6"    "$1" "$2" "$3"; }
+i()     { tag "i"     "$1" "$2" "$3"; }
+label() { tag "label" "$1" "$2" "$3"; }
+li()    { tag "li"    "$1" "$2" "$3"; }
+p()     { tag "p"     "$1" "$2" "$3"; }
+span()  { tag "span"  "$1" "$2" "$3"; }
+td()    { tag "td"    "$1" "$2" "$3"; }
+th()    { tag "th"    "$1" "$2" "$3"; }
+
+footer_() { A "footer" "$1" "$2"; }
+_footer() { Z "footer"; }
+
+div_() { A "div" "$1" "$2"; }
+_div() { Z "div"; }
+
+dl_() { A "dl" "$1" "$2"; }
+_dl() { Z "dl"; }
+
+li_() { A "li" "$1" "$2"; }
+_li() { Z "li"; }
+
+main_() { A "main" "$1" "$2"; }
+_main() { Z "main"; }
+
+nav_() { A "nav" "$1" "$2"; }
+_nav() { Z "nav"; }
+
+ol_() { A "ol" "$1" "$2"; }
+_ol() { Z "ol"; }
+
+pre_() { A "pre" "$1" "$2"; }
+_pre() { Z "pre"; }
+
+span_() { A "span" "$1" "$2"; }
+_span() { Z "span"; }
+
+ul_() { A "ul" "$1" "$2"; }
+_ul() { Z "ul"; }
+
+#######
+
+# alert_ "type" "extras"
+alert_() {
+  div_ "alert alert-${1}" "$2"
+}
+
+_alert() {
+  _div
+}
+
+# alert "text" "type" "extras"
+alert() {
+  alert_ "$2" "$3"
+  echo "$1"
+  _alert
+}
+
 beats() {
-  echo -n "@$(echo "$(date -u -d "1970-01-01 $(TZ=UTC-1 date +%T)" +%s) * 10 / 864" | bc)"
+  echo "@$(echo "$(date -u -d "1970-01-01 $(TZ=UTC-1 date +%T)" +%s)*10/864"|bc)"
+}
+
+# button "text" "type" "extras"
+button() {
+  echo "<button type=button class=\"btn btn-${2}\" ${3}>${1}</button>"
+}
+
+# button_link_to "text" "url" "type" "extras"
+button_link_to() {
+  echo "<a class=\"btn btn-${3}\" href=\"${2}\" ${4}>${1}</a>"
+}
+
+# button_submit "text" "type" "extras"
+button_submit() {
+  echo "<button type=submit class=\"btn btn-${2} mt-3\" ${3}>${1}</button>"
+}
+
+# button_submit_action "action" "text" "extras"
+button_submit_action() {
+  echo "<button type=submit class=\"btn btn-danger\" name=action value=\"${1}\" ${3}>${2}</button>"
+}
+
+button_home() {
+  echo "<a class=\"btn btn-primary\" href=\"/\">$tB_GoHome</a>"
+}
+
+button_reboot() {
+  button_link_to "$tB_Reboot" "/cgi-bin/reboot.cgi" "danger"
+}
+
+# button_refresh
+button_refresh() {
+  link_to "$tB_Refresh" "#" "btn btn-primary refresh"
+}
+
+# card_ "text"
+card_() {
+  _c="card mb-3"; [ -n "$2" ] && _c="${_c} ${2}"
+  div_ "${_c}" "$3"
+  card_header "$1"
+  card_body_
+}
+
+_card() {
+  _card_body
+  _div
+}
+
+# card_header "text"
+card_header() {
+  div "$1" "card-header" "$2"
+}
+
+card_body_() {
+  _c="card-body"; [ -n "$1" ] && _c="${_c} ${1}"
+  div_ "$_c" "$2"
+  unset _c
+}
+
+_card_body() {
+  _div
+}
+
+card_body() {
+  card_body_ "$2" "$3"
+  echo "$1"
+  _card_body
 }
 
 check_password() {
-  [ -z "$REQUEST_URI" ] && return
-  [ "$REQUEST_URI" = "/cgi-bin/webui-settings.cgi" ] && return
-  [ "$REQUEST_URI" = "/cgi-bin/webui-settings-update.cgi" ] && return
-
-  default_password=$(grep admin /rom/etc/httpd.conf | cut -d: -f3)
-  password=$(grep admin /etc/httpd.conf | cut -d: -f3)
-  if [ "$default_password" = "$password" ]; then
-    flash_save "danger" "$tMsgSetYourOwnPassword"
-    redirect_to "/cgi-bin/webui-settings.cgi"
+  [ "0${debug}" -ge "1" ] && return
+  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui-settings.cgi" ] && return
+  if [ -z "$password" ] || [ "$password_fw" = "$password" ]; then
+    redirect_to "/cgi-bin/webui-settings.cgi" "danger" "$tMsgSetYourOwnPassword"
   fi
 }
 
+# col_ "class"
+col_() {
+  div_ "col ${1}" "$2"
+}
+
+_col() {
+  _div
+}
+
+# col_card "text"
+col_card_() {
+  col_
+  card_ "$1" "h-100"
+}
+
+_col_card() {
+  _card
+  _col
+}
+
+# col_card "text-header" "text"
+col_card() {
+  col_card_ "$1"
+  echo "$2"
+  _col_card
+}
+
+# col_first
+col_first() {
+  col_
+}
+
+col_last() {
+  _col
+}
+
+col_next() {
+  col_last
+  col_first
+}
+
+# container "text"
+container_() {
+  div_ "container ${1}" "$2"
+}
+
+_container() {
+  _div
+}
+
+container() {
+  container_
+  echo "$1"
+  _container
+}
+
+e() {
+  echo -e -n "$1"
+}
+
+e2c() {
+  echo "<span class=\"title\">${1}:</span><span>${2}</span>"
+}
+
 ex() {
+  # NB! $() forks process and stalls output.
   h6 "# ${1}"
-  # NB! Don't use $() here, it forks process and stalls output.
-  # report_log "$(eval $1 2>&1)"
-  pre_ "class=\"small\""
-    eval $1 | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g" 2>&1
+  pre_ "small"
+  eval $1 | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g" 2>&1
   _pre
 }
 
-flash_file=/tmp/webui-flash.txt
-flash_append() { echo "$1:$2" >> "$flash_file"; }
-flash_delete() { :> "$flash_file"; }
+field_() {
+  div_ "mb-2 ${1}" "$2"
+}
+
+_field() {
+  _div
+}
+
+# field_checkbox "name" "extras"
+field_checkbox() {
+  field_ "boolean form-check"
+    echo "<input type=hidden name=\"${1}\" id=\"${1}-false\" value=false>"
+    echo "<input type=checkbox name=\"${1}\" id=\"${1}\" $(t_checked "$1" "true") value=true class=form-check-input ${2}>"
+    label "$1" "form-check-label"
+  _field
+}
+
+# field_file "name"
+field_file() {
+  field_ "file"
+    label "$1"
+    input "file" "$1" "form-control"
+    help "$1"
+  _field
+}
+
+# field_hidden "name"
+field_hidden() {
+  input "hidden" "$1" "hidden"
+}
+
+# field_number "name"
+field_number() {
+  field_ "number"
+    label "$1"
+    div_ "input-group"
+      input "text" "$1" "form-control text-end"
+      units "$1"
+    _div
+    help "$1"
+  _field
+}
+
+# field_password "name"
+field_password() {
+  field_ "password"
+    label "$1"
+    div_ "input-group"
+      input "password" "$1"
+      div_ "input-group-text"
+        echo "<input class=\"form-check-input me-1\" type=checkbox data-for=\"${1}\"> show"
+      _div
+    _div
+  _field
+}
+
+# field_range "name"
+field_range() {
+  field_ "range"
+    label "$1"
+    div_ "input-group"
+      if [ -n "$(t_options "$1" | grep -E auto)" ]; then
+        div_ "input-group-text"
+          echo "<input class=\"form-check-input auto-value me-1\" type=checkbox data-for=\"${1}\" data-value=\"$(t_default "$1")\" $(t_checked "$1" "auto")> auto"
+        _div
+      fi
+      input "range" "$1"
+      div_ "input-group-text"
+        span $(t_value "$1") "" "id=\"$1-value\""
+#       echo "<input class=\"form-control range text-end\" type=text name=\"${1}-value\"
+#         id=\"${1}-value\" value=\"$(t_value "$1")\" $(t_placeholder "$1")
+#         data-units=\"$(t_units "$1")\" $(t_readonly "$1" "auto")>"
+        echo "$(t_units "$1")"
+      _div
+#      units "$1"
+    _div
+    help "$1"
+  _field
+}
+
+# field_select "name"
+field_select() {
+  field_ "select"
+    label "$1"
+    div_ "input-group"
+      echo "<select class=form-select id=\"${1}\" name=\"${1}\">"
+      [ -z "$(t_value "$1")" ] && echo "<option>Select from available options</option>"
+      for o in $(t_options "$1")
+      do
+        _v="${o%|*}"
+        _n="${o#*|}"
+        [ "$1" != "mj_isp_sensorConfig" ] && _n=${_n//_/ }
+        echo "<option value=\"${_v}\" $(t_selected "$1" "${_v}")>${_n}</option>"
+        unset _v
+        unset _n
+      done
+      echo "</select>"
+      units "$1"
+    _div
+    help "$1"
+  _field
+}
+
+# field_swith "name"
+field_switch() {
+  field_ "boolean"
+    div_ "form-check form-switch"
+      input "switch" "$1"
+      label "$1" "form-check-label"
+    _div
+    help "$1"
+  _field
+}
+
+# field_text "name" "classes" "extras"
+field_text() {
+  field_ "string"
+    label "$1"
+    div_ "input-group"
+      input "text" "$1" "$2" "$3"
+      units "$1"
+    _div
+    help "$1"
+  _field
+}
+
+field_textarea() {
+  field_ "text"
+    label "$1"
+    tag "textarea" "" "form-control" "id=\"exampleFormControlTextarea1\" rows=\"3\""
+    help "$1"
+  _field
+}
+
+flash_append() {
+  echo "$1:$2" >> "$flash_file"
+}
+
+flash_delete() {
+  :> "$flash_file"
+}
+
 flash_read() {
   [ ! -f "$flash_file" ] && return
   flash=$(cat "$flash_file")
@@ -41,41 +391,25 @@ flash_read() {
    _alert
   flash_delete
 }
-flash_save() { echo "${1}:${2}" > $flash_file; }
 
-get_firmware_info() {
-  file=/tmp/fwinfo.txt
-  if [ ! -f "$_file" ]; then
-    fw_version=$(cat /etc/os-release | grep "OPENIPC_VERSION" | cut -d= -f2 | tr -d /\"/)
-    fw_variant=$(cat /etc/os-release | grep "BUILD_OPTION" | cut -d= -f2 | tr -d /\"/)
-    fw_build=$(cat /etc/os-release | grep "GITHUB_VERSION" | cut -d= -f2 | tr -d /\"/)
-    [ -z "$fw_variant" ] && fw_variant="lite"
-    echo -e "$fw_version\n${fw_variant}\n$fw_build" > $_file
-  else
-    fw_version=$(sed -n 1p $_file)
-    fw_variant=$(sed -n 2p $_file)
-    fw_build=$(sed -n 3p $_file)
-  fi
-  unset _file
+flash_save() {
+  echo "${1}:${2}" > $flash_file
 }
 
-get_hardware_info() {
-  _file=/tmp/hwinfo.txt
-  if [ ! -f "$_file" ]; then
-    soc=$(ipcinfo --chip-name)
-    soc_family=$(ipcinfo --family)
-    sensor=$(ipcinfo --short-sensor)
-    sensor_ini=$(ipcinfo --long-sensor)
-    flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
-    echo -e "$soc\n$soc_family\n$sensor\n$sensor_ini\n$flash_size" > $_file
-  else
-    soc=$(sed -n 1p $_file)
-    soc_family=$(sed -n 2p $_file)
-    sensor=$(sed -n 3p $_file)
-    sensor_ini=$(sed -n 4p $_file)
-    flash_size=$(sed -n 5p $_file)
-  fi
-  unset _file
+form_() {
+  _m="$2"
+  [ -z "$_m" ] && _m="post"
+
+  A "form" "" "action=\"${1}\" method=\"${_m}\" ${3}"
+  unset _m
+}
+
+_form() {
+  Z "form"
+}
+
+form_upload_() {
+  form_ "$1" "$2" "enctype=\"multipart/form-data\""
 }
 
 get_http_time() {
@@ -84,24 +418,6 @@ get_http_time() {
 
 get_soc_temp() {
   soc_temp=$(ipcinfo --temp)
-}
-
-get_software_info() {
-  mj_bin_file=/usr/bin/majestic
-  mj_version=$($mj_bin_file -v)
-  [ -f /var/www/.version ] && ui_version=$(cat /var/www/.version)
-}
-
-get_system_info() {
-  hostname=$(hostname -s)
-  interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'})
-  ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
-  macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/ //g" | uniq)
-  tz_data=$(cat /etc/TZ)
-  [ -z "$tz_data" ] && tz_data="GMT0"
-  [ ! -f /etc/tzname ] && $(grep "$tz_data" /var/www/js/tz.js | head -1 | cut -d':' -f2 | cut -d',' -f1 | tr -d "'" > /etc/tzname)
-  tz_name=$(cat /etc/tzname)
-  wan_mac=$(cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address)
 }
 
 header_ok() {
@@ -116,31 +432,172 @@ Server: httpd
 {}"
 }
 
+help() {
+  [ -n "$(t_hint "$1")" ] && p "$(t_hint "$1")" "hint text-secondary"
+}
+
 html_title() {
   [ -n "$1" ] && echo -n "$1 - "
-  echo -n  "OpenIPC"
+  echo -n "OpenIPC"
 }
 
-print2c() {
-  echo "<span class=\"title\">${1}</span><span>${2}</span>"
+# image "src" "classes" "extras"
+image() {
+  echo -n "<img src=\"${1}\" alt=\"Image: ${1}\" class=\"${2}\" ${3}>"
 }
 
+# input "type" "name" "classes" "value" "extras"
+input() {
+  _t="$1"
+  _n="$2"
+  _c="$3"
+  _x="$4"
+  _v="$(t_value "$_n")"
+
+  case "$1" in
+  checkbox)
+    _c2="$form-check-input"
+    _v="true"
+    _x2="$(t_checked "$_n" "$_v")"
+    echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}-false\" value=\"false\">"
+    ;;
+  switch)
+    _t="checkbox"
+    _c2="form-check-input"
+    _v="true"
+    _x2="role=switch $(t_checked "$2" "$_v")"
+    echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}-false\" value=\"false\">"
+    ;;
+  text)
+    _c2="form-control"
+    ;;
+  range)
+    _c2="form-control form-range"
+    _o="$(t_options "$_n")"
+    _x2="$(t_disabled "$_n" "auto") data-units=\"$(t_units "$_n")\""
+    ;;
+  *)
+    _c="form-control"
+    ;;
+  esac
+
+  [ -n "$_c2" ] && _c="${_c} ${_c2}"; [ -n "$_c" ] && _c=" class=\"${_c}\""
+  [ -n "$_x2" ] && _x="${_x} ${_x2}"; [ -n "$_x" ] && _x=" ${_x}"
+
+  [ -n "$_v" ] && _v=" value=\"${_v}\""
+  _p=$(t_placeholder "$2"); [ -n "$_p" ] && _p=" placeholder=\"${_p}\""
+
+  echo "<input type=\"${_t}\" name=\"${_n}\" id=\"${_n}\"${_v}${_c}${_p}${_x}>"
+  unset _c; unset _p; unset _t; unset _v; unset _x
+}
+
+# label "name" "classes" "extras"
+label() {
+  _c="$2"; [ -z "$_c" ] && _c="form-label"
+  _l="$(t_label "$1")"; [ -z "$_l" ] && _l="$1" && _c="${_c} bg-warning"
+  _x="$3"; [ -n "$_x" ] && _x=" ${_x}"
+  echo "<label for=\"${1}\" class=\"${_c}\"${_x}>${_l}</label>"
+  unset _c; unset _l; unset _x
+}
+
+link_css() {
+  echo "<link rel=\"stylesheet\" href=\"${1}\">"
+}
+
+link_js() {
+  echo "<script src=\"${1}\"></script>"
+}
+
+link_to() {
+  echo "<a href=\"${2}\" class=\"${3}\" ${4}>${1}</a>"
+}
+
+navbar_() {
+  nav_ "navbar navbar-light bg-light mb-3 ${1}"
+}
+
+_navbar() {
+  _nav
+}
+
+# nav_dropdown_ "text" "name"
+nav_dropdown_() {
+  li_ "nav-item dropdown"
+  link_to "$(eval echo \$tM_${1})" "#" "nav-link dropdown-toggle" "id=\"dropdown${1}\" role=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\""
+  ul_ "dropdown-menu" "aria-labelledby=\"dropdown${1}\""
+}
+
+_nav_dropdown() {
+  _ul
+  _li
+}
+
+# nav_dropdown_item "text" "url"
+nav_dropdown_item() {
+  link_to "$1" "$2" "dropdown-item"
+}
+
+# nav_dropdown_to "text" "url"
+nav_dropdown_to() {
+  li "$(nav_dropdown_item "${1}" "${2}")"
+}
+
+nav_item() {
+  li "$1" "nav-item"
+}
+
+nav_link() {
+  link_to "$1" "$2" "nav-link"
+}
+
+nav_item_link() {
+  nav_item "$(nav_link "$1" "$2")"
+}
+
+# navbar_toggler "id"
+navbar_toggler() {
+  echo "<button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#${1}\" aria-controls=\"${1}\" aria-expanded=\"false\" aria-label=\"Toggle navigation\"><span class=\"navbar-toggler-icon\"></span></button>"
+}
+
+# pre "text" "classes" "extras"
+pre() {
+  # replace <, >, &, ", and ' with HTML entities
+  tag "pre" "$(echo -e "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g")" "$2" "$3"
+}
+
+# redirect_to "url" "flash class" "flash text"
 redirect_to() {
-  get_http_time
+  [ -n "$3" ] && flash_save "$2" "$3"
   echo "HTTP/1.1 302 Moved Temporarily
 Content-type: text/html; charset=UTF-8
 Cache-Control: no-store
 Pragma: no-cache
-Date: $http_time
+Date: $(get_http_time)
 Location: $1
 Server: httpd
 Status: 302 Moved Temporarily
 $xheader
 "
+  exit 0
+}
+
+reload_locale() {
+  _l="$(cat /etc/web_locale)"
+  if [ -f "/var/www/lang/${_l}.sh" ]; then
+    source "/var/www/lang/${_l}.sh"
+    locale="$_l"
+  else
+    locale="en"
+  fi
+  unset _l
+}
+
+render() {
+  cat "../html/${1}.html"
 }
 
 report_error() {
-  h4 "$tMsgSomethingHappened" "class=\"text-danger\""
+  h4 "$tMsgSomethingHappened" "text-danger"
   alert "$1" "danger"
 }
 
@@ -150,62 +607,86 @@ report_info() {
 
 # report_log "text" "extras"
 report_log() {
-  pre "$1" "class=\"small\" ${2}"
+  pre "$1" "small" "$2"
 }
 
 report_command_error() {
-  h2 "$tMsgSomethingHappened" "class=\"text-danger\""
+  h2 "$tMsgSomethingHappened" "text-danger"
   alert_ "danger"
-  h6 "# $1"
-  pre "$2"
+  report_command_info "$1" "$2"
   _alert
 }
 
 report_command_info() {
   h6 "# $1"
-  pre "$2"
+  report_log "$2"
 }
 
 report_command_success() {
   h2 "$tMsgCommandExecuted" "success"
-  h6 "# ${1}"
-  pre "$2"
+  report_command_info "$1" "$2"
 }
 
-t_default() {
-  eval "echo \$tDefault_${1}"
+# row_ "class"
+row_() {
+  div_ "row ${1}" "$2"
 }
 
-t_label() {
-  eval "echo \$tLabel_${1}"
+_row() {
+  _div
+}
+
+row() {
+  row_ "$2"
+  echo "$1"
+  _row
+}
+
+signature() {
+  _f=/tmp/webui-signature.txt
+  [ ! -f "$_f" ] && echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash. ${fw_version}-${fw_variant}. ${hostname}, ${wan_mac}" > $_f
+  cat $_f
+  unset _f
 }
 
 t_checked() {
   [ "$2" = "$(t_value "$1")" ] && echo "checked"
 }
 
+t_default() {
+  eval "echo \$tDefault_${1}"
+}
+
+t_disabled() {
+  [ "$2" = "$(t_value "$1")" ] && echo "disabled"
+}
+
 t_hint() {
-  eval "echo \$tHint_${1}"
+  eval "echo \$tH_${1}"
+}
+
+t_label() {
+  eval "echo \$tL_${1}"
+}
+
+t_options() {
+  eval "echo \${tOptions_${1}//,/ }"
 }
 
 t_placeholder() {
 #  if [ "$1" = "isp_sensorConfig" ]; then
-    eval "echo \$tPlaceholder_${1}"
+    eval echo \$tPlaceholder_${1}
 #  else
 #    eval "echo \${tPlaceholder_${1}//_/ }"
 #  fi
 }
 
 t_readonly() {
-  [ "$2" = "$(t_value "$1")" ] && echo "readonly"
+  [ "$2" = "$(t_value "$1")" ] && echo -n "readonly"
 }
 
 t_selected() {
-  [ "$2" = "$(t_value "$1")" ] && echo "selected"
-}
-
-t_options() {
-  eval "echo \${tOptions_${1}//,/ }"
+  [ "$2" = "$(t_value "$1")" ] && echo -n "selected"
 }
 
 t_units() {
@@ -216,13 +697,118 @@ t_value() {
   eval "echo \$${1}"
 }
 
-reload_locale() {
-  [ -n "$locale" ] && source $PWD/locale/${locale}.sh
+units() {
+  [ -n "$(t_units "$1")" ] && span "$(t_units "$1")" "input-group-text"
 }
 
+update_caminfo() {
+  # Debug flag
+  debug=$(fw_printenv -n debug); [ -z "$debug" ] && debug="0"
+
+  # Hardware
+  flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
+  sensor=$(ipcinfo --short-sensor)
+  sensor_ini=$(ipcinfo --long-sensor)
+  soc=$(ipcinfo --chip-name)
+  soc_family=$(ipcinfo --family)
+
+  # Firmware
+  fw_version=$(grep "OPENIPC_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)
+  fw_variant=$(grep "BUILD_OPTION" /etc/os-release | cut -d= -f2 | tr -d /\"/); [ -z "$fw_variant" ] && fw_variant="lite"
+  fw_build=$(grep "GITHUB_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)
+  mj_version=$($mj_bin_file -v)
+
+  # WebUI version
+  ui_version="bundled"; [ -f /var/www/.version ] && ui_version=$(cat /var/www/.version)
+  password=$(grep admin /etc/httpd.conf|cut -d: -f3)
+  password_fw=$(grep admin /rom/etc/httpd.conf|cut -d: -f3)
+
+  # Network
+  dhcp="false"; [ "$(cat /etc/network/interfaces | grep "eth0 inet" | grep dhcp)" ] && dhcp="true"
+  dns_1=$(cat /etc/resolv.conf | grep nameserver | sed -n 1p | cut -d' ' -f2)
+  dns_2=$(cat /etc/resolv.conf | grep nameserver | sed -n 2p | cut -d' ' -f2)
+  gateway=$(ip r | grep default | cut -d' ' -f3)
+  hostname=$(hostname -s)
+  interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | tr '\n' ' ' | sed 's/ $//' )
+  ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
+  macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/ //g" | uniq)
+  netmask=$(ifconfig eth0 | grep "inet " | cut -d: -f4)
+  wan_mac=$(cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address)
+
+  # Default timezone is GMT
+  tz_data=$(cat /etc/TZ)
+  tz_name=$(cat /etc/tz_name)
+  if [ -z "$tz_data" ] || [ -z "$tz_name" ]; then
+    tz_data="GMT0"; echo "$tz_data" > /etc/TZ
+    tz_name="Etc/GMT"; echo "$tz_name" > /etc/tz_name
+  fi
+
+  echo "# caminfo $(date +"%F %T")
+debug=\"$debug\"
+dhcp=\"$dhcp\"
+dns_1=\"$dns_1\"
+dns_2=\"$dns_2\"
+flash_size=\"$flash_size\"
+fw_version=\"$fw_version\"
+fw_variant=\"$fw_variant\"
+fw_build=\"$fw_build\"
+gateway=\"$gateway\"
+hostname=\"$hostname\"
+interfaces=\"$interfaces\"
+ipaddr=\"$ipaddr\"
+macaddr=\"$macaddr\"
+mj_version=\"$mj_version\"
+netmask=\"$netmask\"
+password=\"$password\"
+password_fw=\"$password_fw\"
+soc=\"$soc\"
+soc_family=\"$soc_family\"
+sensor=\"$sensor\"
+sensor_ini=\"$sensor_ini\"
+tz_data=\"$tz_data\"
+tz_name=\"$tz_name\"
+ui_version=\"$ui_version\"
+wan_mac=\"$wan_mac\"
+# end " > $sysinfo_file
+}
+
+xl() {
+  _c="$1"
+  echo "<b>${_c}</b>"
+  _o=$($_c 2>&1)
+  [ $? -ne 0 ] && error=1
+  [ -n "$_o" ] && echo "<div class=\"x-small p-3\"><i>${_o}</i></div>"
+  unset _c; unset _o
+}
+
+
+dump() {
+  echo "Content-Type: text/plain; charset=UTF-8
+Pragma: no-cache
+Connection: close
+
+--------------------
+$(env)
+--------------------
+"
+for x in $1; do
+  echo -e "$x = $(eval echo \$$x)\n"
+done
+
+exit
+}
+
+mj_bin_file=/usr/bin/majestic
+flash_file=/tmp/webui-flash.txt
+sysinfo_file=/tmp/sysinfo.txt
+
+[ ! -f $sysinfo_file ] && update_caminfo
+source $sysinfo_file
+
+[ ! -d /var/www/lang/ ] && mkdir -p /var/www/lang/
+
 source $PWD/_settings.sh
-source $PWD/locale/en.sh
-locale=$(cat /etc/web_locale)
+source $PWD/_en.sh
 reload_locale
 check_password
 %>

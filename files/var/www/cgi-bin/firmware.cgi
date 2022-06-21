@@ -1,11 +1,7 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
 <%
-get_hardware_info
-get_firmware_info
-get_software_info
-
-page_title="$tPageTitleFirmware"
+page_title="$t_firmware_0"
 
 # firmware data
 fw_date=$(date -D "%a, %d %b %Y %T GMT" +"2.2.%m.%d" --date "$(curl -ILs https://github.com/OpenIPC/firmware/releases/download/latest/openipc.${soc}-br.tgz | grep Last-Modified | cut -d' ' -f2-)")
@@ -22,11 +18,12 @@ fi
 # re-download metafile if older than 1 hour
 mj_meta_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.meta"
 mj_meta_file=/tmp/mj_meta.txt
+dl_mj_meta() { curl -s $mj_meta_url -o $mj_meta_file; }
+[ ! -f "$mj_meta_file" ] && dl_mj_meta
 mj_meta_file_timestamp=$(date +%s --date "$(ls -lc --full-time $mj_meta_file | xargs | cut -d' ' -f6,7)")
 mj_meta_file_expiration=$(( $(date +%s) + 3600 ))
-if [ ! -f "$mj_meta_file" ] || [ "$mj_meta_file_timestamp" -gt "$mj_meta_file_expiration" ]; then
-  curl -s $mj_meta_url -o $mj_meta_file
-fi
+[ "$mj_meta_file_timestamp" -gt "$mj_meta_file_expiration" ] && dl_mj_meta
+
 # parse version, date and file size
 if [ "$(wc -l $mj_meta_file | cut -d' ' -f1)" = "1" ]; then
   mj_filesize_new=$(sed -n 1p $mj_meta_file)
@@ -48,112 +45,112 @@ alert_ "danger"
 _alert
 
 row_ "row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-3"
-  col_card_ "$tHeaderFirmware"
-    dl_ "class=\"row small\""
-      dt "$tInstalled" "class=\"col-4\""
-      dd "$fw_version" "class=\"col-8 text-end\""
-      dt "$tLastAvailable" "class=\"col-4\""
-      dd "$fw_date" "class=\"col-8 text-end\" id=\"firmware-master-ver\""
+  col_card_ "$t_firmware_1"
+    dl_ "row small"
+      dt "$t_firmware_2" "col-4"
+      dd "$fw_version" "col-8 text-end"
+      dt "$t_firmware_3" "col-4"
+      dd "$fw_date" "col-8 text-end" "id=firmware-master-ver"
     _dl
 
     fw_kernel="true"
     fw_rootfs="true"
 
     alert_ "light"
-      h6 "$tInstallUpdate"
-      form_ "/cgi-bin/firmware-update.cgi" "post"
+      h6 "$t_firmware_4"
+      form_ "/cgi-bin/firmware-update.cgi"
         field_checkbox "fw_kernel"
         field_checkbox "fw_rootfs"
         field_checkbox "fw_reset"
         field_checkbox "fw_noreboot"
         field_checkbox "fw_enforce"
-        button_submit "$tButtonInstallUpdate" "warning"
+        button_submit "$t_firmware_5" "warning"
       _form
     _alert
 %>
-<%in parts/reset-firmware.cgi %>
+<%in reset-firmware.cgi %>
 <%
   _col_card
 
-  col_card_ "$tHeaderWebui"
-    dl_ "class=\"row small\""
-      dt "$tInstalled" "class=\"col-4\""
-      dd "$ui_version" "class=\"col-8 text-end\""
-      dt "$tStable" "class=\"col-4\""
-      dd "" "class=\"col-8 text-end\" id=\"microbe-web-master-ver\""
-      dt "$tUnstable" "class=\"col-4\""
-      dd "" "class=\"col-8 text-end\" id=\"microbe-web-dev-ver\""
+  col_card_ "$t_firmware_6"
+    dl_ "row small"
+      dt "$t_firmware_7" "col-4"
+      dd "$ui_version" "col-8 text-end"
+      dt "$t_firmware_8" "col-4"
+      dd "" "col-8 text-end" "id=microbe-web-master-ver"
+      dt "$t_firmware_9" "col-4"
+      dd "" "col-8 text-end" "id=microbe-web-dev-ver"
     _dl
 
     alert_ "light"
-      h6 "$tInstallUpdate"
-      form_ "/cgi-bin/webui-update.cgi" "post"
+      h6 "$t_firmware_a"
+      form_ "/cgi-bin/webui-update.cgi"
         field_select "web_version"
         field_checkbox "web_enforce"
-        button_submit "$tButtonInstallUpdate" "warning"
+        button_submit "$t_firmware_b" "warning"
       _form
     _alert
   _col_card
 
-  col_card_ "Majestic"
-    dl_ "class=\"row small\""
-      dt "$tInstalled" "class=\"col-4\""
-      dd "$mj_version" "class=\"col-8 text-end\""
-      dt "$tLastAvailable" "class=\"col-4\""
-      dd "$mj_version_new" "class=\"col-8 text-end\""
+  col_card_ "$t_firmware_c"
+    dl_ "row small"
+      dt "$t_firmware_d" "col-4"
+      dd "$mj_version" "col-8 text-end"
+      dt "$t_firmware_e" "col-4"
+      dd "$mj_version_new" "col-8 text-end"
     _dl
 
     alert_ "light"
       if [ -f "/overlay/root/${mj_mj_bin_file}" ]; then
-        h6 "$tMjInOverlay ($mj_filesize_overlay KB)"
+        h6 "$t_firmware_f ($mj_filesize_overlay KB)"
       else
-        h6 "$tMjInBundle"
+        h6 "$t_firmware_g"
       fi
 
       if [ "$mj_filesize_new" -le "$available_space" ]; then
-        form_ "/cgi-bin/majestic-github.cgi" "post"
-          button_submit "$tButtonInstallUpdate" "warning"
+        form_ "/cgi-bin/majestic-update.cgi"
+          button_submit "$t_firmware_h" "warning"
         _form
       else
-        alert "$tMjNoSpace" "warning"
+        alert "$t_firmware_i" "warning"
       fi
     _alert
 
     if [ -z "$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)" ]; then
       alert_ "light"
-        h6 "$tMjConfigUnchanged"
-        link_to "$tMjConfigEdit" "/cgi-bin/majestic-settings.cgi"
+        h6 "$t_firmware_j"
+        link_to "$t_firmware_k" "/cgi-bin/majestic-settings.cgi"
       _alert
     else
       alert_ "light"
-        h6 "$tMjConfigChanged"
-        link_to "$tMjConfigSeeChanges" "/cgi-bin/majestic-config-compare.cgi"
+        h6 "$t_firmware_l"
+        link_to "$t_firmware_m" "/cgi-bin/majestic-config-compare.cgi"
       _alert
 
       alert_ "danger"
-        h6 "$tMjConfigReset"
-        p "$tMjConfigResetInfo"
-        button_link_to "$tMjConfigBackup" "/cgi-bin/majestic-config-backup.cgi" "primary"
-        button_link_to "$tButtonMjReset" "/cgi-bin/majestic-config-reset.cgi" "danger" "title=\"$tMjConfigResetTitle\""
+        h6 "$t_firmware_n"
+        p "$t_firmware_o"
+        button_link_to "$t_firmware_p" "/cgi-bin/majestic-config-backup.cgi" "primary me-2"
+        button_link_to "$t_firmware_q" "/cgi-bin/majestic-config-reset.cgi" "danger" "title=\"$t_firmware_r\""
       _alert
     fi
   _col_card
 
-  col_card_ "$tHeaderCamera"
-    button_link_to "$tRebootCamera" "/cgi-bin/reboot.cgi" "warning"
+  col_card_ "$t_firmware_s"
+    button_link_to "$t_firmware_t" "/cgi-bin/reboot.cgi" "warning"
   _col_card
 
-  col_card_ "$tHeaderUploadKernel"
-    form_ "/cgi-bin/firmware-upload-kernel.cgi" "post" "enctype=\"multipart/form-data\""
+  col_card_ "$t_firmware_u"
+    form_upload_ "/cgi-bin/firmware-upload-kernel.cgi"
       field_file "kernel_file"
-      button_submit "$tButtonUploadFile" "danger"
+      button_submit "$t_firmware_v" "danger"
     _form
   _col_card
 
-  col_card_ "$tHeaderUploadRootfs"
-    form_ "/cgi-bin/firmware-upload-rootfs.cgi" "post" "enctype=\"multipart/form-data\""
+  col_card_ "$t_firmware_w"
+    form_upload_ "/cgi-bin/firmware-upload-rootfs.cgi"
       field_file "rootfs_file"
-      button_submit "$tButtonUploadFile" "danger"
+      button_submit "$t_firmware_x" "danger"
     _form
   _col_card
 _row
@@ -186,4 +183,4 @@ function queryBranch(repo, branch) {
 
 window.addEventListener('load', checkUpdates);
 </script>
-<%in _footer.cgi %>
+<%in p/footer.cgi %>

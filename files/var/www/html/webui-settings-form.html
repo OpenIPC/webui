@@ -1,0 +1,50 @@
+<div class="row">
+<div class="col col-md-6 col-xl-4">
+<div class="card mb-3">
+<div class="card-header">Web Interface</div>
+<div class="card-body">
+<form action="/cgi-bin/webui-settings-update.cgi" enctype="multipart/form-data" method="post">
+<div class="mb-2 string">
+<label class="form-label" for="webui_username">Username</label>
+<div class="input-group">
+<input class="form-control" id="webui_username" name="webui_username" placeholder="" type="text" value="admin">
+</div>
+</div>
+<div class="mb-2 password">
+<label class="form-label" for="webui_password">Password</label>
+<input class="form-control" id="webui_password" name="webui_password" placeholder="K3wLHaZk3R!" type="password" value="">
+</div>
+<div class="mb-2 password">
+<label class="form-label" for="webui_password_confirmation">Confirm Password</label>
+<input class="form-control" id="webui_password_confirmation" name="webui_password_confirmation" placeholder="K3wLHaZk3R!" type="password" value="">
+</div>
+<div class="mb-2 select">
+<label class="form-label" for="webui_language">Language</label>
+<div class="input-group">
+<select class=form-select id="webui_language" name="webui_language">
+<option>Select from available options</option>
+<option value="en">English</option>
+</select>
+</div>
+</div>
+<div class="mb-2 file">
+<label class="form-label" for="webui_locale_file">Locale file</label>
+<input class="form-control form-control" id="webui_locale_file" name="webui_locale_file" placeholder="" type="file" value="">
+</div>
+<button class="btn btn-primary mt-3" type=submit>Save changes</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+$$('.toggle-password').forEach(el => {el.addEventListener('click', (ev) => {
+const type = (ev.target.checked) ? 'type' : 'password';
+$$('input.password').forEach(el => el.type = type);
+$$('.toggle-password').forEach(el => el.checked = ev.target.checked);
+$('#password').focus();
+})});
+
+$('#webui_language').value = window.navigator.language.split('-')[0];
+</script>

@@ -16,7 +16,7 @@ if [ ! -f "$conf_file" ]; then
   exit 1
 fi
 
-if [ ! "$(grep ^savedumps $conf_file | cut -d= -f2)" == "true" ]; then
+if [ ! "$(grep ^savedumps $conf_file | cut -d= -f2)" = "true" ]; then
   log "Core dump not enabled."
   exit 2
 fi
@@ -45,9 +45,25 @@ os=$(cat /etc/os-release)
 mj=$(majestic -v)
 
 :>$info_file
-echo -e "Date: $(TZ=GMT date)\nName: ${name}\nEmail: ${email}\nTelegram: ${telegram}\n" >> "$info_file"
-echo -e "Hardware:\n---------\nSoC: ${soc}\nFamily: ${family}\nVendor: ${vendor}\nSensor: ${sensor}\nMAC: ${mac}\n" >> "$info_file"
-echo -e "Firmware:\n---------\n${os}\nMAJESTIC_VERSION=\"${mj}\"\n" >> "$info_file"
+echo "
+Date: $(TZ=GMT date)
+Name: ${name}
+Email: ${email}
+Telegram: ${telegram}
+
+Hardware:
+---------
+SoC: ${soc}
+Family: ${family}
+Vendor: ${vendor}
+Sensor: ${sensor}
+MAC: ${mac}
+
+Firmware:
+---------
+${os}
+MAJESTIC_VERSION=\"${mj}\"
+" >> $info_file
 
 cat /etc/majestic.yaml > majestic.yaml
 
@@ -57,20 +73,20 @@ log "done"
 
 rm "$core_file" "$info_file" majestic.yaml
 
-if [ "$(grep ^send2devs $conf_file | cut -d= -f2)" == "true" ]; then
+if [ "$(grep ^send2devs $conf_file | cut -d= -f2)" = "true" ]; then
   log "Sending to S3 bucket"
   curl -s "https://majdumps.s3.eu-north-1.amazonaws.com/${bundle_name}" --upload-file "$bundle_name"
   log "done"
 fi
 
-if [ "$(grep ^send2tftp $conf_file | cut -d= -f2)" == "true" ]; then
+if [ "$(grep ^send2tftp $conf_file | cut -d= -f2)" = "true" ]; then
   log "Sending to TFTP server"
   tftphost=$(grep ^tftphost $conf_file | cut -d= -f2)
   tftp -p -l "$bundle_name" $tftphost
   log "done"
 fi
 
-if [ "$(grep ^send2ftp $conf_file | cut -d= -f2)" == "true" ]; then
+if [ "$(grep ^send2ftp $conf_file | cut -d= -f2)" = "true" ]; then
   log "Sending to FTP server"
   ftphost=$(grep ^ftphost $conf_file | cut -d= -f2)
   ftppath=$(grep ^ftppath $conf_file | cut -d= -f2)
@@ -80,7 +96,7 @@ if [ "$(grep ^send2ftp $conf_file | cut -d= -f2)" == "true" ]; then
   log "done"
 fi
 
-if [ "$(grep save4web $conf_file | cut -d= -f2)" == "true" ]; then
+if [ "$(grep save4web $conf_file | cut -d= -f2)" = "true" ]; then
   localpath=$(grep ^localpath $conf_file | cut -d= -f2)
   [ -z "$localpath" ] && localpath="/root"
   [ ! -d "$localpath" ] && mkdir -p "$localpath"

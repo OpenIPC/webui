@@ -1,11 +1,9 @@
 #!/usr/bin/haserl
 <%in _common.cgi %>
-<%
-page_title="$tPageTitleDmesg"
-%>
+<% page_title="$t_dmesg_0" %>
 <%in _header.cgi %>
 <%
 ex "/bin/dmesg"
 button_refresh
 %>
-<%in _footer.cgi %>
+<%in p/footer.cgi %>

@@ -63,7 +63,7 @@ update_caminfo
 alert_ "danger"
   h6 "$t_networkup_6"
   p "$t_networkup_7"
-  button_link_to "$t_networkup_8" "/cgi-bin/reboot.cgi" "danger"
+  button_reboot
 _alert
 link_to "$t_networkup_9" "/cgi-bin/network.cgi"
 %>

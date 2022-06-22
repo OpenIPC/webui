@@ -22,55 +22,26 @@ Z() {
 }
 
 # tag "text" "classes" "extras"
-b()     { tag "b"     "$1" "$2" "$3"; }
-dd()    { tag "dd"    "$1" "$2" "$3"; }
 div()   { tag "div"   "$1" "$2" "$3"; }
-dt()    { tag "dt"    "$1" "$2" "$3"; }
 h1()    { tag "h1"    "$1" "$2" "$3"; }
 h2()    { tag "h2"    "$1" "$2" "$3"; }
 h3()    { tag "h3"    "$1" "$2" "$3"; }
 h4()    { tag "h4"    "$1" "$2" "$3"; }
 h5()    { tag "h5"    "$1" "$2" "$3"; }
 h6()    { tag "h6"    "$1" "$2" "$3"; }
-i()     { tag "i"     "$1" "$2" "$3"; }
 label() { tag "label" "$1" "$2" "$3"; }
 li()    { tag "li"    "$1" "$2" "$3"; }
 p()     { tag "p"     "$1" "$2" "$3"; }
 span()  { tag "span"  "$1" "$2" "$3"; }
-td()    { tag "td"    "$1" "$2" "$3"; }
-th()    { tag "th"    "$1" "$2" "$3"; }
-
-footer_() { A "footer" "$1" "$2"; }
-_footer() { Z "footer"; }
 
 div_() { A "div" "$1" "$2"; }
 _div() { Z "div"; }
-
-dl_() { A "dl" "$1" "$2"; }
-_dl() { Z "dl"; }
-
-li_() { A "li" "$1" "$2"; }
-_li() { Z "li"; }
-
-main_() { A "main" "$1" "$2"; }
-_main() { Z "main"; }
-
-nav_() { A "nav" "$1" "$2"; }
-_nav() { Z "nav"; }
-
-ol_() { A "ol" "$1" "$2"; }
-_ol() { Z "ol"; }
 
 pre_() { A "pre" "$1" "$2"; }
 _pre() { Z "pre"; }
 
 span_() { A "span" "$1" "$2"; }
 _span() { Z "span"; }
-
-ul_() { A "ul" "$1" "$2"; }
-_ul() { Z "ul"; }
-
-#######
 
 # alert_ "type" "extras"
 alert_() {
@@ -92,11 +63,6 @@ beats() {
   echo "@$(echo "$(date -u -d "1970-01-01 $(TZ=UTC-1 date +%T)" +%s)*10/864"|bc)"
 }
 
-# button "text" "type" "extras"
-button() {
-  echo "<button type=button class=\"btn btn-${2}\" ${3}>${1}</button>"
-}
-
 # button_link_to "text" "url" "type" "extras"
 button_link_to() {
   echo "<a class=\"btn btn-${3}\" href=\"${2}\" ${4}>${1}</a>"
@@ -104,25 +70,25 @@ button_link_to() {
 
 # button_submit "text" "type" "extras"
 button_submit() {
-  echo "<button type=submit class=\"btn btn-${2} mt-3\" ${3}>${1}</button>"
+  echo "<button type=\"submit\" class=\"btn btn-${2} mt-3\" ${3}>${1}</button>"
 }
 
 # button_submit_action "action" "text" "extras"
 button_submit_action() {
-  echo "<button type=submit class=\"btn btn-danger\" name=action value=\"${1}\" ${3}>${2}</button>"
+  echo "<button type=\"submit\" class=\"btn btn-danger\" name=action value=\"${1}\" ${3}>${2}</button>"
 }
 
 button_home() {
-  echo "<a class=\"btn btn-primary\" href=\"/\">$tB_GoHome</a>"
+  echo "<a class=\"btn btn-primary\" href=\"/\">$t_b_home</a>"
 }
 
 button_reboot() {
-  button_link_to "$tB_Reboot" "/cgi-bin/reboot.cgi" "danger"
+  button_link_to "$t_b_reboot" "/cgi-bin/reboot.cgi" "danger"
 }
 
 # button_refresh
 button_refresh() {
-  link_to "$tB_Refresh" "#" "btn btn-primary refresh"
+  link_to "$t_b_refresh" "#" "btn btn-primary refresh"
 }
 
 # card_ "text"
@@ -159,13 +125,13 @@ card_body() {
   _card_body
 }
 
-check_password() {
-  [ "0${debug}" -ge "1" ] && return
-  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui-settings.cgi" ] && return
-  if [ -z "$password" ] || [ "$password_fw" = "$password" ]; then
-    redirect_to "/cgi-bin/webui-settings.cgi" "danger" "$tMsgSetYourOwnPassword"
-  fi
-}
+#check_password() {
+#  [ "0${debug}" -ge "1" ] && return
+#  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui-settings.cgi" ] && return
+#  if [ -z "$password" ] || [ "$password_fw" = "$password" ]; then
+#    redirect_to "/cgi-bin/webui-settings.cgi" "danger" "$t_wui_a"
+#  fi
+#}
 
 # col_ "class"
 col_() {
@@ -387,7 +353,7 @@ flash_read() {
   [ -z "$flash" ] && return
   alert_ "$(echo $flash | cut -d':' -f1) alert-dismissible fade show" "role=\"alert\""
     echo "$(echo $flash | cut -d':' -f2)"
-    button "" "close" "data-bs-dismiss=\"alert\" aria-label=\"Close\""
+    echo "<button type=\"button\" class=\"btn btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>"
    _alert
   flash_delete
 }
@@ -500,63 +466,8 @@ label() {
   unset _c; unset _l; unset _x
 }
 
-link_css() {
-  echo "<link rel=\"stylesheet\" href=\"${1}\">"
-}
-
-link_js() {
-  echo "<script src=\"${1}\"></script>"
-}
-
 link_to() {
   echo "<a href=\"${2}\" class=\"${3}\" ${4}>${1}</a>"
-}
-
-navbar_() {
-  nav_ "navbar navbar-light bg-light mb-3 ${1}"
-}
-
-_navbar() {
-  _nav
-}
-
-# nav_dropdown_ "text" "name"
-nav_dropdown_() {
-  li_ "nav-item dropdown"
-  link_to "$(eval echo \$tM_${1})" "#" "nav-link dropdown-toggle" "id=\"dropdown${1}\" role=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\""
-  ul_ "dropdown-menu" "aria-labelledby=\"dropdown${1}\""
-}
-
-_nav_dropdown() {
-  _ul
-  _li
-}
-
-# nav_dropdown_item "text" "url"
-nav_dropdown_item() {
-  link_to "$1" "$2" "dropdown-item"
-}
-
-# nav_dropdown_to "text" "url"
-nav_dropdown_to() {
-  li "$(nav_dropdown_item "${1}" "${2}")"
-}
-
-nav_item() {
-  li "$1" "nav-item"
-}
-
-nav_link() {
-  link_to "$1" "$2" "nav-link"
-}
-
-nav_item_link() {
-  nav_item "$(nav_link "$1" "$2")"
-}
-
-# navbar_toggler "id"
-navbar_toggler() {
-  echo "<button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#${1}\" aria-controls=\"${1}\" aria-expanded=\"false\" aria-label=\"Toggle navigation\"><span class=\"navbar-toggler-icon\"></span></button>"
 }
 
 # pre "text" "classes" "extras"
@@ -590,10 +501,6 @@ reload_locale() {
     locale="en"
   fi
   unset _l
-}
-
-render() {
-  cat "../html/${1}.html"
 }
 
 report_error() {
@@ -791,11 +698,12 @@ Connection: close
 $(env)
 --------------------
 "
-for x in $1; do
-  echo -e "$x = $(eval echo \$$x)\n"
-done
+  for x in $1; do echo -e "$x = $(eval echo \$$x)\n"; done
+  exit
+}
 
-exit
+log() {
+  echo $1 >/tmp/webui.log
 }
 
 mj_bin_file=/usr/bin/majestic
@@ -810,5 +718,5 @@ source $sysinfo_file
 source $PWD/_settings.sh
 source $PWD/_en.sh
 reload_locale
-check_password
+# check_password
 %>

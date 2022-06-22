@@ -6,10 +6,6 @@
     --bs-blue: #4c60d8;
 }
 
-.x-small {
-    font-size: 0.8125rem;
-}
-
 body > main > .container > h2 {
     font-weight: 700;
     color: var(--bs-blue);
@@ -40,8 +36,16 @@ pre span.title {
     width: 8rem;
 }
 
+.btn {
+    white-space: nowrap;
+}
+
 .card:not(.danger) .card-body {
     background: #4c60d811;
+}
+
+.card-body {
+    position: relative;
 }
 
 .card-header {
@@ -57,7 +61,7 @@ pre span.title {
 }
 
 .dropdown-item {
-    font-size:0.9rem;
+    font-size: 0.9rem;
 }
 
 .form-control.font-monospace {
@@ -82,8 +86,17 @@ pre span.title {
     margin-bottom: 0;
 }
 
-.card-body {
-    position: relative;
+.input-group-text {
+    min-width: 4rem;
+}
+
+.log-scroll {
+    height: 50vh;
+    overflow: auto;
+}
+
+.range-value {
+    text-align: right;
 }
 
 .social {
@@ -105,12 +118,12 @@ pre span.title {
     vertical-align: text-bottom;
 }
 
+.x-small {
+    font-size: 0.8125rem;
+}
+
 /*
-.card-body > div.row {padding:0.5rem 0 0;}
 pre, .pre {white-space:pre;}
 .col-form-label, .form-check-label {font-size:0.9rem; font-weight:400;}
-form .input-group-text {min-width:4rem;}
-form .range-value {text-align:right;}
 #refresh {cursor:pointer;flex-grow:1;font-size:0.8rem;padding:0.5rem 1rem;text-align:right;}
-.log-scroll {height:50vh;overflow:auto;}
 */

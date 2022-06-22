@@ -22,7 +22,7 @@ eval $(grep = $config_file)
 <div class="card mb-3 h-100">
 <div class="card-header"><%= $t_yadisk_1 %></div>
 <div class="card-body">
-<form action="<%= $url %>" method="post" >
+<form action="<%= $url %>" method="post" autocomplete="off">
 <%
 field_switch "yadisk_enabled"
 field_text "yadisk_login"

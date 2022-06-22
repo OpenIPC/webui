@@ -26,11 +26,11 @@ size_h=${size#*x}
 </div>
 <div class="tab-pane fade" id="nav-mjpeg" role="tabpanel" aria-labelledby="nav-mjpeg-tab" tabindex="0">
 <div class="ratio ratio-16x9 mb-3">
-<img src="http://<%= $ipaddr %>/mjpeg" class="d-block img-fluid bg-light" height="<%= $size_h %>" width="<%= $size_w %>" alt="">
+<img src="http://<%= $ipaddr %>/mjpeg" class="d-block img-fluid bg-light" height="<%= $size_h %>" width="<%= $size_w %>" alt="<%= $t_preview_5 %>">
 <audio autoplay controls class="d-block img-fluid">
 <source src="http://<%= $ipaddr %>/audio.opus" type="audio/ogg; codecs=opus">
 <source src="http://<%= $ipaddr %>/audio.mp3" type="audio/mpeg">
-<%= $tMsgAudioTagNotSupported %>
+<%= $t_preview_6 %>
 </audio>
 </div>
 </div>
@@ -40,7 +40,7 @@ size_h=${size#*x}
 <source url="http://<%= $ipaddr %>/video.m3u8" type="application/x-mpegURL">
 <source url="rtsp://<%= $ipaddr %>/stream=0" type="application/x-rtsp">
 <source url="http://<%= $ipaddr %>/video.mp4" type="video/mp4">
-<%= $tMsgVideoTagNotSupported %>
+<%= $t_preview_7 %>
 </video>
 </div>
 </div>

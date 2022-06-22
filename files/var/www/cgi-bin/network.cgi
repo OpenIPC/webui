@@ -18,8 +18,8 @@ network_dns_2="$dns_2"
 <div class="card">
 <div class="card-header"><%= $t_network_1 %></div>
 <div class="card-body">
+<form action="/cgi-bin/network-update.cgi" method="post" autocomplete="off">
 <%
-form_ "/cgi-bin/network-update.cgi"
 action="update"
 field_hidden "action"
 field_text "network_hostname" "data-pattern=host"
@@ -29,9 +29,9 @@ field_text "network_netmask"
 field_text "network_gateway"
 field_text "network_dns_1"
 field_text "network_dns_2"
-button_submit "$t_btn_submit" "primary"
-_form
 %>
+<button type="submit" class="btn btn-primary mt-3"><%= $t_btn_submit %></button>
+</form>
 </div>
 </div>
 </div>

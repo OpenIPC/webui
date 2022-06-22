@@ -31,7 +31,7 @@ eval $(grep = $config_file)
 <div class="card mb-3 h-100">
 <div class="card-header"><%= $t_telegram_2 %></div>
 <div class="card-body">
-<form action="<%= $url %>" method="post">
+<form action="<%= $url %>" method="post" autocomplete="off">
 <%
 field_switch "telegram_enabled"
 field_text "telegram_token"

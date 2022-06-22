@@ -33,9 +33,9 @@ done
 <%
 eval title="\$tT_mj_${only}"
 [ -z "$title" ] && title=$only
-
-h3 "$title" "my-4"
-
+%>
+<h3 class="my-4"><%= $title %></h3>
+<%
 row_ "row-cols-1 row-cols-md-2 g-3 mb-3"
   col_card_ "$t_mjsettings_1"
     form_ "/cgi-bin/majestic-settings-update.cgi"

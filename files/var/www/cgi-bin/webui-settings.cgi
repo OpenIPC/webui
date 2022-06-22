@@ -20,17 +20,17 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   new_password_confirmation="$POST_webui_password_confirmation"
 
   if [ -z "$new_password" ]; then
-    error="$tMsgPasswordCannotBeEmpty"
+    error="$t_wui_4"
   elif [ "$password_fw" = "$new_password" ]; then
-    error="$tMsgPasswordIsDefault"
+    error="$t_wui_5"
   elif [ -n "$(echo "$new_password" | grep " ")" ]; then
-    error="$tMsgPasswordHasSpaces"
+    error="$t_wui_6"
   elif [ "5" -ge "${#new_password}" ]; then
-    error="$tMsgPasswordIsTooShort"
+    error="$t_wui_7"
   elif [ -z "$new_password_confirmation" ]; then
-    error="$tMsgPasswordNeedsConfirmation"
+    error="$t_wui_8"
   elif [ "$new_password" != "$new_password_confirmation" ]; then
-    error="$tMsgPasswordsDontMatch"
+    error="$t_wui_9"
   fi
 
   if [ -z "$error" ]; then
@@ -39,7 +39,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   fi
 fi
 
-page_title="$tPT_WebuiSettings"
+page_title="$t_wui_0"
 tOptions_webui_language="en|English"
 for i in /var/www/lang/; do
   code="$(basename $i)"; code="${code%%.sh}"
@@ -54,34 +54,48 @@ webui_language="$locale"
 <%in _header.cgi %>
 <%
 [ -n "$error" ] && report_error "$error"
-
-form_upload_ "/cgi-bin/webui-settings.cgi"
-  row_
-    col_ "col-md-6 col-xl-4"
-      card_ "$tHD_WebuiAccess"
-        field_text "webui_username" "" "autocomplete=\"username\" disabled"
-        field_password "webui_password" "" "autocomplete=\"new-password\""
-        field_password "webui_password_confirmation" "autocomplete=\"new-password\""
-      _card
-    _col
-    col_ "col-md-6 col-xl-4"
-      card_ "$tHD_WebuiLocale"
-        field_select "webui_language"
-        field_file "webui_locale_file"
-      _card
-    _col
-    col_ "col-md-6 col-xl-4"
-      card_ "$tHD_WebuiConfig"
-        ex "cat /etc/httpd.conf"
-        ex "echo \$locale"
-        ex "cat /etc/web_locale"
-        ex "ls /var/www/lang/"
-      _card
-    _col
-  _row
-  button_submit "$t_btn_submit" "primary"
-_form
 %>
+<form action="/cgi-bin/webui-settings.cgi" method="post" enctype="multipart/form-data" autocomplete="off">
+<div class="row">
+<div class="col col-md-6 col-xl-4">
+<div class="card mb-3">
+<div class="card-header"><%= $t_wui_1 %></div>
+<div class="card-body">
+<%
+field_text "webui_username" "" "autocomplete=\"username\" disabled"
+field_password "webui_password" "" "autocomplete=\"new-password\""
+field_password "webui_password_confirmation" "autocomplete=\"new-password\""
+%>
+</div>
+</div>
+</div>
+<div class="col col-md-6 col-xl-4">
+<div class="card mb-3">
+<div class="card-header"><%= $t_wui_2 %></div>
+<div class="card-body">
+<%
+field_select "webui_language"
+field_file "webui_locale_file"
+%>
+</div>
+</div>
+</div>
+<div class="col col-md-6 col-xl-4">
+<div class="card mb-3">
+<div class="card-header"><%= $t_wui_3 %></div>
+<div class="card-body">
+<%
+ex "cat /etc/httpd.conf"
+ex "echo \$locale"
+ex "cat /etc/web_locale"
+ex "ls /var/www/lang/"
+%>
+</div>
+</div>
+</div>
+</div>
+<button type="submit" class="btn btn-primary mt-3"><%= $t_btn_submit %></button>
+</form>
 
 <script>
 $$('.toggle-password').forEach(el => {

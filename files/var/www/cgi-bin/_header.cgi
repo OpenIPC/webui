@@ -8,16 +8,13 @@ Date: $(TZ=GMT date +"%a, %d %b %Y %T %Z")
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title><% html_title "$page_title" %></title>
-<%
-link_css "/a/bootstrap.css"
-link_css "/a/bootstrap.override.css"
-[ "$HTTP_MODE" = "development" ] && link_css "/a/debug.css"
-link_js "/a/bootstrap.js"
-link_js "/a/main.js"
-%>
+<link rel="stylesheet" href="/a/bootstrap.css">
+<link rel="stylesheet" href="/a/bootstrap.override.css">
+<script src="/a/bootstrap.js"></script>
+<script src="/a/main.js"></script>
 </head>
 <body id="top">
-<% render "nav-main" %>
+<%in p/nav-main.cgi %>
 <div class="bg-light text-end x-small p-2">
 <div class="container"><% signature %></div>
 </div>

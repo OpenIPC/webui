@@ -3,13 +3,10 @@
 <% page_title="$t_fwreset_0" %>
 <%in _header.cgi %>
 <%
-_c="/usr/sbin/sysupgrade -n"
-_o=$($_c 2>&1)
-if [ $? -ne 0 ]; then
-report_command_error "$_c" "$_o"
-else
-report_command_info "$_c" "$_o"
+pre_ "bg-light p-4 log-scroll"
+  sysupgrade -n
+_pre
 button_home
-fi
+button_reboot
 %>
 <%in p/footer.cgi %>

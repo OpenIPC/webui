@@ -8,6 +8,7 @@ only="$GET_group"
 mj=$(echo "$mj" | sed "s/ /_/g")
 %>
 <%in _header.cgi %>
+
 <nav class="navbar navbar-light bg-light mb-3 navbar-expand-xxl">
 <div class="container-fluid">
 <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button">
@@ -15,13 +16,13 @@ mj=$(echo "$mj" | sed "s/ /_/g")
 </button>
 <img alt="Image: Majestic logo" class="me-2" height="32" src="/a/majestic-logo.png" width="32">
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-<ul class="navbar-nav me-auto mb-2 mb-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 15em;">
+<ul class="navbar-nav me-auto mb-2 mb-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 15em">
 <%
 for line in $mj; do
   param=${line%%|*}; fullname=${param#.}; domain=${fullname%.*}
   if [ "$olddomain" != "$domain" ]; then
     olddomain="$domain"; active=""; [ "$domain" == "$only" ] && active=" active"
-    eval "title=\"\$tM_mj_$domain\""
+    eval "title=\"\$tT_mj_$domain\""
     li "$(link_to "$title" "?group=${domain}" "nav-link${active}")" "nav-item small"
   fi
 done

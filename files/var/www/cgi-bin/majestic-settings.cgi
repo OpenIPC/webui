@@ -3,84 +3,69 @@
 <%in _mj.cgi %>
 <%
 page_title="$t_mjsettings_0"
-only="$GET_group"
-[ -z "$only" ] && only="system"
 mj=$(echo "$mj" | sed "s/ /_/g")
+only="$GET_tab"; [ -z "$only" ] && only="system"
+eval title="\$tT_mj_${only}"; [ -z "$title" ] && title=$only
 %>
 <%in _header.cgi %>
-
-<nav class="navbar navbar-light bg-light mb-3 navbar-expand-xxl">
-<div class="container-fluid">
-<button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button">
-<span class="navbar-toggler-icon"></span>
-</button>
-<img alt="Image: Majestic logo" class="me-2" height="32" src="/a/majestic-logo.png" width="32">
-<div class="collapse navbar-collapse" id="navbarSupportedContent">
-<ul class="navbar-nav me-auto mb-2 mb-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 15em">
+<div class="row row-cols-3 g-5">
+<div class="col">
+<div class="list-group list-group-flush" id="mj-tabs">
 <%
-for line in $mj; do
-  param=${line%%|*}; fullname=${param#.}; domain=${fullname%.*}
-  if [ "$olddomain" != "$domain" ]; then
-    olddomain="$domain"; active=""; [ "$domain" == "$only" ] && active=" active"
-    eval "title=\"\$tT_mj_$domain\""
-    li "$(link_to "$title" "?group=${domain}" "nav-link${active}")" "nav-item small"
+for _l in $mj; do
+  _p=${_l%%|*}; fullname=${_p#.}; _d=${fullname%.*}
+  if [ "$_od" != "$_d" ]; then
+    _od="$_d"
+    _c="class=\"list-group-item\""; [ "$_d" = "$only" ] && _c=" class=\"list-group-item active\" aria-current=\"true\""
+    echo "<a $_c href=\"?tab=${_d}\">$(eval echo \$tT_mj_${_d})</a>"
   fi
 done
+unset _c; unset _d; unset _l; unset _od; unset _p;
 %>
-</ul>
 </div>
 </div>
-</nav>
+<form action="/cgi-bin/majestic-settings-update.cgi" method="post">
+<div class="col">
+<h5><%= $title %></h5>
 <%
-eval title="\$tT_mj_${only}"
-[ -z "$title" ] && title=$only
+config=""
+for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
+  param=${line%%|*}; fullname=${param#.}; domain=${fullname%.*}; name=mj_${fullname//./_}; line=${line#*|}; type=${line%%|*}; line=${line#*|}
+  eval "$name=\"$(yaml-cli -g "$param")\""
+  config="${config}\n${param}: $(yaml-cli -g "$param")"
+  case "$type" in
+    boolean)
+      field_switch "$name"
+      ;;
+    hidden)
+      field_hidden "$name"
+      ;;
+    number)
+      field_number "$name"
+      ;;
+    range)
+      field_range "$name"
+      ;;
+    select)
+      field_select "$name"
+      ;;
+    string)
+      field_text "$name"
+      ;;
+    *)
+      echo "UNKNOWN FIELD: $name"
+      ;;
+  esac
+done
 %>
-<h3 class="my-4"><%= $title %></h3>
-<%
-row_ "row-cols-1 row-cols-md-2 g-3 mb-3"
-  col_card_ "$t_mjsettings_1"
-    form_ "/cgi-bin/majestic-settings-update.cgi"
-      mj=$(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only")
-      config=""
-      for line in $mj; do
-        param=${line%%|*}; fullname=${param#.}; domain=${fullname%.*}; name=mj_${fullname//./_}; line=${line#*|}
-        type=${line%%|*}; line=${line#*|}
-
-        eval "$name=\"$(yaml-cli -g "$param")\""
-        config="${config}\n${param}: $(yaml-cli -g "$param")"
-        case "$type" in
-          boolean)
-            field_switch "$name"
-            ;;
-          hidden)
-            field_hidden "$name"
-            ;;
-          number)
-            field_number "$name"
-            ;;
-          range)
-            field_range "$name"
-            ;;
-          select)
-            field_select "$name"
-            ;;
-          string)
-            field_text "$name"
-            ;;
-          *)
-            ;;
-        esac
-      done
-
-      button_submit "$t_btn_submit" "primary"
-    _form
-  _col_card
-
-  col_card_ "$t_mjsettings_2"
-    pre "$(echo -e "$config")"
-  _col_card
-_row
-%>
+<button type="submit" class="btn btn-primary mt-3" ><%= $t_btn_submit %></button>
+</form>
+</div>
+<div class="col">
+<h6><%= $t_mjsettings_2 %>
+<% pre "$(echo -e "$config")" %>
+</div>
+</div>
 
 <script src="/a/majestic-settings.js"></script>
 <script>
@@ -100,4 +85,5 @@ _row
     inp.replaceWith(sel);
   }
 </script>
+
 <%in p/footer.cgi %>

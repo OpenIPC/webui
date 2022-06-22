@@ -90,11 +90,6 @@ pre span.title {
     min-width: 4rem;
 }
 
-.log-scroll {
-    height: 50vh;
-    overflow: auto;
-}
-
 .range-value {
     text-align: right;
 }

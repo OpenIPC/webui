@@ -47,9 +47,10 @@ xl "rm -f ${tmp_file}"
 xl "rm -fr /tmp/microbe-web-${ver}"
 
 if [ -z "$error" ]; then
-  xl "echo \"${ver}+${commit}, ${timestamp}\" > /var/www/.version"
+  echo "${ver}+${commit}, ${timestamp}" > /var/www/.version
+  update_caminfo
 else
-  xl "rm $etag_file"
+  rm $etag_file
   echo "$t_wuiup_2"
 fi
 %>

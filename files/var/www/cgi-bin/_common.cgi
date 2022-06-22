@@ -273,7 +273,7 @@ field_range() {
       fi
       input "range" "$1"
       div_ "input-group-text"
-        span $(t_value "$1") "" "id=\"$1-value\""
+        span $(t_value "$1") "" "" "id=\"$1-value\""
 #       echo "<input class=\"form-control range text-end\" type=text name=\"${1}-value\"
 #         id=\"${1}-value\" value=\"$(t_value "$1")\" $(t_placeholder "$1")
 #         data-units=\"$(t_units "$1")\" $(t_readonly "$1" "auto")>"

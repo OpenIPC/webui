@@ -137,6 +137,7 @@ Server: httpd
 Status: 302 Moved Temporarily
 $xheader
 "
+  exit 0
 }
 
 report_error() {

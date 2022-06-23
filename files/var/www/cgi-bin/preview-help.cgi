@@ -1,13 +1,11 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <% page_title="$t_endpoints_0" %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <p><%= $t_endpoints_1 %> <a href="https://github.com/OpenIPC/wiki/blob/master/en/majestic-streamer.md"><%= $t_endpoints_2 %></a>.</p>
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
 <div class="col">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_endpoints_3 %></div>
-<div class="card-body">
+<h3><%= $t_endpoints_3 %></h3>
 <dl>
 <dt>http://<%= $ipaddr %>/</dt>
 <dd><%= $t_endpoints_4 %></dd>
@@ -15,12 +13,8 @@
 <dd><%= $t_endpoints_5 %></dd>
 </dl>
 </div>
-</div>
-</div>
 <div class="col">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_endpoints_6 %></div>
-<div class="card-body">
+<h3><%= $t_endpoints_6 %></h3>
 <dl>
 <dt>http://<%= $ipaddr %>/mjpeg</dt>
 <dd><%= $t_endpoints_7 %></dd>
@@ -32,12 +26,8 @@
 <dd><%= $t_endpoints_a %></dd>
 </dl>
 </div>
-</div>
-</div>
 <div class="col">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_endpoints_b %></div>
-<div class="card-body">
+<h3><%= $t_endpoints_b %></h3>
 <dl>
 <dt>http://<%= $ipaddr %>/image.jpg</dt>
 <dd><%= $t_endpoints_c %>
@@ -56,12 +46,8 @@
 <dd><%= $t_endpoints_j %></dd>
 </dl>
 </div>
-</div>
-</div>
 <div class="col">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_endpoints_k %></div>
-<div class="card-body">
+<h3><%= $t_endpoints_k %></h3>
 <dl>
 <dt>http://<%= $ipaddr %>/audio.opus</dt>
 <dd><%= $t_endpoints_l %></dd>
@@ -79,12 +65,8 @@
 <dd><%= $t_endpoints_r %></dd>
 </dl>
 </div>
-</div>
-</div>
 <div class="col">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_endpoints_s %></div>
-<div class="card-body">
+<h3><%= $t_endpoints_s %></h3>
 <dl>
 <dt>http://<%= $ipaddr %>/night/on</dt>
 <dd><%= $t_endpoints_t %></dd>
@@ -94,18 +76,12 @@
 <dd><%= $t_endpoints_v %></dd>
 </dl>
 </div>
-</div>
-</div>
 <div class="col">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_endpoints_w %></div>
-<div class="card-body">
+<h3><%= $t_endpoints_w %></h3>
 <dl>
 <dt>http://<%= $ipaddr %>/metrics</dt>
 <dd><%= $t_endpoints_x %></dd>
 </dl>
-</div>
-</div>
 </div>
 </div>
 <%in p/footer.cgi %>

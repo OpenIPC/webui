@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <% page_title="$t_cron_0" %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <%
 f=/etc/crontabs/root
 ex "cat ${f}"

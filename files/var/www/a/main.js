@@ -45,6 +45,8 @@ function refresh() {
         });
         $$('pre').forEach(el => resizeObserver.observe(el));
 
+        $$(".password input[type=checkbox]").forEach(el => el.addEventListener('change', ev => $('#' + ev.target.dataset['for']).type = (el.checked) ? 'text' : 'password'));
+
         if ($("#send-to-telegram")) {
             $("#send-to-telegram").addEventListener("click", event => {
                 event.preventDefault();

@@ -6,6 +6,10 @@
     --bs-blue: #4c60d8;
 }
 
+body {
+    padding-top: 4rem;
+}
+
 body > main > .container > h2 {
     font-weight: 700;
     color: var(--bs-blue);
@@ -27,37 +31,36 @@ h6 {
 
 pre {
     background: #4c60d812;
-    margin: 0.5rem 0 1rem;
-    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    /*margin: 0.5rem 0 1rem;*/
+    padding: 1rem;
 }
 
-pre span.title {
+pre.list b {
     display: inline-block;
-    width: 8rem;
+    width: 8em;
 }
 
 .btn {
     white-space: nowrap;
 }
 
-.card:not(.danger) .card-body {
-    background: #4c60d811;
-}
-
 .card-body {
     position: relative;
-}
-
-.card-header {
-    border-bottom: solid 1px var(--bs-blue);
-    color: var(--bs-blue);
-    text-align: right;
-    text-transform: uppercase;
 }
 
 .card dl dd, .card dl dt {
     border-bottom: solid 1px #ffffff;
     margin-bottom: 0;
+}
+
+.col > h3 {
+    color: var(--bs-blue);
+    margin-bottom: 1.5rem;
+}
+
+.container {
+    display: block;
 }
 
 .dropdown-item {

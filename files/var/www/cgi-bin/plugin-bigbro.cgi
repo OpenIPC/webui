@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 plugin="bigbro"
 page_title="$t_bigbro_0"
@@ -14,14 +14,12 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   redirect_to "?pin=${pin}"
 fi
 %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <div class="alert alert-warning"><%= $t_alert_1 %></div>
-<div class="row row-cols-1 row-cols-xl-3 g-3">
+<div class="row row-cols-1 row-cols-xl-3 g-4">
 <div class="col">
-<div class="card h-100">
-<div class="card-header"><%= $t_bigbro_1 %></div>
-<div class="card-body">
-<form action="/cgi-bin/plugin-bigbro.cgi" method="post" enctype="multipart/form-data" autocomplete="off">
+<h3><%= $t_bigbro_1 %></h3>
+<form action="/cgi-bin/plugin-bigbro.cgi" method="post" enctype="multipart/form-data">
 <p><%= $t_bigbro_2 %></p>
 <div class="mb-2 string">
 <label for="bigbro_pin" class="form-label"><%= $t_bigbro_7 %></label>
@@ -31,12 +29,8 @@ fi
 <button type="submit" class="btn btn-primary mt-3"><%= $t_bigbro_3 %></button>
 </form>
 </div>
-</div>
-</div>
 <div class="col">
-<div class="card h-100">
-<div class="card-header"><%= $t_bigbro_5 %></div>
-<div class="card-body">
+<h3><%= $t_bigbro_5 %></h3>
 <%
 if [ -n "$GET_pin" ]; then
   pin="$GET_pin"
@@ -48,8 +42,8 @@ if [ -n "$GET_pin" ]; then
 <% else %>
 <dl>
 <%
-for device in $(cat $config_file); do 
-  pin=${device%:*}  
+for device in $(cat $config_file); do
+  pin=${device%:*}
 %>
 <dt><a href="/cgi-bin/plugin-bigbro.cgi?pin=<%= $pin %>"><%= $pin %></a></dt>
 <dd><%= ${device##*:} %></dd>
@@ -57,15 +51,9 @@ for device in $(cat $config_file); do
 </dl>
 <% fi %>
 </div>
-</div>
-</div>
 <div class="col">
-<div class="card h-100">
-<div class="card-header"><%= $t_bigbro_4 %></div>
-<div class="card-body">
+<h3><%= $t_bigbro_4 %></h3>
 <% ex "cat $config_file" %>
-</div>
-</div>
 </div>
 </div>
 <%in p/footer.cgi %>

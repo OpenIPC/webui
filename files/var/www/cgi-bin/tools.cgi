@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 page_title="$t_tools_0"
 tOptions_tools_interface="auto ${interfaces}"
@@ -9,26 +9,22 @@ tools_interface="${POST_tools_interface:=auto}"
 tools_packet_size="${POST_tools_packet_size:=56}" # 56-1500 for ping, 38-32768 for trace
 tools_duration="${POST_tools_duration:=5}"
 %>
-<%in _header.cgi %>
-<div class="row g-3">
-<div class="col-md-6 col-lg-4">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_tools_1 %></div>
-<div class="card-body">
-<form action="/cgi-bin/tools.cgi" method="post" autocomplete="off">
+<%in p/header.cgi %>
+<div class="row g-4">
+  <div class="col col-md-4 col-lg-3">
+    <h3><%= $t_tools_1 %></h3>
+    <form action="/cgi-bin/tools.cgi" method="post">
 <%
 field_select "tools_action"
 field_text "tools_target" "data-pattern=pat-host-ip required"
 field_select "tools_interface" "data-pattern=pat-host-ip required"
 field_number "tools_packet_size"
 field_number "tools_duration" "min=1 max=30 step=1"
-button_submit "$t_tools_2" "primary"
+button_submit "$t_tools_2"
 %>
-</form>
-</div>
-</div>
-</div>
-
+    </form>
+  </div>
+  <div class="col col-md-8 col-lg-9">
 <%
 if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$tools_action" in
@@ -38,11 +34,10 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
       cmd="$cmd -s $tools_packet_size"
       cmd="$cmd -c $tools_duration"
       cmd="$cmd $tools_target"
-      col_card_ "$t_tools_3" "col-8 mb-3"
-        pre_
-          $cmd
-        _pre
-      _col_card
+      h3 "$t_tools_3"
+      pre_
+        $cmd
+      _pre
       ;;
     trace)
       cmd="traceroute"
@@ -52,16 +47,16 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
       [ "auto" != "$tools_interface" ] && cmd="$cmd -i $tools_interface"
       cmd="$cmd $tools_target"
       cmd="$cmd $tools_packet_size"
-      col_card "$t_tools_4" "col-8 mb-3"
-        pre_
-          $cmd
-        _pre
-      _col_card
+      h3 "$t_tools_4"
+      pre_
+        $cmd
+      _pre
       ;;
     *)
       ;;
   esac
 fi
 %>
+  </div>
 </div>
 <%in p/footer.cgi %>

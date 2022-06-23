@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 page_title="$t_networkup_0"
 
@@ -11,7 +11,12 @@ network_gateway="$POST_network_gateway"
 network_dns_1="$POST_network_dns_1"
 network_dns_2="$POST_network_dns_2"
 
-if [ "$network_dhcp" == "false" ]; then
+# strip trailing spaces
+for _i in hostname address netmask dateway dns_1 dns_2; do
+  sanitize "network_${_i}"
+done; unset _i
+
+if [ "false" = "$network_dhcp" ]; then
   [ -z "$network_address" ] && error="$t_networkup_1"
   [ -z "$network_netmask" ] && error="$t_networkup_2"
   [ -z "$network_gateway" ] && error="$t_networkup_3"
@@ -58,7 +63,7 @@ fi
 mv $tmp /etc/network/interfaces
 update_caminfo
 %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <%
 alert_ "danger"
   h6 "$t_networkup_6"

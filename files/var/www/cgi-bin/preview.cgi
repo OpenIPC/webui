@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 page_title="$t_preview_0"
 
@@ -7,7 +7,7 @@ size=$(yaml-cli -g .mjpeg.size); [ -z "$size" ] && size="640x480"
 size_w=${size%x*}
 size_h=${size#*x}
 %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 
 <div class="row preview">
 <div class="col-md-8 col-xl-9 col-xxl-12 position-relative mb-3">

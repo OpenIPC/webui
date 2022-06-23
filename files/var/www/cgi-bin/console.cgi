@@ -1,10 +1,10 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 page_title="$t_console_0"
 cmd="$FORM_cmd"
 %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <div class="console">
 <div class="input-group mb-3">
 <div class="input-group-text">~#</div>

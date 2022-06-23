@@ -5,7 +5,7 @@ tag() {
   _tag="$1"; _txt="$2"; _css="$3"; _xtr="$4"
   [ -n "$_css" ] && _css=" class=\"${_css}\""
   [ -n "$_xtr" ] && _xtr=" ${_xtr}"
-  echo -e "<${_tag}${_css}${_xtr}>${_txt}</${_tag}>\n"
+  echo "<${_tag}${_css}${_xtr}>${_txt}</${_tag}>"
   unset _tag; unset _txt; unset _css; unset _xtr
 }
 
@@ -70,12 +70,11 @@ button_link_to() {
 
 # button_submit "text" "type" "extras"
 button_submit() {
-  echo "<button type=\"submit\" class=\"btn btn-${2} mt-3\" ${3}>${1}</button>"
-}
-
-# button_submit_action "action" "text" "extras"
-button_submit_action() {
-  echo "<button type=\"submit\" class=\"btn btn-danger\" name=action value=\"${1}\" ${3}>${2}</button>"
+  _t="$1"; [ -z "$_t" ] && _t="$t_btn_submit"
+  _c="$2"; [ -z "$_c" ] && _c="primary"
+  _x="$3"; [ -z "$_x" ] && _x=" ${_x}"
+  echo "<button type=\"submit\" class=\"btn btn-${_c}\"${_x}>${_t}</button>"
+  unset _c; unset _t; unset _x
 }
 
 button_home() {
@@ -91,40 +90,6 @@ button_refresh() {
   link_to "$t_b_refresh" "#" "btn btn-primary refresh"
 }
 
-# card_ "text"
-card_() {
-  _c="card mb-3"; [ -n "$2" ] && _c="${_c} ${2}"
-  div_ "${_c}" "$3"
-  card_header "$1"
-  card_body_
-}
-
-_card() {
-  _card_body
-  _div
-}
-
-# card_header "text"
-card_header() {
-  div "$1" "card-header" "$2"
-}
-
-card_body_() {
-  _c="card-body"; [ -n "$1" ] && _c="${_c} ${1}"
-  div_ "$_c" "$2"
-  unset _c
-}
-
-_card_body() {
-  _div
-}
-
-card_body() {
-  card_body_ "$2" "$3"
-  echo "$1"
-  _card_body
-}
-
 #check_password() {
 #  [ "0${debug}" -ge "1" ] && return
 #  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui-settings.cgi" ] && return
@@ -132,47 +97,6 @@ card_body() {
 #    redirect_to "/cgi-bin/webui-settings.cgi" "danger" "$t_wui_a"
 #  fi
 #}
-
-# col_ "class"
-col_() {
-  div_ "col ${1}" "$2"
-}
-
-_col() {
-  _div
-}
-
-# col_card "text"
-col_card_() {
-  col_
-  card_ "$1" "h-100"
-}
-
-_col_card() {
-  _card
-  _col
-}
-
-# col_card "text-header" "text"
-col_card() {
-  col_card_ "$1"
-  echo "$2"
-  _col_card
-}
-
-# col_first
-col_first() {
-  col_
-}
-
-col_last() {
-  _col
-}
-
-col_next() {
-  col_last
-  col_first
-}
 
 # container "text"
 container_() {
@@ -206,18 +130,18 @@ ex() {
 }
 
 field_() {
-  div_ "mb-2 ${1}" "$2"
+  echo "<p class=\"$1\">"
 }
 
 _field() {
-  _div
+  echo "</p>"
 }
 
 # field_checkbox "name" "extras"
 field_checkbox() {
   field_ "boolean form-check"
-    echo "<input type=hidden name=\"${1}\" id=\"${1}-false\" value=false>"
-    echo "<input type=checkbox name=\"${1}\" id=\"${1}\" $(t_checked "$1" "true") value=true class=form-check-input ${2}>"
+    echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}-false\" value=\"false\">"
+    echo "<input type=\"checkbox\" name=\"${1}\" id=\"${1}\" $(t_checked "$1" "true") value=\"true\" class=\"form-check-input\" ${2}>"
     label "$1" "form-check-label"
   _field
 }
@@ -240,10 +164,7 @@ field_hidden() {
 field_number() {
   field_ "number"
     label "$1"
-    div_ "input-group"
-      input "text" "$1" "form-control text-end"
-      units "$1"
-    _div
+    input "text" "$1" "form-control text-end"
     help "$1"
   _field
 }
@@ -252,12 +173,11 @@ field_number() {
 field_password() {
   field_ "password"
     label "$1"
-    div_ "input-group"
+    echo "<span class=\"input-group\">"
       input "password" "$1"
-      div_ "input-group-text"
-        echo "<input class=\"form-check-input me-1\" type=checkbox data-for=\"${1}\"> show"
-      _div
-    _div
+      echo "<label class=\"input-group-text\"><input class=\"form-check-input me-1\" type=\"checkbox\" data-for=\"${1}\">  show</label>"
+      echo "</span>"
+    help "$1"
   _field
 }
 
@@ -265,22 +185,13 @@ field_password() {
 field_range() {
   field_ "range"
     label "$1"
-    div_ "input-group"
-      if [ -n "$(t_options "$1" | grep -E auto)" ]; then
-        div_ "input-group-text"
-          echo "<input class=\"form-check-input auto-value me-1\" type=checkbox data-for=\"${1}\" data-value=\"$(t_default "$1")\" $(t_checked "$1" "auto")> auto"
-        _div
-      fi
-      input "range" "$1"
-      div_ "input-group-text"
-        span $(t_value "$1") "" "" "id=\"$1-value\""
-#       echo "<input class=\"form-control range text-end\" type=text name=\"${1}-value\"
-#         id=\"${1}-value\" value=\"$(t_value "$1")\" $(t_placeholder "$1")
-#         data-units=\"$(t_units "$1")\" $(t_readonly "$1" "auto")>"
-        echo "$(t_units "$1")"
-      _div
-#      units "$1"
-    _div
+    echo "<span class=\"input-group\">"
+    if [ -n "$(t_options "$1" | grep -E auto)" ]; then
+      echo "<label class=\"input-group-text\">auto <input class=\"form-check-input auto-value ms-1\" type=\"checkbox\" data-for=\"${1}\" data-value=\"$(t_default "$1")\" $(t_checked "$1" "auto")></label>"
+    fi
+    echo "<input type=\"range\" name=\"${1}\" id=\"${1}\" class=\"form-control form-range\">"
+    echo "<span class=\"input-group-text\"><span id=\"${1}-value\" class=\"text-end\">$(t_value "$1")</span></span>"
+    echo "</span>"
     help "$1"
   _field
 }
@@ -289,21 +200,15 @@ field_range() {
 field_select() {
   field_ "select"
     label "$1"
-    div_ "input-group"
-      echo "<select class=form-select id=\"${1}\" name=\"${1}\">"
-      [ -z "$(t_value "$1")" ] && echo "<option>Select from available options</option>"
-      for o in $(t_options "$1")
-      do
-        _v="${o%|*}"
-        _n="${o#*|}"
-        [ "$1" != "mj_isp_sensorConfig" ] && _n=${_n//_/ }
-        echo "<option value=\"${_v}\" $(t_selected "$1" "${_v}")>${_n}</option>"
-        unset _v
-        unset _n
-      done
-      echo "</select>"
-      units "$1"
-    _div
+    echo "<select class=\"form-select\" id=\"${1}\" name=\"${1}\">"
+    [ -z "$(t_value "$1")" ] && echo "<option>Select from available options</option>"
+    for o in $(t_options "$1"); do
+      _v="${o%|*}"; _n="${o#*|}"; [ "$1" != "mj_isp_sensorConfig" ] && _n=${_n//_/ }
+      echo "<option value=\"${_v}\" $(t_selected "$1" "${_v}")>${_n}</option>"
+      unset _v; unset _n
+    done
+    echo "</select>"
+    units "$1"
     help "$1"
   _field
 }
@@ -311,10 +216,10 @@ field_select() {
 # field_swith "name"
 field_switch() {
   field_ "boolean"
-    div_ "form-check form-switch"
+    echo "<span class=\"form-check form-switch\">"
       input "switch" "$1"
       label "$1" "form-check-label"
-    _div
+    echo "</span>"
     help "$1"
   _field
 }
@@ -323,10 +228,7 @@ field_switch() {
 field_text() {
   field_ "string"
     label "$1"
-    div_ "input-group"
-      input "text" "$1" "$2" "$3"
-      units "$1"
-    _div
+    input "text" "$1" "$2" "$3"
     help "$1"
   _field
 }
@@ -399,7 +301,8 @@ Server: httpd
 }
 
 help() {
-  [ -n "$(t_hint "$1")" ] && p "$(t_hint "$1")" "hint text-secondary"
+  [ -z "$(t_hint "$1")" ] && return
+  echo "<span class=\"hint text-secondary\">$(t_hint "$1")</span>"
 }
 
 html_title() {
@@ -416,31 +319,31 @@ image() {
 input() {
   _t="$1"
   _n="$2"
-  _c="$3"
-  _x="$4"
+  _c2="$3"
+  _x2="$4"
   _v="$(t_value "$_n")"
 
   case "$1" in
   checkbox)
-    _c2="$form-check-input"
+    _c="form-check-input"
     _v="true"
-    _x2="$(t_checked "$_n" "$_v")"
+    _x="$(t_checked "$_n" "$_v")"
     echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}-false\" value=\"false\">"
     ;;
   switch)
     _t="checkbox"
-    _c2="form-check-input"
+    _c="form-check-input"
     _v="true"
-    _x2="role=switch $(t_checked "$2" "$_v")"
+    _x="role=\"switch\""; [ -n "$(t_checked "$2" "$_v")" ] && _x="$_x $(t_checked "$2" "$_v")"
     echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}-false\" value=\"false\">"
     ;;
   text)
-    _c2="form-control"
+    _c="form-control"
     ;;
   range)
-    _c2="form-control form-range"
+    _c="form-control form-range"
     _o="$(t_options "$_n")"
-    _x2="$(t_disabled "$_n" "auto") data-units=\"$(t_units "$_n")\""
+    _x="$(t_disabled "$_n" "auto") data-units=\"$(t_units "$_n")\""
     ;;
   *)
     _c="form-control"
@@ -454,16 +357,17 @@ input() {
   _p=$(t_placeholder "$2"); [ -n "$_p" ] && _p=" placeholder=\"${_p}\""
 
   echo "<input type=\"${_t}\" name=\"${_n}\" id=\"${_n}\"${_v}${_c}${_p}${_x}>"
-  unset _c; unset _p; unset _t; unset _v; unset _x
+  unset _c; unset _c2; unset _n; unset _o; unset _p; unset _t; unset _v; unset _x; unset _x2
 }
 
 # label "name" "classes" "extras"
 label() {
-  _c="$2"; [ -z "$_c" ] && _c="form-label"
+  _c="form-label"; [ -n "$2" ] && _c="${_c} ${2}"
   _l="$(t_label "$1")"; [ -z "$_l" ] && _l="$1" && _c="${_c} bg-warning"
+  _u=$(t_units "$1"); [ -n "$_u" ] && _l="${_l}, <span class=\"units text-secondary x-small\">$_u</span>"
   _x="$3"; [ -n "$_x" ] && _x=" ${_x}"
   echo "<label for=\"${1}\" class=\"${_c}\"${_x}>${_l}</label>"
-  unset _c; unset _l; unset _x
+  unset _c; unset _l; unset _u; unset _x
 }
 
 link_to() {
@@ -547,6 +451,12 @@ row() {
   row_ "$2"
   echo "$1"
   _row
+}
+
+sanitize() {
+  z="$1"
+  eval $z=$(eval echo \$$z | sed s/^\\/// | sed s/\\/$//)
+  unset z
 }
 
 signature() {
@@ -715,8 +625,8 @@ source $sysinfo_file
 
 [ ! -d /var/www/lang/ ] && mkdir -p /var/www/lang/
 
-source $PWD/_settings.sh
-source $PWD/_en.sh
+source $PWD/p/settings.sh
+source $PWD/p/locale_en.sh
 reload_locale
 # check_password
 %>

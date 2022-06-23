@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <% page_title="$t_fwupdate_0" %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <%
 if [ -f /tmp/webjob.lock ]; then
   report_error "danger" "$t_fwupdate_1"

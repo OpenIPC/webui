@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 plugin="vtun"
 url=/cgi-bin/plugin-vtun.cgi
@@ -20,26 +20,24 @@ if [ -n "$POST_vtun_server" ]; then
   redirect_to "$url"
 fi
 %>
-<%in _header.cgi %>
-<div class="row row-cols-1 row-cols-xl-2 g-3 mb-3">
+<%in p/header.cgi %>
+<div class="row row-cols-1 row-cols-xxl-3 g-4">
 <div class="col">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_vtun_1 %></div>
-<div class="card-body">
-<form action="<%= $url %>" method="post" autocomplete="off">
+<h3><%= $t_vtun_1 %></h3>
+<form action="<%= $url %>" method="post">
 <%
 if [ -f "$service_file" ]; then
   ex "cat $service_file"
-  button_submit_action "reset" "$t_vtun_2" "data-method=\"delete\""
+  action="reset"
+  field_hidden "action"
+  button_submit "$t_vtun_2"
 else
   extras=""; [ -n "$vtun_server" ] && extras=" disabled"
   field_text "vtun_server" "$extras"
-  button_submit "$t_btn_submit" "primary"
+  button_submit
 fi
 %>
 </form>
-</div>
-</div>
 </div>
 </div>
 <%in p/footer.cgi %>

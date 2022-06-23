@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 page_title="$t_network_0"
 
@@ -11,14 +11,12 @@ network_gateway="$gateway"
 network_dns_1="$dns_1"
 network_dns_2="$dns_2"
 %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 
-<div class="row mb-3">
-<div class="col-md-6 col-lg-4">
-<div class="card">
-<div class="card-header"><%= $t_network_1 %></div>
-<div class="card-body">
-<form action="/cgi-bin/network-update.cgi" method="post" autocomplete="off">
+<div class="row">
+<div class="col col-md-6 col-lg-4 col-xxl-3">
+<h3><%= $t_network_1 %></h3>
+<form action="/cgi-bin/network-update.cgi" method="post">
 <%
 action="update"
 field_hidden "action"
@@ -29,34 +27,32 @@ field_text "network_netmask"
 field_text "network_gateway"
 field_text "network_dns_1"
 field_text "network_dns_2"
+button_submit
 %>
-<button type="submit" class="btn btn-primary mt-3"><%= $t_btn_submit %></button>
 </form>
 </div>
+<div class="col col-md-6 col-lg-8 col-xxl-9">
+<h3><%= $t_network_5 %></h3>
+<% ex "cat /etc/network/interfaces" %>
+<h3><%= $t_network_6 %></h3>
+<% ex "ip address" %>
+<h3><%= $t_network_3 %></h3>
+<% ex "ip route list" %>
+<h3><%= $t_network_2 %></h3>
+<% ex "cat /etc/resolv.conf" %>
+<h3><%= $t_network_7 %></h3>
+<% ex "netstat -tulpan" %>
 </div>
-</div>
-<div class="col-md-6 col-lg-8">
-<div class="row row-cols-1 g-3">
-<%
-col_card "$t_network_2" "$(ex "cat /etc/resolv.conf")"
-col_card "$t_network_3" "$(ex "ip route list")"
-col_card "$t_network_4" "$(ex "cat /etc/ntp.conf")"
-%>
-</div>
-</div>
-</div>
-
-<div class="row row-cols-1 g-3 mb-3">
-<%
-col_card "$t_network_5" "$(ex "cat /etc/network/interfaces")"
-col_card "$t_network_6" "$(ex "ip address")"
-col_card "$t_network_7" "$(ex "netstat -tulpan")"
-%>
 </div>
 
 <script>
 function toggleDhcp() {
-  $('#network_ip_address').disabled = $('#network_netmask').disabled = $('#network_gateway').disabled = $('#network_dns_1').disabled = $('#network_dns_2').disabled = $('#network_dhcp[type=checkbox]').checked;
+  const c = $('#network_dhcp[type=checkbox]').checked;
+  $('#network_ip_address').disabled = c;
+  $('#network_netmask').disabled = c;
+  $('#network_gateway').disabled = c;
+  $('#network_dns_1').disabled = c;
+  $('#network_dns_2').disabled = c;
 }
 $('#network_dhcp[type=checkbox]').addEventListener('change', toggleDhcp);
 toggleDhcp();

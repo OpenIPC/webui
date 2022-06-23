@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <% page_title="$t_about_0" %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <%
 TEAM="# OpenIPC Team members in following format: Username | GitHub PhotoID | Projects | GitHub name | Telegram name
 FlyRouter|88846|Project Coordination|ZigFisher|FlyRouter
@@ -83,7 +83,7 @@ team() {
 <div class="col-12">
 <h3><%= $t_about_a %></h3>
 <p><%= $t_about_b %></p>
-<% row "$(team)" "row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-3 mb-3" %>
+<% row "$(team)" "row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4" %>
 <p><a href="https://github.com/orgs/OpenIPC/people"><%= $t_about_c %></a></p>
 </div>
 </div>

@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <% page_title="$t_log_0" %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <%
 ex "/sbin/logread"
 button_refresh

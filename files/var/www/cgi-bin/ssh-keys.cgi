@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 page_title="$t_sshkey_0"
 
@@ -48,40 +48,28 @@ case "$POST_action" in
     ;;
   *)
 %>
-<%in _header.cgi %>
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-3">
+<%in p/header.cgi %>
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
 <div class="col">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_sshkey_1 %></div>
-<div class="card-body">
-<form action="/cgi-bin/ssh-keys.cgi" method="post" autocomplete="off">
+<h3><%= $t_sshkey_1 %></h3>
+<form action="/cgi-bin/ssh-keys.cgi" method="post">
 <p><%= $t_sshkey_2 %></p>
 <button class="btn btn-danger" name="action" type="submit" value="backup"><%= $t_sshkey_3 %></button>
 </form>
 </div>
-</div>
-</div>
 <div class="col">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_sshkey_4 %></div>
-<div class="card-body">
+<h3><%= $t_sshkey_4 %></h3>
 <p><%= $t_sshkey_5 %></p>
-<form action="/cgi-bin/ssh-keys.cgi" method="post" autocomplete="off" autocomplete="off">
+<form action="/cgi-bin/ssh-keys.cgi" method="post">
 <button class="btn btn-danger" name="action" type="submit" value="restore"><%= $t_sshkey_6 %></button>
 </form>
 </div>
-</div>
-</div>
 <div class="col">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_sshkey_7 %></div>
-<div class="card-body">
+<h3><%= $t_sshkey_7 %></h3>
 <p><%= $t_sshkey_8 %></p>
 <form action="/cgi-bin/ssh-keys.cgi" method="post">
 <button class="btn btn-danger" name="action" type="submit" value="delete"><%= $t_sshkey_9 %></button>
 </form>
-</div>
-</div>
 </div>
 </div>
 <% readKey "ed25519" %>

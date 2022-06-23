@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 if [ "POST" = "$REQUEST_METHOD" ]; then
   f="$POST_f"
@@ -36,8 +36,8 @@ fi
 
 page_title="$t_editor_0"
 %>
-<%in _header.cgi %>
-<form action="<%= $SCRIPT_NAME %>" method="post" autocomplete="off" class="mb-4">
+<%in p/header.cgi %>
+<form action="<%= $SCRIPT_NAME %>" method="post" class="mb-4">
 <div class="mb-1">
   <label class="form-label" for="f"><%= $t_editor_1 %></label>
   <input type="text" class="form-control" name="f" value="<%= $f %>" readonly>
@@ -45,7 +45,7 @@ page_title="$t_editor_0"
 <div class="mb-1">
   <textarea id="t" name="t" class="form-control font-monospace p-3" style="height:50vh"><%= "$t" %></textarea>
 </div>
-<% button_submit "$t_editor_2" "primary" %>
+<% button_submit "$t_editor_2" %>
 </form>
 
 <%

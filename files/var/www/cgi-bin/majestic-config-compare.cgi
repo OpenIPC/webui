@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <% page_title="$t_mjcompare_0" %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <%
 _c="diff /rom/etc/majestic.yaml /etc/majestic.yaml"
 _o=$($_c 2>&1)

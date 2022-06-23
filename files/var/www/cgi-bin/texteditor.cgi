@@ -5,6 +5,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   f="$POST_f"
   t="$POST_t"
 
+  # strip carriage return (\u000D) characters
+  t=$(echo "$t"|sed "s/\r//g")
+
   if [ "restore" = "$POST_a" ]; then
     [ ! -f "$f" ] && redirect_to "${SCRIPT_NAME}?f=${f}" "danger" "$t_form_error_a"
     [ ! -f "$f.backup" ] && redirect_to "${SCRIPT_NAME}?f=${f}" "danger" "$t_form_error_a"

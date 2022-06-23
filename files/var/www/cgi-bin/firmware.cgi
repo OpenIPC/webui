@@ -48,11 +48,11 @@ fw_rootfs="true"
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
 <div class="col">
 <h3><%= $t_firmware_1 %></h3>
-<dl class="row small">
-<dt class="col-4"><%= $t_firmware_2 %></dt>
-<dd class="col-8 text-end"><%= $fw_version %></dd>
-<dt class="col-4"><%= $t_firmware_3 %></dt>
-<dd class="col-8 text-end" id="firmware-master-ver"><%= $fw_date %></dd>
+<dl class="small list">
+<dt><%= $t_firmware_2 %></dt>
+<dd><%= $fw_version %></dd>
+<dt><%= $t_firmware_3 %></dt>
+<dd id="firmware-master-ver"><%= $fw_date %></dd>
 </dl>
 <div class="alert alert-warning">
 <h6><%= $t_firmware_4 %></h6>
@@ -71,13 +71,13 @@ button_submit "$t_firmware_5" "warning"
 </div>
 <div class="col">
 <h3><%= $t_firmware_6 %></h3>
-<dl class="row small">
-<dt class="col-4"><%= $t_firmware_7 %></dt>
-<dd class="col-8 text-end"><%= $ui_version %></dd>
-<dt class="col-4"><%= $t_firmware_8 %></dt>
-<dd class="col-8 text-end" id="microbe-web-master-ver"></dd>
-<dt class="col-4"><%= $t_firmware_9 %></dt>
-<dd class="col-8 text-end" id="microbe-web-dev-ver"></dd>
+<dl class="small list">
+<dt><%= $t_firmware_7 %></dt>
+<dd><%= $ui_version %></dd>
+<dt><%= $t_firmware_8 %></dt>
+<dd id="microbe-web-master-ver"></dd>
+<dt><%= $t_firmware_9 %></dt>
+<dd id="microbe-web-dev-ver"></dd>
 </dl>
 <div class="alert alert-warning">
 <h6><%= $t_firmware_a %></h6>
@@ -92,11 +92,11 @@ button_submit "$t_firmware_b" "warning"
 </div>
 <div class="col">
 <h3><%= $t_firmware_c %></h3>
-<dl class="row small">
-<dt class="col-4"><%= $t_firmware_d %></dt>
-<dd class="col-8 text-end"><% $mj_version_new %></dd>
-<dt class="col-4"><%= $t_firmware_e %></dt>
-<dd class="col-8 text-end"><%= $mj_version %></dd>
+<dl class="small list">
+<dt><%= $t_firmware_d %></dt>
+<dd><%= $mj_version %></dd>
+<dt><%= $t_firmware_e %></dt>
+<dd><%= $mj_version_new %></dd>
 </dl>
 
 <div class="alert alert-info">

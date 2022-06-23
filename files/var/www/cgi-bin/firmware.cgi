@@ -180,6 +180,7 @@ function queryBranch(repo, branch) {
     const el = $('#' + repo + '-' + branch + '-ver').appendChild(link);
   });
   oReq.open("GET", GH_API + repo + '/branches/' + branch);
+  oReq.setRequestHeader("Authorization", "Basic " + btoa("<%= "${GITHUB_USERNAME}:${GITHUB_TOKEN}" %>"));
   oReq.send();
 }
 

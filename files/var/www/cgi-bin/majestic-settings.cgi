@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%in _mj.cgi %>
 <%
 page_title="$t_mjsettings_0"
@@ -7,26 +7,11 @@ mj=$(echo "$mj" | sed "s/ /_/g")
 only="$GET_tab"; [ -z "$only" ] && only="system"
 eval title="\$tT_mj_${only}"; [ -z "$title" ] && title=$only
 %>
-<%in _header.cgi %>
-<div class="row row-cols-3 g-5">
-<div class="col">
-<div class="list-group list-group-flush" id="mj-tabs">
-<%
-for _l in $mj; do
-  _p=${_l%%|*}; fullname=${_p#.}; _d=${fullname%.*}
-  if [ "$_od" != "$_d" ]; then
-    _od="$_d"
-    _c="class=\"list-group-item\""; [ "$_d" = "$only" ] && _c=" class=\"list-group-item active\" aria-current=\"true\""
-    echo "<a $_c href=\"?tab=${_d}\">$(eval echo \$tT_mj_${_d})</a>"
-  fi
-done
-unset _c; unset _d; unset _l; unset _od; unset _p;
-%>
-</div>
-</div>
+<%in p/header.cgi %>
 <form action="/cgi-bin/majestic-settings-update.cgi" method="post">
+<div class="row row-cols-3 g-4">
 <div class="col">
-<h5><%= $title %></h5>
+<h3><%= $title %></h3>
 <%
 config=""
 for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
@@ -58,14 +43,30 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
   esac
 done
 %>
-<button type="submit" class="btn btn-primary mt-3" ><%= $t_btn_submit %></button>
-</form>
 </div>
 <div class="col">
-<h6><%= $t_mjsettings_2 %>
-<% pre "$(echo -e "$config")" %>
+<h3><%= $t_mjsettings_2 %></h3>
+<% pre "$config" %>
+</div>
+<div class="col">
+<h3>Config group</h3>
+<div class="list-group list-group-flush" id="mj-tabs">
+<%
+for _l in $mj; do
+  _p=${_l%%|*}; fullname=${_p#.}; _d=${fullname%.*}
+  if [ "$_od" != "$_d" ]; then
+    _od="$_d"
+    _c="class=\"list-group-item\""; [ "$_d" = "$only" ] && _c=" class=\"list-group-item active\" aria-current=\"true\""
+    echo "<a $_c href=\"?tab=${_d}\">$(eval echo \$tT_mj_${_d})</a>"
+  fi
+done
+unset _c; unset _d; unset _l; unset _od; unset _p;
+%>
 </div>
 </div>
+</div>
+<button type="submit" class="btn btn-primary mt-3" ><%= $t_btn_submit %></button>
+</form>
 
 <script src="/a/majestic-settings.js"></script>
 <script>

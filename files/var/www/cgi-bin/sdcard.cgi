@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <% page_title="$t_sdcard_0" %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <%
 ls /dev/mmc* >/dev/null 2>&1
 if [ $? -ne 0 ]; then

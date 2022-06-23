@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 page_title="$t_wuiup_0"
 
@@ -11,7 +11,7 @@ etag_file=/root/.ui.etag
 opts="-skL --etag-save ${etag_file}"
 [ -z "$POST_web_enforce" -a -f "$etag_file" ] && opts="${opts} --etag-compare ${etag_file}"
 %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <pre class="log-scroll">
 <%
 xl "curl $opts -o $tmp_file $url"

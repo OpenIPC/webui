@@ -1,3 +1,4 @@
+<% if [ "$debug" ]; then %>
 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasDebug" aria-labelledby="offcanvasDebugLabel">
 <div class="offcanvas-header">
 <h5 class="offcanvas-title" id="offcanvasLabel">Debug Info</h5>
@@ -17,3 +18,4 @@
 :root{--bs-blue: #990000}
 .offcanvas{--bs-offcanvas-width: 30vw}
 </style>
+<% fi %>

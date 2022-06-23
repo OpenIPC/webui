@@ -1,5 +1,5 @@
 #!/usr/bin/haserl --upload-limit=20 --upload-dir=/tmp
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 config_file=/etc/majestic.yaml
 magicnum="23206d616a6573746963"
@@ -20,7 +20,7 @@ elif [ "$(wc -c "$file" | awk '{print $1}')" -gt "$maxsize" ]; then
 fi
 
 if [ -n "$error" ]; then %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <% report_error "$error" %>
 <%in p/footer.cgi %>
 <% else

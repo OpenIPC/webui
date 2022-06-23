@@ -1,5 +1,5 @@
 #!/usr/bin/haserl --upload-limit=200 --upload-dir=/tmp
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 page_title="$t_sensor_0"
 
@@ -52,32 +52,36 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   fi
 fi
 %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
+<% [ -n "$error" ] && report_error "$error" %>
+
+<div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-4 g-4">
+<div class="col">
+<h3><%= $t_sensor_3 %></h3>
+<% ex "ls /usr/lib/sensors/" %>
+</div>
+<div class="col">
+<h3><%= $t_sensor_4 %></h3>
+<form action="/cgi-bin/sensor-upload.cgi" method="post" enctype="multipart/form-data">
 <%
-[ -n "$error" ] && report_error "$error"
-
-row_ "row-cols-1 row-cols-lg-2 g-3 mb-3"
-  col_card_ "$t_sensor_3"
-    alert_ "light"
-      h6 "$t_sensor_4"
-      form_upload_ "/cgi-bin/sensor-upload.cgi"
-        field_file "sensor_driver_file"
-        button_submit "$t_sensor_5" "primary"
-      _form
-    _alert
-    ex "ls /usr/lib/sensors/"
-  _col_card
-
-  col_card_ "$t_sensor_6"
-    alert_ "light"
-      h6 "$t_sensor_7"
-      form_upload_ "/cgi-bin/sensor-upload.cgi"
-        field_file "sensor_config_file"
-        button_submit "$t_sensor_8" "primary"
-      _form
-    _alert
-    ex "ls /etc/sensors/"
-  _col_card
-_row
+field_file "sensor_driver_file"
+button_submit "$t_sensor_5"
 %>
+</form>
+</div>
+
+<div class="col">
+<h3><%= $t_sensor_6 %></h3>
+<% ex "ls /etc/sensors/" %>
+</div>
+<div class="col">
+<h3><%= $t_sensor_7 %></h3>
+<form action="/cgi-bin/sensor-upload.cgi" method="post" enctype="multipart/form-data">
+<%
+field_file "sensor_config_file"
+button_submit "$t_sensor_8"
+%>
+</form>
+</div>
+</div>
 <%in p/footer.cgi %>

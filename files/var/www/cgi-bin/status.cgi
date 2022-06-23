@@ -1,69 +1,52 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 get_soc_temp
 page_title="$t_status_0"
 %>
-<%in _header.cgi %>
-<div class="row row-cols-1 row-cols-lg-2 g-3 mb-3">
+<%in p/header.cgi %>
+<div class="row g-4">
+
 <div class="col">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_status_1 %></div>
-<div class="card-body">
-<b><%= $t_status_2 %></b>
-<pre class="small">
-<span class="title"><%= $t_status_3 %></span> <span><%= $soc %></span>
-<span class="title"><%= $t_status_4 %></span> <span><%= $soc_family %></span>
-<span class="title"><%= $t_status_5 %></span> <span><%= $sensor_ini %></span>
-<span class="title"><%= $t_status_6 %></span> <span><%= $flash_size %> MB</span>
+<h3><%= $t_status_1 %></h3>
+<h6><%= $t_status_2 %></h6>
+<pre class="small list">
+<b><%= $t_status_3 %></b> <%= $soc %>
+<b><%= $t_status_4 %></b> <%= $soc_family %>
+<b><%= $t_status_5 %></b> <%= $sensor_ini %>
+<b><%= $t_status_6 %></b> <%= $flash_size %> MB
 </pre>
 <!--[ -n "$soc_temp" ] && e2c "$tSoCTemp" "${soc_temp}°C"-->
-<b><%= $t_status_7 %></b>
-<pre class="small">
-<span class="title"><%= $t_status_8 %></span> <span><%= "${fw_version}-${fw_variant}" %></span>
-<span class="title"><%= $t_status_9 %></span> <span><%= $fw_build %></span>
-</pre>
-<b><%= $t_status_a %></b>
-<pre class="small mb-0">
-<span class="title"><%= $t_status_b %></span> <span><%= $hostname %></span>
-<span class="title"><%= $t_status_c %></span> <span><%= $wan_mac %></span>
-</pre>
-</div>
-</div>
 </div>
 <div class="col">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_status_d %></div>
-<div class="card-body">
+<h3><%= $t_status_d %></h3>
+<h6><%= $t_status_7 %></h6>
+<pre class="small list">
+<b><%= $t_status_8 %></b> <%= "${fw_version}-${fw_variant}" %>
+<b><%= $t_status_9 %></b> <%= $fw_build %>
+<b><%= $t_status_b %></b> <%= $hostname %>
+<b><%= $t_status_c %></b> <%= $wan_mac %>
+</pre>
+</div>
+<div class="col">
+<h3><%= $t_status_a %></h3>
 <% ex "/bin/date" %>
 <div class="small mb-3">
-<a href="/cgi-bin/network-ntp.cgi" class="me-2" ><%= $t_status_e %></a>
-<a href="/cgi-bin/ntp-update.cgi"><%= $t_status_f %></a>
+<a href="/cgi-bin/network-ntp.cgi" class="btn btn-primary me-2" ><%= $t_status_e %></a>
+<a href="/cgi-bin/ntp-update.cgi" class="btn btn-primary"><%= $t_status_f %></a>
 </div>
+</div>
+
+<div class="col ">
+<h3><%= $t_status_g %></h3>
 <% ex "/usr/bin/uptime" %>
+<% ex "df -T" %>
 <% ex "cat /proc/meminfo | grep Mem" %>
 </div>
-</div>
-</div>
-</div>
-<div class="row row-cols-1 g-3 mb-3">
-<div class="col ">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_status_g %></div>
-<div class="card-body">
-<% ex "df -T" %>
-</div>
-</div>
-</div>
-</div>
-<div class="row row-cols-1 g-3 mb-3">
-<div class="col ">
-<div class="card mb-3 h-100">
-<div class="card-header"><%= $t_status_h %></div>
-<div class="card-body">
+
+<div class="col">
+<h3><%= $t_status_h %></h3>
 <% ex "top -n 1 -b | sed '/top -n/d' | sed '1,4d' | head -20" %>
-</div>
-</div>
 </div>
 </div>
 <%in p/footer.cgi %>

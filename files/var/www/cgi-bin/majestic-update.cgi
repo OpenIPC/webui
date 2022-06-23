@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 check_url() {
   status_code=$(curl --silent --head $mj_bz2_url)
@@ -45,7 +45,7 @@ else
   log="${log}$(rm -f $mj_bz2_file 2>&1)"
 fi
 %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <%
 if [ -n "$error" ]; then
   report_error "$error"

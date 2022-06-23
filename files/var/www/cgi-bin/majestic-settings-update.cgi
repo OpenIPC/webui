@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 mj_conf=/etc/majestic.yaml
 orig_yaml=/tmp/majestic.yaml.original

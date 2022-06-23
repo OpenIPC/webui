@@ -1,5 +1,5 @@
 #!/usr/bin/haserl --upload-limit=100 --upload-dir=/tmp
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 if [ "POST" = "$REQUEST_METHOD" ]; then
   # language routine
@@ -51,39 +51,32 @@ done
 webui_username="admin"
 webui_language="$locale"
 %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <%
 [ -n "$error" ] && report_error "$error"
 %>
-<form action="/cgi-bin/webui-settings.cgi" method="post" enctype="multipart/form-data" autocomplete="off">
+<form action="/cgi-bin/webui-settings.cgi" method="post" enctype="multipart/form-data">
 <div class="row">
+
 <div class="col col-md-6 col-xl-4">
-<div class="card mb-3">
-<div class="card-header"><%= $t_wui_1 %></div>
-<div class="card-body">
+<h3><%= $t_wui_1 %></h3>
 <%
 field_text "webui_username" "" "autocomplete=\"username\" disabled"
 field_password "webui_password" "" "autocomplete=\"new-password\""
 field_password "webui_password_confirmation" "autocomplete=\"new-password\""
 %>
 </div>
-</div>
-</div>
+
 <div class="col col-md-6 col-xl-4">
-<div class="card mb-3">
-<div class="card-header"><%= $t_wui_2 %></div>
-<div class="card-body">
+<h3><%= $t_wui_2 %></h3>
 <%
 field_select "webui_language"
 field_file "webui_locale_file"
 %>
 </div>
-</div>
-</div>
+
 <div class="col col-md-6 col-xl-4">
-<div class="card mb-3">
-<div class="card-header"><%= $t_wui_3 %></div>
-<div class="card-body">
+<h3><%= $t_wui_3 %></h3>
 <%
 ex "cat /etc/httpd.conf"
 ex "echo \$locale"
@@ -91,8 +84,7 @@ ex "cat /etc/web_locale"
 ex "ls /var/www/lang/"
 %>
 </div>
-</div>
-</div>
+
 </div>
 <button type="submit" class="btn btn-primary mt-3"><%= $t_btn_submit %></button>
 </form>

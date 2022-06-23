@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 if [ -z "$POST_tz_name" ]; then
   flash_save "warning" "$t_tz_1"

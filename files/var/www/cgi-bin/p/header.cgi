@@ -14,10 +14,7 @@ Date: $(TZ=GMT date +"%a, %d %b %Y %T %Z")
 <script src="/a/main.js"></script>
 </head>
 <body id="top">
-<%in p/nav-main.cgi %>
-<div class="bg-light text-end x-small p-2">
-<div class="container"><% signature %></div>
-</div>
+<p class="text-end x-small"><span class="container"><% signature %></span></p>
 <main>
 <div class="container">
 <h2><%= $page_title %></h2>

@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <%
 page_title="$t_mjdebug_0"
 
@@ -29,9 +29,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   coredump_localpath="$POST_coredump_localpath"
 
   ### Normalization
-  # strip trailing slashes, if any
-  coredump_localpath="$(echo "$coredump_localpath" | sed s/^\\/// | sed s/\\/$//)"
-  coredump_ftppath="$(echo "$coredump_ftppath" | sed s/^\\/// | sed s/\\/$//)"
+  # strip trailing slashes
+  sanitize "coredump_localpath"
+  sanitize "coredump_ftppath"
 
   ### Validation
   if [ "$coredump_savedumps" = "true" ]; then
@@ -93,7 +93,7 @@ else
   fi
 fi
 %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <%
 if [ -n "$error" ]; then
   report_error "$error"
@@ -110,63 +110,61 @@ if [ $(grep ^savedumps /etc/coredump.config | cut -d= -f2) == "true" ]; then
 fi
 </pre>
 </div>
+<% fi %>
+<form action="/cgi-bin/majestic-debug.cgi" method="post">
+<div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-4">
+<div class="col">
+<h3><% $t_mjdebug_5 %></h3>
+<% [ -f /root/coredump.log ] && ex "cat /root/coredump.log" %>
+<h3><%= $t_mjdebug_6 %></h3>
 <%
-fi
-
-form_ "/cgi-bin/majestic-debug.cgi"
-  div_ "row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-3 mb-4"
-    col_first
-      card_ "$t_mjdebug_5"
-        [ -f /root/coredump.log ] && pre "$(cat /root/coredump.log)"
-      _card
-      card_ "$t_mjdebug_6"
-        field_switch "coredump_enabled"
-        field_text "coredump_name"
-        field_text "coredump_email"
-        field_text "coredump_telegram"
-        field_switch "coredump_consent"
-      _card
-      card_ "$t_mjdebug_7"
-        field_switch "coredump_send2devs"
-      _card
-    col_next
-      card_ "$t_mjdebug_8"
-        field_switch "coredump_send2tftp"
-        field_text "coredump_tftphost"
-      _card
-      card_ "$t_mjdebug_8"
-        field_switch "coredump_send2ftp"
-        field_text "coredump_ftphost"
-        field_text "coredump_ftppath"
-        field_text "coredump_ftpuser"
-        field_password "coredump_ftppass"
-      _card
-      card_ "$t_mjdebug_a"
-        field_switch "coredump_save4web"
-        field_text "coredump_localpath"
-        if [ -f "${coredump_localpath}/coredump.tgz" ]; then
-          %>
-          <div class="alert alert-danger">
-            <h5><%= $t_mjdebug_b %></h5>
-            <p class="mb-0"><%= $t_mjdebug_c %></h5>
-           </div>
-          <%
-        fi
-      _card
-    col_next
-          %>
-          <div class="alert alert-info">
-            <h3><%= $t_mjdebug_c %></h3>
-            <p><%= $t_mjdebug_d %></p>
-            <p><%= $t_mjdebug_e %></p>
-            <p><%= $t_mjdebug_f %></p>
-            <p class="mb-0"><%= $t_mjdebug_g %></p>
-           </div>
-          <%
-    col_last
-  _div
-
-  button_submit "$t_btn_submit" "primary mb-4"
-_form
+field_switch "coredump_enabled"
+field_text "coredump_name"
+field_text "coredump_email"
+field_text "coredump_telegram"
+field_switch "coredump_consent"
 %>
+<h3><%= $t_mjdebug_7 %></h3>
+<%
+field_switch "coredump_send2devs"
+%>
+</div>
+<div class="col">
+<h3><%= $t_mjdebug_8 %></h3>
+<%
+field_switch "coredump_send2tftp"
+field_text "coredump_tftphost"
+%>
+<h3><%= $t_mjdebug_8 %></h3>
+<%
+field_switch "coredump_send2ftp"
+field_text "coredump_ftphost"
+field_text "coredump_ftppath"
+field_text "coredump_ftpuser"
+field_password "coredump_ftppass"
+%>
+<h3><%= $t_mjdebug_a %></h3>
+<%
+field_switch "coredump_save4web"
+field_text "coredump_localpath"
+if [ -f "${coredump_localpath}/coredump.tgz" ]; then
+%>
+<div class="alert alert-danger">
+<h5><%= $t_mjdebug_b %></h5>
+<p class="mb-0"><%= $t_mjdebug_c %></h5>
+</div>
+<% fi %>
+</div>
+<div class="col">
+<div class="alert alert-info">
+<h3><%= $t_mjdebug_c %></h3>
+<p><%= $t_mjdebug_d %></p>
+<p><%= $t_mjdebug_e %></p>
+<p><%= $t_mjdebug_f %></p>
+<p class="mb-0"><%= $t_mjdebug_g %></p>
+</div>
+</div>
+</div>
+<% button_submit %>
+</form>
 <%in p/footer.cgi %>

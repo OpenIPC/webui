@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
-<%in _common.cgi %>
+<%in p/common.cgi %>
 <% page_title="$t_fwreset_0" %>
-<%in _header.cgi %>
+<%in p/header.cgi %>
 <%
 pre_ "bg-light p-4 log-scroll"
   sysupgrade -n

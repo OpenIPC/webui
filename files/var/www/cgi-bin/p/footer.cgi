@@ -6,6 +6,6 @@
 </div>
 </footer>
 <%in p/nav-main.cgi %>
-<%#in p/debug-info.cgi %>
+<%in p/debug-info.cgi %>
 </body>
 </html>

@@ -2,5 +2,5 @@
 <%in p/common.cgi %>
 <%
 update_caminfo
-redirect_to "/"
+redirect_to "$HTTP_REFERER"
 %>

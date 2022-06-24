@@ -35,9 +35,9 @@ size_h=${size#*x}
       <div id="video-tab-pane" role="tabpanel">
         <div class="ratio ratio-16x9">
           <video id="preview" poster="http://<%= $ipaddr %>/image.jpg" autoplay>
-          <source url="http://<%= $ipaddr %>/video.m3u8" type="application/x-mpegURL">
-          <source url="rtsp://<%= $ipaddr %>/stream=0" type="application/x-rtsp">
-          <source url="http://<%= $ipaddr %>/video.mp4" type="video/mp4">
+          <source src="http://<%= $ipaddr %>/video.m3u8" type="application/x-mpegURL">
+          <source src="rtsp://<%= $ipaddr %>/stream=0" type="application/x-rtsp">
+          <source src="http://<%= $ipaddr %>/video.mp4" type="video/mp4">
           <%= $t_preview_7 %>
         </video>
         </div>

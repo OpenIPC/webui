@@ -13,7 +13,7 @@ Date: $(TZ=GMT date +"%a, %d %b %Y %T %Z")
 <script src="/a/bootstrap.js"></script>
 <script src="/a/main.js"></script>
 </head>
-<body id="top">
+<body id="page-<%= $pagename %>">
 <p class="text-end x-small"><span class="container"><% signature %></span></p>
 <main>
 <div class="container">

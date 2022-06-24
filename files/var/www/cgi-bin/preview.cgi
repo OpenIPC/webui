@@ -10,52 +10,50 @@ size_h=${size#*x}
 <%in p/header.cgi %>
 
 <div class="row preview">
-<div class="col-md-8 col-xl-9 col-xxl-12 position-relative mb-3">
-<nav>
-<div class="nav nav-tabs" id="nav-tab" role="tablist">
-<button class="nav-link active" id="nav-jpeg-tab" data-bs-toggle="tab" data-bs-target="#nav-jpeg" type="button" role="tab" aria-controls="nav-jpeg" aria-selected="true">JPEG</button>
-<button class="nav-link" id="nav-mjpeg-tab" data-bs-toggle="tab" data-bs-target="#nav-mjpeg" type="button" role="tab" aria-controls="nav-mjpeg" aria-selected="false">MJPEG</button>
-<button class="nav-link" id="nav-video-tab" data-bs-toggle="tab" data-bs-target="#nav-video" type="button" role="tab" aria-controls="nav-video" aria-selected="false">Video</button>
-</div>
-</nav>
-<div class="tab-content" id="nav-tabContent">
-<div class="tab-pane fade show active" id="nav-jpeg" role="tabpanel" aria-labelledby="nav-jpeg-tab" tabindex="0">
-<div class="ratio ratio-16x9 mb-3">
-<img src="http://<%= $ipaddr %>/image.jpg" class="img-fluid" id="preview" width="1280" height="720" alt="">
-</div>
-</div>
-<div class="tab-pane fade" id="nav-mjpeg" role="tabpanel" aria-labelledby="nav-mjpeg-tab" tabindex="0">
-<div class="ratio ratio-16x9 mb-3">
-<img src="http://<%= $ipaddr %>/mjpeg" class="d-block img-fluid bg-light" height="<%= $size_h %>" width="<%= $size_w %>" alt="<%= $t_preview_5 %>">
-<audio autoplay controls class="d-block img-fluid">
-<source src="http://<%= $ipaddr %>/audio.opus" type="audio/ogg; codecs=opus">
-<source src="http://<%= $ipaddr %>/audio.mp3" type="audio/mpeg">
-<%= $t_preview_6 %>
-</audio>
-</div>
-</div>
-<div class="tab-pane fade" id="nav-video" role="tabpanel" aria-labelledby="nav-video-tab" tabindex="0">
-<div class="ratio ratio-16x9 mb-3">
-<video id="preview" poster="http://<%= $ipaddr %>/image.jpg" autoplay class="border">
-<source url="http://<%= $ipaddr %>/video.m3u8" type="application/x-mpegURL">
-<source url="rtsp://<%= $ipaddr %>/stream=0" type="application/x-rtsp">
-<source url="http://<%= $ipaddr %>/video.mp4" type="video/mp4">
-<%= $t_preview_7 %>
-</video>
-</div>
-</div>
-</div>
-</div>
-<div class="col-md-4 col-xl-3 col-xxl-12">
-<div class="d-grid gap-2 d-md-flex justify-content-md-center mb-3">
-<button class="btn btn-primary text-start" type="button" id="preview_night_mode"><%= $t_preview_1 %></button>
-<button class="btn btn-primary text-start" type="button" id="send_to_telegram"><%= $t_preview_2 %></button>
-<button class="btn btn-primary text-start" type="button" id="send_to_yandex_disk"><%= $t_preview_3 %></button>
-</div>
-<div class="alert alert-danger">
-<%= $t_preview_4 %>
-</div>
-</div>
+  <div class="col-md-8 col-xl-9 col-xxl-10 position-relative mb-3">
+    <nav role="tablist" id="tab-nav">
+      <a id="nav-jpeg-tab">JPEG</a>
+      <a id="nav-mjpeg-tab">MJPEG</a>
+      <a id="nav-video-tab">Video</a>
+    </nav>
+    <div class="tab-content p-2" id="tab-content">
+      <div id="jpeg-tab-pane" role="tabpanel">
+        <div class="ratio ratio-16x9">
+          <img src="http://<%= $ipaddr %>/image.jpg" class="img-fluid" id="preview" width="1280" height="720" alt="">
+        </div>
+      </div>
+      <div id="mjpeg-tab-pane" role="tabpanel">
+        <div class="ratio ratio-16x9">
+          <img src="http://<%= $ipaddr %>/mjpeg" class="d-block img-fluid bg-light" height="<%= $size_h %>" width="<%= $size_w %>" alt="<%= $t_preview_5 %>">
+          <audio autoplay controls class="d-block img-fluid">
+            <source src="http://<%= $ipaddr %>/audio.opus" type="audio/ogg; codecs=opus">
+            <source src="http://<%= $ipaddr %>/audio.mp3" type="audio/mpeg">
+            <%= $t_preview_6 %>
+          </audio>
+        </div>
+      </div>
+      <div id="video-tab-pane" role="tabpanel">
+        <div class="ratio ratio-16x9">
+          <video id="preview" poster="http://<%= $ipaddr %>/image.jpg" autoplay>
+          <source url="http://<%= $ipaddr %>/video.m3u8" type="application/x-mpegURL">
+          <source url="rtsp://<%= $ipaddr %>/stream=0" type="application/x-rtsp">
+          <source url="http://<%= $ipaddr %>/video.mp4" type="video/mp4">
+          <%= $t_preview_7 %>
+        </video>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-xl-3 col-xxl-2 pt-5">
+    <div class="d-grid gap-2 mb-3">
+      <button class="btn btn-primary text-start" type="button" id="preview_night_mode"><%= $t_preview_1 %></button>
+      <button class="btn btn-primary text-start" type="button" id="send_to_telegram"><%= $t_preview_2 %></button>
+      <button class="btn btn-primary text-start" type="button" id="send_to_yandex_disk"><%= $t_preview_3 %></button>
+    </div>
+    <div class="alert alert-danger">
+      <%= $t_preview_4 %>
+    </div>
+  </div>
 </div>
 
 <script src="/a/joystick.js"></script>

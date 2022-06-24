@@ -125,7 +125,7 @@ ex() {
   # NB! $() forks process and stalls output.
   h6 "# ${1}"
   pre_ "small"
-  eval $1 | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g" 2>&1
+  eval "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g" 2>&1
   _pre
 }
 
@@ -236,7 +236,7 @@ field_text() {
 field_textarea() {
   field_ "text"
     label "$1"
-    tag "textarea" "" "form-control" "id=\"exampleFormControlTextarea1\" rows=\"3\""
+    input "textarea" "$1"
     help "$1"
   _field
 }
@@ -319,6 +319,7 @@ image() {
 input() {
   _t="$1"
   _n="$2"
+  _c="form-control"
   _c2="$3"
   _x2="$4"
   _v="$(t_value "$_n")"
@@ -338,25 +339,29 @@ input() {
     echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}-false\" value=\"false\">"
     ;;
   text)
-    _c="form-control"
+    ;;
+  textarea)
     ;;
   range)
-    _c="form-control form-range"
+    _c="${_c} form-range"
     _o="$(t_options "$_n")"
     _x="$(t_disabled "$_n" "auto") data-units=\"$(t_units "$_n")\""
     ;;
   *)
-    _c="form-control"
     ;;
   esac
 
   [ -n "$_c2" ] && _c="${_c} ${_c2}"; [ -n "$_c" ] && _c=" class=\"${_c}\""
   [ -n "$_x2" ] && _x="${_x} ${_x2}"; [ -n "$_x" ] && _x=" ${_x}"
 
-  [ -n "$_v" ] && _v=" value=\"${_v}\""
   _p=$(t_placeholder "$2"); [ -n "$_p" ] && _p=" placeholder=\"${_p}\""
 
-  echo "<input type=\"${_t}\" name=\"${_n}\" id=\"${_n}\"${_v}${_c}${_p}${_x}>"
+  if [ "textarea" = "$1" ]; then
+    echo "<textarea id=\"${_n}\" name=\"${_n}\"${_c}${_x}>${_v}</textarea>"
+  else
+    [ -n "$_v" ] && _v=" value=\"${_v}\""
+    echo "<input type=\"${_t}\" id=\"${_n}\" name=\"${_n}\"${_v}${_c}${_p}${_x}>"
+  fi
   unset _c; unset _c2; unset _n; unset _o; unset _p; unset _t; unset _v; unset _x; unset _x2
 }
 
@@ -461,7 +466,9 @@ sanitize() {
 
 signature() {
   _f=/tmp/webui-signature.txt
-  [ ! -f "$_f" ] && echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash. ${fw_version}-${fw_variant}. ${hostname}, ${wan_mac}" > $_f
+  if [ ! -f "$_f" ]; then
+    echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash. ${fw_version}-${fw_variant}. ${hostname}, ${wan_mac}" > $_f
+  fi
   cat $_f
   unset _f
 }
@@ -511,7 +518,7 @@ t_units() {
 }
 
 t_value() {
-  eval "echo \$${1}"
+  eval "echo \"\$$1\""
 }
 
 units() {
@@ -624,6 +631,9 @@ sysinfo_file=/tmp/sysinfo.txt
 source $sysinfo_file
 
 [ ! -d /var/www/lang/ ] && mkdir -p /var/www/lang/
+
+pagename=$(basename $SCRIPT_NAME)
+pagename="${pagename%%.*}"
 
 source $PWD/p/settings.sh
 source $PWD/p/locale_en.sh

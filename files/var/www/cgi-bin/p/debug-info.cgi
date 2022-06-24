@@ -6,12 +6,8 @@
 </div>
 <div class="offcanvas-body x-small">
 <p><a class="btn btn-warning" href="webui-init.cgi">Refresh Environment</a></p>
-<% ex "printenv|grep REQUEST_|sort" %>
-<% ex "printenv|grep FORM_|sort" %>
-<% ex "printenv|grep GET_|sort" %>
-<% ex "printenv|grep POST_|sort" %>
+<% ex env %>
 <% ex "cat /tmp/sysinfo.txt" %>
-<% ex "env|sort" %>
 </div>
 </div>
 <button type="button" class="btn btn-primary fixed-bottom" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDebug" aria-controls="offcanvasDebug">Debug</button>

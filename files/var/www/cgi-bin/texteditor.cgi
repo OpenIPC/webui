@@ -71,7 +71,7 @@ page_title="$t_editor_0"
 <p class="textarea"><textarea id="editor_text" name="editor_text" class="form-control"><%= "$editor_text" %></textarea></p>
 <p class="boolean"><span class="form-check form-switch">
 <input type="checkbox" id="editor_backup" name="editor_backup" value="true" class="form-check-input" role="switch">
-<label for="editor_backup" class="form-label form-check-label"><%= $L_editor_backup %></label>
+<label for="editor_backup" class="form-label form-check-label"><%= $tL_editor_file %></label>
 </span></p>
 <button type="submit" class="btn btn-primary"><%= $t_btn_submit %></button>
 </form>

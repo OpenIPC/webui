@@ -34,12 +34,8 @@ done
 
 rm $temp_yaml
 
-if [ -z "$DEBUG" ]; then
-  killall -1 majestic
-  [ -n "$goto" ] && goto="$HTTP_REFERER"
-  redirect_to "$goto"
-else
-  diff $orig_yaml $mj_conf
-  rm $orig_yaml
-fi
+killall -1 majestic
+
+[ -z "$goto" ] && goto="$HTTP_REFERER"
+redirect_to "$goto"
 %>

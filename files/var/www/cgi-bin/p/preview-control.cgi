@@ -62,8 +62,8 @@
 
 <div class="d-grid gap-2 mb-3">
   <button class="btn btn-primary text-start" type="button" id="preview_night_mode"><%= $t_preview_1 %></button>
-  <button class="btn btn-primary text-start" type="button" id="send_to_telegram"><%= $t_preview_2 %></button>
-  <button class="btn btn-primary text-start" type="button" id="send_to_yandex_disk"><%= $t_preview_3 %></button>
+  <button class="btn btn-primary text-start" type="button" id="send-to-telegram"><%= $t_preview_2 %></button>
+  <button class="btn btn-primary text-start" type="button" id="send-to-yadisk"><%= $t_preview_3 %></button>
 </div>
 
 <div class="alert alert-danger">
@@ -73,10 +73,10 @@
 <script>
 const ipaddr = "<%= $ipaddr %>";
 <% if [ ! -f /etc/telegram.cfg ] && [ -z "$(grep telegram_enabled /etc/telegram.cfg | grep true)" ]; then %>
-$('#send2telegram').disabled = true;
+$('#send-to-telegram').disabled = true;
 <% fi %>
 <% if [ ! -f /etc/yadisk.cfg ] && [ -z "$(grep yadisk_enabled /etc/yadisk.cfg | grep true)" ]; then %>
-$('#send2yadisk').disabled = true;
+$('#send-to-yadisk').disabled = true;
 <% fi %>
 </script>
 <script src="/a/joystick.js"></script>

@@ -10,7 +10,7 @@ size_h=${size#*x}
 <%in p/header.cgi %>
 
 <div class="row preview">
-  <div class="col-md-8 col-xl-9 col-xxl-10 position-relative mb-3">
+  <div class="col-md-8 col-xl-9 col-xxl-9 position-relative mb-3">
     <nav role="tablist" id="tab-nav">
       <a id="nav-jpeg-tab">JPEG</a>
       <a id="nav-mjpeg-tab">MJPEG</a>
@@ -44,14 +44,27 @@ size_h=${size#*x}
       </div>
     </div>
   </div>
-  <div class="col-md-4 col-xl-3 col-xxl-2 pt-5">
+  <div class="col-md-4 col-xl-3 col-xxl-3 pt-5">
     <div class="d-grid gap-2 mb-3">
-      <button class="btn btn-primary text-start" type="button" id="preview_night_mode"><%= $t_preview_1 %></button>
-      <button class="btn btn-primary text-start" type="button" id="send_to_telegram"><%= $t_preview_2 %></button>
-      <button class="btn btn-primary text-start" type="button" id="send_to_yandex_disk"><%= $t_preview_3 %></button>
+      <div class="input-group">
+        <button class="form-control btn btn-primary text-start" type="button" id="preview_night_mode"><%= $t_preview_1 %></button>
+      </div>
+      <div class="input-group">
+        <button class="form-control btn btn-primary text-start" type="button" id="send-to-telegram"><%= $t_preview_2 %></button>
+        <div class="input-group-text">
+          <a href="/cgi-bin/plugin-telegram.cgi" title="Telegram bot settings"><img src="/a/gear.svg" alt="Gear"></a>
+        </div>
+      </div>
+      <div class="input-group">
+        <button class="form-control btn btn-primary text-start" type="button" id="send-to-yadisk"><%= $t_preview_3 %></button>
+        <div class="input-group-text">
+          <a href="/cgi-bin/plugin-yadisk.cgi" title="Yandex Disk bot settings"><img src="/a/gear.svg" alt="Gear"></a>
+        </div>
+      </div>
     </div>
-    <div class="alert alert-danger">
-      <%= $t_preview_4 %>
+
+    <div class="alert alert-danger small">
+      PTZ feature is not ready. Please consider <a href="https://t.me/OpenIPC">supporting further development</a>.
     </div>
   </div>
 </div>
@@ -59,11 +72,11 @@ size_h=${size#*x}
 <script src="/a/joystick.js"></script>
 <script>
 const ipaddr = "<%= $ipaddr %>";
-<% if [ ! -f /etc/telegram.cfg ] && [ -z "$(grep telegram_enabled /etc/telegram.cfg | grep true)" ]; then %>
-$('#send2telegram').disabled = true;
+<% if [ ! -f /etc/telegram.cfg ] || [ -z "$(grep telegram_enabled /etc/telegram.cfg | grep true)" ]; then %>
+$('#send-to-telegram').disabled = true;
 <% fi %>
-<% if [ ! -f /etc/yadisk.cfg ] && [ -z "$(grep yadisk_enabled /etc/yadisk.cfg | grep true)" ]; then %>
-$('#send2yadisk').disabled = true;
+<% if [ ! -f /etc/yadisk.cfg ] || [ -z "$(grep yadisk_enabled /etc/yadisk.cfg | grep true)" ]; then %>
+$('#send-to-yadisk').disabled = true;
 <% fi %>
 
 function sleep(ms) {

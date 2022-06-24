@@ -104,9 +104,7 @@ dl.list dd { flex: 2 1 70%; text-align: right; font-size: 0.9rem; }
     margin-bottom: 0;
 }
 
-.input-group-text {
-    min-width: 4rem;
-}
+/*.input-group-text { min-width: 4rem; }*/
 
 .nav-link {
     cursor: pointer;

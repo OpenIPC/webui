@@ -64,7 +64,7 @@ button_submit "$t_firmware_5" "warning"
 %>
 </form>
 </div>
-<%in reset-firmware.cgi %>
+<%in p/reset-firmware.cgi %>
 </div>
 <div class="col">
 <h3><%= $t_firmware_6 %></h3>
@@ -124,7 +124,7 @@ fi %>
 <div class="alert alert-danger">
 <h6><%= $t_firmware_n %></h6>
 <p><%= $t_firmware_o %></p>
-<p>
+<p class="mb-0">
 <a class="btn btn-primary me-2" href="/cgi-bin/majestic-config-backup.cgi"><%= $t_firmware_p %></a>
 <a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi" title="<%= $t_firmware_r %>"><%= $t_firmware_q %></a>
 </p>

@@ -103,27 +103,8 @@ check_for_lock() {
 #  fi
 #}
 
-# container "text"
-container_() {
-  div_ "container ${1}" "$2"
-}
-
-_container() {
-  _div
-}
-
-container() {
-  container_
-  echo "$1"
-  _container
-}
-
 e() {
   echo -e -n "$1"
-}
-
-e2c() {
-  echo "<span class=\"title\">${1}:</span><span>${2}</span>"
 }
 
 ex() {

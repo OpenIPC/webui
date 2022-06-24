@@ -201,7 +201,7 @@ field_select() {
   field_ "select"
     label "$1"
     echo "<select class=\"form-select\" id=\"${1}\" name=\"${1}\">"
-    [ -z "$(t_value "$1")" ] && echo "<option>Select from available options</option>"
+    [ -z "$(t_value "$1")" ] && echo "<option value=\"\">Select from available options</option>"
     for o in $(t_options "$1"); do
       _v="${o%|*}"; _n="${o#*|}"; [ "$1" != "mj_isp_sensorConfig" ] && _n=${_n//_/ }
       echo "<option value=\"${_v}\" $(t_selected "$1" "${_v}")>${_n}</option>"

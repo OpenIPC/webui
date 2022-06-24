@@ -65,7 +65,7 @@ fi
 <form action="/cgi-bin/sensor-upload.cgi" method="post" enctype="multipart/form-data">
 <%
 field_file "sensor_driver_file"
-button_submit "$t_sensor_5"
+button_submit "$t_btn_upload"
 %>
 </form>
 </div>
@@ -79,7 +79,7 @@ button_submit "$t_sensor_5"
 <form action="/cgi-bin/sensor-upload.cgi" method="post" enctype="multipart/form-data">
 <%
 field_file "sensor_config_file"
-button_submit "$t_sensor_8"
+button_submit "$t_btn_upload"
 %>
 </form>
 </div>

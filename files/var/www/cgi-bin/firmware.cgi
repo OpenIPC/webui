@@ -41,10 +41,7 @@ fw_kernel="true"
 fw_rootfs="true"
 %>
 <%in p/header.cgi %>
-<div class="alert alert-danger">
-<h6><%= $tMsgDestructiveActions %></h6>
-<p class="mb-0"><%= $tMsgKnowWhatYouDo %></p>
-</div>
+<h4 class="text-danger my-4"><%= $tMsgDestructiveActions %></h3>
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
 <div class="col">
 <h3><%= $t_firmware_1 %></h3>
@@ -143,7 +140,7 @@ fi %>
 <form action="/cgi-bin/firmware-upload-kernel.cgi" method="post" enctype="multipart/form-data">
 <%
 field_file "kernel_file"
-button_submit "$t_firmware_v"
+button_submit "$t_btn_upload"
 %>
 </form>
 </div>
@@ -152,7 +149,7 @@ button_submit "$t_firmware_v"
 <form action="/cgi-bin/firmware-upload-rootfs.cgi" method="post" enctype="multipart/form-data">
 <%
 field_file "rootfs_file"
-button_submit "$t_firmware_x"
+button_submit "$t_btn_upload"
 %>
 </form>
 </div>

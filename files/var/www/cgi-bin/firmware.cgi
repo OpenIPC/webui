@@ -58,12 +58,12 @@ fw_rootfs="true"
     <form action="/cgi-bin/firmware-update.cgi" method="post">
       <p class="boolean form-check">
         <input type="hidden" name="fw_kernel" id="fw_kernel-false" value="false">
-        <input type="checkbox" name="fw_kernel" id="fw_kernel" checked="true" value="true" class="form-check-input">
+        <input type="checkbox" name="fw_kernel" id="fw_kernel" checked value="true" class="form-check-input">
         <label for="fw_kernel" class="form-label">Upgrade kernel.</label>
       </p>
       <p class="boolean form-check">
         <input type="hidden" name="fw_rootfs" id="fw_rootfs-false" value="false">
-        <input type="checkbox" name="fw_rootfs" id="fw_rootfs" checked="true" value="true" class="form-check-input">
+        <input type="checkbox" name="fw_rootfs" id="fw_rootfs" checked value="true" class="form-check-input">
         <label for="fw_rootfs" class="form-label">Upgrade rootfs.</label>
       </p>
       <p class="boolean form-check">

@@ -27,7 +27,7 @@ function refresh() {
         }
 
         $$('form').forEach(el => el.autocomplete = 'off');
-        $$('input[auto-value]').forEach(el => el.addEventListener('click', ev => toggleAuto(ev.target)));
+        $$('input.auto-value').forEach(el => el.addEventListener('click', ev => toggleAuto(ev.target)));
         $$('.btn-danger, .btn-warning, .confirm').forEach(el => el.addEventListener('click', ev => (!confirm("Are you sure?")) ? ev.preventDefault() : null));
         $$('.refresh').forEach(el => el.addEventListener('click', refresh));
         $$('a[href^=http]').forEach(el => el.target = '_blank');

@@ -11,8 +11,4 @@
 </div>
 </div>
 <button type="button" class="btn btn-primary fixed-bottom" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDebug" aria-controls="offcanvasDebug">Debug</button>
-<style>
-body>nav.navbar{background:#900}
-.offcanvas{--bs-offcanvas-width:30vw}
-</style>
 <% fi %>

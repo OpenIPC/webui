@@ -19,7 +19,7 @@ size_h=${size#*x}
     <div class="tab-content p-2" id="tab-content">
       <div id="jpeg-tab-pane" role="tabpanel" class="tab-pane fade">
         <div class="ratio ratio-16x9">
-          <img src="http://<%= $ipaddr %>/image.jpg" class="img-fluid" id="preview" width="1280" height="720" alt="">
+          <img src="http://<%= $ipaddr %>/image.jpg" class="img-fluid" id="preview-jpeg" width="1280" height="720" alt="">
         </div>
       </div>
       <div id="mjpeg-tab-pane" role="tabpanel" class="tab-pane fade">
@@ -37,7 +37,7 @@ size_h=${size#*x}
       </div>
       <div id="video-tab-pane" role="tabpanel" class="tab-pane fade">
         <div class="ratio ratio-16x9">
-          <video id="preview" poster="http://<%= $ipaddr %>/image.jpg" autoplay>
+          <video id="preview-video" poster="http://<%= $ipaddr %>/image.jpg" autoplay>
             <source src="http://<%= $ipaddr %>/video.mp4" type="video/mp4">
             <%= $t_preview_7 %>
           </video>
@@ -86,11 +86,11 @@ function sleep(ms) {
 
 async function updatePreview() {
   await sleep(1000);
-  $('#preview').src = "http://<%= $ipaddr %>/image.jpg?t=" + Date.now();
+  $('#preview-jpeg').src = "http://<%= $ipaddr %>/image.jpg?t=" + Date.now();
 }
 
 function initPage() {
-  $('#preview').addEventListener('load', updatePreview);
+  $('#preview-jpeg').addEventListener('load', updatePreview);
   updatePreview();
 }
 

@@ -90,6 +90,11 @@ button_refresh() {
   link_to "$t_b_refresh" "#" "btn btn-primary refresh"
 }
 
+check_for_lock() {
+  [ -f /tmp/webjob.lock ] && redirect_back "danger" "$t_fwupdate_1"
+  touch /tmp/webjob.lock
+}
+
 #check_password() {
 #  [ "0${debug}" -ge "1" ] && return
 #  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui-settings.cgi" ] && return

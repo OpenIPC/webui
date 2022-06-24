@@ -82,30 +82,6 @@ function refresh() {
             xhr.send();
         });
 
-        // Bootstrap constructor
-        if ($('nav[role=tablist]')) {
-            $$('nav[role=tablist]').forEach(el => {
-                el.children[0].classList.add("active");
-                el.classList.add("nav", "nav-tabs");
-                for (let n = 0; n < el.children.length; n++) {
-                    const a = el.children[n];
-                    const i = a.id.split('-')[1];
-                    a.role = "tab";
-                    a.classList.add("nav-link");
-                    a.dataset["bsToggle"] = "tab";
-                    a.dataset["bsTarget"] = "#" + i + "-tab-pane";
-                    a.ariaControls = i + "-tab-pane";
-                    a.ariaSelected = a.classList.contains('active') ? 'true' : 'false';
-                }
-            });
-            $$('div[role=tabpanel]')[0].classList.add("show", "active");
-            // $$('div[role=tabpanel]').forEach(el => {
-                // el.classList.add("tab-pane", "fade");
-                // const i = el.id.split('-')[0];
-                // el.ariaLabelledby = "nav-" + i + "-tab";
-            // });
-        }
-
         // async output of a command running on camera
         if ($('pre#output[data-cmd]')) {
             const el = $('pre#output[data-cmd]');

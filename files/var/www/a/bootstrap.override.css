@@ -43,10 +43,27 @@ textarea {
     padding: 1rem;
 }
 
-dl.list { display: flex; flex-flow: row wrap; justify-content: space-between; align-items: baseline; }
-dl.list dd, dl.list dt { margin: 0.125rem 0; padding: 0; }
-dl.list dt { flex: 1 1 30%; }
-dl.list dd { flex: 2 1 70%; text-align: right; font-size: 0.9rem; }
+dl.list {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+dl.list dd, dl.list dt {
+    margin: 0.125rem 0;
+    padding: 0;
+}
+
+dl.list dt {
+    flex: 1 1 30%;
+}
+
+dl.list dd {
+    flex: 2 1 70%;
+    text-align: right;
+    font-size: 0.9rem;
+}
 
 .btn {
     white-space: nowrap;
@@ -149,4 +166,12 @@ pre, .pre {white-space:pre;}
 
 #mj-tabs .list-group-item {
     padding: 0.25rem 1.0rem;
+}
+
+body > nav.navbar {
+    background: #900
+}
+
+.offcanvas {
+    --bs-offcanvas-width: 30vw
 }

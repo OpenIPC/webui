@@ -25,11 +25,14 @@ size_h=${size#*x}
       <div id="mjpeg-tab-pane" role="tabpanel" class="tab-pane fade">
         <div class="ratio ratio-16x9">
           <img src="http://<%= $ipaddr %>/mjpeg" class="d-block img-fluid bg-light" height="<%= $size_h %>" width="<%= $size_w %>" alt="<%= $t_preview_5 %>">
-          <audio autoplay controls class="d-block img-fluid">
-            <source src="http://<%= $ipaddr %>/audio.opus" type="audio/ogg; codecs=opus">
-            <source src="http://<%= $ipaddr %>/audio.mp3" type="audio/mpeg">
-            <%= $t_preview_6 %>
-          </audio>
+          <% if [ "true" = "$(yaml-cli -g .audio.enabled)" ]; then %>
+            <audio autoplay controls class="d-block img-fluid">
+              <source src="http://<%= $ipaddr %>/audio.opus" type="audio/ogg; codecs=opus">
+              <source src="http://<%= $ipaddr %>/audio.m4a" type="audio/aac">
+              <source src="http://<%= $ipaddr %>/audio.mp3" type="audio/mpeg">
+              Your browser does not support HTML5 audio.
+            </audio>
+          <% fi %>
         </div>
       </div>
       <div id="video-tab-pane" role="tabpanel" class="tab-pane fade">

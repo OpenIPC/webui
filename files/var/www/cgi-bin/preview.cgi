@@ -17,12 +17,12 @@ size_h=${size#*x}
       <a id="nav-video-tab">Video</a>
     </nav>
     <div class="tab-content p-2" id="tab-content">
-      <div id="jpeg-tab-pane" role="tabpanel">
+      <div id="jpeg-tab-pane" role="tabpanel" class="tab-pane fade">
         <div class="ratio ratio-16x9">
           <img src="http://<%= $ipaddr %>/image.jpg" class="img-fluid" id="preview" width="1280" height="720" alt="">
         </div>
       </div>
-      <div id="mjpeg-tab-pane" role="tabpanel">
+      <div id="mjpeg-tab-pane" role="tabpanel" class="tab-pane fade">
         <div class="ratio ratio-16x9">
           <img src="http://<%= $ipaddr %>/mjpeg" class="d-block img-fluid bg-light" height="<%= $size_h %>" width="<%= $size_w %>" alt="<%= $t_preview_5 %>">
           <audio autoplay controls class="d-block img-fluid">
@@ -32,7 +32,7 @@ size_h=${size#*x}
           </audio>
         </div>
       </div>
-      <div id="video-tab-pane" role="tabpanel">
+      <div id="video-tab-pane" role="tabpanel" class="tab-pane fade">
         <div class="ratio ratio-16x9">
           <video id="preview" poster="http://<%= $ipaddr %>/image.jpg" autoplay>
             <source src="http://<%= $ipaddr %>/video.mp4" type="video/mp4">

@@ -99,11 +99,11 @@ function refresh() {
                 }
             });
             $$('div[role=tabpanel]')[0].classList.add("show", "active");
-            $$('div[role=tabpanel]').forEach(el => {
-                el.classList.add("tab-pane", "fade");
-                const i = el.id.split('-')[0];
-                el.ariaLabelledby = "nav-" + i + "-tab";
-            });
+            // $$('div[role=tabpanel]').forEach(el => {
+                // el.classList.add("tab-pane", "fade");
+                // const i = el.id.split('-')[0];
+                // el.ariaLabelledby = "nav-" + i + "-tab";
+            // });
         }
 
         // async output of a command running on camera

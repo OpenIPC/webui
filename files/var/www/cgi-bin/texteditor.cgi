@@ -64,7 +64,7 @@ page_title="$t_editor_0"
 <% fi %>
 </nav>
 <div class="tab-content p-2" id="tab-content">
-<div id="edit-tab-pane" role="tabpanel">
+<div id="edit-tab-pane" role="tabpanel" class="tab-pane fade">
 <form action="<%= $SCRIPT_NAME %>" method="post" class="mb-4">
 <input type="hidden" name="action" value="save">
 <input type="hidden" name="editor_file" value="<%= $editor_file %>">
@@ -76,11 +76,11 @@ page_title="$t_editor_0"
 <button type="submit" class="btn btn-primary"><%= $t_btn_submit %></button>
 </form>
 </div>
-<div id="file-tab-pane" role="tabpanel">
+<div id="file-tab-pane" role="tabpanel" class="tab-pane fade">
 <% ex "cat -t $editor_file" %>
 </div>
 <% if [ -f "${editor_file}.backup" ]; then %>
-<div id="back-tab-pane" role="tabpanel">
+<div id="back-tab-pane" role="tabpanel" class="tab-pane fade">
 <% ex "cat -t ${editor_file}.backup" %>
 <form action="<%= $SCRIPT_NAME %>" method="post">
 <input type="hidden" name="action" value="restore">
@@ -88,7 +88,7 @@ page_title="$t_editor_0"
 <input type="submit" value="<%= $t_editor_4 %>" class="btn btn-danger">
 </form>
 </div>
-<div id="diff-tab-pane" role="tabpanel">
+<div id="diff-tab-pane" role="tabpanel" class="tab-pane fade">
 <h4><%= $t_editor_3 %></h4>
 <%
 # it's ugly but shows non-printed characters (^M/^I)

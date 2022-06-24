@@ -55,41 +55,54 @@ fi
 page_title="$t_editor_0"
 %>
 <%in p/header.cgi %>
-<nav role="tablist" id="tab-nav">
-<a id="nav-edit-tab"><%= $t_editor_5 %></a>
-<a id="nav-file-tab"><%= $t_editor_6 %></a>
+
+
+<ul class="nav nav-tabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button role="tab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#edit-tab-pane" id="edit-tab" aria-controls="edit-tab-pane" aria-selected="true"><%= $t_editor_5 %></button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button role="tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#file-tab-pane" id="file-tab" aria-controls="file-tab-pane" aria-selected="false"><%= $t_editor_6 %></button>
+  </li>
 <% if [ -f "${editor_file}.backup" ]; then %>
-<a id="nav-back-tab"><%= $t_editor_7 %></a>
-<a id="nav-diff-tab"><%= $t_editor_8 %></a>
+  <li class="nav-item" role="presentation">
+    <button role="tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#back-tab-pane" id="back-tab" aria-controls="back-tab-pane" aria-selected="false"><%= $t_editor_7 %></button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button role="tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#diff-tab-pane" id="diff-tab" aria-controls="diff-tab-pane" aria-selected="false"><%= $t_editor_8 %></button>
+  </li>
 <% fi %>
-</nav>
+</ul>
+
 <div class="tab-content p-2" id="tab-content">
-<div id="edit-tab-pane" role="tabpanel" class="tab-pane fade">
-<form action="<%= $SCRIPT_NAME %>" method="post" class="mb-4">
-<input type="hidden" name="action" value="save">
-<input type="hidden" name="editor_file" value="<%= $editor_file %>">
-<p class="textarea"><textarea id="editor_text" name="editor_text" class="form-control"><%= "$editor_text" %></textarea></p>
-<p class="boolean"><span class="form-check form-switch">
-<input type="checkbox" id="editor_backup" name="editor_backup" value="true" class="form-check-input" role="switch">
-<label for="editor_backup" class="form-label form-check-label"><%= $tL_editor_backup %></label>
-</span></p>
-<button type="submit" class="btn btn-primary"><%= $t_btn_submit %></button>
-</form>
-</div>
-<div id="file-tab-pane" role="tabpanel" class="tab-pane fade">
-<% ex "cat -t $editor_file" %>
-</div>
-<% if [ -f "${editor_file}.backup" ]; then %>
-<div id="back-tab-pane" role="tabpanel" class="tab-pane fade">
-<% ex "cat -t ${editor_file}.backup" %>
-<form action="<%= $SCRIPT_NAME %>" method="post">
-<input type="hidden" name="action" value="restore">
-<input type="hidden" name="editor_file" value="<%= $editor_file %>">
-<input type="submit" value="<%= $t_editor_4 %>" class="btn btn-danger">
-</form>
-</div>
-<div id="diff-tab-pane" role="tabpanel" class="tab-pane fade">
-<h4><%= $t_editor_3 %></h4>
+  <div id="edit-tab-pane" role="tabpanel" class="tab-pane fade show active" aria-labelledby="edit-tab" tabindex="0">
+    <form action="<%= $SCRIPT_NAME %>" method="post" class="mb-4">
+      <input type="hidden" name="action" value="save">
+      <input type="hidden" name="editor_file" value="<%= $editor_file %>">
+      <p class="textarea"><textarea id="editor_text" name="editor_text" class="form-control"><%= "$editor_text" %></textarea></p>
+      <p class="boolean"><span class="form-check form-switch">
+      <input type="checkbox" id="editor_backup" name="editor_backup" value="true" class="form-check-input" role="switch">
+      <label for="editor_backup" class="form-label form-check-label"><%= $tL_editor_backup %></label>
+      </span></p>
+      <button type="submit" class="btn btn-primary"><%= $t_btn_submit %></button>
+    </form>
+  </div>
+
+  <div id="file-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="file-tab" tabindex="0">
+    <% ex "cat -t $editor_file" %>
+  </div>
+
+  <% if [ -f "${editor_file}.backup" ]; then %>
+    <div id="back-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="back-tab" tabindex="0">
+      <% ex "cat -t ${editor_file}.backup" %>
+      <form action="<%= $SCRIPT_NAME %>" method="post">
+        <input type="hidden" name="action" value="restore">
+        <input type="hidden" name="editor_file" value="<%= $editor_file %>">
+        <input type="submit" value="<%= $t_editor_4 %>" class="btn btn-danger">
+      </form>
+    </div>
+    <div id="diff-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="diff-tab" tabindex="0">
+      <h4><%= $t_editor_3 %></h4>
 <%
 # it's ugly but shows non-printed characters (^M/^I)
 _n=$(basename $editor_file)
@@ -99,7 +112,8 @@ pre "$(diff -s -d -U0 /tmp/${_n}.backup.np -L ${editor_file}.backup /tmp/${_n}.n
 rm /tmp/${_n}.np /tmp/${_n}.backup.np
 unset _n
 %>
+    </div>
+  <% fi %>
 </div>
-<% fi %>
-</div>
+
 <%in p/footer.cgi %>

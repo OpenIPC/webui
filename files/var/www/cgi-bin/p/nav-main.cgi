@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark navbar-expand-lg fixed-top">
+<nav class="navbar navbar-dark navbar-expand-lg sticky-top">
 <div class="container">
 <a class="navbar-brand" href="/cgi-bin/status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg"></a>
 <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">

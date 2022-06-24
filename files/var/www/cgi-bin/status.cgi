@@ -31,8 +31,8 @@ page_title="$t_status_0"
 <div class="col">
 <h3><%= $t_status_a %></h3>
 <% ex "/bin/date" %>
-<div class="small mb-3">
-<a href="/cgi-bin/network-ntp.cgi" class="btn btn-primary me-2" ><%= $t_status_e %></a>
+<div class="d-flex gap-2 mx-auto">
+<a href="/cgi-bin/network-ntp.cgi" class="btn btn-primary" ><%= $t_status_e %></a>
 <a href="/cgi-bin/ntp-update.cgi" class="btn btn-primary"><%= $t_status_f %></a>
 </div>
 </div>

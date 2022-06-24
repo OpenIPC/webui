@@ -86,6 +86,10 @@ dl.list dd { flex: 2 1 80%; text-align: right; font-size: 0.8125rem; }
     color: #c2c2d9;
 }
 
+.form-label {
+    margin-bottom: 0.125rem;
+}
+
 .form-range {
     height: 2.5rem;
 }

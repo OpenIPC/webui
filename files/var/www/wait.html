@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1" name="viewport">
+<title>Please wait... - OpenIPC</title>
+<style>
+body {font:2.5rem sans-serif;text-align:center;padding:20%}
+progress {width:100%}
+</style>
+</head>
+<body id="page-progress">
+<main>
+<h1>Open IPC</h1>
+<h3>Please wait...</h3>
+<progress id="timer" max="20" value="0"></progress>
+</main>
+<script>
+const oipc_url = window.location.protocol + '//' + window.location.host;
+const timer = document.querySelector('#timer');
+const max = timer.max;
+let tock = 0;
+function tick() { tock += 1; timer.value = tock; (tock === max) ? engage() : setTimeout(tick, 1000); }
+function engage() { (async () => { const c = new AbortController(); const s = c.signal; await fetch(oipc_url, {mode: 'no-cors', signal: s}).then(function () { window.location.replace(oipc_url) }).catch(function (e) { console.log(e.message) }); })() }
+setTimeout(tick, 1000);
+</script>
+</body>
+</html>

@@ -4,7 +4,7 @@
 <%in p/header.cgi %>
 <% if [ "$(cat /etc/TZ)" != "$TZ" ]; then %>
 <div class="alert alert-danger">
-<h6><%= $t_ntp_1 %></h6>
+<h4><%= $t_ntp_1 %></h4>
 <p><%= $t_ntp_2 %></p>
 <% button_reboot %>
 </div>

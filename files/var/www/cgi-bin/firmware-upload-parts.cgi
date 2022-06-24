@@ -1,16 +1,29 @@
-#!/usr/bin/haserl --upload-limit=5120 --upload-dir=/tmp
+#!/usr/bin/haserl --upload-limit=2048 --upload-dir=/tmp
 <%in p/common.cgi %>
 <%in p/header.cgi %>
 <%
-maxsize=5242880
-magicnum="68737173"
-
 sysupgrade_date=$(ls -lc --full-time /usr/sbin/sysupgrade | xargs | cut -d' ' -f6)
 sysupgrade_date=$(date +"%s" --date="$sysupgrade_date")
-new_sysupgrade_date=$(date +"%s" --date="2022-02-22")
 
-file="$POST_rootfs_file"
-file_name="$POST_rootfs_file_name"
+file="$POST_parts_file"
+file_name="$POST_parts_file_name"
+
+case "$POST_parts_type" in
+kernel)
+  maxsize=2097152
+  magicnum="27051956"
+  new_sysupgrade_date=$(date +"%s" --date="2021-12-07")
+  cmd="sysupgrade --kernel=/tmp/${file_name} --force_ver"
+  ;;
+rootfs)
+  maxsize=5242880
+  magicnum="68737173"
+  new_sysupgrade_date=$(date +"%s" --date="2022-02-22")
+  cmd="sysupgrade --rootfs=/tmp/${file_name} --force_ver --force_all"
+  ;;
+*)
+  ;;
+esac
 
 error=""
 if [ -z "$file_name"  ]; then
@@ -30,7 +43,7 @@ if [ -n "$error" ]; then
 else
   pre_ "bg-light p-4 log-scroll"
     xl "mv $file /tmp/${file_name}"
-    sysupgrade --rootfs=/tmp/${file_name} --force_ver --force_all
+    $cmd
   _pre
   button_home
 fi

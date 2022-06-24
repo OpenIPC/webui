@@ -9,7 +9,7 @@ page_title="$t_status_0"
 
 <div class="col">
 <h3><%= $t_status_1 %></h3>
-<h6><%= $t_status_2 %></h6>
+<h4><%= $t_status_2 %></h4>
 <pre class="small list">
 <b><%= $t_status_3 %></b> <%= $soc %>
 <b><%= $t_status_4 %></b> <%= $soc_family %>
@@ -20,7 +20,7 @@ page_title="$t_status_0"
 </div>
 <div class="col">
 <h3><%= $t_status_d %></h3>
-<h6><%= $t_status_7 %></h6>
+<h4><%= $t_status_7 %></h4>
 <pre class="small list">
 <b><%= $t_status_8 %></b> <%= "${fw_version}-${fw_variant}" %>
 <b><%= $t_status_9 %></b> <%= $fw_build %>

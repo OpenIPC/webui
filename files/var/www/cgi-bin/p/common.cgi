@@ -68,15 +68,6 @@ button_link_to() {
   echo "<a class=\"btn btn-${3}\" href=\"${2}\" ${4}>${1}</a>"
 }
 
-# button_submit "text" "type" "extras"
-button_submit() {
-  _t="$1"; [ -z "$_t" ] && _t="$t_btn_submit"
-  _c="$2"; [ -z "$_c" ] && _c="primary"
-  _x="$3"; [ -z "$_x" ] && _x=" ${_x}"
-  echo "<button type=\"submit\" class=\"btn btn-${_c}\"${_x}>${_t}</button>"
-  unset _c; unset _t; unset _x
-}
-
 button_home() {
   echo "<a class=\"btn btn-primary\" href=\"/\">$t_b_home</a>"
 }
@@ -88,6 +79,15 @@ button_reboot() {
 # button_refresh
 button_refresh() {
   link_to "$t_b_refresh" "#" "btn btn-primary refresh"
+}
+
+# button_submit "text" "type" "extras"
+button_submit() {
+  _t="$1"; [ -z "$_t" ] && _t="$t_btn_submit"
+  _c="$2"; [ -z "$_c" ] && _c="primary"
+  _x="$3"; [ -z "$_x" ] && _x=" ${_x}"
+  echo "<p class=\"button submit mt-2\"><input type=\"submit\" class=\"btn btn-${_c}\"${_x} value=\"${_t}\"></p>"
+  unset _c; unset _t; unset _x
 }
 
 check_for_lock() {
@@ -128,7 +128,7 @@ e2c() {
 
 ex() {
   # NB! $() forks process and stalls output.
-  h6 "# ${1}"
+  h4 "# ${1}"
   pre_ "small"
   eval "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g" 2>&1
   _pre
@@ -147,7 +147,7 @@ field_checkbox() {
   field_ "boolean form-check"
     echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}-false\" value=\"false\">"
     echo "<input type=\"checkbox\" name=\"${1}\" id=\"${1}\" $(t_checked "$1" "true") value=\"true\" class=\"form-check-input\" ${2}>"
-    label "$1" "form-check-label"
+    label "$1" "$2"
   _field
 }
 
@@ -155,7 +155,7 @@ field_checkbox() {
 field_file() {
   field_ "file"
     label "$1"
-    input "file" "$1" "form-control"
+    input "file" "$1" "$2"
     help "$1"
   _field
 }
@@ -282,7 +282,7 @@ _form() {
 }
 
 form_upload_() {
-  form_ "$1" "$2" "enctype=\"multipart/form-data\""
+  echo "<form action=\"$1\" method=\"post\" enctype=\"multipart/form-data\">"
 }
 
 get_http_time() {
@@ -443,7 +443,7 @@ report_command_error() {
 }
 
 report_command_info() {
-  h6 "# $1"
+  h4 "# $1"
   report_log "$2"
 }
 

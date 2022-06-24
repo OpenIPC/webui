@@ -12,6 +12,6 @@ opts=""
 cmd="sysupgrade $opts"
 %>
 <%in p/header.cgi %>
-<h6># <%= $cmd %></h6>
+<h4># <%= $cmd %></h4>
 <pre id="output" data-cmd="<%= $cmd %>" data-reboot="true"></pre>
 <%in p/footer.cgi %>

@@ -6,7 +6,7 @@
 ls /dev/mmc* >/dev/null 2>&1
 if [ $? -ne 0 ]; then
   alert_ "danger"
-    h6 "$t_sdcard_1"
+    h4 "$t_sdcard_1"
     p "$t_sdcard_2"
   _alert
 else
@@ -17,7 +17,7 @@ else
   _o=""
   if [ -n "$POST_doFormatCard" ]; then
     alert_ "danger"
-      h6 "$t_sdcard_3"
+      h4 "$t_sdcard_3"
       p "$t_sdcard_4"
     _alert
 
@@ -58,7 +58,7 @@ else
     _o="$($_c)"
     report_command_info "$_c" "$_o"
     alert_ "danger"
-      h6 "$t_sdcard_9"
+      h4 "$t_sdcard_9"
       p "$t_sdcard_a"
       form_ "sdcard.cgi"
         doFormatCard="true"

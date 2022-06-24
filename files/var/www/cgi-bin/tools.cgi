@@ -51,7 +51,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   esac
 %>
 <h3><%= $title %></h3>
-<h6># <%= $cmd %></h6>
+<h4># <%= $cmd %></h4>
 <pre id="output" data-cmd="<%= $cmd %>"></pre>
 <% fi %>
 </div>

@@ -49,7 +49,7 @@ button_submit
 <% if [ ! -z "$telegram_token" ]; then %>
 <div class="col">
 <h3><%= $t_telegram_4 %></h3>
-<h6><%= $t_telegram_5 %></h6>
+<h4><%= $t_telegram_5 %></h4>
 <ol>
 <li><%= $t_telegram_6 %></li>
 <li><%= $t_telegram_7 %></li>

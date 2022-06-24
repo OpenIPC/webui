@@ -66,7 +66,7 @@ update_caminfo
 <%in p/header.cgi %>
 <%
 alert_ "danger"
-  h6 "$t_networkup_6"
+  h4 "$t_networkup_6"
   p "$t_networkup_7"
   button_reboot
 _alert

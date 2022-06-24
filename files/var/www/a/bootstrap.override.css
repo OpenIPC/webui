@@ -48,9 +48,9 @@ textarea {
 }
 
 dl.list { display: flex; flex-flow: row wrap; justify-content: space-between; align-items: baseline; }
-dl.list dd, dl.list dt { margin: 0; padding: 0 }
-dl.list dt { flex: 1 1 20%; }
-dl.list dd { flex: 2 1 80%; text-align: right; font-size: 0.8125rem; }
+dl.list dd, dl.list dt { margin: 0.125rem 0; padding: 0; }
+dl.list dt { flex: 1 1 30%; }
+dl.list dd { flex: 2 1 70%; text-align: right; font-size: 0.9rem; }
 
 .btn {
     white-space: nowrap;

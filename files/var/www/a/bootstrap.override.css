@@ -6,10 +6,6 @@
     --bs-blue: #4c60d8;
 }
 
-body {
-    padding-top: 4rem;
-}
-
 body > main > .container > h2 {
     font-weight: 700;
     color: var(--bs-blue);

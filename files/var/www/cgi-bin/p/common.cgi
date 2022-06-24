@@ -385,6 +385,10 @@ pre() {
   tag "pre" "$(echo -e "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g")" "$2" "$3"
 }
 
+redirect_back() {
+  redirect_to "$HTTP_REFERER" "$1" "$2"
+}
+
 # redirect_to "url" "flash class" "flash text"
 redirect_to() {
   [ -n "$3" ] && flash_save "$2" "$3"

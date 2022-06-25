@@ -30,9 +30,15 @@ function refresh() {
 
         $$('form').forEach(el => el.autocomplete = 'off');
 
-        $$('.btn-danger, .btn-warning, .confirm').forEach(el =>
-            el.addEventListener('click', ev =>
-                (!confirm("Are you sure?")) ? ev.preventDefault() : null));
+        $$('.btn-danger, .btn-warning, .confirm').forEach(el => {
+            // for input, find its parent form and attach listener to it submit event
+            if (el.nodeName === "INPUT") {
+                while (el.nodeName !== "FORM") el = el.parentNode
+                el.addEventListener('submit', ev => (!confirm("Are you sure?")) ? ev.preventDefault() : null)
+            } else {
+                el.addEventListener('click', ev => (!confirm("Are you sure?")) ? ev.preventDefault() : null)
+            }
+        });
 
         $$('.refresh').forEach(el => el.addEventListener('click', refresh));
 

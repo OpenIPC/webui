@@ -66,7 +66,7 @@ function refresh() {
             el.addEventListener('change', ev =>
                 $('#' + ev.target.dataset['for']).type = (el.checked) ? 'text' : 'password'));
 
-        $("#send-to-telegram") && $("#send-to-telegram").addEventListener("click", event => {
+        $("#send-to-telegram")?.addEventListener("click", event => {
             event.preventDefault();
             if (!confirm("Are you sure?")) return false;
             const xhr = new XMLHttpRequest();
@@ -74,7 +74,7 @@ function refresh() {
             xhr.send();
         });
 
-        $("#send-to-yadisk") && $("#send-to-yadisk").addEventListener("click", event => {
+        $("#send-to-yadisk")?.addEventListener("click", event => {
             event.preventDefault();
             if (!confirm("Are you sure?")) return false;
             const xhr = new XMLHttpRequest();
@@ -95,7 +95,7 @@ function refresh() {
                 let startIndex = 0;
                 let result;
                 try {
-                    for (; ;) {
+                    for (;;) {
                         result = re.exec(chunk);
                         if (!result) {
                             if (readerDone) break;

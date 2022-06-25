@@ -15,16 +15,13 @@ function chr(n){return String.fromCharCode(n)}
 function generateSofiaHash(text) {let h="";let md5=MD5(text);for(let i=0;i<=7;i++){let n=(ord(md5[2*i])+ord(md5[2*i+1]))%62;n+=(n>9)?(n>35)?61:55:48;h+=chr(n)}return h}
 
 window.addEventListener("load", () => {
-    if ($("#mj_netip_enabled")) {
-        $("#mj_netip_enabled").addEventListener("change", (ev) => {
-            $("#mj_netip_user").required = ev.target.checked;
-            $("#mj_netip_password_plain").required = ev.target.checked;
-        })
-    }
-    if ($("#mj_netip_password_plain")) {
-        $("form").addEventListener("submit", (ev) => {
-            const pw = $("#mj_netip_password_plain").value.trim();
-            if (pw !== "") $("#mj_netip_password").value = generateSofiaHash(pw);
-        })
-    }
+    $("#mj_netip_enabled")?.addEventListener("change", (ev) => {
+        $("#mj_netip_user").required = ev.target.checked;
+        $("#mj_netip_password_plain").required = ev.target.checked;
+    })
+
+    $("#mj_netip_password_plain") && $("form").addEventListener("submit", (ev) => {
+        const pw = $("#mj_netip_password_plain").value.trim();
+        if (pw !== "") $("#mj_netip_password").value = generateSofiaHash(pw);
+    })
 })

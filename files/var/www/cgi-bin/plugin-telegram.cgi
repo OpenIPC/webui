@@ -34,7 +34,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   redirect_to $SCRIPT_NAME "success" "Configuration updated."
 fi
 
-source $config_file
+include $config_file
 %>
 <%in p/header.cgi %>
 

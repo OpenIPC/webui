@@ -9,7 +9,7 @@ if [ -n "$1" ] && [ -n "$2" ]; then
   telegram_token="$2"
 else
   # read variables from config
-  source $config_file
+  [ -f "$config_file" ] && source $config_file
 fi
 
 if [ -z "$telegram_channel" ] || [ -z "$telegram_token" ]; then
@@ -29,7 +29,7 @@ if [ $? -eq 0 ]; then
 
   # SOCK5 proxy, if needed
   if [ "true" = "$telegram_socks5_enabled" ]; then
-    source /etc/webui/socks5.conf
+    include /etc/webui/socks5.conf
     curl_options="${curl_options} --socks5-hostname ${socks5_server}:${socks5_port} --proxy-user ${socks5_login}:${socks5_password}"
   fi
 

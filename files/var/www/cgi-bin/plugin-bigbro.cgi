@@ -7,7 +7,7 @@ page_title="BigBro"
 config_file="${config_path}/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
 
-# source $config_file
+# include $config_file
 
 case "$REQUEST_METHOD" in
   POST)

@@ -11,7 +11,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   for v in address dhcp dns_1 dns_2 gateway hostname netmask; do
     eval echo "${plugin}_${v}=\\\"\$POST_${plugin}_${v}\\\"" >> $tmp_file
   done
-  source $tmp_file
+  include $tmp_file
 
   for _i in hostname address netmask dateway dns_1 dns_2; do
     sanitize "network_${_i}"

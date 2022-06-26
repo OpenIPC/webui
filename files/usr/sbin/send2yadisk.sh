@@ -9,7 +9,7 @@ if [ ! -f "$config_file" ]; then
 fi
 
 # read variables from config
-source $config_file
+[ -f "$config_file" ] && source $config_file
 
 # exit if plugin is not enabled
 # [ "$yadisk_enabled" != "true" ] && exit 0

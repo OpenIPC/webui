@@ -608,11 +608,9 @@ $(env|sort)
   exit
 }
 
-#include() {
-#  mkdir -p $(basename $1)
-#  [ ! -f "$1" ] && touch $1
-#  source "$1"
-#}
+include() {
+  [ -f "$1" ] && source "$1"
+}
 
 load_plugins() {
   for i in $(ls -1 plugin-*); do
@@ -637,17 +635,16 @@ lang_path=/var/www/lang/
 [ ! -d $lang_path ] && mkdir -p $lang_path
 
 [ ! -f $sysinfo_file ] && update_caminfo
-source $sysinfo_file
+include $sysinfo_file
 
 pagename=$(basename "$SCRIPT_NAME")
 pagename="${pagename%%.*}"
 
-source p/settings.sh
-source p/locale_en.sh
-
-source /etc/webui/socks5.conf
-source /etc/webui/telegram.conf
-source /etc/webui/yadisk.conf
+include p/settings.sh
+include p/locale_en.sh
+include /etc/webui/socks5.conf
+include /etc/webui/telegram.conf
+include /etc/webui/yadisk.conf
 
 reload_locale
 # check_password

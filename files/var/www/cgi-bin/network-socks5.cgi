@@ -15,7 +15,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   redirect_to $SCRIPT_NAME
 fi
 
-source $config_file
+include $config_file
 %>
 
 <%in p/header.cgi %>

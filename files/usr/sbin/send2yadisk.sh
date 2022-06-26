@@ -9,7 +9,7 @@ if [ ! -f "$config_file" ]; then
 fi
 
 # read variables from config
-eval $(grep = $config_file)
+source $config_file
 
 # exit if plugin is not enabled
 # [ "$yadisk_enabled" != "true" ] && exit 0
@@ -46,8 +46,9 @@ if [ $? -eq 0 ]; then
   curl_options="${curl_options} --user ${yadisk_login}:${yadisk_password}"
 
   # SOCK5 proxy, if needed
-  if [ "$socks5_enabled" = "1" ]; then
-    curl_options="${curl_options} --socks5-hostname ${yadisk_socks5_server}:${yadisk_socks5_port} --proxy-user ${yadisk_socks5_login}:${yadisk_socks5_password}"
+  if [ "true" = "$yadisk_socks5_enabled" ]; then
+    source /etc/webui/socks5.conf
+    curl_options="${curl_options} --socks5-hostname ${socks5_server}:${socks5_port} --proxy-user ${socks5_login}:${socks5_password}"
   fi
 
   # create path to destination directory

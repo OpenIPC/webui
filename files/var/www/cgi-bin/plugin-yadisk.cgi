@@ -8,7 +8,7 @@ config_file="/etc/${plugin}.cfg"; [ ! -f "$config_file" ] && touch $config_file
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   :> $config_file
-  for v in enabled login password path socks5_enabled socks5_server socks5_port socks5_login socks5_password; do
+  for v in enabled login password path socks5_enabled; do
     eval echo "${plugin}_${v}=\\\"\$POST_${plugin}_${v}\\\"" >> $config_file
   done
   redirect_to $SCRIPT_NAME

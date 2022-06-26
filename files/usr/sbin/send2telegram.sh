@@ -1,6 +1,6 @@
 #!/bin/sh
 
-config_file="/etc/telegram.cfg"
+config_file="/etc/webui/telegram.cfg"
 curl_timeout=100
 
 if [ -n "$1" ] && [ -n "$2" ]; then
@@ -9,7 +9,7 @@ if [ -n "$1" ] && [ -n "$2" ]; then
   telegram_token="$2"
 else
   # read variables from config
-  eval $(grep = $config_file)
+  source $config_file
 fi
 
 if [ -z "$telegram_channel" ] || [ -z "$telegram_token" ]; then
@@ -28,8 +28,9 @@ if [ $? -eq 0 ]; then
   curl_options="--silent --insecure --connect-timeout ${curl_timeout} --max-time ${curl_timeout}"
 
   # SOCK5 proxy, if needed
-  if [ "$socks5_enabled" = "1" ]; then
-    curl_options="${curl_options} --socks5-hostname ${telegram_socks5_server}:${telegram_socks5_port} --proxy-user ${telegram_socks5_login}:${telegram_socks5_password}"
+  if [ "true" = "$telegram_socks5_enabled" ]; then
+    source /etc/webui/socks5.conf
+    curl_options="${curl_options} --socks5-hostname ${socks5_server}:${socks5_port} --proxy-user ${socks5_login}:${socks5_password}"
   fi
 
   url="https://api.telegram.org/bot${telegram_token}/sendPhoto?chat_id=${telegram_channel}"

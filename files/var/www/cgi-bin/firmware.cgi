@@ -46,15 +46,15 @@ fw_rootfs="true"
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">
   <div class="col">
-    <h3><%= $t_firmware_1 %></h3>
+    <h3>Firmware</h3>
     <dl class="small list">
-      <dt><%= $t_firmware_2 %></dt>
+      <dt>Installed</dt>
       <dd><%= $fw_version %></dd>
-      <dt><%= $t_firmware_3 %></dt>
+      <dt>On GitHub</dt>
       <dd id="firmware-master-ver"><%= $fw_date %></dd>
     </dl>
 
-    <h4><%= $t_firmware_4 %></h4>
+    <h4>Install update</h4>
     <form action="/cgi-bin/firmware-update.cgi" method="post">
       <p class="boolean form-check">
         <input type="hidden" name="fw_kernel" id="fw_kernel-false" value="false">
@@ -86,7 +86,7 @@ fw_rootfs="true"
   </div>
 
   <div class="col">
-    <h3><%= $t_firmware_u %></h3>
+    <h3>Kernel & RootFS</h3>
     <form action="/cgi-bin/firmware-upload-parts.cgi" method="post" enctype="multipart/form-data">
       <p class="select">
         <label for="parts_type" class="form-label">Type of binary file</label>
@@ -105,45 +105,45 @@ fw_rootfs="true"
   </div>
 
   <div class="col">
-    <h3><%= $t_firmware_c %></h3>
+    <h3>Majestic</h3>
     <dl class="small list">
-      <dt><%= $t_firmware_d %></dt>
+      <dt>Installed</dt>
       <dd><%= $mj_version %></dd>
-      <dt><%= $t_firmware_e %></dt>
+      <dt>On GitHub</dt>
       <dd><%= $mj_version_new %></dd>
     </dl>
 
     <% if [ -f "/overlay/root/${mj_mj_bin_file}" ]; then %>
-      <p class="alert alert-info"><%= $t_firmware_f %> (<%= $mj_filesize_overlay %> KB)</p>
+      <p class="alert alert-info">Majestic is installed in the overlay. (<%= $mj_filesize_overlay %> KB)</p>
     <% fi %>
 
     <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
       <p><a href="/cgi-bin/majestic-update.cgi" class="btn btn-warning"><%= $t_btn_update %></a></p>
     <% else %>
-      <p class="alert alert-warning"><%= $t_firmware_i %></p>
+      <p class="alert alert-warning">Not enough space to update Majestic.</p>
     <% fi %>
 
     <% if [ -z "$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)" ]; then %>
-      <h5><%= $t_firmware_j %></h5>
-      <p><a href="/cgi-bin/majestic-settings.cgi"><%= $t_firmware_k %></a></p>
+      <h5>Majestic uses the original configuration.</h5>
+      <p><a href="/cgi-bin/majestic-settings.cgi">Make changes.</a></p>
     <% else %>
-      <h5><%= $t_firmware_l %></h5>
-      <p><a href="/cgi-bin/majestic-config-compare.cgi" class="btn btn-primary"><%= $t_firmware_m %></a></p>
+      <h5>Majestic uses custom configuration.</h5>
+      <p><a href="/cgi-bin/majestic-config-compare.cgi" class="btn btn-primary">See difference</a></p>
     <% fi %>
   </div>
 
   <div class="col">
-    <h3><%= $t_firmware_6 %></h3>
+    <h3>Web UI</h3>
     <dl class="small list">
-      <dt><%= $t_firmware_7 %></dt>
+      <dt>Installed</dt>
       <dd><%= $ui_version %></dd>
-      <dt><%= $t_firmware_8 %></dt>
+      <dt>Stable</dt>
       <dd id="microbe-web-master-ver"></dd>
-      <dt><%= $t_firmware_9 %></dt>
+      <dt>Unstable</dt>
       <dd id="microbe-web-dev-ver"></dd>
     </dl>
 
-    <h4><%= $t_firmware_a %></h4>
+    <h4>Install update</h4>
     <form action="/cgi-bin/webui-update.cgi" method="post">
       <p class="select input-group">
         <label for="web_version" class="input-group-text">Branch</label>

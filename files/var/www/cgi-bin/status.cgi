@@ -5,6 +5,7 @@ get_soc_temp
 page_title="$t_status_0"
 %>
 <%in p/header.cgi %>
+
 <div class="row g-4">
   <div class="col">
     <h3><%= $t_status_1 %></h3>
@@ -49,4 +50,5 @@ page_title="$t_status_0"
     <% ex "top -n 1 -b | sed '/top -n/d' | sed '1,4d' | head -20" %>
   </div>
 </div>
+
 <%in p/footer.cgi %>

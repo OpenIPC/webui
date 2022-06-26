@@ -5,10 +5,11 @@ page_title="$t_console_0"
 cmd="$FORM_cmd"
 %>
 <%in p/header.cgi %>
+
 <div class="console">
   <div class="input-group mb-3">
     <div class="input-group-text">/tmp#</div>
-    <input class="form-control" type="text" id="cmd" value="<%= $cmd %>" placeholder="<%= $tPH_web_console_cmd %>" required autofocus>
+    <input class="form-control" type="text" id="cmd" value="<%= $cmd %>" placeholder="Type a command and hit Enter" required autofocus>
     <div class="input-group-text p-0"><button type="button" class="btn btn-sm btn-white" id="submit-cmd">⏎</button></div>
   </div>
   <pre class="log-scroll" id="code"></pre>

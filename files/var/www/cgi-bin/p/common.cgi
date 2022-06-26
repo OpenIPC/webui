@@ -175,7 +175,7 @@ field_range() {
     if [ -n "$(t_options "$1" | grep -E auto)" ]; then
       echo "<label class=\"input-group-text\">auto <input class=\"form-check-input auto-value ms-1\" type=\"checkbox\" data-for=\"${1}\" data-value=\"$(t_default "$1")\" $(t_checked "$1" "auto")></label>"
     fi
-    echo "<input type=\"range\" name=\"${1}\" id=\"${1}\" class=\"form-control form-range\">"
+    echo "<input type=\"range\" name=\"${1}\" id=\"${1}\" class=\"form-control form-range\" value=\"$(t_value "$1")\">"
     echo "<span class=\"input-group-text\"><span id=\"${1}-value\" class=\"text-end\">$(t_value "$1")</span></span>"
     echo "</span>"
     help "$1"

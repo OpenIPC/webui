@@ -6,12 +6,52 @@ page_title="$t_mjsettings_0"
 mj=$(echo "$mj" | sed "s/ /_/g")
 only="$GET_tab"; [ -z "$only" ] && only="system"
 eval title="\$tT_mj_${only}"; [ -z "$title" ] && title=$only
+
+if [ "POST" = "$REQUEST_METHOD" ]; then
+  mj_conf=/etc/majestic.yaml
+  orig_yaml=/tmp/majestic.yaml.original
+  temp_yaml=/tmp/majestic.yaml
+
+  cp -f $mj_conf $temp_yaml
+
+  IFS=$'\n' # make newlines the only separator
+  for name in $(printenv|grep POST_); do
+    key=".$(echo $name | sed 's/^POST_mj_//' | cut -d= -f1 | sed 's/_/./g')"
+    value="$(echo $name | cut -d= -f2)"
+
+    # validation and normalization
+    [ "$key" = ".track" ] && continue
+    [ "$key" = ".reset" ] && continue
+    [ "$key" = ".netip.password.plain" ] && continue
+    if [ "$key" = ".image.rotate" ]; then
+      value="${value//°/}"
+      [ "$value" = "0" ] && value="none"
+    fi
+
+    oldvalue=$(yaml-cli -g "$key" -i $temp_yaml)
+    if [ -z "$value" ]; then
+      [ -n "$oldvalue" ] && yaml-cli -d $key -i "$temp_yaml" -o "$temp_yaml"
+    else
+      [ "$oldvalue" != "$value" ] && yaml-cli -s $key "$value" -i "$temp_yaml" -o "$temp_yaml"
+    fi
+  done
+
+  [ -n "$(diff -q $temp_yaml $mj_conf)" ] && cp -f $temp_yaml $mj_conf
+
+  rm $temp_yaml
+
+  killall -1 majestic
+
+  redirect_to "$HTTP_REFERER"
+fi
 %>
+
 <%in p/header.cgi %>
-<form action="/cgi-bin/majestic-settings-update.cgi" method="post">
-<div class="row row-cols-3 g-4">
-<div class="col">
-<h3><%= $title %></h3>
+
+<div class="row row-cols-1 row-cols-xxl-3 g-4">
+  <div class="col">
+    <h3><%= $title %></h3>
+    <form action="<%= $SCRIPT_NAME %>" method="post">
 <%
 config=""
 for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
@@ -43,14 +83,16 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
   esac
 done
 %>
-</div>
-<div class="col">
-<h3><%= $t_mjsettings_2 %></h3>
-<% pre "$config" %>
-</div>
-<div class="col">
-<h3>Config group</h3>
-<div class="list-group list-group-flush" id="mj-tabs">
+      <p><input type="submit" class="btn btn-primary mt-3" value="Save changes"></p>
+    </form>
+  </div>
+  <div class="col">
+    <h3>Config excerpt</h3>
+    <% pre "$config" %>
+  </div>
+  <div class="col">
+    <h3>Config group</h3>
+    <div class="list-group list-group-flush" id="mj-tabs">
 <%
 for _l in $mj; do
   _p=${_l%%|*}; fullname=${_p#.}; _d=${fullname%.*}
@@ -62,11 +104,9 @@ for _l in $mj; do
 done
 unset _c; unset _d; unset _l; unset _od; unset _p;
 %>
+    </div>
+  </div>
 </div>
-</div>
-</div>
-<button type="submit" class="btn btn-primary mt-3" ><%= $t_btn_submit %></button>
-</form>
 
 <script src="/a/majestic-settings.js"></script>
 <script>

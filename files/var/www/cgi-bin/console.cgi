@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
 <%
-page_title="$t_console_0"
+page_title="Web console"
 cmd="$FORM_cmd"
 %>
 <%in p/header.cgi %>

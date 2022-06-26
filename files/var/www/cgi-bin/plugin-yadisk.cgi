@@ -3,7 +3,7 @@
 <%
 plugin="yadisk"
 plugin_name="Yandex Disk"
-page_title="$t_yadisk_0"
+page_title="Yandex Disk"
 config_file="/etc/${plugin}.cfg"; [ ! -f "$config_file" ] && touch $config_file
 
 if [ "POST" = "$REQUEST_METHOD" ]; then

@@ -2,7 +2,7 @@
 <%in p/common.cgi %>
 <%
 check_for_lock
-page_title="$t_fwupdate_0"
+page_title="Upgrading firmware"
 opts=""
 [ "$POST_fw_kernel" = "true" ] && opts="${opts} -k"
 [ "$POST_fw_rootfs" = "true" ] && opts="${opts} -r"

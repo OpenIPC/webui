@@ -1,6 +1,6 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
-<% page_title="$t_fwreset_0" %>
+<% page_title="Erasing overlay" %>
 <%in p/header.cgi %>
 <%
 pre_ "bg-light p-4 log-scroll"

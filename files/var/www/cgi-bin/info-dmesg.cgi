@@ -1,6 +1,6 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
-<% page_title="$t_dmesg_0" %>
+<% page_title="Diagnostic messages" %>
 <%in p/header.cgi %>
 <%
 ex "/bin/dmesg"

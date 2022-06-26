@@ -91,7 +91,7 @@ button_submit() {
 }
 
 check_for_lock() {
-  [ -f /tmp/webjob.lock ] && redirect_back "danger" "$t_fwupdate_1"
+  [ -f /tmp/webjob.lock ] && redirect_back "danger" "Another progress is running."
   touch /tmp/webjob.lock
 }
 

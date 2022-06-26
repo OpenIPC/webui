@@ -81,10 +81,10 @@ page_title="$t_editor_0"
       <input type="hidden" name="editor_file" value="<%= $editor_file %>">
       <p class="textarea"><textarea id="editor_text" name="editor_text" class="form-control"><%= "$editor_text" %></textarea></p>
       <p class="boolean"><span class="form-check form-switch">
-      <input type="checkbox" id="editor_backup" name="editor_backup" value="true" class="form-check-input" role="switch">
-      <label for="editor_backup" class="form-label form-check-label"><%= $tL_editor_backup %></label>
+        <input type="checkbox" id="editor_backup" name="editor_backup" value="true" class="form-check-input" role="switch">
+        <label for="editor_backup" class="form-label form-check-label"><%= $tL_editor_backup %></label>
       </span></p>
-      <button type="submit" class="btn btn-primary"><%= $t_btn_submit %></button>
+      <p class="mt-2"><input type="submit" class="btn btn-primary" value="<%= $t_btn_submit %>"></p>
     </form>
   </div>
 
@@ -98,7 +98,7 @@ page_title="$t_editor_0"
       <form action="<%= $SCRIPT_NAME %>" method="post">
         <input type="hidden" name="action" value="restore">
         <input type="hidden" name="editor_file" value="<%= $editor_file %>">
-        <input type="submit" value="<%= $t_editor_4 %>" class="btn btn-danger">
+        <p class="mt-2"><input type="submit" class="btn btn-danger" value="<%= $t_editor_4 %>"></p>
       </form>
     </div>
     <div id="diff-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="diff-tab" tabindex="0">

@@ -81,7 +81,7 @@ fw_rootfs="true"
         <input type="checkbox" name="fw_enforce" id="fw_enforce" value="true" class="form-check-input">
         <label for="fw_enforce" class="form-label">Install even if matches the existing version.</label>
       </p>
-      <p class="button submit mt-2"><input type="submit" class="btn btn-warning" value="<%= $t_btn_update %>"></p>
+      <p class="mt-2"><input type="submit" class="btn btn-warning" value="<%= $t_btn_update %>"></p>
     </form>
   </div>
 
@@ -100,7 +100,7 @@ fw_rootfs="true"
         <label for="parts_file" class="form-label">Binary file</label>
         <input type="file" id="parts_file" name="parts_file" class="form-control" required>
       </p>
-      <p class="button submit mt-2"><input type="submit" class="btn btn-warning" value="<%= $t_btn_upload %>"></p>
+      <p class="mt-2"><input type="submit" class="btn btn-warning" value="<%= $t_btn_upload %>"></p>
     </form>
   </div>
 
@@ -157,9 +157,7 @@ fw_rootfs="true"
         <input type="checkbox" name="web_enforce" id="web_enforce" value="true" class="form-check-input">
         <label for="web_enforce" class="form-label">Install even if matches the existing version.</label>
       </p>
-      <p class="button submit mt-2">
-        <input type="submit" class="btn btn-warning" value="<%= $t_btn_update %>">
-      </p>
+      <p class="mt-2"><input type="submit" class="btn btn-warning" value="<%= $t_btn_update %>"></p>
     </form>
   </div>
 </div>

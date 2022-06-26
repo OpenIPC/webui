@@ -109,7 +109,7 @@ webui_language="$locale"
       %>
     </div>
   </div>
-  <p><input type="submit" class="btn btn-primary mt-3" value="Save changes"></p>
+  <p class="mt-2"><input type="submit" class="btn btn-primary" value="Save changes"></p>
 </form>
 
 <script>

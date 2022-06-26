@@ -49,29 +49,35 @@ case "$POST_action" in
   *)
 %>
 <%in p/header.cgi %>
+
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
-<div class="col">
-<h3><%= $t_sshkey_1 %></h3>
-<form action="/cgi-bin/ssh-keys.cgi" method="post">
-<p><%= $t_sshkey_2 %></p>
-<button class="btn btn-danger" name="action" type="submit" value="backup"><%= $t_sshkey_3 %></button>
-</form>
+  <div class="col">
+    <h3><%= $t_sshkey_1 %></h3>
+    <form action="/cgi-bin/ssh-keys.cgi" method="post">
+      <input type="hidden" name="action" value="backup">
+      <p><%= $t_sshkey_2 %></p>
+      <p class="mt-2"><input type="submit" class="btn btn-danger" value="<%= $t_sshkey_3 %>"></p>
+    </form>
+  </div>
+  <div class="col">
+    <h3><%= $t_sshkey_4 %></h3>
+    <p><%= $t_sshkey_5 %></p>
+    <form action="/cgi-bin/ssh-keys.cgi" method="post">
+      <input type="hidden" name="action" value="restore">
+      <p class="mt-2"><input type="submit" class="btn btn-danger" value="<%= $t_sshkey_6 %>"></p>
+    </form>
+  </div>
+  <div class="col">
+    <h3><%= $t_sshkey_7 %></h3>
+    <p><%= $t_sshkey_8 %></p>
+    <form action="/cgi-bin/ssh-keys.cgi" method="post">
+      <input type="hidden" name="action" value="delete">
+      <p class="mt-2"><input type="submit" class="btn btn-danger" value="<%= $t_sshkey_9 %>">
+    </form>
+  </div>
 </div>
-<div class="col">
-<h3><%= $t_sshkey_4 %></h3>
-<p><%= $t_sshkey_5 %></p>
-<form action="/cgi-bin/ssh-keys.cgi" method="post">
-<button class="btn btn-danger" name="action" type="submit" value="restore"><%= $t_sshkey_6 %></button>
-</form>
-</div>
-<div class="col">
-<h3><%= $t_sshkey_7 %></h3>
-<p><%= $t_sshkey_8 %></p>
-<form action="/cgi-bin/ssh-keys.cgi" method="post">
-<button class="btn btn-danger" name="action" type="submit" value="delete"><%= $t_sshkey_9 %></button>
-</form>
-</div>
-</div>
+
 <% readKey "ed25519" %>
+
 <%in p/footer.cgi %>
 <% esac %>

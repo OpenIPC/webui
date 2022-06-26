@@ -2,7 +2,8 @@
 <%in p/common.cgi %>
 <%in _mj.cgi %>
 <%
-page_title="$t_mjsettings_0"
+page_title="Majestic settings"
+
 mj=$(echo "$mj" | sed "s/ /_/g")
 only="$GET_tab"; [ -z "$only" ] && only="system"
 eval title="\$tT_mj_${only}"; [ -z "$title" ] && title=$only
@@ -83,7 +84,7 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
   esac
 done
 %>
-      <p><input type="submit" class="btn btn-primary mt-3" value="Save changes"></p>
+      <p class="mt-2"><input type="submit" class="btn btn-primary" value="Save changes"></p>
     </form>
   </div>
   <div class="col">

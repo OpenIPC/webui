@@ -47,7 +47,7 @@ window.addEventListener("load", initIpEyeForm);
 <form action="/cgi-bin/majestic-settings-update.cgi" method="post">
 <input type="hidden" name="mj_ipeye_enabled" id="mj_ipeye_enabled" value="true" class="form-control">
 <input type="hidden" name="mj_go_to" id="mj_go_to" value="/cgi-bin/plugin-ipeye.cgi" class="form-control">
-<button type="submit" class="btn btn-warning"><%= $t_ipeye_9 %></button>
+<p class="mt-2"><input type="submit" class="btn btn-warning" value="<%= $t_ipeye_9 %>"></p>
 </form>
 </div>
 <% fi %>

@@ -29,7 +29,7 @@ field_password "yadisk_password"
 field_text "yadisk_path"
 field_switch "yadisk_socks5_enabled"
 %>
-      <p><input type="submit" class="btn btn-primary mt-3" value="Save changes">
+      <p class="mt-2"><input type="submit" class="btn btn-primary" value="Save changes"></p>
     </form>
   </div>
   <div class="col">

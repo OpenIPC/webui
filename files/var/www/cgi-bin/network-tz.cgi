@@ -35,7 +35,7 @@ fi
         <input type="text" id="tz_data" name="tz_data" value="<%= $tz_data %>" class="form-control" readonly>
         <span class="hint text-secondary">Control string of the timezone selected above. Read-only field, only for monitoring.</span>
       </p>
-      <p class="button submit mt-2"><input type="submit" class="btn btn-primary" value="Save changes"></p>
+      <p class="mt-2"><input type="submit" class="btn btn-primary" value="Save changes"></p>
     </form>
   </div>
   <div class="col">

@@ -1,6 +1,6 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
-<% page_title="$t_about_0" %>
+<% page_title="About OpenIPC" %>
 <%in p/header.cgi %>
 <%
 TEAM="# OpenIPC Team members in following format: Username | GitHub PhotoID | Projects | GitHub name | Telegram name
@@ -35,58 +35,58 @@ team() {
       </p>
     </div>
     <div class="col-md-6">
-      <h5><%= $t_about_8 %></h4>
-      <p class="mb-0"><%= $t_about_9 %></p>
+      <h5>Do you like what we do?</h4>
+      <p class="mb-0">Please consider supporting our projects.</p>
     </div>
   </div>
 </div>
 
 <div class="row">
   <div class="col-lg-6">
-    <h3><%= $t_about_1 %></h3>
+    <h3>Projects</h3>
     <dl>
       <dt><a href="https://github.com/OpenIPC/firmware">Firmware</a></dt>
-      <dd><%= $t_about_2 %></dd>
+      <dd>The Holy Grail of the community. Universal firmware for IP-cameras to replace proprietary, outdated and often insecure vendor pre-installed firmware.</dd>
       <dt><a href="https://github.com/OpenIPC/ipctool">IPC tool</a></dt>
-      <dd><%= $t_about_3 %></dd>
+      <dd>An IP-camera hardware inspector on steroids. This tool will not only identify your camera's processor, sensor, flash chip, but also help you with backing up the original firmware and more.</dd>
       <dt><a href="https://github.com/OpenIPC/coupler">Coupler</a></dt>
-      <dd><%= $t_about_4 %></dd>
+      <dd>A tool that allows you a smooth transition from the IP-camera manufacturer's pre-installed proprietary firmware to OpenIPC Firmware. No special skills are required.</dd>
       <dt><a href="https://github.com/OpenIPC/majestic">Majestic</a></dt>
-      <dd><%= $t_about_5 %></dd>
+      <dd>A universal IP-camera streamer. This project is the major part of the OpenIPC Firmware. Although it is not fully open source at this stage of development, we are considering opening up the codebase when the project matures enough and gets enough funding for open development.</dd>
       <dt><a href="https://github.com/OpenIPC/mini">Mini</a></dt>
-      <dd><%= $t_about_6 %></dd>
+      <dd>An open source IP-camera streamer. Think of it as Majestic's little brother.</dd>
       <dt><a href="https://github.com/OpenIPC/smolrtsp">SmolRTSP</a></dt>
-      <dd><%= $t_about_7 %></dd>
+      <dd>A simple RTSP 1.0 server library tailored for embedded devices, such as IP cameras. It supports both TCP and UDP, allows any payload format, and provides a convenient and flexible API.</dd>
     </dl>
   </div>
   <div class="col-lg-6">
-    <h3><%= $t_about_d %></h3>
+    <h3>Telegram Channels</h3>
     <dl>
       <dt><a href="https://t.me/OpenIPC">OpenIPC (EN)</a></dt>
-      <dd><%= $t_about_e %></dd>
+      <dd>International channel about OpenIPC. (English)</dd>
       <dt><a href="https://t.me/openipc_modding">OpenIPC users (RU)</a></dt>
-      <dd><%= $t_about_f %></dd>
+      <dd>Channel about OpenIPC for Russian-speaking users. (Russian)</dd>
       <dt><a href="https://t.me/openipc_software">OpenIPC development (RU)</a></dt>
-      <dd><%= $t_about_g %></dd>
+      <dd>Channel for OpenIPC developers. (Mostly Russian)</dd>
       <dt><a href="https://t.me/joinchat/YgHc5Bg4NOoxOTdi">Majestic Tests (RU)</a></dt>
-      <dd><%= $t_about_h %></dd>
+      <dd>Telegram group for Majestic streamer testers. (Mostly Russian)</dd>
       <dt><a href="https://t.me/ExIPCam">ExIPCam users + repair</a></dt>
-      <dd><%= $t_about_i %></dd>
+      <dd>Discussion of the ExIPCam program and hardware/software repairing devices. (Russian)</dd>
       <dt><a href="https://t.me/openipc_demo">OpenIPC demo</a></dt>
-      <dd><%= $t_about_j %></dd>
+      <dd>Experimental Telegram Bot. (After connecting, send "/menu")</dd>
       <dt><a href="https://paywall.pw/openipc">OpenIPC paywall</a></dt>
-      <dd><%= $t_about_k %></dd>
+      <dd>Paid technical support group.</dd>
       <dt><a href="https://t.me/joinchat/T_GwQUBTJdfXJrFb">OpenIPC Iranian</a></dt>
-      <dd><%= $t_about_l %></dd>
+      <dd>تیم OpenIPC برای کاربران ایرانی (Telegram group for Iranian OpenIPC users). (Persian)</dd>
       <dt><a href="https://t.me/s/openipc_dev">OpenIPC dev</a></dt>
-      <dd><%= $t_about_m %></dd>
+      <dd>GitHub notifications on the latest Firmware & Software.</dd>
     </dl>
   </div>
   <div class="col-12">
-    <h3><%= $t_about_a %></h3>
-    <p><%= $t_about_b %></p>
+    <h3>Team</h3>
+    <p>OpenIPC is a community-driven open source project, and many people contribute to its codebase. Koodos to them! There is also a core team of skilled developers who work hard to expand the list of supported hardware platforms, extend the functionality and stability of the firmware, review submitted code, and coordinate community efforts. Get to know the team and their areas of expertise:</p>
     <% row "$(team)" "row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4" %>
-    <p><a href="https://github.com/orgs/OpenIPC/people"><%= $t_about_c %></a></p>
+    <p><a href="https://github.com/orgs/OpenIPC/people" class="btn btn-secondary">List of contributors</a></p>
   </div>
 </div>
 <%in p/footer.cgi %>

@@ -18,7 +18,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         eval s=\$POST_ntp_server_${i}
         [ -n "$s" ] && echo "server ${s} iburst" >> $tmp_file
       done
-      unset s
+      unset i; unset s
       mv $tmp_file $config_file
       redirect_to $SCRIPT_NAME "success" "Configuration updated."
       ;;
@@ -40,7 +40,7 @@ for i in 0 1 2 3; do
   field_text "ntp_server_${i}"
 done
 %>
-      <p><input type="submit" class="btn btn-danger" value="Save changes"></p>
+      <p class="mt-2"><input type="submit" class="btn btn-danger" value="Save changes"></p>
     </form>
   </div>
   <div class="col">
@@ -48,7 +48,7 @@ done
     <% ex "cat $config_file" %>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <input type="hidden" name="action" value="reset">
-      <p><input type="submit" class="btn btn-danger" value="Reset to firware defaults"></p>
+      <p class="mt-2"><input type="submit" class="btn btn-danger" value="Reset to firware defaults"></p>
     </form>
   </div>
 </div>

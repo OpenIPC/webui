@@ -68,9 +68,13 @@ function refresh() {
         // });
         // $$('pre').forEach(el => resizeObserver.observe(el));
 
-        $$(".password input[type=checkbox]").forEach(el =>
-            el.addEventListener('change', ev =>
-                $('#' + ev.target.dataset['for']).type = (el.checked) ? 'text' : 'password'));
+        $$(".password input[type=checkbox]").forEach(el => {
+            el.addEventListener('change', ev => {
+                const pw = $('#' + ev.target.dataset['for']);
+                pw.type = (el.checked) ? 'text' : 'password';
+                pw.focus();
+            });
+        });
 
         $("#send-to-telegram")?.addEventListener("click", event => {
             event.preventDefault();
@@ -116,7 +120,7 @@ function refresh() {
                     }
                     if (startIndex < chunk.length) yield chunk.substr(startIndex);
                 } finally {
-                    if (el.dataset["reboot"] == "true") {
+                    if ("true" === el.dataset["reboot"]) {
                         window.location.href = '/wait.html'
                     } else {
                         el.textContent += '\n--- finished ---\n';

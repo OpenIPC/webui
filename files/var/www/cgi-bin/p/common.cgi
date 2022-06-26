@@ -97,9 +97,9 @@ check_for_lock() {
 
 #check_password() {
 #  [ "0${debug}" -ge "1" ] && return
-#  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui-settings.cgi" ] && return
+#  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui.cgi" ] && return
 #  if [ -z "$password" ] || [ "$password_fw" = "$password" ]; then
-#    redirect_to "/cgi-bin/webui-settings.cgi" "danger" "$t_wui_a"
+#    redirect_to "/cgi-bin/webui.cgi" "danger" "You must set your own secure password!"
 #  fi
 #}
 

@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
 <%
-page_title="$t_wuiup_0"
+page_title="Updating Web UI"
 
 ver="$POST_web_version"
 url="https://github.com/OpenIPC/microbe-web/archive/refs/heads/${ver}.zip"
@@ -15,7 +15,7 @@ opts="-skL --etag-save ${etag_file}"
 <pre class="log-scroll">
 <%
 xl "curl $opts -o $tmp_file $url"
-[ ! -f "$tmp_file" ] && echo "$t_wuiup_1" && error=1
+[ ! -f "$tmp_file" ] && echo "GitHub version matches the installed one. Nothing to update." && error=1
 
 commit=$(tail -c 40 $tmp_file|cut -b1-7)
 timestamp=$(unzip -l $tmp_file|head -5|tail -1|xargs|cut -d" " -f2|sed 's/\(\d\d\)-\(\d\d\)-\(\d\d\d\d\)/\3-\1-\2/')
@@ -51,7 +51,7 @@ if [ -z "$error" ]; then
   update_caminfo
 else
   rm $etag_file
-  echo "$t_wuiup_2"
+  echo "ATTENTION! There were errors!"
 fi
 %>
 </pre>

@@ -26,57 +26,62 @@ Pragma: no-cache
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
-            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownInformation" role="button"><%= $t_nav_1 %></a>
+            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownInformation" role="button">Information</a>
             <ul aria-labelledby="dropdownInformation" class="dropdown-menu">
-              <li><a class="dropdown-item" href="/cgi-bin/status.cgi"><%= $t_nav_2 %></a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/info-cron.cgi"><%= $t_nav_3 %></a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/info-dmesg.cgi"><%= $t_nav_4 %></a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/info-httpd.cgi"><%= $t_nav_5 %></a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/info-log.cgi"><%= $t_nav_6 %></a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/info-overlay.cgi"><%= $t_nav_7 %></a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/status.cgi">Overview</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/info-cron.cgi">Cron config</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/info-dmesg.cgi">Diagnostic messages</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/info-httpd.cgi">HTTPd environment</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/info-log.cgi">Log read</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/info-overlay.cgi">Overlay partition</a></li>
             </ul>
           </li>
-          <li class="nav-item"><a class="nav-link" href="/cgi-bin/firmware.cgi"><%= $t_nav_8 %></a></li>
           <li class="nav-item dropdown">
-            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownSettings" role="button"><%= $t_nav_9 %></a>
+            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownUpdates" role="button">Updates</a>
+            <ul aria-labelledby="dropdownUpdates" class="dropdown-menu">
+              <li><a  class="dropdown-item" href="/cgi-bin/firmware.cgi">Firmware</a></li>
+              <li><a  class="dropdown-item" href="/cgi-bin/webui.cgi">Web Interface</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownSettings" role="button">Settings</a>
             <ul aria-labelledby="dropdownSettings" class="dropdown-menu">
-              <li><a class="dropdown-item" href="/cgi-bin/network.cgi"><%= $t_nav_a %></a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/network-tz.cgi">Timezone</a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/network-ntp.cgi">NTP Servers</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/network.cgi">Network Settings</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/network-tz.cgi">System Timezone</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/network-ntp.cgi">NTP Settings</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/network-socks5.cgi">SOCKS5 Proxy</a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/webui-settings.cgi"><%= $t_nav_c %></a></li>
             </ul>
           </li>
           <li class="nav-item dropdown">
-            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownMajestic" role="button"><%= $t_nav_d %></a>
+            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownMajestic" role="button">Majestic</a>
             <ul aria-labelledby="dropdownMajestic" class="dropdown-menu">
-              <li><a class="dropdown-item" href="/cgi-bin/majestic-settings.cgi"><%= $t_nav_e %></a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/majestic-config-actions.cgi"><%= $t_nav_f %></a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/majestic-debug.cgi"><%= $t_nav_g %></a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/preview-help.cgi"><%= $t_nav_h %></a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/majestic-settings.cgi">Majestic Settings</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/majestic-config-actions.cgi">Majestic Maintenance</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/majestic-debug.cgi">Majestic Debugging</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/preview-help.cgi">Majestic Information</a></li>
             </ul>
           </li>
           <li class="nav-item dropdown">
-            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownTools" role="button"><%= $t_nav_i %></a>
+            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownTools" role="button">Tools</a>
             <ul aria-labelledby="dropdownTools" class="dropdown-menu">
-              <li><a class="dropdown-item" href="/cgi-bin/tools.cgi"><%= $t_nav_j %></a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/console.cgi"><%= $t_nav_k %></a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/ssh-keys.cgi"><%= $t_nav_l %></a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/sdcard.cgi"><%= $t_nav_m %></a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/tools.cgi">Ping & Traceroute</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/console.cgi">Web Console</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/ssh-keys.cgi">SSH Key</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/sdcard.cgi">SD Card</a></li>
             </ul>
           </li>
           <li class="nav-item dropdown">
-            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownServices" role="button"><%= $t_nav_n %></a>
+            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownServices" role="button">Services</a>
             <ul aria-labelledby="dropdownServices" class="dropdown-menu">
               <% load_plugins %>
             </ul>
           </li>
-          <li class="nav-item"><a class="nav-link" href="/cgi-bin/preview.cgi"><%= $t_nav_t %></a></li>
-            <li class="nav-item dropdown">
-            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownHelp" role="button"><%= $t_nav_u %></a>
+          <li class="nav-item"><a class="nav-link" href="/cgi-bin/preview.cgi">Preview</a></li>
+          <li class="nav-item dropdown">
+            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownHelp" role="button">Help</a>
             <ul aria-labelledby="dropdownHelp" class="dropdown-menu">
-              <li><a class="dropdown-item" href="/cgi-bin/about.cgi"><%= $t_nav_v %></a></li>
-              <li><a class="dropdown-item" href="https://openipc.org/wiki/"><%= $t_nav_w %></a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/about.cgi">About OpenIPC</a></li>
+              <li><a class="dropdown-item" href="https://openipc.org/wiki/">OpenIPC Wiki</a></li>
             </ul>
           </li>
         </ul>

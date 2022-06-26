@@ -44,7 +44,7 @@ fw_rootfs="true"
 
 <h4 class="text-danger my-4"><%= $tMsgDestructiveActions %></h4>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
   <div class="col">
     <h3>Firmware</h3>
     <dl class="small list">
@@ -131,63 +131,6 @@ fw_rootfs="true"
       <p><a href="/cgi-bin/majestic-config-compare.cgi" class="btn btn-primary">See difference</a></p>
     <% fi %>
   </div>
-
-  <div class="col">
-    <h3>Web UI</h3>
-    <dl class="small list">
-      <dt>Installed</dt>
-      <dd><%= $ui_version %></dd>
-      <dt>Stable</dt>
-      <dd id="microbe-web-master-ver"></dd>
-      <dt>Unstable</dt>
-      <dd id="microbe-web-dev-ver"></dd>
-    </dl>
-
-    <h4>Install update</h4>
-    <form action="/cgi-bin/webui-update.cgi" method="post">
-      <p class="select input-group">
-        <label for="web_version" class="input-group-text">Branch</label>
-        <select class="form-select" id="web_version" name="web_version" required>
-          <option value="">Choose...</option>
-          <option value="master">Stable</option>
-          <option value="dev">Development</option>
-        </select>
-      </p>
-      <p class="boolean form-check">
-        <input type="checkbox" name="web_enforce" id="web_enforce" value="true" class="form-check-input">
-        <label for="web_enforce" class="form-label">Install even if matches the existing version.</label>
-      </p>
-      <p class="mt-2"><input type="submit" class="btn btn-warning" value="<%= $t_btn_update %>"></p>
-    </form>
-  </div>
 </div>
 
-<script>
-const GH_URL="https://github.com/OpenIPC/";
-const GH_API="https://api.github.com/repos/OpenIPC/";
-
-function checkUpdates() {
-  queryBranch('microbe-web', 'master');
-  queryBranch('microbe-web', 'dev');
-}
-
-function queryBranch(repo, branch) {
-  var oReq = new XMLHttpRequest();
-  oReq.addEventListener("load", function(){
-    const d = JSON.parse(this.response);
-    const sha_short = d.commit.sha.slice(0,7);
-    const date = d.commit.commit.author.date.slice(0,10);
-    const link = document.createElement('a');
-    link.href = GH_URL + repo + '/commits/' + branch;
-    link.target = '_blank';
-    link.textContent = branch + '+' + sha_short + ', ' + date;
-    const el = $('#' + repo + '-' + branch + '-ver').appendChild(link);
-  });
-  oReq.open("GET", GH_API + repo + '/branches/' + branch);
-  oReq.setRequestHeader("Authorization", "Basic " + btoa("<%= "${GITHUB_USERNAME}:${GITHUB_TOKEN}" %>"));
-  oReq.send();
-}
-
-window.addEventListener('load', checkUpdates);
-</script>
 <%in p/footer.cgi %>

@@ -133,12 +133,9 @@ async function updatePreview() {
   $('#preview-jpeg').src = "http://<%= $ipaddr %>/image.jpg?t=" + Date.now();
 }
 
-function initPage() {
-  initControls();
-  $('#preview-jpeg').addEventListener('load', updatePreview);
-  updatePreview();
-}
-
-window.addEventListener('load', initPage);
+$('#preview-jpeg').addEventListener('load', updatePreview);
+updatePreview();
+initControls();
 </script>
+
 <%in p/footer.cgi %>

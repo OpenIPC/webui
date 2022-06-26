@@ -88,3 +88,9 @@ Pragma: no-cache
     <div class="container">
       <h2><%= $page_title %></h2>
       <% flash_read %>
+
+<% if [ "true" = "$telegram_socks5_enabled" ] || [ "true" = "$yadisk_socks5_enabled" ]; then
+  if [ -z "$socks5_server" ] || [ -z "$socks5_port" ]; then %>
+<p class="alert alert-danger">You want to use SOCKS5 proxy but it is not configured!
+  Please <a href="/cgi-bin/network-socks5.cgi">configure the proxy</a>.</p>
+<% fi; fi %>

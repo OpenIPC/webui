@@ -12,18 +12,8 @@ t_preview_7="Your browser does not support HTML5 video."
 size=$(yaml-cli -g .mjpeg.size); [ -z "$size" ] && size="640x480"
 size_w=${size%x*}
 size_h=${size#*x}
-
-source /etc/webui/socks5.conf
-source /etc/webui/telegram.conf
-source /etc/webui/yadisk.conf
 %>
 <%in p/header.cgi %>
-
-<% if [ "true" = "$telegram_socks5_enabled" ] || [ "true" = "$yadisk_socks5_enabled" ]; then
-  if [ -z "$socks5_server" ] || [ -z "$socks5_port" ]; then %>
-<p class="alert alert-danger">You want to use SOCKS5 proxy but it is not configured!
-Please <a href="/cgi-bin/network-socks5.cgi">configure the proxy</a>.</p>
-<% fi; fi %>
 
 <div class="row preview">
   <div class="col-md-8 col-xl-9 col-xxl-9 position-relative mb-3">

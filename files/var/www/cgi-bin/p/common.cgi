@@ -645,6 +645,10 @@ pagename="${pagename%%.*}"
 source p/settings.sh
 source p/locale_en.sh
 
+source /etc/webui/socks5.conf
+source /etc/webui/telegram.conf
+source /etc/webui/yadisk.conf
+
 reload_locale
 # check_password
 %>

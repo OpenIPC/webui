@@ -608,9 +608,11 @@ $(env|sort)
   exit
 }
 
-include() {
-  source "$i"
-}
+#include() {
+#  mkdir -p $(basename $1)
+#  [ ! -f "$1" ] && touch $1
+#  source "$1"
+#}
 
 load_plugins() {
   for i in $(ls -1 plugin-*); do

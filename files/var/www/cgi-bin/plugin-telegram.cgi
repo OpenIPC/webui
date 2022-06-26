@@ -4,7 +4,7 @@
 plugin="telegram"
 plugin_name="Telegram bot"
 page_title="Telegram"
-config_file="/etc/webui/${plugin}.cfg"
+config_file="/etc/webui/${plugin}.conf"
 tmp_file=/tmp/${plugin}.conf
 
 mkdir -p /etc/webui

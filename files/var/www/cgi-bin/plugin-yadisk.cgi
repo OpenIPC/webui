@@ -4,7 +4,18 @@
 plugin="yadisk"
 plugin_name="Yandex Disk"
 page_title="Yandex Disk"
-config_file="/etc/${plugin}.cfg"; [ ! -f "$config_file" ] && touch $config_file
+config_file="/etc/webui/${plugin}.conf";
+tmp_file=/tmp/${plugin}.conf
+
+mkdir -p /etc/webui
+[ ! -f "$config_file" ] && touch $config_file
+
+# convert old config format
+old_config_file=/etc/yadisk.cfg
+if [ -f $old_config_file ]; then
+  mv $old_config_file $config_file
+  flash_save "success" "Configuration file converted to new format."
+fi
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   :> $config_file

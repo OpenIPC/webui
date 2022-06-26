@@ -45,6 +45,7 @@ textarea {
     font-family: var(--bs-font-monospace);
     height: 50vh;
     padding: 1rem;
+    white-space: pre;
 }
 
 dl.list {

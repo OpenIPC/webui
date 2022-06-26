@@ -124,7 +124,7 @@ function refresh() {
                 }
             }
             async function run() {
-                for await (let line of makeTextFileLineIterator('/cgi-bin/jrun.sh?cmd=' + btoa(el.dataset["cmd"]))) {
+                for await (let line of makeTextFileLineIterator('/cgi-bin/jrun.cgi?cmd=' + btoa(el.dataset["cmd"]))) {
                     el.textContent += line + '\n';
                 }
             }

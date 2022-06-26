@@ -1,8 +1,12 @@
 #!/bin/sh
 file=/etc/majestic.yaml
-echo "Content-Type: application/x-yaml
+echo "HTTP/1.0 200 OK
+Date: $(TZ=GMT0 date +'%a, %d %b %Y %T %Z')
+Server: $SERVER_SOFTWARE
+Content-type: text/plain
+Content-Disposition: attachment; filename=majestic.yaml
 Content-Length: $(ls -l $file | xargs | cut -d' ' -f5)
-Content-Encoding: gzip
-Content-Disposition: attachment; filename=\"$(basename $file)\"
+Cache-Control: no-store
+Pragma: no-cache
 "
-gzip -c $file
+cat $file

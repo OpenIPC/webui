@@ -51,62 +51,65 @@ done
 webui_username="admin"
 webui_language="$locale"
 %>
+
 <%in p/header.cgi %>
+
 <%
 [ -n "$error" ] && report_error "$error"
 %>
+
 <form action="/cgi-bin/webui-settings.cgi" method="post" enctype="multipart/form-data">
-<div class="row">
+  <div class="row row-cols-1 row-cols-xxl-3 g-4">
 
-<div class="col col-md-6 col-xl-4">
-  <h3><%= $t_wui_1 %></h3>
-  <p class="string">
-    <label for="webui_username" class="form-label">Username</label>
-    <input type="text" id="webui_username" name="webui_username" value="admin" class="form-control" autocomplete="username" disabled="">
-  </p>
-  <p class="password">
-    <label for="webui_password" class="form-label">Password</label>
-    <span class="input-group">
-      <input type="password" id="webui_password" name="webui_password" class="form-control" placeholder="K3wLHaZk3R!">
-      <label class="input-group-text"><input class="form-check-input me-1" type="checkbox" data-for="webui_password">  show</label>
-    </span>
-  </p>
-  <p class="password">
-    <label for="webui_password_confirmation" class="form-label">Confirm Password</label>
-    <span class="input-group">
-      <input type="password" id="webui_password_confirmation" name="webui_password_confirmation" class="form-control" placeholder="K3wLHaZk3R!">
-    <label class="input-group-text"><input class="form-check-input me-1" type="checkbox" data-for="webui_password_confirmation">  show</label>
-    </span>
-  </p>
-</div>
+    <div class="col">
+      <h3><%= $t_wui_1 %></h3>
 
-<div class="col col-md-6 col-xl-4">
-  <h3><%= $t_wui_2 %></h3>
-  <p class="select">
-    <label for="webui_language" class="form-label">Language</label>
-    <select class="form-select" id="webui_language" name="webui_language">
-      <option value="en" selected="">English</option>
-      <% # %>
-    </select>
-  </p>
-  <p class="file">
-    <label for="webui_locale_file" class="form-label">Locale file</label>
-    <input type="file" id="webui_locale_file" name="webui_locale_file" class="form-control">
-  </p>
-</div>
+      <p class="string">
+        <label for="webui_username" class="form-label">Username</label>
+        <input type="text" id="webui_username" name="webui_username" value="admin" class="form-control" autocomplete="username" disabled>
+      </p>
+      <p class="password">
+        <label for="webui_password" class="form-label">Password</label>
+        <span class="input-group">
+          <input type="password" id="webui_password" name="webui_password" class="form-control" placeholder="K3wLHaZk3R!">
+          <label class="input-group-text"><input class="form-check-input me-1" type="checkbox" data-for="webui_password"> show</label>
+        </span>
+      </p>
+      <p class="password">
+        <label for="webui_password_confirmation" class="form-label">Confirm Password</label>
+        <span class="input-group">
+          <input type="password" id="webui_password_confirmation" name="webui_password_confirmation" class="form-control" placeholder="K3wLHaZk3R!">
+        <label class="input-group-text"><input class="form-check-input me-1" type="checkbox" data-for="webui_password_confirmation"> show</label>
+        </span>
+      </p>
+    </div>
 
-<div class="col col-md-6 col-xl-4">
-<h3><%= $t_wui_3 %></h3>
-<%
-ex "cat /etc/httpd.conf"
-ex "echo \$locale"
-ex "cat /etc/web_locale"
-ex "ls /var/www/lang/"
-%>
-</div>
+    <div class="col">
+      <h3><%= $t_wui_2 %></h3>
+      <p class="select">
+        <label for="webui_language" class="form-label">Language</label>
+        <select class="form-select" id="webui_language" name="webui_language">
+          <option value="en" selected="">English</option>
+          <% # FIXME: add more locales %>
+        </select>
+      </p>
+      <p class="file">
+        <label for="webui_locale_file" class="form-label">Locale file</label>
+        <input type="file" id="webui_locale_file" name="webui_locale_file" class="form-control">
+      </p>
+    </div>
 
-</div>
-<button type="submit" class="btn btn-primary mt-3"><%= $t_btn_submit %></button>
+    <div class="col">
+      <h3><%= $t_wui_3 %></h3>
+      <%
+      ex "cat /etc/httpd.conf"
+      ex "echo \$locale"
+      ex "cat /etc/web_locale"
+      ex "ls /var/www/lang/"
+      %>
+    </div>
+  </div>
+  <p><input type="submit" class="btn btn-primary mt-3" value="Save changes"></p>
 </form>
 
 <script>

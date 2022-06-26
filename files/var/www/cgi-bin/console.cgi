@@ -6,13 +6,14 @@ cmd="$FORM_cmd"
 %>
 <%in p/header.cgi %>
 <div class="console">
-<div class="input-group mb-3">
-<div class="input-group-text">~#</div>
-<input class="form-control" type="text" id="cmd" value="<%= $cmd %>" placeholder="<%= $tPH_web_console_cmd %>" autofocus>
-<div class="input-group-text p-0"><button type="button" class="btn btn-sm btn-white" id="submit-cmd">⏎</button></div>
+  <div class="input-group mb-3">
+    <div class="input-group-text">/tmp#</div>
+    <input class="form-control" type="text" id="cmd" value="<%= $cmd %>" placeholder="<%= $tPH_web_console_cmd %>" required autofocus>
+    <div class="input-group-text p-0"><button type="button" class="btn btn-sm btn-white" id="submit-cmd">⏎</button></div>
+  </div>
+  <pre class="log-scroll" id="code"></pre>
 </div>
-<pre class="log-scroll" id="code"></pre>
-</div>
+
 <script>
 jx = {
   handler: false, error: false, opt: new Object(),
@@ -52,26 +53,26 @@ jx = {
     xhr.send(parameters);
   }
 }
+
 function handler(data) {
   $("#code").innerHTML = data;
 }
-function runCommand(cmd) {
-  window.curcmd = cmd;
-  jx.load("/cgi-bin/ajaxcmd.cgi?cmd=" + urlencode(cmd), handler, "text", "POST");
+
+function runCommand() {
+  cmd = $("#cmd").value.trim();
+  if (cmd.length == 0) return;
+  jx.load("/cgi-bin/jrun.cgi?cmd=" + btoa(cmd), handler, "text", "GET");
   return false;
 }
-function runCommandFromWeb(ev) {
-  if (ev.keyCode && ev.keyCode !== 13) return;
-  const cmd = $("#cmd").value;
-  return runCommand(cmd);
-}
-function urlencode(str) {
-  return str.replace(/%/g, "%25").replace(/\+/g, "%2B").replace(/%20/g, "+").replace(/\*/g, "%2A").replace(/\//g, "%2F").replace(/@/g, "%40").replace(/&/g, "%26").replace(/;/g, "%3B").replace(/\$/g, "%24").replace(/\?/g, "%3F");
-}
+
 window.addEventListener("load", () => {
-  $("#cmd").addEventListener("keyup", runCommandFromWeb);
+  $("#cmd").addEventListener("keyup", (ev) => {
+    if (ev.keyCode && ev.keyCode == 13)
+      runCommand();
+  });
+
   $("#submit-cmd").addEventListener("click", (ev) => {
-    runCommandFromWeb(ev);
+    runCommand();
     $("#cmd").focus();
     ev.preventDefault();
   });

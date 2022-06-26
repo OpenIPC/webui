@@ -2,6 +2,7 @@
 <%in p/common.cgi %>
 <%
 plugin="ipeye"
+plugin_name="IPEYE"
 page_title="$t_ipeye_0"
 %>
 <%in p/header.cgi %>

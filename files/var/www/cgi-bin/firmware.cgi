@@ -44,7 +44,7 @@ fw_rootfs="true"
 
 <h4 class="text-danger my-4"><%= $tMsgDestructiveActions %></h4>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">
   <div class="col">
     <h3><%= $t_firmware_1 %></h3>
     <dl class="small list">
@@ -83,17 +83,23 @@ fw_rootfs="true"
       </p>
       <p class="button submit mt-2"><input type="submit" class="btn btn-warning" value="<%= $t_btn_update %>"></p>
     </form>
+  </div>
 
+  <div class="col">
     <h3><%= $t_firmware_u %></h3>
     <form action="/cgi-bin/firmware-upload-parts.cgi" method="post" enctype="multipart/form-data">
-      <div class="input-group mb-3">
-        <input type="file" id="parts_file" name="parts_file" class="form-control" style="width:70%" required>
-        <select class="form-select" id="parts_type" name="parts_type" style="width:6rem" required>
+      <p class="select">
+        <label for="parts_type" class="form-label">Type of binary file</label>
+        <select class="form-select" id="parts_type" name="parts_type" required>
           <option value="">Choose...</option>
           <option value="kernel">Kernel</option>
           <option value="rootfs">RootFS</option>
         </select>
-      </div>
+      </p>
+      <p class="file">
+        <label for="parts_file" class="form-label">Binary file</label>
+        <input type="file" id="parts_file" name="parts_file" class="form-control" required>
+      </p>
       <p class="button submit mt-2"><input type="submit" class="btn btn-warning" value="<%= $t_btn_upload %>"></p>
     </form>
   </div>
@@ -123,55 +129,38 @@ fw_rootfs="true"
     <% else %>
       <h5><%= $t_firmware_l %></h5>
       <p><a href="/cgi-bin/majestic-config-compare.cgi" class="btn btn-primary"><%= $t_firmware_m %></a></p>
-
-      <h3><%= $t_firmware_6 %></h3>
-      <dl class="small list">
-        <dt><%= $t_firmware_7 %></dt>
-        <dd><%= $ui_version %></dd>
-        <dt><%= $t_firmware_8 %></dt>
-        <dd id="microbe-web-master-ver"></dd>
-        <dt><%= $t_firmware_9 %></dt>
-        <dd id="microbe-web-dev-ver"></dd>
-      </dl>
-
-      <h4><%= $t_firmware_a %></h4>
-      <form action="/cgi-bin/webui-update.cgi" method="post">
-        <p class="select input-group">
-          <label for="web_version" class="input-group-text">Branch</label>
-          <select class="form-select" id="web_version" name="web_version" required>
-            <option value="">Choose...</option>
-            <option value="master">Stable</option>
-            <option value="dev">Development</option>
-          </select>
-        </p>
-        <p class="boolean form-check">
-          <input type="checkbox" name="web_enforce" id="web_enforce" value="true" class="form-check-input">
-          <label for="web_enforce" class="form-label">Install even if matches the existing version.</label>
-        </p>
-        <p class="button submit mt-2">
-          <input type="submit" class="btn btn-warning" value="<%= $t_btn_update %>">
-        </p>
-      </form>
-    </div>
-
-    <div class="col">
-      <div class="alert alert-danger">
-        <h4>Reboot camera</h4>
-        <p>Reboot camera to apply new settings. That will also delete all data on partitions mounted into system memory, like /tmp and such.</p>
-        <p class="mb-0"><a class="btn btn-danger" href="/cgi-bin/reboot.cgi">Reboot camera</a></p>
-      </div>
-
-      <%in p/reset-firmware.cgi %>
-
-      <div class="alert alert-danger">
-        <h4><%= $t_firmware_n %></h4>
-        <p><%= $t_firmware_o %></p>
-        <p class="d-flex gap-2 mb-0">
-          <a class="btn btn-primary" href="/cgi-bin/majestic-config-backup.cgi"><%= $t_firmware_p %></a>
-          <a class="btn btn-danger" href="/cgi-bin/majestic-config-reset.cgi" title="<%= $t_firmware_r %>"><%= $t_firmware_q %></a>
-        </p>
-      </div>
     <% fi %>
+  </div>
+
+  <div class="col">
+    <h3><%= $t_firmware_6 %></h3>
+    <dl class="small list">
+      <dt><%= $t_firmware_7 %></dt>
+      <dd><%= $ui_version %></dd>
+      <dt><%= $t_firmware_8 %></dt>
+      <dd id="microbe-web-master-ver"></dd>
+      <dt><%= $t_firmware_9 %></dt>
+      <dd id="microbe-web-dev-ver"></dd>
+    </dl>
+
+    <h4><%= $t_firmware_a %></h4>
+    <form action="/cgi-bin/webui-update.cgi" method="post">
+      <p class="select input-group">
+        <label for="web_version" class="input-group-text">Branch</label>
+        <select class="form-select" id="web_version" name="web_version" required>
+          <option value="">Choose...</option>
+          <option value="master">Stable</option>
+          <option value="dev">Development</option>
+        </select>
+      </p>
+      <p class="boolean form-check">
+        <input type="checkbox" name="web_enforce" id="web_enforce" value="true" class="form-check-input">
+        <label for="web_enforce" class="form-label">Install even if matches the existing version.</label>
+      </p>
+      <p class="button submit mt-2">
+        <input type="submit" class="btn btn-warning" value="<%= $t_btn_update %>">
+      </p>
+    </form>
   </div>
 </div>
 

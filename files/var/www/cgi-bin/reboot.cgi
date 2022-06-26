@@ -1,15 +1,13 @@
-#!/usr/bin/haserl
-<%in p/common.cgi %>
-<%
-touch /tmp/webjob.lock
-  echo "HTTP/1.1 302 Moved Temporarily
+#!/bin/sh
+echo "HTTP/1.1 302 Moved Temporarily
+Date: $(TZ=GMT0 date +'%a, %d %b %Y %T %Z')
+Server: $SERVER_SOFTWARE
 Content-type: text/html; charset=UTF-8
 Cache-Control: no-store
 Pragma: no-cache
-Date: $(TZ=GMT date +"%a, %d %b %Y %T %Z")
 Location: /wait.html
-Server: httpd
 Status: 302 Moved Temporarily
 "
+
+touch /tmp/webjob.lock
 reboot
-%>

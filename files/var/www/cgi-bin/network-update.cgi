@@ -24,10 +24,7 @@ if [ "false" = "$network_dhcp" ]; then
   [ -z "$network_dns_2" ] && error="$t_networkup_5"
 fi
 
-if [ -n "$error" ]; then
-  flash_save "danger" "$error"
-  redirect_to "/cgi-bin/network.cgi"
-fi
+[ -n "$error" ] && redirect_to "/cgi-bin/network.cgi" "danger" "$error"
 
 if [ -n "$network_hostname" ]; then
   if [ "$network_hostname" != "$hostname" ]; then
@@ -65,11 +62,6 @@ update_caminfo
 %>
 <%in p/header.cgi %>
 <%
-alert_ "danger"
-  h4 "$t_networkup_6"
-  p "$t_networkup_7"
-  button_reboot
-_alert
 link_to "$t_networkup_9" "/cgi-bin/network.cgi"
 %>
 <%in p/footer.cgi %>

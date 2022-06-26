@@ -1,55 +1,56 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
-<% page_title="$t_ntp_0" %>
+<%
+plugin="ntp"
+page_title="NTP servers"
+config_file="/etc/ntp.conf"
+
+if [ "POST" = "$REQUEST_METHOD" ]; then
+  case "$POST_action" in
+    reset)
+      cp /rom/etc/ntp.conf /etc/ntp.conf
+      redirect_to $SCRIPT_NAME "success" "Configuration reset to firware defaults."
+      ;;
+    update)
+      tmp_file=/tmp/${plugin}.conf
+      :> $tmp_file
+      for i in 0 1 2 3; do
+        eval s=\$POST_ntp_server_${i}
+        [ -n "$s" ] && echo "server ${s} iburst" >> $tmp_file
+      done
+      unset s
+      mv $tmp_file $config_file
+      redirect_to $SCRIPT_NAME "success" "Configuration updated."
+      ;;
+  esac
+fi
+%>
+
 <%in p/header.cgi %>
-<% if [ "$(cat /etc/TZ)" != "$TZ" ]; then %>
-<div class="alert alert-danger">
-<h4><%= $t_ntp_1 %></h4>
-<p><%= $t_ntp_2 %></p>
-<% button_reboot %>
-</div>
-<% fi %>
-<div class="row row-cols-1 row-cols-md-2 row-cols-xxl-4 g-4">
-<div class="col">
-<h3><%= $t_ntp_4 %></h3>
-<p><a href="#" id="frombrowser"><%= $tH_tz_name2 %></a></p>
-<form action="/cgi-bin/network-tz-update.cgi" method="post">
-<datalist id="tz_list"></datalist>
-<%
-field_text "tz_name" "" "list=tz_list"
-field_text "tz_data" "" "readonly"
-button_submit
-%>
-</form>
-</div>
-<div class="col">
-<h3><%= $t_ntp_5 %></h3>
-<%
-ex "cat /etc/TZ"
-ex "cat /etc/tz_name"
-ex "echo \$TZ"
-ex "/bin/date"
-%>
-</div>
-<div class="col">
-<h3><%= $t_ntp_6 %></h3>
-<form action="/cgi-bin/network-ntp-update.cgi" method="post">
+
+<div class="row row-cols-1 row-cols-xxl-3 g-4">
+  <div class="col">
+    <h3>NTP Servers</h3>
+    <form action="<%= $SCRIPT_NAME %>" method="post">
+      <input type="hidden" name="action" value="update">
 <%
 for i in 0 1 2 3; do
   x=$(expr $i + 1)
   eval "ntp_server_${i}=$(sed -n ${x}p /etc/ntp.conf | cut -d' ' -f2)"
   field_text "ntp_server_${i}"
 done
-button_submit
 %>
-</form>
-</div>
-<div class="col">
-<h3><%= $t_ntp_7 %></h3>
-<% ex "cat /etc/ntp.conf" %>
-<a class="btn btn-danger" href="/cgi-bin/network-ntp-reset.cgi"><%= $t_ntp_8 %></a>
-</div>
+      <p><input type="submit" class="btn btn-danger" value="Save changes"></p>
+    </form>
+  </div>
+  <div class="col">
+    <h3>NTP Settings</h3>
+    <% ex "cat $config_file" %>
+    <form action="<%= $SCRIPT_NAME %>" method="post">
+      <input type="hidden" name="action" value="reset">
+      <p><input type="submit" class="btn btn-danger" value="Reset to firware defaults"></p>
+    </form>
+  </div>
 </div>
 
-<script src="/a/tz.js"></script>
 <%in p/footer.cgi %>

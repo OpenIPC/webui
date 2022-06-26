@@ -2,6 +2,7 @@
 <%in p/common.cgi %>
 <%
 plugin="vtun"
+plugin_name="Virtual Tunnel"
 url=/cgi-bin/plugin-vtun.cgi
 page_title="$t_vtun_0"
 service_file=/etc/init.d/S98vtun

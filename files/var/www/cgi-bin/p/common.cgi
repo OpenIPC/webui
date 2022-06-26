@@ -266,22 +266,17 @@ form_upload_() {
   echo "<form action=\"$1\" method=\"post\" enctype=\"multipart/form-data\">"
 }
 
-get_http_time() {
-  http_time=$(TZ=GMT date +"%a, %d %b %Y %T %Z")
-}
-
 get_soc_temp() {
   soc_temp=$(ipcinfo --temp)
 }
 
 header_ok() {
-  get_http_time
   echo "HTTP/1.1 200 OK
 Content-type: application/json; charset=UTF-8
 Cache-Control: no-store
 Pragma: no-cache
-Date: $http_time
-Server: httpd
+Date: $(TZ=GMT0 date +'%a, %d %b %Y %T %Z')
+Server: $SERVER_SOFTWARE
 
 {}"
 }
@@ -303,12 +298,27 @@ image() {
 
 # input "type" "name" "classes" "value" "extras"
 input() {
+  # input type
   _t="$1"
+
+  # input name
   _n="$2"
+
+  # css class
   _c="form-control"
+
+  # extra css class
   _c2="$3"
-  _x2="$4"
+
+  # placeholder
+  eval _p=\$sP_${_n}
+  [ -n "$_p" ] && _p=" placeholder=\"${_p}\""
+
+  #  value
   _v="$(t_value "$_n")"
+
+  # extra attributes
+  _x2="$4"
 
   case "$1" in
   checkbox)
@@ -339,8 +349,6 @@ input() {
 
   [ -n "$_c2" ] && _c="${_c} ${_c2}"; [ -n "$_c" ] && _c=" class=\"${_c}\""
   [ -n "$_x2" ] && _x="${_x} ${_x2}"; [ -n "$_x" ] && _x=" ${_x}"
-
-  _p=$(t_placeholder "$2"); [ -n "$_p" ] && _p=" placeholder=\"${_p}\""
 
   if [ "textarea" = "$1" ]; then
     echo "<textarea id=\"${_n}\" name=\"${_n}\"${_c}${_x}>${_v}</textarea>"
@@ -382,11 +390,10 @@ redirect_to() {
 Content-type: text/html; charset=UTF-8
 Cache-Control: no-store
 Pragma: no-cache
-Date: $(get_http_time)
+Date: $(TZ=GMT0 date +'%a, %d %b %Y %T %Z')
 Location: $1
-Server: httpd
+Server: $SERVER_SOFTWARE
 Status: 302 Moved Temporarily
-$xheader
 "
   exit 0
 }
@@ -485,14 +492,6 @@ t_label() {
 
 t_options() {
   eval "echo \${tOptions_${1}//,/ }"
-}
-
-t_placeholder() {
-#  if [ "$1" = "isp_sensorConfig" ]; then
-    eval echo \$tPlaceholder_${1}
-#  else
-#    eval "echo \${tPlaceholder_${1}//_/ }"
-#  fi
 }
 
 t_readonly() {
@@ -602,11 +601,23 @@ Pragma: no-cache
 Connection: close
 
 --------------------
-$(env)
+$(env|sort)
 --------------------
 "
   for x in $1; do echo -e "$x = $(eval echo \$$x)\n"; done
   exit
+}
+
+include() {
+  source "$i"
+}
+
+load_plugins() {
+  for i in $(ls -1 plugin-*); do
+    eval "$(grep 'plugin_name=' $i)"
+    echo "<li><a class=\"dropdown-item\" href=\"/cgi-bin/${i}\">${plugin_name}</a></li>"
+    unset plugin_name
+  done
 }
 
 log() {
@@ -617,16 +628,21 @@ mj_bin_file=/usr/bin/majestic
 flash_file=/tmp/webui-flash.txt
 sysinfo_file=/tmp/sysinfo.txt
 
+config_path=/etc/webui
+[ ! -d $config_path ] && mkdir -p $config_path
+
+lang_path=/var/www/lang/
+[ ! -d $lang_path ] && mkdir -p $lang_path
+
 [ ! -f $sysinfo_file ] && update_caminfo
 source $sysinfo_file
 
-[ ! -d /var/www/lang/ ] && mkdir -p /var/www/lang/
-
-pagename=$(basename $SCRIPT_NAME)
+pagename=$(basename "$SCRIPT_NAME")
 pagename="${pagename%%.*}"
 
-source $PWD/p/settings.sh
-source $PWD/p/locale_en.sh
+source p/settings.sh
+source p/locale_en.sh
+
 reload_locale
 # check_password
 %>

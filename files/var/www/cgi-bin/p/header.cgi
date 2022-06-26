@@ -30,6 +30,7 @@ Pragma: no-cache
             <ul aria-labelledby="dropdownInformation" class="dropdown-menu">
               <li><a class="dropdown-item" href="/cgi-bin/status.cgi">Overview</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/info-cron.cgi">Cron config</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/info-majestic.cgi">Majestic config</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/info-dmesg.cgi">Diagnostic messages</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/info-httpd.cgi">HTTPd environment</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/info-log.cgi">Log read</a></li>

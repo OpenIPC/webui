@@ -14,17 +14,22 @@ function refresh() {
 
 (function () {
     function initAll() {
+
         function toggleAuto(el) {
-            const el2 = $('#' + el.dataset.for);
+            const id = el.dataset.for;
+            const p = $('#' + id);
+            const r = $('#' + id + '-range');
+            const s = $('#' + id + '-show');
             if (el.checked) {
-                el.dataset.value = el2.value;
-                el2.value = 'auto';
-                el2.disabled = true
-                $('#' + el2.id + '-value').textContent = 'auto';
+                el.dataset.value = p.value;
+                p.value = 'auto';
+                r.disabled = true;
+                s.textContent = '--';
             } else {
-                el2.value = el.dataset.value;
-                el2.disabled = false;
-                $('#' + el2.id + '-value').textContent = el2.value;
+                p.value = el.dataset.value;
+                r.value = p.value;
+                r.disabled = false;
+                s.textContent = p.value;
             }
         }
 
@@ -44,19 +49,23 @@ function refresh() {
 
         $$('a[href^=http]').forEach(el => el.target = '_blank');
 
-        $$('input.auto-value').forEach(el => {
-            el.addEventListener('click', ev => toggleAuto(ev.target));
-            toggleAuto(el);
-        });
-
         // add patterns
         $$('input.pat-host').forEach(el => el.pattern = '^[a-zA-Z0-9-_.]+$');
 
         $$('input.pat-host-ip').forEach(el => el.pattern = '^[a-zA-Z0-9-_.]+$');
 
-        $$('input[type=range]').forEach(el =>
-            el.addEventListener('input', ev =>
-                $('#' + ev.target.id + '-value').textContent = ev.target.value));
+        $$('input[type=range]').forEach(el => {
+            el.addEventListener('input', ev => {
+                const id = ev.target.id.replace(/-range/, '');
+                $('#' + id).value = ev.target.value;
+                $('#' + id + '-show').textContent = ev.target.value;
+            })
+        });
+
+        $$('input.auto-value').forEach(el => {
+            el.addEventListener('click', ev => toggleAuto(ev.target));
+            toggleAuto(el);
+        });
 
         // const resizeObserver = new ResizeObserver(entries => {
         //     entries.forEach(entry => {

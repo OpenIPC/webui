@@ -169,15 +169,21 @@ field_password() {
 
 # field_range "name"
 field_range() {
+  _v=$(t_value "$1")
+  [ -z "$_v" ] && _v=$(t_default "$1")
+
   field_ "range"
     label "$1"
     echo "<span class=\"input-group\">"
-    if [ -n "$(t_options "$1" | grep -E auto)" ]; then
-      echo "<label class=\"input-group-text\">auto <input class=\"form-check-input auto-value ms-1\" type=\"checkbox\" data-for=\"${1}\" data-value=\"$(t_default "$1")\" $(t_checked "$1" "auto")></label>"
-    fi
-    echo "<input type=\"range\" name=\"${1}\" id=\"${1}\" class=\"form-control form-range\" value=\"$(t_value "$1")\">"
-    echo "<span class=\"input-group-text\"><span id=\"${1}-value\" class=\"text-end\">$(t_value "$1")</span></span>"
+      if [ -n "$(t_options "$1" | grep -E auto)" ]; then
+        echo "<label class=\"input-group-text\">auto"
+        echo "<input class=\"form-check-input auto-value ms-1\" type=\"checkbox\" data-for=\"${1}\" data-value=\"${_v}\" $(t_checked "$1" "auto")>"
+        echo "</label>"
+      fi
+      echo "<input type=\"range\" name=\"${1}-range\" id=\"${1}-range\" class=\"form-control form-range\" value=\"${_v}\">"
+      echo "<span class=\"input-group-text\" id=\"${1}-show\">${_v}</span>"
     echo "</span>"
+    echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}\" value=\"${_v}\">"
     help "$1"
   _field
 }

@@ -27,7 +27,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
       if [ -n "$editor_backup" ]; then
         cp "$editor_file" "${editor_file}.backup"
       else
-        rm "${editor_file}.backup"
+        [ -f "${editor_file}.backup" ] && rm "${editor_file}.backup"
       fi
       echo "$editor_text" > "$editor_file"
       redirect_to "${SCRIPT_NAME}?f=${editor_file}" "success" "$t_form_error_d"

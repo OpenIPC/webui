@@ -72,7 +72,6 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
   # hide some params in config
   [ "mj_netip_password_plain" != "$name" ] && config="${config}\n$(eval echo ${param}: \$$name)"
 
-  echo "<div class=x-small>$name</div>"
   case "$type" in
     boolean) field_switch "$name";;
     hidden)  field_hidden "$name";;

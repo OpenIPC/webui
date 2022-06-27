@@ -21,7 +21,7 @@ Pragma: no-cache
     <div class="container">
       <a class="navbar-brand" href="/cgi-bin/status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg"></a>
       <% if [ -n "$soc_temp" ]; then %>
-        <span id="soc-temp" class="text-primary bg-white rounded small" title="<%= $tSoCTemp %>">72<%= $soc_temp %>°C</span>
+        <span id="soc-temp" class="text-primary bg-white rounded small" title="<%= $tSoCTemp %>"><%= $soc_temp %>°C</span>
       <% fi %>
       <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>

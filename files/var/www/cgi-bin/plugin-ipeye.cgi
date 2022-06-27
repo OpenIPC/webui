@@ -7,7 +7,7 @@ page_title="IPEYE Cloud"
 %>
 <%in p/header.cgi %>
 
-<div class="alert alert-warning"><%= $t_alert_1 %></div>
+<p class="alert alert-warning">Attention! This is only a proof of concept for the prospective subsystem of additional services. No real functionality here.</p>
 
 <% if [ "$(yaml-cli -g .ipeye.enabled)" = "true" ]; then %>
   <div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3 g-4">

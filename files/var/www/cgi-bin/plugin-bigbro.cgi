@@ -20,7 +20,9 @@ case "$REQUEST_METHOD" in
   GET)
 %>
 <%in p/header.cgi %>
-<div class="alert alert-warning"><%= $t_alert_1 %></div>
+
+<p class="alert alert-warning">Attention! This is only a proof of concept for the prospective subsystem of additional services. No real functionality here.</p>
+
 <div class="row row-cols-1 row-cols-xl-3 g-4">
   <div class="col">
     <h3>Add a device</h3>

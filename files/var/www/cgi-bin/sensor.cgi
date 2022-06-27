@@ -40,13 +40,11 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     case "$type" in
     driver)
       mv "$file_path" "/usr/lib/sensors/${file_name}"
-      flash_save "success" "$t_sensor_1"
-      redirect_to "/cgi-bin/sensor-upload.cgi"
+      redirect_to "/cgi-bin/sensor-upload.cgi" "success" "$t_sensor_1"
       ;;
     config)
       mv "$file_path" "/etc/sensors/${file_name}"
-      flash_save "success" "$t_sensor_2"
-      redirect_to "/cgi-bin/sensor-upload.cgi"
+      redirect_to "/cgi-bin/sensor-upload.cgi" "success" "$t_sensor_2"
       ;;
     esac
   fi

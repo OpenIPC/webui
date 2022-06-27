@@ -10,7 +10,6 @@ if [ $? -ne 0 ]; then
 <%in p/footer.cgi %>
 <%
 else
-flash_save "success" "$t_ntp_a"
-redirect_to "/cgi-bin/status.cgi"
+redirect_to "/cgi-bin/status.cgi" "success" "Camera time synchronized with NTP server."
 fi
 %>

@@ -3,10 +3,7 @@
 <%
 page_title="$t_mjdebug_0"
 
-if [ ! -f "/rom/${mj_bin_file}" ]; then
-  flash_save "danger" "$t_mjdebug_1"
-  redirect_to "/cgi-bin/status.cgi"
-fi
+[ ! -f "/rom/${mj_bin_file}" ] && redirect_to "/cgi-bin/status.cgi" "danger" "$t_mjdebug_1"
 
 conf_file=/etc/coredump.config
 

@@ -51,15 +51,17 @@ if [ -n "$error" ]; then
   report_error "$error"
   report_log "$log"
 else
-  pre_ "bg-light p-4 log-scroll"
-  e "$log"
-  e "killall majestic"
-  e "$(killall majestic 2>&1)"
-  e "mv -f ${mj_tmp_file} ${mj_bin_file}"
-  e "$(mv -f $mj_tmp_file $mj_bin_file 2>&1)"
-  e "$t_mjupdate_5"
-  e "$(reboot)"
-  _pre
-fi
 %>
+<pre class="bg-light p-4 log-scroll">
+<%
+e "$log"
+e "killall majestic"
+e "$(killall majestic 2>&1)"
+e "mv -f ${mj_tmp_file} ${mj_bin_file}"
+e "$(mv -f $mj_tmp_file $mj_bin_file 2>&1)"
+e "$t_mjupdate_5"
+e "$(reboot)"
+%>
+</pre>
+<% fi %>
 <%in p/footer.cgi %>

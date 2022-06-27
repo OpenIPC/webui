@@ -16,7 +16,7 @@ Pragma: no-cache
 <script src="/a/bootstrap.js"></script>
 <script src="/a/main.js"></script>
 </head>
-<body id="page-<%= $pagename %>">
+<body id="page-<%= $pagename %>" class="<% [ "$debug" -ge "1" ] && echo -n " debug" %>">
   <nav class="navbar navbar-dark navbar-expand-lg sticky-top">
     <div class="container">
       <a class="navbar-brand" href="/cgi-bin/status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg"></a>
@@ -97,16 +97,18 @@ Pragma: no-cache
     <div class="container">
       <p class="text-end x-small"><% signature %></p>
 
-      <h2><%= $page_title %></h2>
-      <% flash_read %>
-
 <% if [ "true" = "$telegram_socks5_enabled" ] || [ "true" = "$yadisk_socks5_enabled" ]; then
   if [ -z "$socks5_server" ] || [ -z "$socks5_port" ]; then %>
-<p class="alert alert-danger">You want to use SOCKS5 proxy but it is not configured!
-  Please <a href="/cgi-bin/network-socks5.cgi">configure the proxy</a>.</p>
+<p class="alert alert-danger">You want to use SOCKS5 proxy but it is not configured! Please <a href="/cgi-bin/network-socks5.cgi">configure the proxy</a>.</p>
 <% fi; fi %>
 
 <% if [ "$(cat /etc/TZ)" != "$TZ" ]; then %>
-<p class="alert alert-danger">$TZ variable in system environment needs updating!
-  <a class="btn btn-danger ms-2" href="/cgi-bin/reboot.cgi">Reboot camera</a></p>
+<p class="alert alert-danger">$TZ variable in system environment needs updating! <a class="btn btn-danger ms-2" href="/cgi-bin/reboot.cgi">Reboot camera</a></p>
 <% fi %>
+
+<% if [ -f /tmp/network-restart.txt ]; then %>
+<p class="alert alert-danger">Network settings have been updated. Restart to apply changes. <a class="btn btn-danger ms-2" href="/cgi-bin/reboot.cgi">Reboot camera</a></p>
+<% fi %>
+
+      <h2><%= $page_title %></h2>
+      <% flash_read %>

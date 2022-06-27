@@ -37,9 +37,6 @@ span()  { tag "span"  "$1" "$2" "$3"; }
 div_() { A "div" "$1" "$2"; }
 _div() { Z "div"; }
 
-pre_() { A "pre" "$1" "$2"; }
-_pre() { Z "pre"; }
-
 span_() { A "span" "$1" "$2"; }
 _span() { Z "span"; }
 
@@ -50,19 +47,6 @@ alert() {
 
 beats() {
   echo "@$(echo "$(date -u -d "1970-01-01 $(TZ=UTC-1 date +%T)" +%s)*10/864"|bc)"
-}
-
-# button_link_to "text" "url" "type" "extras"
-button_link_to() {
-  echo "<a class=\"btn btn-${3}\" href=\"${2}\" ${4}>${1}</a>"
-}
-
-button_home() {
-  echo "<a class=\"btn btn-primary\" href=\"/\">$t_b_home</a>"
-}
-
-button_reboot() {
-  button_link_to "$t_b_reboot" "/cgi-bin/reboot.cgi" "danger"
 }
 
 # button_submit "text" "type" "extras"
@@ -93,10 +77,9 @@ e() {
 
 ex() {
   # NB! $() forks process and stalls output.
-  h4 "# ${1}"
-  pre_ "small"
-  eval "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g" 2>&1
-  _pre
+  echo "<h4># ${1}</h4><pre class=\"small\">"
+  eval "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g"
+  echo "</pre>"
 }
 
 field_() {
@@ -249,22 +232,6 @@ flash_save() {
   echo "${1}:${2}" > $flash_file
 }
 
-form_() {
-  _m="$2"
-  [ -z "$_m" ] && _m="post"
-
-  A "form" "" "action=\"${1}\" method=\"${_m}\" ${3}"
-  unset _m
-}
-
-_form() {
-  Z "form"
-}
-
-form_upload_() {
-  echo "<form action=\"$1\" method=\"post\" enctype=\"multipart/form-data\">"
-}
-
 get_soc_temp() {
   [ "true" = "$has_soc_temp" ] && soc_temp=$(ipcinfo --temp)
 }
@@ -288,11 +255,6 @@ help() {
 html_title() {
   [ -n "$1" ] && echo -n "$1 - "
   echo -n "OpenIPC"
-}
-
-# image "src" "classes" "extras"
-image() {
-  echo -n "<img src=\"${1}\" alt=\"Image: ${1}\" class=\"${2}\" ${3}>"
 }
 
 # input "type" "name" "classes" "value" "extras"
@@ -368,10 +330,6 @@ label() {
   unset _c; unset _l; unset _u; unset _x
 }
 
-link_to() {
-  echo "<a href=\"${2}\" class=\"${3}\" ${4}>${1}</a>"
-}
-
 # pre "text" "classes" "extras"
 pre() {
   # replace <, >, &, ", and ' with HTML entities
@@ -413,10 +371,6 @@ report_error() {
   alert "$1" "danger"
 }
 
-report_info() {
-  alert "$1" "info"
-}
-
 # report_log "text" "extras"
 report_log() {
   pre "$1" "small" "$2"
@@ -432,11 +386,6 @@ report_command_error() {
 report_command_info() {
   h4 "# $1"
   report_log "$2"
-}
-
-report_command_success() {
-  h2 "$tMsgCommandExecuted" "success"
-  report_command_info "$1" "$2"
 }
 
 # row_ "class"

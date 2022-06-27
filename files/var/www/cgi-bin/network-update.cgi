@@ -61,7 +61,5 @@ mv $tmp /etc/network/interfaces
 update_caminfo
 %>
 <%in p/header.cgi %>
-<%
-link_to "$t_networkup_9" "/cgi-bin/network.cgi"
-%>
+<a href="/cgi-bin/network.cgi"><%= $t_networkup_9 %></a>
 <%in p/footer.cgi %>

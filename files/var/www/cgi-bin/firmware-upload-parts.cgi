@@ -36,12 +36,12 @@ if [ -n "$error" ]; then
   redirect_back "danger" "$error"
 else %>
 <%in p/header.cgi %>
+<pre class="bg-light p-4 log-scroll">
 <%
-  pre_ "bg-light p-4 log-scroll"
-    xl "mv $file /tmp/${file_name}"
-    $cmd
-  _pre
-  button_home
-fi
+xl "mv $file /tmp/${file_name}"
+$cmd
 %>
+</pre>
+<a class="btn btn-primary" href="/">Go home</a>
+<% fi %>
 <%in p/footer.cgi %>

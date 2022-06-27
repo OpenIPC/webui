@@ -54,8 +54,9 @@ else
     else
       report_log "$_o"
     fi
-
-    button_home
+%>
+<a class="btn btn-primary" href="/">Go home</a>
+<%
   else
     _c="df -h|sed -n 1p/${card_partition////\\\/}/p"
     _o="$($_c)"

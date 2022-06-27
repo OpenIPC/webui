@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;700&display=swap');
 
+@media (max-width: 575.98px) {body.debug:before{content:"xs"}}
+@media (min-width: 576px) and (max-width: 767.98px) {body.debug:before{content:"sm"}}
+@media (min-width: 768px) and (max-width: 991.98px) {body.debug:before{content:"md"}}
+@media (min-width: 992px) and (max-width: 1199.98px) {body.debug:before{content:"lg"}}
+@media (min-width: 1200px) and (max-width: 1399.98px) {body.debug:before{content:"xl"}}
+@media (min-width: 1400px) {body.debug:before{content:"xxl"}}
+body.debug:before {color:#4c60d811;display:block;font-size:10rem;font-weight:700;line-height:1;position:absolute;right:3rem;top:3rem;z-index:-1}
+
 :root {
     --bs-body-font-family: "IBM Plex Sans", sans-serif;
     --bs-font-monospace: "IBM Plex Mono", monospace;
@@ -53,14 +61,17 @@ dl.list {
     justify-content: space-between;
     align-items: baseline;
 }
-
-dl.list dd, dl.list dt {
-    margin: 0.125rem 0;
-    padding: 0;
+/*dl.list dd, dl.list dt {*/
+/*    margin: 0.125rem 0;*/
+/*    padding: 0;*/
+/*}*/
+dl.list dt {
+    flex: 1 10rem;
 }
-
-dl.list dt { flex: 1 1 30% }
-dl.list dd { flex: 2 1 70% }
+dl.list dd {
+    flex: 1 20rem;
+    flex-flow: row wrap;
+}
 
 .btn {
     white-space: nowrap;

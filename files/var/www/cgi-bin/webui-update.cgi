@@ -55,5 +55,5 @@ else
 fi
 %>
 </pre>
-<% button_home %>
+<a class="btn btn-primary" href="/">Go home</a>
 <%in p/footer.cgi %>

@@ -69,14 +69,6 @@ fi
 
 <%in p/header.cgi %>
 
-<% if [ -f /tmp/network-restart.txt ]; then %>
-  <div class="alert alert-danger">
-    <h4>Network settings have been updated.</h4>
-    <p>Restart needed to apply changes.</p>
-    <% button_reboot %>
-  </div>
-<% fi %>
-
 <div class="row">
   <div class="col col-md-6 col-lg-4 col-xxl-3">
     <h3>Settings</h3>

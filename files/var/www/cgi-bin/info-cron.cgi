@@ -2,9 +2,6 @@
 <%in p/common.cgi %>
 <% page_title="Cron settings" %>
 <%in p/header.cgi %>
-<%
-f=/etc/crontabs/root
-ex "cat ${f}"
-button_link_to "Edit file" "texteditor.cgi?f=${f}" "warning"
-%>
+<% ex "cat /etc/crontabs/root" %>
+<a class="btn btn-warning" href="texteditor.cgi?f=/etc/crontabs/root">Edit file</a>
 <%in p/footer.cgi %>

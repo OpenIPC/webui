@@ -2,9 +2,6 @@
 <%in p/common.cgi %>
 <% page_title="Majestic config" %>
 <%in p/header.cgi %>
-<%
-f=/etc/majestic.yaml
-ex "cat ${f}"
-button_link_to "Edit file" "texteditor.cgi?f=${f}" "warning"
-%>
+<% ex "cat /etc/majestic.yaml" %>
+<a class="btn btn-warning" href="texteditor.cgi?f=/etc/majestic.yaml">Edit file</a>
 <%in p/footer.cgi %>

@@ -13,7 +13,7 @@
     </div>
     <div class="offcanvas-body x-small">
       <p><a class="btn btn-warning" href="webui-init.cgi">Refresh Environment</a></p>
-      <% ex env | sort %>
+      <% ex "env | sort" %>
       <% ex "cat /tmp/sysinfo.txt" %>
     </div>
   </div>

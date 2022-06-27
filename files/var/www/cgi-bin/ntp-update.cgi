@@ -10,6 +10,6 @@ if [ $? -ne 0 ]; then
 <%in p/footer.cgi %>
 <%
 else
-redirect_to "/cgi-bin/status.cgi" "success" "Camera time synchronized with NTP server."
+  redirect_to "/cgi-bin/status.cgi" "success" "Camera time synchronized with NTP server."
 fi
 %>

@@ -76,11 +76,6 @@ button_reboot() {
   button_link_to "$t_b_reboot" "/cgi-bin/reboot.cgi" "danger"
 }
 
-# button_refresh
-button_refresh() {
-  link_to "$t_b_refresh" "#" "btn btn-primary refresh"
-}
-
 # button_submit "text" "type" "extras"
 button_submit() {
   _t="$1"; [ -z "$_t" ] && _t="$t_btn_submit"

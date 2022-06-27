@@ -2,8 +2,6 @@
 <%in p/common.cgi %>
 <% page_title="Modules" %>
 <%in p/header.cgi %>
-<%
-ex "lsmod"
-button_refresh
-%>
+<% ex "lsmod" %>
+<a href="#" class="btn btn-primary refresh">Refresh</a>
 <%in p/footer.cgi %>

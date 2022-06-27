@@ -107,6 +107,12 @@ dl.list dd { flex: 2 1 70% }
     width: 90%;
 }
 
+p.range span.show-value {
+    display: block;
+    min-width: 3.5rem;
+    text-align: center;
+}
+
 .hint {
     font-size: 0.875rem;
     margin-top: 0.2rem;

@@ -2,6 +2,15 @@
 
 ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
 
+tRange_mj_audio_volume="1,100,1,auto"
+tRange_mj_image_contrast="1,100,1,auto"
+tRange_mj_image_hue="1,100,1"
+tRange_mj_image_luminance="1,100,1,auto"
+tRange_mj_image_saturation="1,100,1"
+tRange_mj_isp_aGain="0.1,1.0,0.1"
+tRange_mj_isp_dGain="0.1,1.0,0.1"
+tRange_mj_isp_ispGain="0.1,1.0,0.1"
+
 tOptions_mj_audio_codec="mp3,opus,aac,pcm,alaw,ulaw"
 tOptions_mj_audio_enabled="true,false"
 tOptions_mj_audio_outputEnabled="true,false"

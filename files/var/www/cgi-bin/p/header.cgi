@@ -47,6 +47,7 @@ Pragma: no-cache
           <li class="nav-item dropdown">
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownSettings" role="button">Settings</a>
             <ul aria-labelledby="dropdownSettings" class="dropdown-menu">
+              <li><a class="dropdown-item" href="/cgi-bin/majestic-settings.cgi">Majestic Settings</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/network.cgi">Network Settings</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/network-tz.cgi">System Timezone</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/network-ntp.cgi">NTP Settings</a></li>
@@ -56,7 +57,6 @@ Pragma: no-cache
           <li class="nav-item dropdown">
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownMajestic" role="button">Majestic</a>
             <ul aria-labelledby="dropdownMajestic" class="dropdown-menu">
-              <li><a class="dropdown-item" href="/cgi-bin/majestic-settings.cgi">Majestic Settings</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/majestic-config-actions.cgi">Majestic Maintenance</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/majestic-debug.cgi">Majestic Debugging</a></li>
             </ul>

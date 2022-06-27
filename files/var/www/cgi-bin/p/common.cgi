@@ -2,11 +2,11 @@
 <%
 # tag "tag" "text" "css" "extras"
 tag() {
-  _tag="$1"; _txt="$2"; _css="$3"; _xtr="$4"
-  [ -n "$_css" ] && _css=" class=\"${_css}\""
-  [ -n "$_xtr" ] && _xtr=" ${_xtr}"
-  echo "<${_tag}${_css}${_xtr}>${_txt}</${_tag}>"
-  unset _tag; unset _txt; unset _css; unset _xtr
+  _t="$1"; _n="$2"; _c="$3"; _x="$4"
+  [ -n "$_c" ] && _c=" class=\"${_c}\""
+  [ -n "$_x" ] && _x=" ${_x}"
+  echo "<${_t}${_c}${_x}>${_n}</${_t}>"
+  unset _t; unset _n; unset _c; unset _x
 }
 
 # A "tag" "classes" "extras"

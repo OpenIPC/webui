@@ -542,8 +542,8 @@ update_caminfo() {
   sensor_ini=$(ipcinfo --long-sensor)
   soc=$(ipcinfo --chip-name)
   soc_family=$(ipcinfo --family)
-  has_soc_temp=$(ipcinfo --temp)
-  if [ "Temperature cannot be retrieved" = "$has_soc_temp" ]; then
+  # ipcinfo reports to stderr
+  if [ "Temperature cannot be retrieved" = "$(ipcinfo --temp 2>&1)" ]; then
     has_soc_temp="false"
   else
     has_soc_temp="true"

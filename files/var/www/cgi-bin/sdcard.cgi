@@ -5,10 +5,12 @@
 <%
 ls /dev/mmc* >/dev/null 2>&1
 if [ $? -ne 0 ]; then
-  alert_ "danger"
-    h4 "$t_sdcard_1"
-    p "$t_sdcard_2"
-  _alert
+%>
+<div class="alert alert-danger">
+  <h4><%= $t_sdcard_1 %></h4>
+  <p><%= $t_sdcard_2 %></p>
+</div>
+<%
 else
   card_device="/dev/mmcblk0"
   card_partition="${card_device}p1"
@@ -16,11 +18,12 @@ else
   error=""
   _o=""
   if [ -n "$POST_doFormatCard" ]; then
-    alert_ "danger"
-      h4 "$t_sdcard_3"
-      p "$t_sdcard_4"
-    _alert
-
+%>
+<div class="alert alert-danger">
+  <h4><%= $t_sdcard_3 %></h4>
+  <p><%= $t_sdcard_4 %></p>
+</div>
+<%
     if [ "$(grep $card_partition /etc/mtab)" ]; then
       _c="umount $card_partition"
       _o="${_o}\n${_c}\n$($_c 2>&1)"
@@ -57,15 +60,16 @@ else
     _c="df -h|sed -n 1p/${card_partition////\\\/}/p"
     _o="$($_c)"
     report_command_info "$_c" "$_o"
-    alert_ "danger"
-      h4 "$t_sdcard_9"
-      p "$t_sdcard_a"
-      form_ "sdcard.cgi"
-        doFormatCard="true"
-        field_hidden "doFormatCard"
-        button_submit "$t_sdcard_b" "danger"
-      _form
-    _alert
+%>
+<div class="alert alert-danger">
+  <h4><%= $t_sdcard_9 %></h4>
+  <p><%= $t_sdcard_a %></p>
+  <form action="/cgi-bin/sdcard.cgi" method="post">
+    <input type="hidden" name="doFormatCard" value="true">
+    <p><input type="submit" class="btn btn-danger" value="<%= $t_sdcard_b %>"></p>
+  </form>
+</div>
+<%
   fi
 fi
 %>

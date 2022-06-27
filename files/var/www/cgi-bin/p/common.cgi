@@ -43,20 +43,9 @@ _pre() { Z "pre"; }
 span_() { A "span" "$1" "$2"; }
 _span() { Z "span"; }
 
-# alert_ "type" "extras"
-alert_() {
-  div_ "alert alert-${1}" "$2"
-}
-
-_alert() {
-  _div
-}
-
 # alert "text" "type" "extras"
 alert() {
-  alert_ "$2" "$3"
-  echo "$1"
-  _alert
+  echo "<div class=\"alert alert-${2}\" ${3}>${1}</div>"
 }
 
 beats() {
@@ -435,9 +424,9 @@ report_log() {
 
 report_command_error() {
   h2 "$tMsgSomethingHappened" "text-danger"
-  alert_ "danger"
+  echo "<div class=\"alert alert-danger\">"
   report_command_info "$1" "$2"
-  _alert
+  echo "</div>"
 }
 
 report_command_info() {

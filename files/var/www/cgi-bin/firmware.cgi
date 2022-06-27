@@ -24,7 +24,7 @@ mj_meta_file_timestamp=$(date +%s --date "$(ls -lc --full-time $mj_meta_file | x
 mj_meta_file_expiration=$(( $(date +%s) + 3600 ))
 [ "$mj_meta_file_timestamp" -gt "$mj_meta_file_expiration" ] && dl_mj_meta
 
-mj_version_fw=$(/rom/$mj_bin_file -v)
+mj_version_fw=$(/rom${mj_bin_file} -v)
 
 # parse version, date and file size
 if [ "$(wc -l $mj_meta_file | cut -d' ' -f1)" = "1" ]; then

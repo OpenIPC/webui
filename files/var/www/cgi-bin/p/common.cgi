@@ -282,7 +282,7 @@ form_upload_() {
 }
 
 get_soc_temp() {
-  soc_temp=$(ipcinfo --temp)
+  [ "true" = "$has_soc_temp" ] && soc_temp=$(ipcinfo --temp)
 }
 
 header_ok() {
@@ -543,6 +543,12 @@ update_caminfo() {
   sensor_ini=$(ipcinfo --long-sensor)
   soc=$(ipcinfo --chip-name)
   soc_family=$(ipcinfo --family)
+  has_soc_temp=$(ipcinfo --temp)
+  if [ "Temperature cannot be retrieved" = "$has_soc_temp" ]; then
+    has_soc_temp="false"
+  else
+    has_soc_temp="true"
+  fi
 
   # Firmware
   fw_version=$(grep "OPENIPC_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)
@@ -585,6 +591,7 @@ fw_version=\"$fw_version\"
 fw_variant=\"$fw_variant\"
 fw_build=\"$fw_build\"
 gateway=\"$gateway\"
+has_soc_temp=\"$has_soc_temp\"
 hostname=\"$hostname\"
 interfaces=\"$interfaces\"
 ipaddr=\"$ipaddr\"

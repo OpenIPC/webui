@@ -16,7 +16,6 @@ page_title="$t_status_0"
       <dt><%= $t_status_5 %></dt><dd><%= $sensor_ini %></dd>
       <dt><%= $t_status_6 %></dt><dd><%= $flash_size %> MB</dd>
     </dl>
-    <!--[ -n "$soc_temp" ] && echo "<b>${tSoCTemp}</b> ${soc_temp}°C"-->
   </div>
   <div class="col">
     <h3><%= $t_status_d %></h3>

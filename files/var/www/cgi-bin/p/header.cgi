@@ -20,6 +20,9 @@ Pragma: no-cache
   <nav class="navbar navbar-dark navbar-expand-lg sticky-top">
     <div class="container">
       <a class="navbar-brand" href="/cgi-bin/status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg"></a>
+      <% if [ -n "$soc_temp" ]; then %>
+        <span id="soc-temp" class="text-primary bg-white rounded small" title="<%= $tSoCTemp %>">72<%= $soc_temp %>°C</span>
+      <% fi %>
       <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -89,9 +92,10 @@ Pragma: no-cache
       </div>
     </div>
   </nav>
-  <p class="text-end x-small"><span class="container"><% signature %></span></p>
   <main>
     <div class="container">
+      <p class="text-end x-small"><% signature %></p>
+
       <h2><%= $page_title %></h2>
       <% flash_read %>
 

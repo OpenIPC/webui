@@ -36,6 +36,7 @@ Pragma: no-cache
               <li><a class="dropdown-item" href="/cgi-bin/info-majestic.cgi">Majestic config</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/info-dmesg.cgi">Diagnostic messages</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/info-httpd.cgi">HTTPd environment</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/info-modules.cgi">Modules</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/info-log.cgi">Log read</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/info-overlay.cgi">Overlay partition</a></li>
             </ul>

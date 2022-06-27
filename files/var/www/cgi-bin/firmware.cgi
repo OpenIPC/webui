@@ -24,6 +24,8 @@ mj_meta_file_timestamp=$(date +%s --date "$(ls -lc --full-time $mj_meta_file | x
 mj_meta_file_expiration=$(( $(date +%s) + 3600 ))
 [ "$mj_meta_file_timestamp" -gt "$mj_meta_file_expiration" ] && dl_mj_meta
 
+mj_version_fw=$(/rom/$mj_bin_file -v)
+
 # parse version, date and file size
 if [ "$(wc -l $mj_meta_file | cut -d' ' -f1)" = "1" ]; then
   mj_filesize_new=$(sed -n 1p $mj_meta_file)
@@ -109,26 +111,35 @@ fw_rootfs="true"
     <dl class="small list">
       <dt>Installed</dt>
       <dd><%= $mj_version %></dd>
+      <dt>Bundled</dt>
+      <dd><%= $mj_version_fw %></dd>
       <dt>On GitHub</dt>
       <dd><%= $mj_version_new %></dd>
     </dl>
 
-    <% if [ -f "/overlay/root/${mj_mj_bin_file}" ]; then %>
-      <p class="alert alert-info">Majestic is installed in the overlay. (<%= $mj_filesize_overlay %> KB)</p>
+    <% if [ -z "$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)" ]; then %>
+      <p>Majestic uses original configuration.</p>
+      <p><a href="/cgi-bin/majestic-settings.cgi">Make changes.</a></p>
+    <% else %>
+      <p>Majestic uses custom configuration.</p>
+      <p><a href="/cgi-bin/majestic-config-compare.cgi" class="btn btn-primary">See difference</a></p>
     <% fi %>
 
     <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
       <p><a href="/cgi-bin/majestic-update.cgi" class="btn btn-warning"><%= $t_btn_update %></a></p>
     <% else %>
-      <p class="alert alert-warning">Not enough space to update Majestic.</p>
+      <p class="alert alert-danger">Not enough space to update Majestic.</p>
     <% fi %>
 
-    <% if [ -z "$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)" ]; then %>
-      <h5>Majestic uses the original configuration.</h5>
-      <p><a href="/cgi-bin/majestic-settings.cgi">Make changes.</a></p>
-    <% else %>
-      <h5>Majestic uses custom configuration.</h5>
-      <p><a href="/cgi-bin/majestic-config-compare.cgi" class="btn btn-primary">See difference</a></p>
+    <% if [ -f "/overlay/root/${mj_mj_bin_file}" ]; then %>
+      <div class="alert alert-warning">
+        <p>More recent version of Majestic found in overlay partition.
+         It takes <%= $mj_filesize_overlay %> KB of space.</p>
+        <form action="<%= $SCRIPT_NAME %>" method="post">
+          <input type="hidden" name="action" value="rmmj">
+          <p class="mb-0"><input type="submit" value="Revert to bundled version" class="btn btn-warning"></p>
+        </form>
+      </div>
     <% fi %>
   </div>
 </div>

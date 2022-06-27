@@ -46,10 +46,12 @@ done
   <div class="col">
     <h3>NTP Settings</h3>
     <% ex "cat $config_file" %>
+    <% if [ "$(diff -q -- "/rom${config_file}" "$config_file")" ]; then %>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <input type="hidden" name="action" value="reset">
-      <p class="mt-2"><input type="submit" class="btn btn-danger" value="Reset to firware defaults"></p>
+      <p class="mt-2"><input type="submit" class="btn btn-danger" value="Restore firmware defaults"></p>
     </form>
+    <% fi %>
   </div>
 </div>
 

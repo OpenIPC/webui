@@ -59,7 +59,6 @@ Pragma: no-cache
               <li><a class="dropdown-item" href="/cgi-bin/majestic-settings.cgi">Majestic Settings</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/majestic-config-actions.cgi">Majestic Maintenance</a></li>
               <li><a class="dropdown-item" href="/cgi-bin/majestic-debug.cgi">Majestic Debugging</a></li>
-              <li><a class="dropdown-item" href="/cgi-bin/preview-help.cgi">Majestic Information</a></li>
             </ul>
           </li>
           <li class="nav-item dropdown">
@@ -82,6 +81,7 @@ Pragma: no-cache
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownHelp" role="button">Help</a>
             <ul aria-labelledby="dropdownHelp" class="dropdown-menu">
               <li><a class="dropdown-item" href="/cgi-bin/about.cgi">About OpenIPC</a></li>
+              <li><a class="dropdown-item" href="/cgi-bin/endpoints.cgi">Endpoints</a></li>
               <li><a class="dropdown-item" href="https://openipc.org/wiki/">OpenIPC Wiki</a></li>
             </ul>
           </li>

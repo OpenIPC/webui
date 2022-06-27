@@ -40,7 +40,7 @@ for i in 0 1 2 3; do
   field_text "ntp_server_${i}"
 done
 %>
-      <p class="mt-2"><input type="submit" class="btn btn-danger" value="Save changes"></p>
+      <p class="mt-2"><input type="submit" class="btn btn-primary" value="Save changes"></p>
     </form>
   </div>
   <div class="col">

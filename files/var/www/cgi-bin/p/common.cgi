@@ -254,10 +254,9 @@ flash_read() {
   [ ! -f "$flash_file" ] && return
   flash=$(cat "$flash_file")
   [ -z "$flash" ] && return
-  alert_ "$(echo $flash | cut -d':' -f1) alert-dismissible fade show" "role=\"alert\""
-    echo "$(echo $flash | cut -d':' -f2)"
-    echo "<button type=\"button\" class=\"btn btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>"
-   _alert
+  _css="$(echo $flash | cut -d':' -f1)"
+  _message="$(echo $flash | cut -d':' -f2)"
+  echo "<div class=\"alert alert-${_css} alert-dismissible fade show\" role=\"alert\">${message}<button type=\"button\" class=\"btn btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></div>"
   flash_delete
 }
 
@@ -457,11 +456,11 @@ report_command_success() {
 
 # row_ "class"
 row_() {
-  div_ "row ${1}" "$2"
+  echo "<div class\"row ${1}\" ${2}>"
 }
 
 _row() {
-  _div
+  echo "</div>"
 }
 
 row() {

@@ -5,7 +5,7 @@
       <p class="x-small text-end"><%= $tPoweredBy %> <a href="https://github.com/OpenIPC/microbe-web">Microbe Web UI</a>, <%= $tPartOf %> <a href="https://openipc.org/">OpenIPC project</a>.</p>
     </div>
   </footer>
-<% if [ "$debug" ]; then %>
+<% if [ "$debug" -ge "1" ]; then %>
   <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasDebug" aria-labelledby="offcanvasDebugLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasDebugLabel">Debug Info</h5>

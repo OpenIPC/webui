@@ -46,13 +46,6 @@ fi
   <div class="col">
     <h3>System settings</h3>
     <% ex "echo \$TZ" %>
-  <% if [ "$(cat /etc/TZ)" != "$TZ" ]; then %>
-    <div class="alert alert-danger">
-      <h4>$TZ variable in system environment needs updating!</h4>
-      <p>Please restart the system.</p>
-      <a class="btn btn-danger" href="/cgi-bin/reboot.cgi">Reboot camera</a>
-    </div>
-  <% fi %>
   </div>
 </div>
 

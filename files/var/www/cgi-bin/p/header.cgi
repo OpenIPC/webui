@@ -105,3 +105,8 @@ Pragma: no-cache
 <p class="alert alert-danger">You want to use SOCKS5 proxy but it is not configured!
   Please <a href="/cgi-bin/network-socks5.cgi">configure the proxy</a>.</p>
 <% fi; fi %>
+
+<% if [ "$(cat /etc/TZ)" != "$TZ" ]; then %>
+<p class="alert alert-danger">$TZ variable in system environment needs updating!
+  <a class="btn btn-danger ms-2" href="/cgi-bin/reboot.cgi">Reboot camera</a></p>
+<% fi %>

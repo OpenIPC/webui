@@ -254,10 +254,11 @@ flash_read() {
   [ ! -f "$flash_file" ] && return
   flash=$(cat "$flash_file")
   [ -z "$flash" ] && return
-  _css="$(echo $flash | cut -d':' -f1)"
-  _message="$(echo $flash | cut -d':' -f2)"
-  echo "<div class=\"alert alert-${_css} alert-dismissible fade show\" role=\"alert\">${message}<button type=\"button\" class=\"btn btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></div>"
+  _c="$(echo $flash | cut -d':' -f1)"
+  _m="$(echo $flash | cut -d':' -f2-)"
+  echo "<div class=\"alert alert-${_c} alert-dismissible fade show\" role=\"alert\">${_m}<button type=\"button\" class=\"btn btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></div>"
   flash_delete
+  unset _c; unset _m
 }
 
 flash_save() {

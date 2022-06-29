@@ -61,13 +61,11 @@ dl.list {
     justify-content: space-between;
     align-items: baseline;
 }
-/*dl.list dd, dl.list dt {*/
-/*    margin: 0.125rem 0;*/
-/*    padding: 0;*/
-/*}*/
+
 dl.list dt {
     flex: 1 10rem;
 }
+
 dl.list dd {
     flex: 1 20rem;
     flex-flow: row wrap;

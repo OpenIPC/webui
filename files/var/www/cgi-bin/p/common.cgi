@@ -426,6 +426,12 @@ signature() {
   unset _f
 }
 
+tab_lap() {
+  echo "<li class=\"nav-item\" role=\"presentation\"><button role=\"tab\" class=\"nav-link\" \
+   data-bs-toggle=\"tab\" data-bs-target=\"#${1}-tab-pane\" id=\"#${1}-tab\" \
+   aria-controls=\"${1}-tab-pane\" aria-selected=\"false\">${2}</button></li>"
+}
+
 t_checked() {
   [ "$2" = "$(t_value "$1")" ] && echo "checked"
 }

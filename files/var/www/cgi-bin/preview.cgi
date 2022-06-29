@@ -12,15 +12,9 @@ size_h=${size#*x}
 <div class="row preview">
   <div class="col-md-8 col-xl-9 col-xxl-9 position-relative mb-3">
     <ul class="nav nav-tabs" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button role="tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#jpeg-tab-pane" id="jpeg-tab" aria-controls="jpeg-tab-pane" aria-selected="false">JPEG</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button role="tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#mjpeg-tab-pane" id="mjpeg-tab" aria-controls="mjpeg-tab-pane" aria-selected="false">MJPEG</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button role="tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#video-tab-pane" id="video-tab" aria-controls="video-tab-pane" aria-selected="false">Video</button>
-      </li>
+      <% tab_lap "jpeg" "JPEG" %>
+      <% tab_lap "mjpeg" "MJPEG" %>
+      <% tab_lap "video" "Video" %>
     </ul>
     <div class="tab-content p-2" id="tab-content">
       <div id="jpeg-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="jpeg-tab" tabindex="0">

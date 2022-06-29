@@ -15,8 +15,7 @@ Usage: $0 -b <branch> [-f]
 }
 
 args=""
-while [ $# -gt 0 ]; do
-#for i in "$@"; do
+while [ $# -gt "0" ]; do
   case "$1" in
     -b|--branch)
       branch="$2"
@@ -38,6 +37,7 @@ while [ $# -gt 0 ]; do
     -*|--*)
       echo_c 97 "\nUnknown option: $1"
       print_usage
+      shift
       exit 1
       ;;
     *)
@@ -57,10 +57,9 @@ url="https://github.com/OpenIPC/microbe-web/archive/refs/heads/${branch}.zip"
 tmp_file=/tmp/microbe-web.zip
 etag_file=/root/.ui.etag
 opts="--silent --location --insecure --etag-save ${etag_file}"
-
 [ -n "$verbose" ] && [ "$verbose" -eq 1 ] && opts="${opts} --verbose"
 
-if [ -z "$verbose" ] || [ "$enforce" -eq 0 ]; then
+if [ "$enforce" != "1" ]; then
   [ -f "$etag_file" ] && opts="${opts} --etag-compare ${etag_file}"
 fi
 
@@ -81,10 +80,10 @@ upd_dir="${unzip_dir}/files"
 echo_c 97 "Copy newer files to web directory"
 for upd_file in $(find $upd_dir -type f -or -type l); do
   ovl_file=${upd_file#/tmp/microbe-web-${branch}/files}
-  diff $ovl_file $upd_file > /dev/null
-  if [ 0 -ne $? ]; then
-    [ ! -d "${ovl_file%/*}" ] && mkdir -p ${ovl_file%/*}
-    cp -f ${upd_file} ${ovl_file}
+  # echo "Overlay file ${ovl_file}"
+  if [ ! -f "$ovl_file" ] || [ "$(diff -q $ovl_file $upd_file)" ]; then
+    [ ! -d "${ovl_file%/*}" ] && mkdir -p $(basename $ovl_file)
+    cp -f $upd_file $ovl_file
   fi
 done
 
@@ -94,8 +93,10 @@ for file in $(diff -qr "/var/www" "${upd_dir}/var/www" | grep "Only in /var/www:
   mount -oremount /
 done
 
-echo_c 97 "Clean up"
+echo_c 97 "Delete bundle"
 rm -f $tmp_file
+
+echo_c 97 "Delete temp directory"
 rm -fr /tmp/microbe-web-${branch}
 
 if [ -z "$error" ]; then

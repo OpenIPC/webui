@@ -83,7 +83,7 @@ for upd_file in $(find $upd_dir -type f -or -type l); do
   ovl_file=${upd_file#/tmp/microbe-web-${branch}/files}
   diff $ovl_file $upd_file > /dev/null
   if [ 0 -ne $? ]; then
-    [ ! -d "${ovl_file%/*}" ] && xl "mkdir -p ${ovl_file%/*}"
+    [ ! -d "${ovl_file%/*}" ] && mkdir -p ${ovl_file%/*}
     cp -f ${upd_file} ${ovl_file}
   fi
 done

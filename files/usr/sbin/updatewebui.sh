@@ -70,7 +70,8 @@ if [ ! -f "$tmp_file" ]; then
 fi
 
 commit=$(tail -c 40 $tmp_file|cut -b1-7)
-timestamp=$(unzip -l $tmp_file|head -5|tail -1|xargs|cut -d" " -f2|sed 's/\(\d\d\)-\(\d\d\)-\(\d\d\d\d\)/\3-\1-\2/')
+_ts=$(unzip -l $tmp_file|head -5|tail -1|xargs|cut -d" " -f2)
+timestamp="$(echo $_ts|cut -d- -f3)-$(echo $_ts|cut -d- -f1)-$(echo $_ts|cut -d- -f2)" # ugly but it works
 
 unzip_dir="/tmp/microbe-web-${branch}"
 [ -d "$unzip_dir" ] && rm -rf $unzip_dir

@@ -10,21 +10,18 @@ Pragma: no-cache
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light dark">
 <title><% html_title "$page_title" %></title>
 <link rel="stylesheet" href="/a/bootstrap.css">
 <link rel="stylesheet" href="/a/bootstrap.override.css">
 <script src="/a/bootstrap.js"></script>
 <script src="/a/main.js"></script>
-
-<meta name="theme-color" content="#111111" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#eeeeee" media="(prefers-color-scheme: dark)">
 </head>
 
-<body id="page-<%= $pagename %>" class="<% [ "$debug" -ge "1" ] && echo -n " debug" %>">
+<body id="page-<%= $pagename %>" class="<%= $fw_variant %><% [ "$debug" -ge "1" ] && echo -n " debug" %>">
   <nav class="navbar navbar-dark navbar-expand-lg sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg"></a>
+      <a class="navbar-brand" href="status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg">
+       <span class="x-small"><%= $fw_variant %></span></a>
       <% if [ -n "$soc_temp" ]; then %>
         <span id="soc-temp" class="text-primary bg-white rounded small" title="<%= $tSoCTemp %>"><%= $soc_temp %>°C</span>
       <% fi %>

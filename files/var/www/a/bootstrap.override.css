@@ -199,3 +199,5 @@ pre#output { background: #111; color: #89a; }
 .ansi-35 {color: magenta}
 .ansi-36 {color: cyan}
 .ansi-37 {color: white}
+
+body.lite .ult { display: none; }

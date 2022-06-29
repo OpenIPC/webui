@@ -55,10 +55,10 @@
       <dd>Opus audio stream.</dd>
       <dt>http://<%= $ipaddr %>/audio.pcm</dt>
       <dd>Raw PCM audio stream.</dd>
-      <dt>http://<%= $ipaddr %>/audio.m4a</dt>
-      <dd>AAC audio stream.</dd>
-      <dt>http://<%= $ipaddr %>/audio.mp3</dt>
-      <dd>MP3 audio stream.</dd>
+      <dt class="ult">http://<%= $ipaddr %>/audio.m4a</dt>
+      <dd class="ult">AAC audio stream.</dd>
+      <dt class="ult">http://<%= $ipaddr %>/audio.mp3</dt>
+      <dd class="ult">MP3 audio stream.</dd>
       <dt>http://<%= $ipaddr %>/audio.alaw</dt>
       <dd>A-law compressed audio stream.</dd>
       <dt>http://<%= $ipaddr %>/audio.ulaw</dt>

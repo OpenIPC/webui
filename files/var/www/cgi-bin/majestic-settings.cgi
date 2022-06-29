@@ -67,7 +67,7 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
   param=${line%%|*}; _n=${param#.}; domain=${_n%.*}; name=mj_${_n//./_}; line=${line#*|}; type=${line%%|*}; line=${line#*|}
 
   # assign param's value to a variable with param's name for form fields values
-  eval $name="$(yaml-cli -g "$param")"
+  eval $name=\"$(yaml-cli -g "$param")\"
 
   # hide some params in config
   [ "mj_netip_password_plain" != "$name" ] && config="${config}\n$(eval echo ${param}: \$$name)"

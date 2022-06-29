@@ -39,7 +39,7 @@ while [ $# -gt "0" ]; do
       echo_c 97 "\nUnknown option: $1"
       print_usage
       shift
-      exit 1
+      exit 99
       ;;
     *)
       args="${args} $1"

@@ -26,10 +26,20 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     value="$(echo $name | cut -d= -f2)"
 
     # normalization
-    if [ "$key" = ".image.rotate" ]; then
-      value="${value//°/}"
-      [ "0" = "$value" ] && value="none"
-    fi
+    case "$key" in
+      .image.rotate)
+        value="${value//°/}"
+        [ "0" = "$value" ] && value="none"
+        ;;
+      .isp.antiFlicker)
+        [ "50Hz" = "$value" ] && value="50"
+        [ "60Hz" = "$value" ] && value="60"
+        ;;
+      .system.webAdmin)
+        [ "true" = "$value" ] && value="enabled"
+        [ "false" = "$value" ] && value="disabled"
+        ;;
+    esac
 
     # read existing value
     oldvalue=$(yaml-cli -g "$key" -i $temp_yaml)

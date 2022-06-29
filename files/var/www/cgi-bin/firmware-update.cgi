@@ -11,5 +11,5 @@ c="/usr/sbin/sysupgrade"
 %>
 <%in p/header.cgi %>
 <h4># <%= $c %></h4>
-<pre id="output" data-cmd="<%= $c %>" data-reboot="false"></pre>
+<pre id="output" data-cmd="<%= $c %>" data-reboot="true"></pre>
 <%in p/footer.cgi %>

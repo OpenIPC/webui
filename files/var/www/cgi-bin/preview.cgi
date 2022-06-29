@@ -137,6 +137,8 @@ $$('button[data-bs-toggle="tab"]').forEach(el => el.addEventListener('shown.bs.t
 
 const tab1 = new bootstrap.Tab($('#jpeg-tab'));
 tab1.show();
+
+document.activeElement = $('body');
 </script>
 
 <%in p/footer.cgi %>

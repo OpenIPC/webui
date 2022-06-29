@@ -229,6 +229,7 @@ flash_save() {
 
 get_soc_temp() {
   [ "true" = "$has_soc_temp" ] && soc_temp=$(ipcinfo --temp)
+  [ "$debug" -ge 1 ] && soc_temp="99.99"
 }
 
 header_ok() {
@@ -483,9 +484,11 @@ update_caminfo() {
   sensor_ini=$(ipcinfo --long-sensor)
   soc=$(ipcinfo --chip-name)
   soc_family=$(ipcinfo --family)
+
   # ipcinfo reports to stderr
   if [ "Temperature cannot be retrieved" = "$(ipcinfo --temp 2>&1)" ]; then
     has_soc_temp="false"
+    [ $debug -ge 1 ] && has_soc_temp="true"
   else
     has_soc_temp="true"
   fi

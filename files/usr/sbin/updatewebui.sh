@@ -113,6 +113,7 @@ rm -fr /tmp/microbe-web-${branch}
 
 if [ -z "$error" ]; then
   echo "${branch}+${commit}, ${timestamp}" > /var/www/.version
+  [ -f /tmp/sysinfo.txt ] && rm /tmp/sysinfo.txt
   exit 0
 else
   rm $etag_file

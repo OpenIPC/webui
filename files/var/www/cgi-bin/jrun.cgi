@@ -20,8 +20,9 @@ prompt() {
 
 export PATH=/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin
 cd /tmp
-prompt "$c"
-eval $c
+prompt "$c\n"
+eval $c 2>&1
+
 case "$?" in
 126)
   echo "-sh: $c: Permission denied"
@@ -35,5 +36,5 @@ case "$?" in
   prompt
   ;;
 *)
-  echo "UNKNOWN ERROR CODE: $?"
+  echo -e "\nEXIT CODE: $?"
 esac

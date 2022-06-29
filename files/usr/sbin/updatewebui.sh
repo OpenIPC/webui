@@ -83,7 +83,7 @@ for upd_file in $(find $upd_dir -type f -or -type l); do
   ovl_file=${upd_file#/tmp/microbe-web-${branch}/files}
   # echo "Overlay file ${ovl_file}"
   if [ ! -f "$ovl_file" ] || [ "$(diff -q $ovl_file $upd_file)" ]; then
-    [ ! -d "${ovl_file%/*}" ] && mkdir -p $(basename $ovl_file)
+    [ ! -d "${ovl_file%/*}" ] && mkdir -p $(dirname $ovl_file)
     cp -f $upd_file $ovl_file
   fi
 done

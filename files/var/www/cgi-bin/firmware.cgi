@@ -15,29 +15,40 @@ else
   mj_filesize_old=$mj_filesize_fw
 fi
 
-# re-download metafile if older than 1 hour
-mj_meta_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.meta"
 mj_meta_file=/tmp/mj_meta.txt
-dl_mj_meta() { curl -s $mj_meta_url -o $mj_meta_file; }
-[ ! -f "$mj_meta_file" ] && dl_mj_meta
-mj_meta_file_timestamp=$(date +%s --date "$(ls -lc --full-time $mj_meta_file | xargs | cut -d' ' -f6,7)")
-mj_meta_file_expiration=$(( $(date +%s) + 3600 ))
-[ "$mj_meta_file_timestamp" -gt "$mj_meta_file_expiration" ] && dl_mj_meta
+
+update_meta() {
+  # re-download metafile if older than 1 hour
+  mj_meta_url="http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.meta"
+  mj_meta_file_timestamp=$(date +%s --date "$(ls -lc --full-time $mj_meta_file | xargs | cut -d' ' -f6,7)")
+  mj_meta_file_expiration=$(( $(date +%s) + 3600 ))
+  [ -f "$mj_meta_file" ] && [ "$mj_meta_file_timestamp" -le "$mj_meta_file_expiration" ] && return
+
+  rm $mj_meta_file
+  if [ "200" = $(curl $mj_meta_url -s -f -w %{http_code} -o /dev/null) ]; then
+    curl -s $mj_meta_url -o $mj_meta_file
+  fi
+}
+
+update_meta
 
 mj_version_fw=$(/rom${mj_bin_file} -v)
 
-# parse version, date and file size
-if [ "$(wc -l $mj_meta_file | cut -d' ' -f1)" = "1" ]; then
-  mj_filesize_new=$(sed -n 1p $mj_meta_file)
+if [ -f "$mj_meta_file" ]; then
+  # parse version, date and file size
+  if [ "$(wc -l $mj_meta_file | cut -d' ' -f1)" = "1" ]; then
+    mj_filesize_new=$(sed -n 1p $mj_meta_file)
+  else
+    mj_version_new=$(sed -n 1p $mj_meta_file)
+    mj_filesize_new=$(sed -n 2p $mj_meta_file)
+  fi
+  # NB! size in bytes, but since blocks are 1024 bytes each, we are safe here for now.
+  mj_filesize_new=$(( ($mj_filesize_new + 1024) / 1024 )) # Rounding up by priming, since $(()) sucks at floats.
+  free_space=$(df | grep /overlay | xargs | cut -d' ' -f4)
+  available_space=$(( $free_space + $mj_filesize_overlay - 1 ))
 else
-  mj_version_new=$(sed -n 1p $mj_meta_file)
-  mj_filesize_new=$(sed -n 2p $mj_meta_file)
+  mj_version_new="unavailable"
 fi
-# NB! size in bytes, but since blocks are 1024 bytes each, we are safe here for now.
-mj_filesize_new=$(( ($mj_filesize_new + 1024) / 1024 )) # Rounding up by priming, since $(()) sucks at floats.
-
-free_space=$(df | grep /overlay | xargs | cut -d' ' -f4)
-available_space=$(( $free_space + $mj_filesize_overlay - 1 ))
 
 fw_kernel="true"
 fw_rootfs="true"
@@ -125,21 +136,23 @@ fw_rootfs="true"
       <p><a href="majestic-config-compare.cgi" class="btn btn-primary">See difference</a></p>
     <% fi %>
 
-    <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
-      <p><a href="majestic-update.cgi" class="btn btn-warning"><%= $t_btn_update %></a></p>
-    <% else %>
-      <p class="alert alert-danger">Not enough space to update Majestic.</p>
-    <% fi %>
+    <% if [ -f "$mj_meta_file" ]; then %>
+      <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
+        <p><a href="majestic-update.cgi" class="btn btn-warning"><%= $t_btn_update %></a></p>
+      <% else %>
+        <p class="alert alert-danger">Not enough space to update Majestic.</p>
+      <% fi %>
 
-    <% if [ -f "/overlay/root/${mj_mj_bin_file}" ]; then %>
-      <div class="alert alert-warning">
-        <p>More recent version of Majestic found in overlay partition.
-         It takes <%= $mj_filesize_overlay %> KB of space.</p>
-        <form action="<%= $SCRIPT_NAME %>" method="post">
-          <input type="hidden" name="action" value="rmmj">
-          <p class="mb-0"><input type="submit" value="Revert to bundled version" class="btn btn-warning"></p>
-        </form>
-      </div>
+      <% if [ -f "/overlay/root/${mj_mj_bin_file}" ]; then %>
+        <div class="alert alert-warning">
+          <p>More recent version of Majestic found in overlay partition.
+           It takes <%= $mj_filesize_overlay %> KB of space.</p>
+          <form action="<%= $SCRIPT_NAME %>" method="post">
+            <input type="hidden" name="action" value="rmmj">
+            <p class="mb-0"><input type="submit" value="Revert to bundled version" class="btn btn-warning"></p>
+          </form>
+        </div>
+      <% fi %>
     <% fi %>
   </div>
 </div>

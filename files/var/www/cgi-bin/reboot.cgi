@@ -8,4 +8,6 @@ Pragma: no-cache
 Location: /wait.html
 Status: 302 Moved Temporarily
 "
+
+sleep 3
 reboot

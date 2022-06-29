@@ -130,7 +130,7 @@ function refresh() {
                     if (startIndex < chunk.length) yield chunk.substr(startIndex);
                 } finally {
                     if ("true" === el.dataset["reboot"]) {
-                        window.location.href = '/wait.html'
+                        window.location.href = '/cgi-bin/reboot.cgi'
                     } else {
                         el.innerHTML += '\n--- finished ---\n';
                     }

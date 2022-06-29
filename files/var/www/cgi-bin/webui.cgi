@@ -87,6 +87,11 @@ done
         <input type="checkbox" name="web_enforce" id="web_enforce" value="true" class="form-check-input">
         <label for="web_enforce" class="form-label">Install even if the same version.</label>
       </p>
+      <p class="boolean form-check">
+        <input type="hidden" name="fw_noreboot" id="web_noreboot-false" value="false">
+        <input type="checkbox" name="fw_noreboot" id="web_noreboot" value="true" class="form-check-input">
+        <label for="web_noreboot" class="form-label">Do not reboot after upgrade.</label>
+      </p>
       <p class="mt-2"><input type="submit" class="btn btn-warning" value="<%= $t_btn_update %>"></p>
     </form>
   </div>

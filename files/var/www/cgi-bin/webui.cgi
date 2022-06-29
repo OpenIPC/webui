@@ -55,6 +55,9 @@ page_title="Web Interface"
 webui_username="admin"
 webui_language="$locale"
 
+webui_version="master"
+[ -n "$ui_version" ] && webui_version="$(echo "$ui_version" | cut -d+ -f1)"
+
 tOptions_webui_language="en|English"
 for i in /var/www/lang/; do
   code="$(basename $i)"; code="${code%%.sh}"
@@ -79,8 +82,8 @@ done
         <label for="web_version" class="input-group-text">Branch</label>
         <select class="form-select" id="web_version" name="web_version" required>
           <option value="">Choose...</option>
-          <option value="master">Stable</option>
-          <option value="dev">Development</option>
+          <option value="master"<%= [ "master" = "$webui_version" ] && echo " selected" %>>Stable</option>
+          <option value="dev"<%= [ "dev" = "$webui_version" ] && echo " selected" %>>Development</option>
         </select>
       </p>
       <p class="boolean form-check">

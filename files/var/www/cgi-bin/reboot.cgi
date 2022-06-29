@@ -9,5 +9,5 @@ Location: /wait.html
 Status: 302 Moved Temporarily
 "
 
-sleep 3
+sleep 5
 reboot

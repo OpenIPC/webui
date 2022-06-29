@@ -85,7 +85,9 @@ team() {
   <div class="col-12">
     <h3>Team</h3>
     <p>OpenIPC is a community-driven open source project, and many people contribute to its codebase. Koodos to them! There is also a core team of skilled developers who work hard to expand the list of supported hardware platforms, extend the functionality and stability of the firmware, review submitted code, and coordinate community efforts. Get to know the team and their areas of expertise:</p>
-    <% row "$(team)" "row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4" %>
+    <div class="row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4">
+      <% team %>
+    </div>
     <p><a href="https://github.com/orgs/OpenIPC/people" class="btn btn-secondary">List of contributors</a></p>
   </div>
 </div>

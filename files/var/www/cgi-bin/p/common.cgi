@@ -58,16 +58,11 @@ button_submit() {
   unset _c; unset _t; unset _x
 }
 
-check_for_lock() {
-  [ -f /tmp/webjob.lock ] && redirect_back "danger" "Another progress is running."
-  touch /tmp/webjob.lock
-}
-
 #check_password() {
 #  [ "0${debug}" -ge "1" ] && return
 #  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui.cgi" ] && return
 #  if [ -z "$password" ] || [ "$password_fw" = "$password" ]; then
-#    redirect_to "/cgi-bin/webui.cgi" "danger" "You must set your own secure password!"
+#    redirect_to "webui.cgi" "danger" "You must set your own secure password!"
 #  fi
 #}
 
@@ -330,6 +325,18 @@ label() {
   unset _c; unset _l; unset _u; unset _x
 }
 
+load_plugins() {
+  for i in $(ls -1 plugin-*); do
+    eval "$(grep 'plugin_name=' $i)"
+    echo "<li><a class=\"dropdown-item\" href=\"${i}\">${plugin_name}</a></li>"
+    unset plugin_name
+  done
+}
+
+log() {
+  echo $1 >/tmp/webui.log
+}
+
 # pre "text" "classes" "extras"
 pre() {
   # replace <, >, &, ", and ' with HTML entities
@@ -367,7 +374,7 @@ reload_locale() {
 }
 
 report_error() {
-  h4 "$tMsgSomethingHappened" "text-danger"
+  echo "<h4 class=\"text-danger\">Oops. Something happened.</h4>"
   alert "$1" "danger"
 }
 
@@ -377,14 +384,14 @@ report_log() {
 }
 
 report_command_error() {
-  h2 "$tMsgSomethingHappened" "text-danger"
+  echo "<h4 class=\"text-danger\">Oops. Something happened.</h4>"
   echo "<div class=\"alert alert-danger\">"
   report_command_info "$1" "$2"
   echo "</div>"
 }
 
 report_command_info() {
-  h4 "# $1"
+  echo "<h4># ${1}</h4>"
   report_log "$2"
 }
 
@@ -569,18 +576,6 @@ $(env|sort)
 
 include() {
   [ -f "$1" ] && source "$1"
-}
-
-load_plugins() {
-  for i in $(ls -1 plugin-*); do
-    eval "$(grep 'plugin_name=' $i)"
-    echo "<li><a class=\"dropdown-item\" href=\"/cgi-bin/${i}\">${plugin_name}</a></li>"
-    unset plugin_name
-  done
-}
-
-log() {
-  echo $1 >/tmp/webui.log
 }
 
 mj_bin_file=/usr/bin/majestic

@@ -8,6 +8,4 @@ Pragma: no-cache
 Location: /wait.html
 Status: 302 Moved Temporarily
 "
-
-touch /tmp/webjob.lock
 reboot

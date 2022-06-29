@@ -6,5 +6,5 @@
 <% sysupgrade -n %>
 </pre>
 <a class="btn btn-primary" href="/">Go home</a>
-<a class="btn btn-danger" href="/cgi-bin/reboot.cgi">Reboot camera</a>
+<a class="btn btn-danger" href="reboot.cgi">Reboot camera</a>
 <%in p/footer.cgi %>

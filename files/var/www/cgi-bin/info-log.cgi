@@ -1,6 +1,6 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
-<% page_title="$t_log_0" %>
+<% page_title="Log read" %>
 <%in p/header.cgi %>
 <% ex "/sbin/logread" %>
 <a href="#" class="btn btn-primary refresh">Refresh</a>

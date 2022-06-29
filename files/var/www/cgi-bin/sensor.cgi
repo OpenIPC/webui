@@ -40,11 +40,11 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     case "$type" in
     driver)
       mv "$file_path" "/usr/lib/sensors/${file_name}"
-      redirect_to "/cgi-bin/sensor-upload.cgi" "success" "$t_sensor_1"
+      redirect_to "sensor-upload.cgi" "success" "$t_sensor_1"
       ;;
     config)
       mv "$file_path" "/etc/sensors/${file_name}"
-      redirect_to "/cgi-bin/sensor-upload.cgi" "success" "$t_sensor_2"
+      redirect_to "sensor-upload.cgi" "success" "$t_sensor_2"
       ;;
     esac
   fi
@@ -60,7 +60,7 @@ fi
 </div>
 <div class="col">
 <h3><%= $t_sensor_4 %></h3>
-<form action="/cgi-bin/sensor-upload.cgi" method="post" enctype="multipart/form-data">
+<form action="sensor-upload.cgi" method="post" enctype="multipart/form-data">
 <%
 field_file "sensor_driver_file"
 button_submit "$t_btn_upload"
@@ -74,7 +74,7 @@ button_submit "$t_btn_upload"
 </div>
 <div class="col">
 <h3><%= $t_sensor_7 %></h3>
-<form action="/cgi-bin/sensor-upload.cgi" method="post" enctype="multipart/form-data">
+<form action="sensor-upload.cgi" method="post" enctype="multipart/form-data">
 <%
 field_file "sensor_config_file"
 button_submit "$t_btn_upload"

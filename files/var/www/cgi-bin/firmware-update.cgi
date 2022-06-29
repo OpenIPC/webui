@@ -1,17 +1,15 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
 <%
-check_for_lock
 page_title="Upgrading firmware"
-opts=""
-[ "$POST_fw_kernel" = "true" ] && opts="${opts} -k"
-[ "$POST_fw_rootfs" = "true" ] && opts="${opts} -r"
-[ "$POST_fw_reset" = "true" ] && opts="${opts} -n"
-[ "$POST_fw_noreboot" = "true" ] && opts="${opts} -x"
-[ "$POST_fw_enforce" = "true" ] && opts="${opts} --force_ver"
-cmd="sysupgrade $opts"
+c="/usr/sbin/sysupgrade"
+[ "true" = "$POST_fw_kernel" ] && c="${c} -k"
+[ "true" = "$POST_fw_rootfs" ] && c="${c} -r"
+[ "true" = "$POST_fw_reset"  ] && c="${c} -n"
+[ "true" = "$POST_fw_noreboot" ] && c="${c} -x"
+[ "true" = "$POST_fw_enforce"  ] && c="${c} --force_ver"
 %>
 <%in p/header.cgi %>
-<h4># <%= $cmd %></h4>
-<pre id="output" data-cmd="<%= $cmd %>" data-reboot="true"></pre>
+<h4># <%= $c %></h4>
+<pre id="output" data-cmd="<%= $c %>" data-reboot="false"></pre>
 <%in p/footer.cgi %>

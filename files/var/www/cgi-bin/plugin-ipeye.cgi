@@ -51,7 +51,7 @@ button_submit "Add camera to the cloud"
   <div class="alert alert-danger">
     <h4>Cannot proceed because IPEYE support is disabled.</h4>
     <p>In order to add this camera to the cloud you have to enable IPEYE support first.</p>
-    <form action="/cgi-bin/majestic-settings.cgi" method="post">
+    <form action="majestic-settings.cgi" method="post">
       <input type="hidden" name="mj_ipeye_enabled" id="mj_ipeye_enabled" value="true" class="form-control">
       <p class="mt-2"><input type="submit" class="btn btn-warning" value="Enable IPEYE Cloud protocol"></p>
     </form>

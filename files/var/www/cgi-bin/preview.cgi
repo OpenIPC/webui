@@ -59,13 +59,13 @@ size_h=${size#*x}
       <div class="input-group">
         <button class="form-control btn btn-primary text-start" type="button" id="send-to-telegram">Send to Telegram</button>
         <div class="input-group-text">
-          <a href="/cgi-bin/plugin-telegram.cgi" title="Telegram bot settings"><img src="/a/gear.svg" alt="Gear"></a>
+          <a href="plugin-telegram.cgi" title="Telegram bot settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
       <div class="input-group">
         <button class="form-control btn btn-primary text-start" type="button" id="send-to-yadisk">Send to Yandex Disk</button>
         <div class="input-group-text">
-          <a href="/cgi-bin/plugin-yadisk.cgi" title="Yandex Disk bot settings"><img src="/a/gear.svg" alt="Gear"></a>
+          <a href="plugin-yadisk.cgi" title="Yandex Disk bot settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
     </div>

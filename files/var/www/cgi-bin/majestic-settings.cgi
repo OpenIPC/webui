@@ -89,7 +89,7 @@ done
   <div class="col">
     <h3>Related settings</h3>
     <% pre "$config" %>
-    <p><a href="/cgi-bin/info-majestic.cgi">See majestic.yaml</a></o>
+    <p><a href="info-majestic.cgi">See majestic.yaml</a></o>
   </div>
   <div class="col">
     <h3>Majestic config sections</h3>

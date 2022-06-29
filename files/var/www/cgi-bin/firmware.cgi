@@ -44,7 +44,7 @@ fw_rootfs="true"
 %>
 <%in p/header.cgi %>
 
-<h4 class="text-danger my-4"><%= $tMsgDestructiveActions %></h4>
+<h4 class="text-danger my-4">Attention: Destructive Actions! Make sure you know what you are doing.</h4>
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
   <div class="col">
@@ -57,7 +57,7 @@ fw_rootfs="true"
     </dl>
 
     <h4>Install update</h4>
-    <form action="/cgi-bin/firmware-update.cgi" method="post">
+    <form action="firmware-update.cgi" method="post">
       <p class="boolean form-check">
         <input type="hidden" name="fw_kernel" id="fw_kernel-false" value="false">
         <input type="checkbox" name="fw_kernel" id="fw_kernel" checked value="true" class="form-check-input">
@@ -89,7 +89,7 @@ fw_rootfs="true"
 
   <div class="col">
     <h3>Kernel & RootFS</h3>
-    <form action="/cgi-bin/firmware-upload-parts.cgi" method="post" enctype="multipart/form-data">
+    <form action="firmware-upload-parts.cgi" method="post" enctype="multipart/form-data">
       <p class="select">
         <label for="parts_type" class="form-label">Type of binary file</label>
         <select class="form-select" id="parts_type" name="parts_type" required>
@@ -119,14 +119,14 @@ fw_rootfs="true"
 
     <% if [ -z "$(diff /rom/etc/majestic.yaml /etc/majestic.yaml)" ]; then %>
       <p>Majestic uses original configuration.</p>
-      <p><a href="/cgi-bin/majestic-settings.cgi">Make changes.</a></p>
+      <p><a href="majestic-settings.cgi">Make changes.</a></p>
     <% else %>
       <p>Majestic uses custom configuration.</p>
-      <p><a href="/cgi-bin/majestic-config-compare.cgi" class="btn btn-primary">See difference</a></p>
+      <p><a href="majestic-config-compare.cgi" class="btn btn-primary">See difference</a></p>
     <% fi %>
 
     <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
-      <p><a href="/cgi-bin/majestic-update.cgi" class="btn btn-warning"><%= $t_btn_update %></a></p>
+      <p><a href="majestic-update.cgi" class="btn btn-warning"><%= $t_btn_update %></a></p>
     <% else %>
       <p class="alert alert-danger">Not enough space to update Majestic.</p>
     <% fi %>

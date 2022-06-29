@@ -12,7 +12,11 @@
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body x-small">
-      <p><a class="btn btn-warning" href="webui-init.cgi">Refresh Environment</a></p>
+      <form action="webui.cgi" method="post">
+        <input type="hidden" name="action" value="init">
+        <p><input type="submit" class="btn btn-primary" value="Refresh Environment"></p>
+      </form>
+
       <% ex "env | sort" %>
       <% ex "cat /tmp/sysinfo.txt" %>
     </div>

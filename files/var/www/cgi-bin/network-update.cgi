@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
 <%
-page_title="$t_networkup_0"
+page_title="Updating network settings"
 
 network_dhcp="$POST_network_dhcp"
 network_hostname="$POST_network_hostname"
@@ -17,14 +17,14 @@ for _i in hostname address netmask dateway dns_1 dns_2; do
 done; unset _i
 
 if [ "false" = "$network_dhcp" ]; then
-  [ -z "$network_address" ] && error="$t_networkup_1"
-  [ -z "$network_netmask" ] && error="$t_networkup_2"
-  [ -z "$network_gateway" ] && error="$t_networkup_3"
-  [ -z "$network_dns_1" ] && error="$t_networkup_4"
-  [ -z "$network_dns_2" ] && error="$t_networkup_5"
+  [ -z "$network_address" ] && error="IP address cannot be empty."
+  [ -z "$network_netmask" ] && error="Networking mask cannot be empty."
+  [ -z "$network_gateway" ] && error="Gateway IP address cannot be empty."
+  [ -z "$network_dns_1" ] && error="Nameserver address cannot be empty."
+  [ -z "$network_dns_2" ] && error="Nameserver address cannot be empty."
 fi
 
-[ -n "$error" ] && redirect_to "/cgi-bin/network.cgi" "danger" "$error"
+[ -n "$error" ] && redirect_to "network.cgi" "danger" "$error"
 
 if [ -n "$network_hostname" ]; then
   if [ "$network_hostname" != "$hostname" ]; then
@@ -61,5 +61,5 @@ mv $tmp /etc/network/interfaces
 update_caminfo
 %>
 <%in p/header.cgi %>
-<a href="/cgi-bin/network.cgi"><%= $t_networkup_9 %></a>
+<a href="network.cgi">Go back to settings</a>
 <%in p/footer.cgi %>

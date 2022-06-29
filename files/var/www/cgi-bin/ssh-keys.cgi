@@ -36,15 +36,15 @@ function deleteKey() {
 case "$POST_action" in
   backup)
     saveKey "ed25519"
-    redirect_to "/cgi-bin/ssh-keys.cgi"
+    redirect_back
     ;;
   restore)
     restoreKey "ed25519"
-    redirect_to "/cgi-bin/ssh-keys.cgi"
+    redirect_back
     ;;
   delete)
     deleteKey "ed25519"
-    redirect_to "/cgi-bin/ssh-keys.cgi"
+    redirect_back
     ;;
   *)
 %>
@@ -53,7 +53,7 @@ case "$POST_action" in
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
   <div class="col">
     <h3><%= $t_sshkey_1 %></h3>
-    <form action="/cgi-bin/ssh-keys.cgi" method="post">
+    <form action="<%= $SCRIPT_NAME %>" method="post">
       <input type="hidden" name="action" value="backup">
       <p><%= $t_sshkey_2 %></p>
       <p class="mt-2"><input type="submit" class="btn btn-danger" value="<%= $t_sshkey_3 %>"></p>
@@ -62,7 +62,7 @@ case "$POST_action" in
   <div class="col">
     <h3><%= $t_sshkey_4 %></h3>
     <p><%= $t_sshkey_5 %></p>
-    <form action="/cgi-bin/ssh-keys.cgi" method="post">
+    <form action="<%= $SCRIPT_NAME %>" method="post">
       <input type="hidden" name="action" value="restore">
       <p class="mt-2"><input type="submit" class="btn btn-danger" value="<%= $t_sshkey_6 %>"></p>
     </form>
@@ -70,7 +70,7 @@ case "$POST_action" in
   <div class="col">
     <h3><%= $t_sshkey_7 %></h3>
     <p><%= $t_sshkey_8 %></p>
-    <form action="/cgi-bin/ssh-keys.cgi" method="post">
+    <form action="<%= $SCRIPT_NAME %>" method="post">
       <input type="hidden" name="action" value="delete">
       <p class="mt-2"><input type="submit" class="btn btn-danger" value="<%= $t_sshkey_9 %>">
     </form>

@@ -65,7 +65,7 @@ else
 <div class="alert alert-danger">
   <h4><%= $t_sdcard_9 %></h4>
   <p><%= $t_sdcard_a %></p>
-  <form action="/cgi-bin/sdcard.cgi" method="post">
+  <form action="<%= $SCRIPT_NAME %>" method="post">
     <input type="hidden" name="doFormatCard" value="true">
     <p><input type="submit" class="btn btn-danger" value="<%= $t_sdcard_b %>"></p>
   </form>

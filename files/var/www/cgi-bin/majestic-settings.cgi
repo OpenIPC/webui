@@ -5,7 +5,10 @@
 page_title="Majestic settings"
 
 mj=$(echo "$mj" | sed "s/ /_/g")
+
 only="$GET_tab"; [ -z "$only" ] && only="system"
+[ "all" = "$only" ] && only=""
+
 eval title="\$tT_mj_${only}"; [ -z "$title" ] && title=$only
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
@@ -67,14 +70,21 @@ fi
 %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-1 row-cols-xl-3 g-4">
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
   <div class="col">
     <h3><%= $title %></h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
 <%
 config=""
+olddomain=""
 for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
-  param=${line%%|*}; _n=${param#.}; domain=${_n%.*}; name=mj_${_n//./_}; line=${line#*|}; type=${line%%|*}; line=${line#*|}
+  param=${line%%|*}; _n=${param#.}; domain=${_n%.*}; name=mj_${_n//./_}; line=${line#*|};
+  type=${line%%|*}; line=${line#*|}
+
+  if [ "$olddomain" != "$domain" ]; then
+    echo "<h3>${domain}</h3>"
+    olddomain="$domain"
+  fi
 
   # assign param's value to a variable with param's name for form fields values
   eval $name=\"$(yaml-cli -g "$param")\"
@@ -98,7 +108,7 @@ done
   </div>
   <div class="col">
     <h3>Related settings</h3>
-    <% pre "$config" %>
+    <pre><% echo -e "$config" %></pre>
     <p><a href="info-majestic.cgi">See majestic.yaml</a></o>
   </div>
   <div class="col">
@@ -114,6 +124,8 @@ for _l in $mj; do
   fi
 done
 unset _c; unset _d; unset _l; unset _n; unset _o; unset _p;
+
+echo "<a class=\"list-group-item list-group-item-danger\" href=\"?tab=all\">Show Everything (damn slow!)</a>"
 %>
     </div>
   </div>

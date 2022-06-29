@@ -10,6 +10,7 @@ print_usage() {
 Usage: $0 -b <branch> [-f]
 
   -f, --force           install even if same version
+  -v, --verbose         show more information
   -h, --help            display this help and exit
 "
 }
@@ -53,17 +54,27 @@ if [ -z "$branch" ]; then
   exit 0
 fi
 
-url="https://github.com/OpenIPC/microbe-web/archive/refs/heads/${branch}.zip"
 tmp_file=/tmp/microbe-web.zip
 etag_file=/root/.ui.etag
-opts="--silent --location --insecure --etag-save ${etag_file}"
-[ -n "$verbose" ] && [ "$verbose" -eq 1 ] && opts="${opts} --verbose"
+
+# url to retrieve update from
+url="https://github.com/OpenIPC/microbe-web/archive/refs/heads/${branch}.zip"
+opts="--location --insecure --etag-save ${etag_file}" #--silent
 
 if [ "$enforce" != "1" ]; then
   [ -f "$etag_file" ] && opts="${opts} --etag-compare ${etag_file}"
 fi
 
-curl $opts -o $tmp_file $url
+if [ -n "$verbose" ] && [ "$verbose" -eq 1 ]; then
+  opts="${opts} --verbose"
+else
+  opts="${opts} --silent"
+fi
+
+cmd="curl $opts -o $tmp_file $url"
+echo_c 97 "$cmd"
+echo "$($cmd)"
+
 if [ ! -f "$tmp_file" ]; then
   echo_c 97 "GitHub version matches the installed one. Nothing to update." >&2
   exit 1

@@ -84,6 +84,10 @@ done
         </select>
       </p>
       <p class="boolean form-check">
+        <input type="checkbox" name="web_verbose" id="web_verbose" value="true" class="form-check-input">
+        <label for="web_verbose" class="form-label">Verbose output.</label>
+      </p>
+      <p class="boolean form-check">
         <input type="checkbox" name="web_enforce" id="web_enforce" value="true" class="form-check-input">
         <label for="web_enforce" class="form-label">Install even if the same version.</label>
       </p>

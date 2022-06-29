@@ -23,6 +23,10 @@ cd /tmp
 prompt "$c"
 eval $c
 case "$?" in
+126)
+  echo "-sh: $c: Permission denied"
+  prompt
+  ;;
 127)
   echo "-sh: $c: not found"
   prompt

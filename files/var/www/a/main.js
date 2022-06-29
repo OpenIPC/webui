@@ -132,13 +132,16 @@ function refresh() {
                     if ("true" === el.dataset["reboot"]) {
                         window.location.href = '/wait.html'
                     } else {
-                        el.textContent += '\n--- finished ---\n';
+                        el.innerHTML += '\n--- finished ---\n';
                     }
                 }
             }
             async function run() {
                 for await (let line of makeTextFileLineIterator('/cgi-bin/jrun.cgi?cmd=' + btoa(el.dataset["cmd"]))) {
-                    el.textContent += line + '\n';
+                    const re1 = /\[1;(\d+)m/;
+                    const re2 = /\[0m/;
+                    line=line.replace(re1, '<span class="ansi-$1">').replace(re2, '</span>')
+                    el.innerHTML += line + '\n';
                 }
             }
             run()

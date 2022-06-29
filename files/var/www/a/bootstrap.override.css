@@ -189,3 +189,13 @@ pre, .pre {white-space:pre;}
     padding: 0.25rem 0.5rem;
     /*border-radius: 5px;*/
 }
+
+pre#output { background: #111; color: #89a; }
+.ansi-30 {color: black}
+.ansi-31 {color: red}
+.ansi-32 {color: green}
+.ansi-33 {color: yellow}
+.ansi-34 {color: blue}
+.ansi-35 {color: magenta}
+.ansi-36 {color: cyan}
+.ansi-37 {color: white}

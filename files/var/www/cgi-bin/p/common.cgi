@@ -373,69 +373,6 @@ html_title() {
   echo -n "OpenIPC"
 }
 
-## input "type" "name" "classes" "value" "extras"
-#input() {
-#  # input type
-#  _t="$1"
-#
-#  # input name
-#  _n="$2"
-#
-#  # css class
-#  _c="form-control"
-#
-#  # extra css class
-#  _c2="$3"
-#
-#  # placeholder
-#  eval _p=\$sP_${_n}
-#  [ -n "$_p" ] && _p=" placeholder=\"${_p}\""
-#
-#  #  value
-#  _v="$(t_value "$_n")"
-#
-#  # extra attributes
-#  _x2="$4"
-#
-#  case "$1" in
-#  checkbox)
-#    _c="form-check-input"
-#    _v="true"
-#    _x="$(t_checked "$_n" "$_v")"
-#    echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}-false\" value=\"false\">"
-#    ;;
-#  switch)
-#    _t="checkbox"
-#    _c="form-check-input"
-#    _v="true"
-#    _x="role=\"switch\""; [ -n "$(t_checked "$2" "$_v")" ] && _x="$_x $(t_checked "$2" "$_v")"
-#    echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}-false\" value=\"false\">"
-#    ;;
-#  text)
-#    ;;
-#  textarea)
-#    ;;
-#  range)
-#    _c="${_c} form-range"
-#    _o="$(t_options "$_n")"
-#    _x="$(t_disabled "$_n" "auto") data-units=\"$(t_units "$_n")\""
-#    ;;
-#  *)
-#    ;;
-#  esac
-#
-#  [ -n "$_c2" ] && _c="${_c} ${_c2}"; [ -n "$_c" ] && _c=" class=\"${_c}\""
-#  [ -n "$_x2" ] && _x="${_x} ${_x2}"; [ -n "$_x" ] && _x=" ${_x}"
-#
-#  if [ "textarea" = "$1" ]; then
-#    echo "<textarea id=\"${_n}\" name=\"${_n}\"${_c}${_x}>${_v}</textarea>"
-#  else
-#    [ -n "$_v" ] && _v=" value=\"${_v}\""
-#    echo "<input type=\"${_t}\" id=\"${_n}\" name=\"${_n}\"${_v}${_c}${_p}${_x}>"
-#  fi
-#  unset _c; unset _c2; unset _n; unset _o; unset _p; unset _t; unset _v; unset _x; unset _x2
-#}
-
 # label "name" "classes" "extras"
 label() {
   _c="form-label"; [ -n "$2" ] && _c="${_c} ${2}"

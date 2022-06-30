@@ -91,9 +91,6 @@ else
 fi
 %>
 <%in p/header.cgi %>
-
-<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#helpModal">How is works?</button>
-
 <%
 if [ -n "$error" ]; then
   report_error "$error"
@@ -113,63 +110,23 @@ fi
 <% fi %>
 
 <form action="<%= $SCRIPT_NAME %>" method="post">
-  <div class="row row-cols-1 row-cols-md-2 row-cols-xxl-5 g-4">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-4 g-4">
     <div class="col">
       <h3>Core dump saving</h3>
-      <p class="boolean">
-        <span class="form-check form-switch">
-          <input type="hidden" name="coredump_enabled" id="coredump_enabled-false" value="false">
-          <input type="checkbox" id="coredump_enabled" name="coredump_enabled" value="true" class="form-check-input" role="switch"<% [ "true" = "$coredump_enabled" ] && echo " checked" %>>
-          <label for="coredump_enabled" class="form-label form-check-label">Enable core dump saving</label>
-        </span>
-      </p>
-      <p class="string">
-        <label for="coredump_name" class="form-label">Name</label>
-        <input type="text" id="coredump_name" name="coredump_name" class="form-control" value="<%= $coredump_name %>">
-      </p>
-      <p class="string">
-        <label for="coredump_email" class="form-label">Email address</label>
-        <input type="text" id="coredump_email" name="coredump_email" class="form-control" value="<%= $coredump_email %>">
-      </p>
-      <p class="string">
-        <label for="coredump_telegram" class="form-label">Telegram username</label>
-        <input type="text" id="coredump_telegram" name="coredump_telegram" class="form-control" value="<%= $coredump_telegram %>">
-      </p>
+      <% field_switch "coredump_enabled" "Enable core dump saving" %>
+      <% field_text "coredump_name" "Name" %>
+      <% field_text "coredump_email" "Email address" %>
+      <% field_text "coredump_telegram" "Telegram username" %>
     </div>
-
     <div class="col">
       <h3>Upload to AWS S3 bucket</h3>
-      <p class="boolean">
-        <span class="form-check form-switch">
-          <input type="hidden" name="coredump_send2devs" id="coredump_send2devs-false" value="false">
-          <input type="checkbox" id="coredump_send2devs" name="coredump_send2devs" value="true" class="form-check-input" role="switch"<% [ "true" = "$coredump_send2devs" ] && echo " checked" %>>
-          <label for="coredump_send2devs" class="form-label form-check-label">Upload to developers</label>
-        </span>
-      </p>
-      <p class="boolean">
-        <span class="form-check form-switch">
-          <input type="hidden" name="coredump_consent" id="coredump_consent-false" value="false">
-          <input type="checkbox" id="coredump_consent" name="coredump_consent" value="true" class="form-check-input" role="switch"<% [ "true" = "$coredump_consent"] && echo " checked" %>>
-          <label for="coredump_consent" class="form-label form-check-label">I am aware of sensitive information in core dumps and I trust the developers.</label>
-        </span>
-      </p>
+      <% field_switch "coredump_send2devs" "Upload to developers" %>
+      <% field_switch "coredump_consent" "I am aware of sensitive information in core dumps and I trust the developers." %>
     </div>
-
     <div class="col">
       <h3>Leave on camera</h3>
-      <p class="boolean">
-        <span class="form-check form-switch">
-          <input type="hidden" name="coredump_save4web" id="coredump_save4web-false" value="false">
-          <input type="checkbox" id="coredump_save4web" name="coredump_save4web" value="true" class="form-check-input" role="switch"<% [ "true" = "$coredump_save4web" ] && echo " checked" %>>
-          <label for="coredump_save4web" class="form-label form-check-label">Save file on camera</label>
-        </span>
-        <span class="hint text-secondary">Not recommended!</span>
-      </p>
-      <p class="string">
-        <label for="coredump_localpath" class="form-label">Local path</label>
-        <input type="text" id="coredump_localpath" name="coredump_localpath" value="<%= $coredump_localpath %>" class="form-control">
-      </p>
-
+      <% field_switch "coredump_save4web" "Save file on camera" "Not recommended!" %>
+      <% field_text "coredump_localpath" "Local path" %>
 <% if [ -f "${coredump_localpath}/coredump.tgz" ]; then %>
       <div class="alert alert-danger">
         <h5>There is a core dump saved on the camera!</h5>
@@ -177,56 +134,28 @@ fi
       </div>
 <% fi %>
     </div>
-
     <div class="col">
       <h3>Upload to TFTP server</h3>
-      <p class="boolean">
-        <span class="form-check form-switch">
-          <input type="hidden" name="coredump_send2tftp" id="coredump_send2tftp-false" value="false">
-          <input type="checkbox" id="coredump_send2tftp" name="coredump_send2tftp" value="true" class="form-check-input" role="switch"<% [ "true" = "$coredump_send2tftp" ] && echo " checked" %>>
-          <label for="coredump_send2tftp" class="form-label form-check-label">Upload to TFTP server</label>
-        </span>
-      </p>
-      <p class="string">
-        <label for="coredump_tftphost" class="form-label">Hostname or IP address</label>
-        <input type="text" id="coredump_tftphost" name="coredump_tftphost" class="form-control" value="<%= $coredump_tftphost %>">
-      </p>
+      <% field_switch "coredump_send2tftp" "Upload to TFTP server" %>
+      <% field_text "coredump_tftphost" "Hostname or IP address" %>
     </div>
-
     <div class="col">
       <h3>Upload to FTP server</h3>
-      <p class="boolean">
-        <span class="form-check form-switch">
-          <input type="hidden" name="coredump_send2ftp" id="coredump_send2ftp-false" value="false">
-          <input type="checkbox" id="coredump_send2ftp" name="coredump_send2ftp" value="true" class="form-check-input" role="switch"<% [ "true" = "$coredump_send2ftp" ] && echo " checked" %>>
-          <label for="coredump_send2ftp" class="form-label form-check-label">Upload to FTP server</label>
-        </span>
-      </p>
-      <p class="string">
-        <label for="coredump_ftphost" class="form-label">Hostname or IP address</label>
-        <input type="text" id="coredump_ftphost" name="coredump_ftphost" class="form-control" value="<%= $coredump_ftphost %>">
-      </p>
-      <p class="string">
-        <label for="coredump_ftppath" class="form-label">Target directory</label>
-        <input type="text" id="coredump_ftppath" name="coredump_ftppath" class="form-control" value="<%= $coredump_ftppath %>">
-        <span class="hint text-secondary">relative to ftp root directory</span>
-      </p>
-      <p class="string">
-        <label for="coredump_ftpuser" class="form-label">Username</label>
-        <input type="text" id="coredump_ftpuser" name="coredump_ftpuser" class="form-control" value="<%= $coredump_ftpuser %>">
-      </p>
-      <p class="password">
-        <label for="coredump_ftppass" class="form-label">Password</label>
-        <span class="input-group">
-          <input type="password" id="coredump_ftppass" name="coredump_ftppass" class="form-control"  value="<%= $coredump_ftppass %>">
-          <label class="input-group-text"><input class="form-check-input me-1" type="checkbox" data-for="coredump_ftppass"> show</label>
-        </span>
-      </p>
+      <% field_switch "coredump_send2ftp" "Upload to FTP server" %>
+      <% field_text "coredump_ftphost" "Hostname or IP address" %>
+      <% field_text "coredump_ftppath" "Target directory" "relative to ftp root directory" %>
+      <% field_text "coredump_ftpuser" "Username" %>
+      <% field_password "coredump_ftppass" "Password" %>
+    </div>
+    <div class="col">
+      <h3>Config</h3>
+      <% ex "cat $conf_file" %>
+    </div>
+    <div class="col">
+      <h3>Log of last core dumping</h3>
+      <% [ -f /root/coredump.log ] && ex "cat /root/coredump.log" %>
     </div>
   </div>
-
-  <h3>Log of last core dumping</h3>
-  <% [ -f /root/coredump.log ] && ex "cat /root/coredump.log" %>
   <% button_submit %>
 </form>
 
@@ -250,5 +179,6 @@ fi
   </div>
 </div>
 
+<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#helpModal">How is works?</button>
 
 <%in p/footer.cgi %>

@@ -62,7 +62,7 @@ done
   <div class="col">
     <h3>Access</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
-      <input type="hidden" name="action" value="access">
+      <% field_hidden "action" "access" %>
       <p class="string">
         <label for="webui_username" class="form-label">Username</label>
         <input type="text" id="webui_username" name="webui_username" value="admin" class="form-control" autocomplete="username" disabled>
@@ -76,7 +76,7 @@ done
   <div class="col">
     <h3>Locale</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="action" value="locale">
+      <% field_hidden "action" "locale" %>
       <% field_select "webui_language" "Interface Language" "en|English" %>
       <% field_file "webui_locale_file" "Locale file" %>
       <% button_submit %>

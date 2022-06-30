@@ -32,7 +32,7 @@ web_version="master"
   <div class="col">
     <h3>Upgrade</h3>
     <form action="webui-update.cgi" method="post">
-      <input type="hidden" name="action" value="update">
+      <% field_hidden "action" "update" %>
       <% field_select "web_version" "Branch" "master,dev" %>
       <% field_checkbox "web_verbose" "Verbose output." %>
       <% field_checkbox "web_enforce" "Install even if the same version." %>

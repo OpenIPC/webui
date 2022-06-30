@@ -15,7 +15,7 @@
     </div>
     <div class="offcanvas-body x-small">
       <form action="webui.cgi" method="post">
-        <input type="hidden" name="action" value="init">
+        <% field_hidden "action" "init" %>
         <% button_submit "Refresh Environment" %>
       </form>
 

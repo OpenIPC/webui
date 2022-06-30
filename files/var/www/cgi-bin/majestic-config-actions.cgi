@@ -65,7 +65,7 @@ fi
     <h3>Backup config</h3>
     <p>Download recent majestic.yaml to preserve changes you made to the default configuration.</p>
     <form action="<%= $SCRIPT_NAME %>" method="post">
-      <input type="hidden" name="action" value="backup">
+      <% field_hidden "action" "backup" %>
       <% button_submit "Download config" %>
     </form>
   </div>
@@ -73,11 +73,8 @@ fi
     <h3>Restore config</h3>
     <p>Restore custom Majestic configuration from a saved copy of majestic.yaml file.</p>
     <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="action" value="restore">
-      <p class="file">
-        <label for="mj_restore_file" class="form-label d-none">Backup file</label>
-        <input type="file" id="mj_restore_file" name="mj_restore_file" class="form-control">
-      </p>
+      <% field_hidden "action" "restore" %>
+      <% field_file "mj_restore_file" "Backup file" %>
       <% button_submit "Upload config" "warning" %>
     </form>
   </div>
@@ -90,7 +87,7 @@ fi
     <h3>Export as patch</h3>
     <p>Export changes made to majestic.yaml in a form of a patch file.</p>
     <form action="<%= $SCRIPT_NAME %>" method="post">
-      <input type="hidden" name="action" value="patch">
+      <% field_hidden "action" "patch" %>
       <% button_submit "Download patch file" %>
     </form>
   </div>

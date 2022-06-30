@@ -68,8 +68,8 @@ page_title="Text editor"
 <div class="tab-content p-2" id="tab-content">
   <div id="edit-tab-pane" role="tabpanel" class="tab-pane fade show active" aria-labelledby="edit-tab" tabindex="0">
     <form action="<%= $SCRIPT_NAME %>" method="post" class="mb-4">
-      <input type="hidden" name="action" value="save">
-      <input type="hidden" name="editor_file" value="<%= $editor_file %>">
+      <% field_hidden "action" "save" %>
+      <% field_hidden "editor_file" "$editor_file" %>
       <% field_textarea "editor_text" %>
       <p class="boolean"><span class="form-check form-switch">
         <input type="checkbox" id="editor_backup" name="editor_backup" value="true" class="form-check-input" role="switch">
@@ -87,8 +87,8 @@ page_title="Text editor"
     <div id="back-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="back-tab" tabindex="0">
       <% ex "cat -t ${editor_file}.backup" %>
       <form action="<%= $SCRIPT_NAME %>" method="post">
-        <input type="hidden" name="action" value="restore">
-        <input type="hidden" name="editor_file" value="<%= $editor_file %>">
+        <% field_hidden "action" "restore" %>
+        <% field_hidden "editor_file" "$editor_file" %>
         <% button_submit "Restore" "danger" %>
       </form>
     </div>

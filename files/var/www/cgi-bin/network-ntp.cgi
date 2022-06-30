@@ -32,12 +32,12 @@ fi
   <div class="col">
     <h3>NTP Servers</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
-      <input type="hidden" name="action" value="update">
 <%
+field_hidden "action" "update"
 for i in 0 1 2 3; do
   x=$(expr $i + 1)
   eval "ntp_server_${i}=$(sed -n ${x}p /etc/ntp.conf | cut -d' ' -f2)"
-  field_text "ntp_server_${i}"
+  field_text "ntp_server_${i}" "NTP Server $(( i + 1 ))"
 done
 button_submit
 %>
@@ -48,7 +48,7 @@ button_submit
     <% ex "cat $config_file" %>
     <% if [ "$(diff -q -- "/rom${config_file}" "$config_file")" ]; then %>
     <form action="<%= $SCRIPT_NAME %>" method="post">
-      <input type="hidden" name="action" value="reset">
+      <% field_hidden "action" "reset" %>
       <% button_submit "Restore firmware defaults" "danger" %>
     </form>
     <% fi %>

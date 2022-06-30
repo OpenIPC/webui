@@ -65,6 +65,14 @@ iface eth0 inet static
   touch /tmp/network-restart.txt
   redirect_to $SCRIPT_NAME
 fi
+
+[ -z "$network_hostname" ] && network_hostname=$hostname
+[ -z "$network_dhcp" ] && network_dhcp=$dhcp
+[ -z "$network_address" ] && network_address=$ipaddr
+[ -z "$network_netmask" ] && network_netmask=$netmask
+[ -z "$network_gateway" ] && network_gateway=$gateway
+[ -z "$network_dns_1" ] && network_dns_1=$dns_1
+[ -z "$network_dns_2" ] && network_dns_2=$dns_2
 %>
 
 <%in p/header.cgi %>
@@ -73,40 +81,14 @@ fi
   <div class="col col-md-6 col-lg-4 col-xxl-3">
     <h3>Settings</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
-      <input type="hidden" name="action" value="update">
-
-      <p class="string">
-        <label for="network_hostname" class="form-label">Hostname</label>
-        <input type="text" id="network_hostname" name="network_hostname" class="form-control data-pattern=host" value="<%= $hostname %>">
-        <span class="hint text-secondary">Make hostname unique using MAC address information: <%= $macaddr %></span>
-      </p>
-      <p class="boolean">
-        <span class="form-check form-switch">
-        <input type="hidden" name="network_dhcp" id="network_dhcp-false" value="false">
-        <input type="checkbox" id="network_dhcp" name="network_dhcp" value="true" class="form-check-input" role="switch"<% [ "true" = "$dhcp" ] && echo " checked" %>>
-        <label for="network_dhcp" class="form-label form-check-label">Use DHCP</label>
-        </span>
-      </p>
-      <p class="string">
-        <label for="network_address" class="form-label">IP Address</label>
-        <input type="text" id="network_address" name="network_address" class="form-control" value="<%= $ipaddr %>">
-      </p>
-      <p class="string">
-        <label for="network_netmask" class="form-label">IP Netmask</label>
-        <input type="text" id="network_netmask" name="network_netmask" class="form-control" value="<%= $netmask %>">
-      </p>
-      <p class="string">
-        <label for="network_gateway" class="form-label">Gateway</label>
-        <input type="text" id="network_gateway" name="network_gateway" class="form-control" value="<%= $gateway %>">
-      </p>
-      <p class="string">
-        <label for="network_dns_1" class="form-label">DNS 1</label>
-        <input type="text" id="network_dns_1" name="network_dns_1" class="form-control" value="<%= $dns_1 %>">
-      </p>
-      <p class="string">
-        <label for="network_dns_2" class="form-label">DNS 2</label>
-        <input type="text" id="network_dns_2" name="network_dns_2" class="form-control" value="<%= $dns_2 %>">
-      </p>
+      <% field_hidden "action" "update" %>
+      <% field_text "network_hostname" "Hostname" "Make hostname unique using MAC address information: ${macaddr}" %>
+      <% field_switch "network_dhcp" "Use DHCP" %>
+      <% field_text "network_address" "IP Address" %>
+      <% field_text "network_netmask" "IP Netmask" %>
+      <% field_text "network_gateway" "Gateway" %>
+      <% field_text "network_dns_1" "DNS 1" %>
+      <% field_text "network_dns_2" "DNS 2" %>
       <% button_submit %>
     </form>
   </div>

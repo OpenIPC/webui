@@ -155,9 +155,10 @@ field_file() {
   echo "</p>"
 }
 
-# field_hidden "name"
+# field_hidden "name" "value"
 field_hidden() {
-  echo "<input type=\"hidden\" id=\"${1}\" name=\"${1}\" class=\"form-hidden\">"
+  # do we need id here? id=\"${1}\"
+  echo "<input type=\"hidden\" name=\"${1}\" value=\"${2}\" class=\"form-hidden\">"
 }
 
 # field_number "name" "label" "range" "hint"

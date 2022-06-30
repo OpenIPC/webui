@@ -28,10 +28,7 @@ case "$REQUEST_METHOD" in
     <h3>Add a device</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">
       <p>Please enter access PIN to add a device.</p>
-      <p class="string">
-        <label for="bigbro_pin" class="form-label">Access PIN</label>
-        <input type="text" name="bigbro_pin" id="bigbro_pin" class="form-control" pattern="[A-Za-z0-9]+" title="letters and numbers, no punctuation or special characters" required>
-      </p>
+      <% field_text "bigbro_pin" "Access PIN" %>
       <% button_submit "Add device" %>
     </form>
   </div>
@@ -55,6 +52,14 @@ case "$REQUEST_METHOD" in
     <% ex "cat $config_file" %>
   </div>
 </div>
+
+<script>
+const el=$("#bigbro_pin")
+el.pattern = "[A-Za-z0-9]+";
+el.title = "letters and numbers, no punctuation or special characters"
+el.required = true;
+</script>
+
 <%in p/footer.cgi %>
 <%
 ;;

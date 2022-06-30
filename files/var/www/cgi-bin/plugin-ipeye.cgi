@@ -15,17 +15,11 @@ page_title="IPEYE Cloud"
       <h3>Add a feed</h3>
       <form action="<%= $SCRIPT_NAME %>" method="post">
 <%
-tL_ipeye_camera_name="Camera name"
-tL_ipeye_login="IPEYE cloud login"
-tL_ipeye_password="IPEYE cloud password"
-tL_ipeye_rtsp_feed="RTSP feed"
-
 ipeye_camera_name="$hostname"
-field_text "ipeye_login"
-field_text "ipeye_password"
-field_text "ipeye_password"
-field_text "ipeye_camera_name"
-field_select "ipeye_rtsp_feed"
+field_text "ipeye_login" "IPEYE cloud login"
+field_password "ipeye_password" "IPEYE cloud password"
+field_text "ipeye_camera_name" "Camera name"
+field_select "ipeye_rtsp_feed" "RTSP feed"
 button_submit "Add camera to the cloud"
 %>
       </form>
@@ -52,8 +46,8 @@ button_submit "Add camera to the cloud"
     <h4>Cannot proceed because IPEYE support is disabled.</h4>
     <p>In order to add this camera to the cloud you have to enable IPEYE support first.</p>
     <form action="majestic-settings.cgi" method="post">
-      <input type="hidden" name="mj_ipeye_enabled" id="mj_ipeye_enabled" value="true" class="form-control">
-      <p class="mt-2"><input type="submit" class="btn btn-warning" value="Enable IPEYE Cloud protocol"></p>
+      <% field_hidden "mj_ipeye_enabled" "true" %>
+      <% button_submit "Enable IPEYE Cloud protocol" "warning" %>
     </form>
   </div>
 <% fi %>

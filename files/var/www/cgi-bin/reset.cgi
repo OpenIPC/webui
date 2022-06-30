@@ -19,12 +19,9 @@
       <div class="d-flex gap-2 mb-0">
         <form action="majestic-config-actions.cgi" method="post">
           <input type="hidden" name="action" value="backup">
-          <input type="submit" class="btn btn-primary" value="Backup settings">
+          <% button_submit "Backup settings" %>
         </form>
-        <form action="majestic-config-actions.cgi" method="post">
-          <input type="hidden" name="action" value="reset">
-          <input type="submit" class="btn btn-danger" value="Reset settings" title="Restore original configuration">
-        </form>
+        <% button_mj_reset %>
       </p>
     </div>
   </div>

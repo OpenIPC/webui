@@ -66,7 +66,7 @@ fi
     <p>Download recent majestic.yaml to preserve changes you made to the default configuration.</p>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <input type="hidden" name="action" value="backup">
-      <p><input type="submit" class="btn btn-primary" value="Download config"></p>
+      <% button_submit "Download config" %>
     </form>
   </div>
   <div class="col">
@@ -78,7 +78,7 @@ fi
         <label for="mj_restore_file" class="form-label d-none">Backup file</label>
         <input type="file" id="mj_restore_file" name="mj_restore_file" class="form-control">
       </p>
-      <p><input type="submit" class="btn btn-warning" value="Upload config"></p>
+      <% button_submit "Upload config" "warning" %>
     </form>
   </div>
   <div class="col">
@@ -91,17 +91,14 @@ fi
     <p>Export changes made to majestic.yaml in a form of a patch file.</p>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <input type="hidden" name="action" value="patch">
-      <p><input type="submit" class="btn btn-primary" value="Download patch file"></p>
+      <% button_submit "Download patch file" %>
     </form>
   </div>
   <div class="col">
     <h3>Reset</h3>
     <% if [ "$(diff -q $config_file_fw $config_file)" ]; then %>
       <p>Reset Majestic configuration to its original state, as supplied with the firmware.</p>
-      <form action="<%= $SCRIPT_NAME %>" method="post">
-        <input type="hidden" name="action" value="reset">
-        <p><input type="submit" class="btn btn-danger" value="Reset settings"></p>
-      </form>
+      <% button_mj_reset %>
     <% else %>
       <p>There is nothing to reset. Recent Majestic configuration does not differ from the one supplied with the firmware.</p>
     <% fi %>

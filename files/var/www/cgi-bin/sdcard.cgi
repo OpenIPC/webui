@@ -67,7 +67,7 @@ else
   <p><%= $t_sdcard_a %></p>
   <form action="<%= $SCRIPT_NAME %>" method="post">
     <input type="hidden" name="doFormatCard" value="true">
-    <p><input type="submit" class="btn btn-danger" value="<%= $t_sdcard_b %>"></p>
+    <% button_submit "$t_sdcard_b" "danger" %>
   </form>
 </div>
 <%

@@ -32,7 +32,7 @@ case "$REQUEST_METHOD" in
         <label for="bigbro_pin" class="form-label">Access PIN</label>
         <input type="text" name="bigbro_pin" id="bigbro_pin" class="form-control" pattern="[A-Za-z0-9]+" title="letters and numbers, no punctuation or special characters" required>
       </p>
-      <p class="mt-2"><input type="submit" class="btn btn-primary" value="Add device"></p>
+      <% button_submit "Add device" %>
     </form>
   </div>
   <div class="col">

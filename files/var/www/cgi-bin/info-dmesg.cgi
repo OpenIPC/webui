@@ -3,5 +3,5 @@
 <% page_title="Diagnostic messages" %>
 <%in p/header.cgi %>
 <% ex "/bin/dmesg" %>
-<a href="#" class="btn btn-primary refresh">Refresh</a>
+<% button_refresh %>
 <%in p/footer.cgi %>

@@ -66,7 +66,7 @@ include $config_file
         <label for="telegram_socks5_enabled" class="form-label form-check-label">Use SOCKS5</label>
       </span>
       </p>
-      <p class="mt-2"><input type="submit" class="btn btn-primary" value="Save changes"></p>
+      <% button_submit %>
     </form>
   </div>
   <div class="col">

@@ -99,7 +99,7 @@ done
         <input type="checkbox" name="fw_noreboot" id="web_noreboot" value="true" class="form-check-input">
         <label for="web_noreboot" class="form-label">Do not reboot after upgrade.</label>
       </p>
-      <p class="mt-2"><input type="submit" class="btn btn-warning" value="<%= $t_btn_update %>"></p>
+      <% button_submit "$t_btn_update" "warning" %>
     </form>
   </div>
 
@@ -127,7 +127,7 @@ done
         </span>
       </p>
       -->
-      <p class="mt-2"><input type="submit" class="btn btn-primary" value="Save changes"></p>
+      <% button_submit %>
     </form>
   </div>
 
@@ -146,7 +146,7 @@ done
         <label for="webui_locale_file" class="form-label">Locale file</label>
         <input type="file" id="webui_locale_file" name="webui_locale_file" class="form-control">
       </p>
-      <p class="mt-2"><input type="submit" class="btn btn-primary" value="Save changes"></p>
+      <% button_submit %>
     </form>
   </div>
 

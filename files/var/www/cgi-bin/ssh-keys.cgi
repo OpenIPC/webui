@@ -56,7 +56,7 @@ case "$POST_action" in
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <input type="hidden" name="action" value="backup">
       <p><%= $t_sshkey_2 %></p>
-      <p class="mt-2"><input type="submit" class="btn btn-danger" value="<%= $t_sshkey_3 %>"></p>
+      <% button_submit "$t_sshkey_3" "danger" %>
     </form>
   </div>
   <div class="col">
@@ -64,7 +64,7 @@ case "$POST_action" in
     <p><%= $t_sshkey_5 %></p>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <input type="hidden" name="action" value="restore">
-      <p class="mt-2"><input type="submit" class="btn btn-danger" value="<%= $t_sshkey_6 %>"></p>
+      <% button_submit "$t_sshkey_6" "danger" %>
     </form>
   </div>
   <div class="col">
@@ -72,7 +72,7 @@ case "$POST_action" in
     <p><%= $t_sshkey_8 %></p>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <input type="hidden" name="action" value="delete">
-      <p class="mt-2"><input type="submit" class="btn btn-danger" value="<%= $t_sshkey_9 %>">
+      <% button_submit "$t_sshkey_9" "danger" %>
     </form>
   </div>
 </div>

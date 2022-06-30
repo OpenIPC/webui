@@ -3,5 +3,5 @@
 <% page_title="Log read" %>
 <%in p/header.cgi %>
 <% ex "/sbin/logread" %>
-<a href="#" class="btn btn-primary refresh">Refresh</a>
+<% button_refresh %>
 <%in p/footer.cgi %>

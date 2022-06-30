@@ -70,12 +70,12 @@ page_title="Text editor"
     <form action="<%= $SCRIPT_NAME %>" method="post" class="mb-4">
       <input type="hidden" name="action" value="save">
       <input type="hidden" name="editor_file" value="<%= $editor_file %>">
-      <p class="textarea"><textarea id="editor_text" name="editor_text" class="form-control"><%= "$editor_text" %></textarea></p>
+      <% field_textarea "editor_text" %>
       <p class="boolean"><span class="form-check form-switch">
         <input type="checkbox" id="editor_backup" name="editor_backup" value="true" class="form-check-input" role="switch">
         <label for="editor_backup" class="form-label form-check-label"><%= $tL_editor_backup %></label>
       </span></p>
-      <p class="mt-2"><input type="submit" class="btn btn-primary" value="<%= $t_btn_submit %>"></p>
+      <% button_submit %>
     </form>
   </div>
 
@@ -89,7 +89,7 @@ page_title="Text editor"
       <form action="<%= $SCRIPT_NAME %>" method="post">
         <input type="hidden" name="action" value="restore">
         <input type="hidden" name="editor_file" value="<%= $editor_file %>">
-        <p class="mt-2"><input type="submit" class="btn btn-danger" value="Restore"></p>
+        <% button_submit "Restore" "danger" %>
       </form>
     </div>
     <div id="diff-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="diff-tab" tabindex="0">

@@ -39,8 +39,8 @@ for i in 0 1 2 3; do
   eval "ntp_server_${i}=$(sed -n ${x}p /etc/ntp.conf | cut -d' ' -f2)"
   field_text "ntp_server_${i}"
 done
+button_submit
 %>
-      <p class="mt-2"><input type="submit" class="btn btn-primary" value="Save changes"></p>
     </form>
   </div>
   <div class="col">
@@ -49,7 +49,7 @@ done
     <% if [ "$(diff -q -- "/rom${config_file}" "$config_file")" ]; then %>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <input type="hidden" name="action" value="reset">
-      <p class="mt-2"><input type="submit" class="btn btn-danger" value="Restore firmware defaults"></p>
+      <% button_submit "Restore firmware defaults" "danger" %>
     </form>
     <% fi %>
   </div>

@@ -3,5 +3,5 @@
 <% page_title="Modules" %>
 <%in p/header.cgi %>
 <% ex "lsmod" %>
-<a href="#" class="btn btn-primary refresh">Refresh</a>
+<% button_refresh %>
 <%in p/footer.cgi %>

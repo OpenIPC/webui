@@ -107,7 +107,7 @@ fi
         <label for="network_dns_2" class="form-label">DNS 2</label>
         <input type="text" id="network_dns_2" name="network_dns_2" class="form-control" value="<%= $dns_2 %>">
       </p>
-      <p class="mt-2"><input type="submit" class="btn btn-primary" value="Save changes"></p>
+      <% button_submit %>
     </form>
   </div>
   <div class="col col-md-6 col-lg-8 col-xxl-9">

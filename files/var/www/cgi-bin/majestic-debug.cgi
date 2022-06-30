@@ -227,8 +227,7 @@ fi
 
   <h3>Log of last core dumping</h3>
   <% [ -f /root/coredump.log ] && ex "cat /root/coredump.log" %>
-
-  <p class="mt-2"><input type="submit" class="btn btn-primary" value="Save changes"></p>
+  <% button_submit %>
 </form>
 
 <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">

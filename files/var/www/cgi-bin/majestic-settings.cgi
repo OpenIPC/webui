@@ -102,8 +102,8 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
     *) echo "UNKNOWN FIELD: $name";;
   esac
 done
+button_submit
 %>
-      <p class="mt-2"><input type="submit" class="btn btn-primary" value="Save changes"></p>
     </form>
   </div>
   <div class="col">

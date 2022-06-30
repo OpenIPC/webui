@@ -42,30 +42,10 @@ include $config_file
   <div class="col">
     <h3>Telegram</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
-      <p class="boolean">
-        <span class="form-check form-switch">
-          <input type="hidden" name="telegram_enabled" id="telegram_enabled-false" value="false">
-          <input type="checkbox" id="telegram_enabled" name="telegram_enabled" value="true" class="form-check-input" role="switch"<% [ "true" = "$telegram_enabled"] && echo " checked" %>>
-          <label for="telegram_enabled" class="form-label form-check-label">Enable Telegram bot</label>
-        </span>
-      </p>
-      <p class="string">
-        <label for="telegram_token" class="form-label">Token</label>
-        <input type="text" id="telegram_token" name="telegram_token" class="form-control" value="<%= $telegram_token %>">
-        <span class="hint text-secondary">Your Telegram Bot authentication token.</span>
-      </p>
-      <p class="string">
-        <label for="telegram_channel" class="form-label">Chat ID</label>
-        <input type="text" id="telegram_channel" name="telegram_channel" class="form-control" value="<%= $telegram_channel %>">
-        <span class="hint text-secondary">Numeric ID of the channel you want the bot to post images to.</span>
-      </p>
-      <p class="boolean">
-        <span class="form-check form-switch">
-        <input type="hidden" name="telegram_socks5_enabled" id="telegram_socks5_enabled-false" value="false">
-        <input type="checkbox" id="telegram_socks5_enabled" name="telegram_socks5_enabled" value="true" class="form-check-input" role="switch"<% [ "true" = "$telegram_socks5_enabled"] && echo " checked" %>>
-        <label for="telegram_socks5_enabled" class="form-label form-check-label">Use SOCKS5</label>
-      </span>
-      </p>
+      <% field_switch "telegram_enabled" "Enable Telegram bot" %>
+      <% field_text "telegram_token" "Token" "Your Telegram Bot authentication token." %>
+      <% field_text "telegram_channel" "Chat ID" "Numeric ID of the channel you want the bot to post images to." %>
+      <% field_switch "telegram_socks5_enabled" "Use SOCKS5" %>
       <% button_submit %>
     </form>
   </div>
@@ -73,7 +53,7 @@ include $config_file
     <h3>Config file</h3>
     <% ex "cat $config_file" %>
   </div>
-<% if [ ! -z "$telegram_token" ]; then %>
+<% if [ -z "$telegram_token" ]; then %>
   <div class="col">
     <h3>How to set up</h3>
     <h4>To create a new channel for your Telegram bot:</h4>

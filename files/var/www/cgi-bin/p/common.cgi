@@ -436,8 +436,8 @@ Status: 302 Moved Temporarily
 }
 
 reload_locale() {
-  _l="$(cat /etc/web_locale)"
-  if [ -f "/var/www/lang/${_l}.sh" ]; then
+  [ -f /etc/web_locale ] && _l="$(cat /etc/web_locale)"
+  if [ -n "$_l" ] && [ -f "/var/www/lang/${_l}.sh" ]; then
     source "/var/www/lang/${_l}.sh"
     locale="$_l"
   else

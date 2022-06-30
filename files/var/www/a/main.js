@@ -21,7 +21,7 @@ function refresh() {
             const r = $('#' + id + '-range');
             const s = $('#' + id + '-show');
             if (el.checked) {
-                el.dataset.value = p.value;
+                el.dataset.value = r.value;
                 p.value = 'auto';
                 r.disabled = true;
                 s.textContent = '--';
@@ -57,8 +57,8 @@ function refresh() {
         $$('input[type=range]').forEach(el => {
             el.addEventListener('input', ev => {
                 const id = ev.target.id.replace(/-range/, '');
-                $('#' + id).value = ev.target.value;
                 $('#' + id + '-show').textContent = ev.target.value;
+                $('#' + id).value = ev.target.value;
             })
         });
 

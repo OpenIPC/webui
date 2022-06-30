@@ -210,37 +210,52 @@ field_password() {
 
 # field_range "name" "label" "range" "hint"
 field_range() {
+  _n=$1
+
   _l=$2
-  [ -z "$_l" ] && _l="$(t_label "$1")"
-  [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
+  [ -z "$_l" ] && _l="$(t_label "$_n")"
+  [ -z "$_l" ] && _l="<span class=\"bg-warning\">${_n}</span>"
 
-  # min, max, step, button
-  _r=$3
-  _f=$(echo "$_r" | cut -d, -f1)
-  _t=$(echo "$_r" | cut -d, -f2)
-  _s=$(echo "$_r" | cut -d, -f3)
-  _b=$(echo "$_r" | cut -d, -f4)
+  _r=$3 # min,max,step,button
+  _mn=$(echo "$_r" | cut -d, -f1)
+  _mx=$(echo "$_r" | cut -d, -f2)
+  _st=$(echo "$_r" | cut -d, -f3)
+  _ab=$(echo "$_r" | cut -d, -f4)
 
-  _h=$4
-  [ -z "$_h" ] && _h="$(t_hint "$1")"
+  _hint=$4
+  [ -z "$_hint" ] && _hint="$(t_hint "$_n")"
 
-  _v=$(t_value "$1")
-  [ -z "$_v" ] && _v=$(t_default "$1")
-  [ "auto" = "$_v" ] && _v=$(( (_t + _f )/ 2 ))
+  _v=$(t_value "$_n")
+  [ -z "$_v" ] && _v=$(t_default "$_n")
 
-  echo "<p class=\"range\"><label for=\"${1}\" class=\"form-label\">${_l}</label>" \
+  _vr=$_v
+  [ -z "$_vr" -o "$_ab" = "$_vr" ] && _vr=$(( ( $_mn + $_mx ) / 2 ))
+
+  echo "<p class=\"range\">" \
+    "<label class=\"form-label\" for=\"${_n}\">${_l}</label>" \
     "<span class=\"input-group\">"
-  [ -n "$_b" ] && echo "<label class=\"input-group-text\">${_b}" \
-    "<input class=\"form-check-input auto-value ms-1\" type=\"checkbox\" data-for=\"${1}\" data-value=\"${_dv}\" $(t_checked "$1" "${_b}")>" \
+
+  # NB! no name on checkbox, since we don't want its data submitted
+  [ -n "$_ab" ] && echo "<label class=\"input-group-text\" for=\"${_n}-auto\">${_ab}" \
+    "<input type=\"checkbox\" class=\"form-check-input auto-value ms-1\" id=\"${_n}-auto\"" \
+      " data-for=\"${_n}\" data-value=\"${_vr}\" $(t_checked "$_v" "$_ab")>" \
     "</label>"
+
+  # Input that holds the submitting value.
+  echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}\" value=\"${_v}\">"
+
   # NB! no name on range, since we don't want its data submitted
-  echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}\" value=\"${_v}\">" \
-    "<input type=\"range\" id=\"${1}-range\" class=\"form-control form-range\" value=\"${_v}\" min=\"${_f}\" max=\"${_t}\" step=\"${_s}\">" \
-    "<span class=\"input-group-text show-value\" id=\"${1}-show\">${_v}</span>" \
+  echo "<input type=\"range\" class=\"form-control form-range\" id=\"${_n}-range\"" \
+      "value=\"${_vr}\" min=\"${_mn}\" max=\"${_mx}\" step=\"${_st}\">"
+
+  echo "<span class=\"input-group-text show-value\" id=\"${_n}-show\">${_vr}</span>" \
     "</span>"
-  [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
+
+  [ -n "$_hint" ] && echo "<span class=\"hint text-secondary\">${_hint}</span>"
+
   echo "</p>"
-  unset _b; unset _f; unset _r; unset _s; unset _t; unset _v
+
+  unset _ab; unset _mn; unset _mx; unset _n; unset _r; unset _st; unset _v; unset _vr;
 }
 
 # field_select "name" "label" "options" "hint"

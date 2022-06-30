@@ -82,8 +82,8 @@ done
         <label for="web_version" class="input-group-text">Branch</label>
         <select class="form-select" id="web_version" name="web_version" required>
           <option value="">Choose...</option>
-          <option value="master"<%= [ "master" = "$webui_version" ] && echo " selected" %>>Stable</option>
-          <option value="dev"<%= [ "dev" = "$webui_version" ] && echo " selected" %>>Development</option>
+          <option value="master"<% [ "master" = "$webui_version" ] && echo " selected" %>>Stable</option>
+          <option value="dev"<% [ "dev" = "$webui_version" ] && echo " selected" %>>Development</option>
         </select>
       </p>
       <p class="boolean form-check">

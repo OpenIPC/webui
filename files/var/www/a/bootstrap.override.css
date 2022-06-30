@@ -6,7 +6,7 @@
 @media (min-width: 992px) and (max-width: 1199.98px) {body.debug:before{content:"lg"}}
 @media (min-width: 1200px) and (max-width: 1399.98px) {body.debug:before{content:"xl"}}
 @media (min-width: 1400px) {body.debug:before{content:"xxl"}}
-body.debug:before {color:#4c60d811;display:block;font-size:10rem;font-weight:700;line-height:1;position:absolute;right:3rem;top:3rem;z-index:-1}
+body.debug:before {color:#4c60d811;display:block;font-size:10rem;font-variant:all-small-caps;font-weight:700;line-height:1;position:absolute;right:3rem;top:3rem;z-index:-1}
 
 :root {
     --bs-body-font-family: "IBM Plex Sans", sans-serif;
@@ -24,13 +24,6 @@ body > nav.navbar,
 body > header {
     background: var(--bs-blue);
     color: #ffffff;
-}
-
-body > footer > .container {
-    border-top: solid 1px #d3d3d3;
-    padding: 1rem 0;
-    text-align: right;
-    font-size: 0.8125rem;
 }
 
 h6 {

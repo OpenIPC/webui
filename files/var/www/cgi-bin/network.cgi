@@ -65,14 +65,6 @@ iface eth0 inet static
   touch /tmp/network-restart.txt
   redirect_to $SCRIPT_NAME
 fi
-
-[ -z "$network_hostname" ] && network_hostname=$hostname
-[ -z "$network_dhcp" ] && network_dhcp=$dhcp
-[ -z "$network_address" ] && network_address=$ipaddr
-[ -z "$network_netmask" ] && network_netmask=$netmask
-[ -z "$network_gateway" ] && network_gateway=$gateway
-[ -z "$network_dns_1" ] && network_dns_1=$dns_1
-[ -z "$network_dns_2" ] && network_dns_2=$dns_2
 %>
 
 <%in p/header.cgi %>

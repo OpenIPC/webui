@@ -22,15 +22,14 @@ include $config_file
 
 <div class="row row-cols-1 row-cols-xxl-3 g-4">
   <div class="col">
-    <h3><%= SOCKS5 Proxy Settings %></h3>
+    <h3>SOCKS5 Proxy Settings</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
 <%
-action="update"
-field_hidden "action"
-field_text "socks5_server"
-field_number "socks5_port"
-field_text "socks5_login"
-field_password "socks5_password"
+field_hidden "action" "update"
+field_text "socks5_server" "SOCKS5 Server"
+field_number "socks5_port" "SOCKS5 Port"
+field_text "socks5_login" "SOCKS5 Login"
+field_password "socks5_password" "SOCKS5 Password"
 button_submit
 %>
     </form>

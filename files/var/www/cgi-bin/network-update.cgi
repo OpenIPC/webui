@@ -5,7 +5,7 @@ page_title="Updating network settings"
 
 network_dhcp="$POST_network_dhcp"
 network_hostname="$POST_network_hostname"
-network_address="$POST_network_ip_address"
+network_address="$POST_network_address"
 network_netmask="$POST_network_netmask"
 network_gateway="$POST_network_gateway"
 network_dns_1="$POST_network_dns_1"

@@ -29,15 +29,14 @@ fi
 <%
 if [ -f "$service_file" ]; then
   ex "cat $service_file"
-  action="reset"
-  field_hidden "action"
+  field_hidden "action" "reset"
   button_submit "Reset configuration"
 else
-  extras=""; [ -n "$vtun_server" ] && extras=" disabled"
-  field_text "vtun_server" "$extras"
+  field_text "vtun_server" "Virtual Tunnel Server" "Your Virtual Tunnel server address."
   button_submit
 fi
 %>
+
     </form>
   </div>
 </div>

@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
 <%
-page_title="$t_sshkey_0"
+page_title="SSH key"
 
 function readKey() {
   [ -n "$(fw_printenv key_${1})" ] && alert "$(fw_printenv key_${1})" "secondary" "style=\"overflow-wrap: anywhere;\""
@@ -9,7 +9,7 @@ function readKey() {
 
 function saveKey() {
   if [ -n "$(fw_printenv key_${1})" ]; then
-    flash_save "danger" "${1} $t_sshkey_a"
+    flash_save "danger" "${1} key already in backup. You need to delete it before saving a new key."
   else
     fw_setenv key_${1} $(dropbearconvert dropbear openssh /etc/dropbear/dropbear_${1}_host_key - 2>/dev/null | base64 | tr -d '\n')
   fi
@@ -17,19 +17,19 @@ function saveKey() {
 
 function restoreKey() {
   if [ -z "$(fw_printenv key_${1})" ]; then
-    flash_save "danger" "${1} $t_sshkey_b"
+    flash_save "danger" "${1} key is not in the environment."
   else
     fw_printenv key_${1} | sed s/^key_${1}=// | base64 -d | dropbearconvert openssh dropbear - /etc/dropbear/dropbear_${1}_host_key
-    flash_save "success" "${1} $t_sshkey_c"
+    flash_save "success" "${1} key restored from environment."
   fi
 }
 
 function deleteKey() {
   if [ -z "$(fw_printenv key_${1})" ]; then
-    flash_save "danger" "${1} $t_sshkey_d"
+    flash_save "danger" "${1} Cannot find saved SSH key."
   else
     fw_setenv key_${1}
-    flash_save "success" "${1} $t_sshkey_e"
+    flash_save "success" "${1} key deleted from environment."
   fi
 }
 
@@ -52,27 +52,27 @@ case "$POST_action" in
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
   <div class="col">
-    <h3><%= $t_sshkey_1 %></h3>
+    <h3>Key Backup</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_hidden "action" "backup" %>
-      <p><%= $t_sshkey_2 %></p>
-      <% button_submit "$t_sshkey_3" "danger" %>
+      <p>You can back up your existing SSH key into firmware environment and restore them later, after overlay wiping.</p>
+      <% button_submit "Backup SSH key" "danger" %>
     </form>
   </div>
   <div class="col">
-    <h3><%= $t_sshkey_4 %></h3>
-    <p><%= $t_sshkey_5 %></p>
+    <h3>Key Restore</h3>
+    <p>Restoring previously saved SSH key from firmware environment will let you keep exsiting client's authentication.</p>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_hidden "action" "restore" %>
-      <% button_submit "$t_sshkey_6" "danger" %>
+      <% button_submit "Restore SSH key from backup" "danger" %>
     </form>
   </div>
   <div class="col">
-    <h3><%= $t_sshkey_7 %></h3>
-    <p><%= $t_sshkey_8 %></p>
+    <h3>Key Delete</h3>
+    <p>You can delete saved key from firmware environment, e.g. to replace them with a new key.</p>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_hidden "action" "delete" %>
-      <% button_submit "$t_sshkey_9" "danger" %>
+      <% button_submit "Delete SSH key backup." "danger" %>
     </form>
   </div>
 </div>

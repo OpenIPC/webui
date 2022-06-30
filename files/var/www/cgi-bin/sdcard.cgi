@@ -1,14 +1,14 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
-<% page_title="$t_sdcard_0" %>
+<% page_title="SD Card" %>
 <%in p/header.cgi %>
 <%
 ls /dev/mmc* >/dev/null 2>&1
 if [ $? -ne 0 ]; then
 %>
 <div class="alert alert-danger">
-  <h4><%= $t_sdcard_1 %></h4>
-  <p><%= $t_sdcard_2 %></p>
+  <h4>Does this camera support SD Card?</h4>
+  <p>Your camera does not have an SD Card slot or SD Card is not inserted.</p>
 </div>
 <%
 else
@@ -20,32 +20,32 @@ else
   if [ -n "$POST_doFormatCard" ]; then
 %>
 <div class="alert alert-danger">
-  <h4><%= $t_sdcard_3 %></h4>
-  <p><%= $t_sdcard_4 %></p>
+  <h4>ATTENTION! SD Card formatting takes time.</h4>
+  <p>Please do not refresh this page. Wait until partition formatting is finished!</p>
 </div>
 <%
     if [ "$(grep $card_partition /etc/mtab)" ]; then
       _c="umount $card_partition"
       _o="${_o}\n${_c}\n$($_c 2>&1)"
-      [ $? -ne 0 ] && error="$t_sdcard_5"
+      [ $? -ne 0 ] && error="Cannot unmount SD Card partition."
     fi
 
     if [ -z "$error" ]; then
       _c="echo -e "o\nn\np\n1\n\n\nw"|fdisk $card_device"
       _o="${_o}\n${_c}\n$($_c 2>&1)"
-      [ $? -ne 0 ] && error="$t_sdcard_6"
+      [ $? -ne 0 ] && error="Cannot create an SD Card partition."
     fi
 
     if [ -z "$error" ]; then
       _c="mkfs.vfat -v -n OpenIPC $card_partition"
       _o="${_o}\n${_c}\n$($_c 2>&1)"
-      [ $? -ne 0 ] && error="$t_sdcard_7"
+      [ $? -ne 0 ] && error="Cannot format SD Card partition."
     fi
 
     if [ -z "$error" ]; then
       _c="mount $card_partition $mount_point"
       _o="${_o}\n${_c}\n$($_c 2>&1)"
-      [ $? -ne 0 ] && error="$t_sdcard_8"
+      [ $? -ne 0 ] && error="Cannot re-mount SD Card partition."
     fi
 
     if [ -n "$error" ]; then
@@ -63,11 +63,11 @@ else
     report_command_info "$_c" "$_o"
 %>
 <div class="alert alert-danger">
-  <h4><%= $t_sdcard_9 %></h4>
-  <p><%= $t_sdcard_a %></p>
+  <h4>ATTENTION! Formatting will destroy all data on the SD Card.</h4>
+  <p>Make sure you have a backup copy if you are going to use the data in the future.</p>
   <form action="<%= $SCRIPT_NAME %>" method="post">
     <% field_hidden "doFormatCard" "true" %>
-    <% button_submit "$t_sdcard_b" "danger" %>
+    <% button_submit "Format SD Card" "danger" %>
   </form>
 </div>
 <%

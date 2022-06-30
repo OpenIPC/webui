@@ -72,7 +72,6 @@ done
       <% button_submit %>
     </form>
   </div>
-
   <div class="col">
     <h3>Locale</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">

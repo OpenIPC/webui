@@ -70,10 +70,10 @@ page_title="Text editor"
     <form action="<%= $SCRIPT_NAME %>" method="post" class="mb-4">
       <% field_hidden "action" "save" %>
       <% field_hidden "editor_file" "$editor_file" %>
-      <% field_textarea "editor_text" %>
+      <% field_textarea "editor_text" "File content" %>
       <p class="boolean"><span class="form-check form-switch">
         <input type="checkbox" id="editor_backup" name="editor_backup" value="true" class="form-check-input" role="switch">
-        <label for="editor_backup" class="form-label form-check-label"><%= $tL_editor_backup %></label>
+        <label for="editor_backup" class="form-label form-check-label">Create backup file</label>
       </span></p>
       <% button_submit %>
     </form>

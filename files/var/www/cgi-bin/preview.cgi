@@ -19,17 +19,17 @@ size_h=${size#*x}
     <div class="tab-content p-2" id="tab-content">
       <div id="jpeg-tab-pane" role="tabpanel" class="tab-pane fade active show" aria-labelledby="jpeg-tab" tabindex="0">
         <div class="ratio ratio-16x9">
-          <img src="http://<%= $ipaddr %>/image.jpg" class="img-fluid" id="preview-jpeg" width="1280" height="720" alt="">
+          <img src="http://<%= $network_address %>/image.jpg" class="img-fluid" id="preview-jpeg" width="1280" height="720" alt="">
         </div>
       </div>
       <div id="mjpeg-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="mjpeg-tab" tabindex="0">
         <div class="ratio ratio-16x9">
-          <img src="http://<%= $ipaddr %>/mjpeg" class="d-block img-fluid bg-light" height="<%= $size_h %>" width="<%= $size_w %>" alt="MJPEG Preview. If you don't see it, it's not supported by your browser, or MJPEG steam does not work.">
+          <img src="http://<%= $network_address %>/mjpeg" class="d-block img-fluid bg-light" height="<%= $size_h %>" width="<%= $size_w %>" alt="MJPEG Preview. If you don't see it, it's not supported by your browser, or MJPEG steam does not work.">
           <% if [ "true" = "$(yaml-cli -g .audio.enabled)" ]; then %>
             <audio autoplay controls class="d-block img-fluid">
-              <source src="http://<%= $ipaddr %>/audio.opus" type="audio/ogg; codecs=opus">
-              <source src="http://<%= $ipaddr %>/audio.m4a" type="audio/aac">
-              <source src="http://<%= $ipaddr %>/audio.mp3" type="audio/mpeg">
+              <source src="http://<%= $network_address %>/audio.opus" type="audio/ogg; codecs=opus">
+              <source src="http://<%= $network_address %>/audio.m4a" type="audio/aac">
+              <source src="http://<%= $network_address %>/audio.mp3" type="audio/mpeg">
               Your browser does not support HTML5 audio.
             </audio>
           <% fi %>
@@ -37,8 +37,8 @@ size_h=${size#*x}
       </div>
       <div id="video-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="video-tab" tabindex="0">
         <div class="ratio ratio-16x9">
-          <video id="preview-video" poster="http://<%= $ipaddr %>/image.jpg" autoplay>
-            <source src="http://<%= $ipaddr %>/video.mp4" type="video/mp4">
+          <video id="preview-video" poster="http://<%= $network_address %>/image.jpg" autoplay>
+            <source src="http://<%= $network_address %>/video.mp4" type="video/mp4">
             Your browser does not support HTML5 video.
           </video>
         </div>
@@ -70,7 +70,7 @@ size_h=${size#*x}
 </div>
 
 <script>
-const ipaddr = "<%= $ipaddr %>";
+const network_address = "<%= $network_address %>";
 
 <% [ "true" != "$telegram_enabled" ] && echo "\$('#send-to-telegram').disabled = true;" %>
 <% [ "true" != "$yadisk_enabled" ] && echo "\$('#send-to-yadisk').disabled = true;" %>
@@ -82,7 +82,7 @@ function reqListener(data) {
 function sendToApi(endpoint) {
   const xhr = new XMLHttpRequest();
   xhr.addEventListener("load", reqListener);
-  xhr.open("GET", "http://" + ipaddr + endpoint);
+  xhr.open("GET", "http://" + network_address + endpoint);
   xhr.setRequestHeader("Authorization", "Basic " + btoa("admin:"));
   xhr.send();
 }
@@ -93,7 +93,7 @@ function sleep(ms) {
 
 async function updatePreview() {
   await sleep(1000);
-  $('#preview-jpeg').src = "http://<%= $ipaddr %>/image.jpg?t=" + Date.now();
+  $('#preview-jpeg').src = "http://<%= $network_address %>/image.jpg?t=" + Date.now();
 }
 
 $$("a[id^=pan-],a[id^=zoom-]").forEach(el => {

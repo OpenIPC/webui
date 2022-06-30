@@ -49,7 +49,7 @@ button_submit
   </div>
   <div class="col">
     <h3>Preview</h3>
-    <p><img src="http://<%= $ipaddr %>/image.jpg" alt="Image: preview" class="img-fluid mb-3" id="preview" width="1280" height="720"></p>
+    <p><img src="http://<%= $network_address %>/image.jpg" alt="Image: preview" class="img-fluid mb-3" id="preview" width="1280" height="720"></p>
     <% if [ -n "$yadisk_login" ] && [ -n "$yadisk_password" ]; then %>
       <p><a href="#" class="btn btn-primary" id="send-to-yadisk">Send to Yandex Disk</a></p>
     <% fi %>

@@ -69,7 +69,7 @@ include $config_file
 <% fi %>
   <div class="col">
     <h3>Preview</h3>
-    <p><img src="http://<%= $ipaddr %>/image.jpg" alt="Image: Preview" class="img-fluid mb-3" id="preview" width="1280" height="720"></p>
+    <p><img src="http://<%= $network_address %>/image.jpg" alt="Image: Preview" class="img-fluid mb-3" id="preview" width="1280" height="720"></p>
   <% if [ -n "$telegram_token" ] && [ -n "$telegram_channel" ]; then %>
     <p><a href="#" class="btn btn-primary" id="send-to-telegram">Send to Telegram</a></p>
   <% fi %>

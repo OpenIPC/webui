@@ -356,7 +356,7 @@ flash_save() {
 }
 
 get_soc_temp() {
-  [ "true" = "$has_soc_temp" ] && soc_temp=$(ipcinfo --temp)
+  [ "true" = "$soc_has_temp" ] && soc_temp=$(ipcinfo --temp)
 }
 
 header_ok() {
@@ -569,9 +569,9 @@ update_caminfo() {
 
   # ipcinfo reports to stderr
   if [ "Temperature cannot be retrieved" = "$(ipcinfo --temp 2>&1)" ]; then
-    has_soc_temp="false"
+    soc_has_temp="false"
   else
-    has_soc_temp="true"
+    soc_has_temp="true"
   fi
 
   # Firmware
@@ -586,16 +586,16 @@ update_caminfo() {
   password_fw=$(grep admin /rom/etc/httpd.conf|cut -d: -f3)
 
   # Network
-  dhcp="false"; [ "$(cat /etc/network/interfaces | grep "eth0 inet" | grep dhcp)" ] && dhcp="true"
-  dns_1=$(cat /etc/resolv.conf | grep nameserver | sed -n 1p | cut -d' ' -f2)
-  dns_2=$(cat /etc/resolv.conf | grep nameserver | sed -n 2p | cut -d' ' -f2)
-  gateway=$(ip r | grep default | cut -d' ' -f3)
-  hostname=$(hostname -s)
-  interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | tr '\n' ' ' | sed 's/ $//' )
-  ipaddr=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
-  macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/ //g" | uniq)
-  netmask=$(ifconfig eth0 | grep "inet " | cut -d: -f4)
-  wan_mac=$(cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address)
+  network_dhcp="false"; [ "$(cat /etc/network/interfaces | grep "eth0 inet" | grep dhcp)" ] && dhcp="true"
+  network_dns_1=$(cat /etc/resolv.conf | grep nameserver | sed -n 1p | cut -d' ' -f2)
+  network_dns_2=$(cat /etc/resolv.conf | grep nameserver | sed -n 2p | cut -d' ' -f2)
+  network_gateway=$(ip r | grep default | cut -d' ' -f3)
+  network_hostname=$(hostname -s)
+  network_interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | tr '\n' ' ' | sed 's/ $//' )
+  network_address=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
+  network_macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/ //g" | uniq)
+  network_netmask=$(ifconfig eth0 | grep "inet " | cut -d: -f4)
+  network_wan_mac=$(cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address)
 
   # Default timezone is GMT
   tz_data=$(cat /etc/TZ)
@@ -607,31 +607,31 @@ update_caminfo() {
 
   echo "# caminfo $(date +"%F %T")
 debug=\"$debug\"
-dhcp=\"$dhcp\"
-dns_1=\"$dns_1\"
-dns_2=\"$dns_2\"
 flash_size=\"$flash_size\"
 fw_version=\"$fw_version\"
 fw_variant=\"$fw_variant\"
 fw_build=\"$fw_build\"
-gateway=\"$gateway\"
-has_soc_temp=\"$has_soc_temp\"
-hostname=\"$hostname\"
-interfaces=\"$interfaces\"
-ipaddr=\"$ipaddr\"
-macaddr=\"$macaddr\"
+network_address=\"$network_address\"
+network_dhcp=\"$network_dhcp\"
+network_dns_1=\"$network_dns_1\"
+network_dns_2=\"$network_dns_2\"
+network_gateway=\"$network_gateway\"
+network_hostname=\"$network_hostname\"
+network_interfaces=\"$network_interfaces\"
+network_macaddr=\"$network_macaddr\"
+network_netmask=\"$network_netmask\"
+network_wan_mac=\"$network_wan_mac\"
 mj_version=\"$mj_version\"
-netmask=\"$netmask\"
 password=\"$password\"
 password_fw=\"$password_fw\"
 soc=\"$soc\"
 soc_family=\"$soc_family\"
+soc_has_temp=\"$soc_has_temp\"
 sensor=\"$sensor\"
 sensor_ini=\"$sensor_ini\"
 tz_data=\"$tz_data\"
 tz_name=\"$tz_name\"
 ui_version=\"$ui_version\"
-wan_mac=\"$wan_mac\"
 # end " > $sysinfo_file
 }
 

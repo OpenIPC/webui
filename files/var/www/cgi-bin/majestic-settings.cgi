@@ -109,7 +109,7 @@ button_submit
   <div class="col">
     <h3>Related settings</h3>
     <pre><% echo -e "$config" %></pre>
-    <p><a href="info-majestic.cgi">See majestic.yaml</a></o>
+    <p><a href="info-majestic.cgi">See majestic.yaml</a></p>
   </div>
   <div class="col">
     <h3>Majestic config sections</h3>

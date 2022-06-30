@@ -12,12 +12,12 @@ size_h=${size#*x}
 <div class="row preview">
   <div class="col-md-8 col-xl-9 col-xxl-9 position-relative mb-3">
     <ul class="nav nav-tabs" role="tablist">
-      <% tab_lap "jpeg" "JPEG" %>
+      <% tab_lap "jpeg" "JPEG" "active" %>
       <% tab_lap "mjpeg" "MJPEG" %>
       <% tab_lap "video" "Video" %>
     </ul>
     <div class="tab-content p-2" id="tab-content">
-      <div id="jpeg-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="jpeg-tab" tabindex="0">
+      <div id="jpeg-tab-pane" role="tabpanel" class="tab-pane fade active show" aria-labelledby="jpeg-tab" tabindex="0">
         <div class="ratio ratio-16x9">
           <img src="http://<%= $ipaddr %>/image.jpg" class="img-fluid" id="preview-jpeg" width="1280" height="720" alt="">
         </div>
@@ -75,16 +75,16 @@ const ipaddr = "<%= $ipaddr %>";
 <% [ "true" != "$telegram_enabled" ] && echo "\$('#send-to-telegram').disabled = true;" %>
 <% [ "true" != "$yadisk_enabled" ] && echo "\$('#send-to-yadisk').disabled = true;" %>
 
-function reqListener() {
-    console.log(this.responseText);
+function reqListener(data) {
+  console.log(data.responseText);
 }
 
 function sendToApi(endpoint) {
-    const xhr = new XMLHttpRequest();
-    xhr.addEventListener("load", reqListener);
-    xhr.open("GET", "http://" + ipaddr + endpoint);
-    xhr.setRequestHeader("Authorization", "Basic " + btoa("admin:"));
-    xhr.send();
+  const xhr = new XMLHttpRequest();
+  xhr.addEventListener("load", reqListener);
+  xhr.open("GET", "http://" + ipaddr + endpoint);
+  xhr.setRequestHeader("Authorization", "Basic " + btoa("admin:"));
+  xhr.send();
 }
 
 function sleep(ms) {
@@ -97,26 +97,26 @@ async function updatePreview() {
 }
 
 $$("a[id^=pan-],a[id^=zoom-]").forEach(el => {
-    el.addEventListener("click", event => {
-        event.preventDefault();
-        alert("Sorry, this feature does not work, yet!");
-    });
+  el.addEventListener("click", event => {
+    event.preventDefault();
+    alert("Sorry, this feature does not work, yet!");
+  });
 });
 
 $("#night-mode")?.addEventListener("click", event => {
-    event.preventDefault();
-    event.target.src = (event.target.src.split("/").pop() == "light-on.svg") ? "/a/light-off.svg" : "/a/light-on.svg";
-    // sendToApi("/night/toggle");
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/cgi-bin/night.cgi");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.send("mode=toggle");
+  event.preventDefault();
+  event.target.src = (event.target.src.split("/").pop() == "light-on.svg") ? "/a/light-off.svg" : "/a/light-on.svg";
+  // sendToApi("/night/toggle");
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "/cgi-bin/night.cgi");
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  xhr.send("mode=toggle");
 });
 
 $("#speed")?.addEventListener("click", event => {
-    event.preventDefault();
-    event.target.src = (event.target.src.split("/").pop() == "speed-slow.svg") ? "/a/speed-fast.svg" : "/a/speed-slow.svg";
-    // sendToApi("/speed/toggle");
+  event.preventDefault();
+  event.target.src = (event.target.src.split("/").pop() == "speed-slow.svg") ? "/a/speed-fast.svg" : "/a/speed-slow.svg";
+  // sendToApi("/speed/toggle");
 });
 
 $$('button[data-bs-toggle="tab"]').forEach(el => el.addEventListener('shown.bs.tab', event => {
@@ -129,10 +129,8 @@ $$('button[data-bs-toggle="tab"]').forEach(el => el.addEventListener('shown.bs.t
   }
 }));
 
-const tab1 = new bootstrap.Tab($('#jpeg-tab'));
-tab1.show();
-
-document.activeElement = $('body');
+$('#preview-jpeg').addEventListener('load', updatePreview);
+updatePreview();
 </script>
 
 <%in p/footer.cgi %>

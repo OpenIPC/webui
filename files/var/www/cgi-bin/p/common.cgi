@@ -45,8 +45,20 @@ alert() {
   echo "<div class=\"alert alert-${2}\" ${3}>${1}</div>"
 }
 
-beats() {
-  echo "@$(echo "$(date -u -d "1970-01-01 $(TZ=UTC-1 date +%T)" +%s)*10/864"|bc)"
+time_epoch() {
+  if [ -n "$1" ]; then
+    TZ=GMT0 date +%s --date="${1}"
+  else
+    TZ=GMT0 date +%s
+  fi
+}
+
+time_http() {
+  if [ -n "$1" ]; then
+    TZ=GMT0 date +"%a, %d %b %Y %T %Z" --date="${1}"
+  else
+    TZ=GMT0 date +"%a, %d %b %Y %T %Z"
+  fi
 }
 
 # button_submit "text" "type" "extras"

@@ -2,7 +2,7 @@
 <%in p/common.cgi %>
 <%
 sysupgrade_date=$(ls -lc --full-time /usr/sbin/sysupgrade | xargs | cut -d' ' -f6)
-sysupgrade_date=$(date +"%s" --date="$sysupgrade_date")
+sysupgrade_date=$(time_epoch "$sysupgrade_date")
 
 file="$POST_parts_file"
 file_name="$POST_parts_file_name"
@@ -12,13 +12,13 @@ case "$POST_parts_type" in
 kernel)
   maxsize=2097152
   magicnum="27051956"
-  new_sysupgrade_date=$(date +"%s" --date="2021-12-07")
+  new_sysupgrade_date=$(time_epoch "2021-12-07")
   cmd="sysupgrade --kernel=/tmp/${file_name} --force_ver"
   ;;
 rootfs)
   maxsize=5242880
   magicnum="68737173"
-  new_sysupgrade_date=$(date +"%s" --date="2022-02-22")
+  new_sysupgrade_date=$(time_epoch "2022-02-22")
   cmd="sysupgrade --rootfs=/tmp/${file_name} --force_ver --force_all"
   ;;
 *)

@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
-Date: <%= $(TZ=GMT0 date +"%a, %d %b %Y %T %Z") %>
-Server: <%= $SERVER_SOFTWARE %>
 Content-type: text/html; charset=UTF-8
+Date: <%= $(TZ=GMT0 date +'%a, %d %b %Y %T %Z') %>
+Server: <%= $SERVER_SOFTWARE %>
 Cache-Control: no-store
 Pragma: no-cache
 

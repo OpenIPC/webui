@@ -1,5 +1,5 @@
 #!/usr/bin/haserl
-Date: <%= $(TZ=GMT0 date +'%a, %d %b %Y %T %Z' -d @$(( $(TZ=GMT0 date +%s) + 1000 ))) %>
+Date: <%= $(TZ=GMT0 date +"%a, %d %b %Y %T %Z" --date @$(( $(TZ=GMT0 date +%s) + 1000 ))) %>
 Server: <%= $SERVER_SOFTWARE %>
 Content-type: application/javascript; charset=UTF-8
 Access-Control-Allow-Origin: *

@@ -8,7 +8,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in
     backup)
       echo "HTTP/1.0 200 OK
-Date: $(TZ=GMT0 date +'%a, %d %b %Y %T %Z')
+Date: $(time_http)
 Server: $SERVER_SOFTWARE
 Content-type: text/plain
 Content-Disposition: attachment; filename=majestic.yaml
@@ -22,10 +22,10 @@ Pragma: no-cache
       patch_file=/tmp/majestic.patch
       diff $config_file_fw $config_file > $patch_file
       echo "HTTP/1.0 200 OK
-Date: $(TZ=GMT0 date +'%a, %d %b %Y %T %Z')
+Date: $(time_http)
 Server: $SERVER_SOFTWARE
 Content-type: text/plain
-Content-Disposition: attachment; filename=majestic.$(date +"%s").patch
+Content-Disposition: attachment; filename=majestic.$(time_epoch).patch
 Content-Length: $(wc -c $patch_file | cut -d' ' -f1)
 Cache-Control: no-store
 Pragma: no-cache

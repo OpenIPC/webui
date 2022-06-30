@@ -119,12 +119,12 @@ $("#speed")?.addEventListener("click", event => {
   // sendToApi("/speed/toggle");
 });
 
-$$('button[data-bs-toggle="tab"]').forEach(el => el.addEventListener('shown.bs.tab', event => {
-  if (event.target.id == "jpeg-tab") {
+$$('button[data-bs-toggle=tab]').forEach(el => el.addEventListener('shown.bs.tab', event => {
+  if (event.target.id == "#jpeg-tab") {
     $('#preview-jpeg').addEventListener('load', updatePreview);
     updatePreview();
   }
-  if (event.relatedTarget && event.relatedTarget.id == "jpeg-tab") {
+  if (event.relatedTarget && event.relatedTarget.id == "#jpeg-tab") {
     $('#preview-jpeg').removeEventListener('load', updatePreview);
   }
 }));

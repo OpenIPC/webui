@@ -29,7 +29,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
   :> $tmp_file
   cat /etc/network/interfaces | sed '/^auto eth0$/,/^$/d' | sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' > $tmp_file
-  if [ "$network_dhcp" = "true" ]; then
+  if [ "true" = "$network_dhcp" ]; then
     echo "
 auto eth0
 iface eth0 inet dhcp

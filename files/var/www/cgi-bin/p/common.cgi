@@ -586,7 +586,7 @@ update_caminfo() {
   password_fw=$(grep admin /rom/etc/httpd.conf|cut -d: -f3)
 
   # Network
-  network_dhcp="false"; [ "$(cat /etc/network/interfaces | grep "eth0 inet" | grep dhcp)" ] && dhcp="true"
+  network_dhcp="false"; [ "$(cat /etc/network/interfaces | grep "eth0 inet" | grep dhcp)" ] && network_dhcp="true"
   network_dns_1=$(cat /etc/resolv.conf | grep nameserver | sed -n 1p | cut -d' ' -f2)
   network_dns_2=$(cat /etc/resolv.conf | grep nameserver | sed -n 2p | cut -d' ' -f2)
   network_gateway=$(ip r | grep default | cut -d' ' -f3)

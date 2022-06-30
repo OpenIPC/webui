@@ -280,11 +280,12 @@ field_switch() {
 
   _v=$(t_value "$1")
   [ -z "$_v" ] && _v=$(t_default "$1")
+  [ -z "$_v" ] && _v="false"
 
   echo "<p class=\"boolean\">" \
     "<span class=\"form-check form-switch\">" \
     "<input type=\"hidden\" id=\"${1}-false\" name=\"${1}\" value=\"false\">" \
-    "<input type=\"checkbox\" id=\"${1}\" name=\"${1}\" value=\"true\" role=\"switch\" class=\"form-check-input\"$(t_checked "$1" "$_v")>" \
+    "<input type=\"checkbox\" id=\"${1}\" name=\"${1}\" value=\"true\" role=\"switch\" class=\"form-check-input\"$(t_checked "true" "$_v")>" \
     "<label for=\"$1\" class=\"form-check-label\">${_l}</label>" \
     "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
@@ -507,7 +508,7 @@ tab_lap() {
 }
 
 t_checked() {
-  [ "$2" = "$(t_value "$1")" ] && echo "checked"
+  [ "$2" = "$1" ] && echo "checked"
 }
 
 t_default() {
@@ -547,7 +548,7 @@ t_units() {
 }
 
 t_value() {
-  eval "echo \"\$$1\""
+  eval "echo \$${1}"
 }
 
 units() {

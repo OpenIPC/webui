@@ -35,7 +35,7 @@ Pragma: no-cache
       ;;
     reset)
       cp -f $config_file_fw $config_file
-      redirect_to $SCRIPT_NAME
+      redirect_back
       ;;
     restore)
       magicnum="23206d616a6573746963"

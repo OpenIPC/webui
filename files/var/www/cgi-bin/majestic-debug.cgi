@@ -66,21 +66,24 @@ localpath=${coredump_localpath}
     redirect_to "majestic-debug.cgi"
   fi
 else
-  coredump_enabled=$(grep ^savedumps $conf_file | cut -d= -f2)
-  coredump_consent=$(grep ^haveconsent $conf_file | cut -d= -f2)
-  coredump_name=$(grep ^contact_name $conf_file | cut -d= -f2)
-  coredump_email=$(grep ^contact_email $conf_file | cut -d= -f2)
-  coredump_telegram=$(grep ^contact_telegram $conf_file | cut -d= -f2)
-  coredump_send2devs=$(grep ^send2devs $conf_file | cut -d= -f2)
-  coredump_send2tftp=$(grep ^send2tftp $conf_file | cut -d= -f2)
-  coredump_tftphost=$(grep ^tftphost $conf_file | cut -d= -f2)
-  coredump_send2ftp=$(grep ^send2ftp $conf_file | cut -d= -f2)
-  coredump_ftphost=$(grep ^ftphost $conf_file | cut -d= -f2)
-  coredump_ftppath=$(grep ^ftppath $conf_file | cut -d= -f2)
-  coredump_ftpuser=$(grep ^ftpuser $conf_file | cut -d= -f2)
-  coredump_ftppass=$(grep ^ftppass $conf_file | cut -d= -f2)
-  coredump_save4web=$(grep ^save4web $conf_file | cut -d= -f2)
-  coredump_localpath=$(grep ^localpath $conf_file | cut -d= -f2)
+  if [ -f $conf_file ]; then
+    coredump_enabled=$(grep ^savedumps $conf_file | cut -d= -f2)
+    coredump_consent=$(grep ^haveconsent $conf_file | cut -d= -f2)
+    coredump_name=$(grep ^contact_name $conf_file | cut -d= -f2)
+    coredump_email=$(grep ^contact_email $conf_file | cut -d= -f2)
+    coredump_telegram=$(grep ^contact_telegram $conf_file | cut -d= -f2)
+    coredump_send2devs=$(grep ^send2devs $conf_file | cut -d= -f2)
+    coredump_send2tftp=$(grep ^send2tftp $conf_file | cut -d= -f2)
+    coredump_tftphost=$(grep ^tftphost $conf_file | cut -d= -f2)
+    coredump_send2ftp=$(grep ^send2ftp $conf_file | cut -d= -f2)
+    coredump_ftphost=$(grep ^ftphost $conf_file | cut -d= -f2)
+    coredump_ftppath=$(grep ^ftppath $conf_file | cut -d= -f2)
+    coredump_ftpuser=$(grep ^ftpuser $conf_file | cut -d= -f2)
+    coredump_ftppass=$(grep ^ftppass $conf_file | cut -d= -f2)
+    coredump_save4web=$(grep ^save4web $conf_file | cut -d= -f2)
+    coredump_localpath=$(grep ^localpath $conf_file | cut -d= -f2)
+  fi
+
   if [ -z "$coredump_localpath" ]; then
     if [ -d "/mnt/mmc" ]; then
       coredump_localpath="/mnt/mmc"

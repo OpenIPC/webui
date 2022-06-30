@@ -46,9 +46,9 @@ Pragma: no-cache
           <li class="nav-item dropdown">
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownUpdates" role="button">Updates</a>
             <ul aria-labelledby="dropdownUpdates" class="dropdown-menu">
-              <li><a  class="dropdown-item" href="firmware.cgi">Firmware</a></li>
-              <li><a  class="dropdown-item" href="webui.cgi">Web Interface</a></li>
-              <li><a  class="dropdown-item" href="reset.cgi">Reset Things</a></li>
+              <li><a class="dropdown-item" href="firmware.cgi">Firmware</a></li>
+              <li><a class="dropdown-item" href="majestic.cgi">Majestic</a></li>
+              <li><a class="dropdown-item" href="webui.cgi">Web Interface</a></li>
             </ul>
           </li>
           <li class="nav-item dropdown">
@@ -56,9 +56,12 @@ Pragma: no-cache
             <ul aria-labelledby="dropdownSettings" class="dropdown-menu">
               <li><a class="dropdown-item" href="majestic-settings.cgi">Majestic Settings</a></li>
               <li><a class="dropdown-item" href="network.cgi">Network Settings</a></li>
+              <li><a class="dropdown-item" href="webui-settings.cgi">Web Interface Settings</a></li>
               <li><a class="dropdown-item" href="network-tz.cgi">System Timezone</a></li>
               <li><a class="dropdown-item" href="network-ntp.cgi">NTP Settings</a></li>
               <li><a class="dropdown-item" href="network-socks5.cgi">SOCKS5 Proxy</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="reset.cgi">Reset...</a></li>
             </ul>
           </li>
           <li class="nav-item dropdown">

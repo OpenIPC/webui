@@ -7,9 +7,13 @@ page_title="Majestic settings"
 mj=$(echo "$mj" | sed "s/ /_/g")
 
 only="$GET_tab"; [ -z "$only" ] && only="system"
-[ "all" = "$only" ] && only=""
 
-eval title="\$tT_mj_${only}"; [ -z "$title" ] && title=$only
+if [ "all" = "$only" ]; then
+  only=""
+  title="All settings"
+else
+  eval title="\$tT_mj_${only}"
+fi
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   mj_conf=/etc/majestic.yaml
@@ -19,14 +23,14 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   cp -f $mj_conf $temp_yaml
 
   IFS=$'\n' # make newlines the only separator
-  for param in $(printenv|grep POST_); do
-    name=$(echo $param | sed 's/^POST_mj_//')
-    key=".$(echo $name | cut -d= -f1 | sed 's/_/./g')"
+  for yaml_param_name in $(printenv|grep POST_); do
+    form_field_name=$(echo $yaml_param_name | sed 's/^POST_mj_//')
+    key=".$(echo $form_field_name | cut -d= -f1 | sed 's/_/./g')"
 
     # do not include helping fields into config
     [ "$key" = ".netip.password.plain" ] && continue
 
-    value="$(echo $name | cut -d= -f2)"
+    value="$(echo $form_field_name | cut -d= -f2)"
 
     # normalization
     case "$key" in
@@ -48,10 +52,10 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     oldvalue=$(yaml-cli -g "$key" -i $temp_yaml)
 
     if [ -z "$value" ]; then
-      # if no new value submitted but there is an existing value, delete the param
+      # if no new value submitted but there is an existing value, delete the yaml_param_name
       [ -n "$oldvalue" ] && yaml-cli -d $key -i "$temp_yaml" -o "$temp_yaml"
     else
-      # if new value is submitted and it differs from the existing one, update the param
+      # if new value is submitted and it differs from the existing one, update the yaml_param_name
       [ "$oldvalue" != "$value" ] && yaml-cli -s $key "$value" -i "$temp_yaml" -o "$temp_yaml"
     fi
   done
@@ -78,30 +82,53 @@ fi
 config=""
 olddomain=""
 for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
-  param=${line%%|*}; _n=${param#.}; domain=${_n%.*}; name=mj_${_n//./_}; line=${line#*|};
-  type=${line%%|*}; line=${line#*|}
+                                        # line: .isp.exposure|Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
+  yaml_param_name=${line%%|*}           # => .isp.exposure
+  _n=${yaml_param_name#.}               # => isp.exposure
+  _n=${_n//./_}                         # => isp_exposure
+  _n=${_n//-/_}                         # => isp_exposure
+  domain=${_n%%_*}                      # => isp
+  form_field_name=mj_${_n}              # => mj_isp_exposure
+  line=${line#*|}                       # line: Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
+  label_text=${line%%|*}                # => Sensor_exposure_time
+  label_text=${label_text//_/ }         # => Sensor exposure time
+  line=${line#*|}                       # line: &micro;s|range|auto,1-500000|auto|From_1_to_500000.
+  units=${line%%|*}                     # => &micro;s
+  line=${line#*|}                       # line: range|auto,1-500000|auto|From_1_to_500000.
+  form_field_type=${line%%|*}           # => range
+  line=${line#*|}                       # line: auto,1-500000|auto|From_1_to_500000.
+  options=${line%%|*}                   # => auto,1-500000
+  line=${line#*|}                       # line: auto|From_1_to_500000.
+  placeholder=${line%%|*}               # => auto
+  line=${line#*|}                       # line: From_1_to_500000.
+  hint=$line                            # => From_1_to_500000.
+  hint=${hint//_/ }                     # => From 1 to 500000.
+
+  value=$(yaml-cli -g "$yaml_param_name")
 
   if [ "$olddomain" != "$domain" ]; then
-    echo "<h3>${domain}</h3>"
+    [ -n "$olddomain" ] && echo "</fieldset>"
+    echo "<fieldset><legend>${domain}</legend>"
     olddomain="$domain"
   fi
 
-  # assign param's value to a variable with param's name for form fields values
-  eval $name=\"$(yaml-cli -g "$param")\"
+  # assign yaml_param_name's value to a variable with yaml_param_name's form_field_name for form fields values
+  eval $form_field_name=\"$(yaml-cli -g "$yaml_param_name")\"
 
   # hide some params in config
-  [ "mj_netip_password_plain" != "$name" ] && config="${config}\n$(eval echo ${param}: \$$name)"
+  [ "mj_netip_password_plain" != "$form_field_name" ] && config="${config}\n$(eval echo ${yaml_param_name}: \$$form_field_name)"
 
-  case "$type" in
-    boolean) field_switch "$name";;
-    hidden)  field_hidden "$name";;
-    number)  field_number "$name";;
-    range)   field_range  "$name";;
-    select)  field_select "$name";;
-    string)  field_text   "$name";;
-    *) echo "UNKNOWN FIELD: $name";;
+  case "$form_field_type" in
+    boolean) field_switch "$form_field_name" "$label_text";;
+    hidden)  field_hidden "$form_field_name" "$label_text";;
+    number)  field_number "$form_field_name" "$label_text" "$options";;
+    range)   field_range  "$form_field_name" "$label_text" "$options";;
+    select)  field_select "$form_field_name" "$label_text" "$options";;
+    string)  field_text   "$form_field_name" "$label_text";;
+    *) echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>";;
   esac
 done
+echo "</fieldset>"
 button_submit
 %>
     </form>
@@ -110,6 +137,8 @@ button_submit
     <h3>Related settings</h3>
     <pre><% echo -e "$config" %></pre>
     <p><a href="info-majestic.cgi">See majestic.yaml</a></p>
+    <pre><% majestic_diff %></pre>
+    <% button_mj_reset %>
   </div>
   <div class="col">
     <h3>Majestic config sections</h3>
@@ -161,7 +190,7 @@ echo "<a class=\"list-group-item list-group-item-danger\" href=\"?tab=all\">Show
     const inp = $("#mj_isp_sensorConfig");
     const sel = document.createElement("select");
     sel.classList.add("form-select");
-    sel.name=inp.name;
+    sel.form_field_name=inp.form_field_name;
     sel.id=inp.id;
     sel.options.add(new Option());
     let opt;

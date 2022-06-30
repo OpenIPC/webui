@@ -61,12 +61,36 @@ time_http() {
   fi
 }
 
+button_mj_backup() {
+  echo "<form action=\"majestic-config-actions.cgi\" method=\"post\">" \
+    "<input type=\"hidden\" name=\"action\" value=\"backup\">"
+  button_submit "Backup settings"
+  echo "</form>"
+}
+
 button_mj_reset() {
-  echo "<form action=\"majestic-config-actions.cgi\" method=\"post\"><input type=\"hidden\" name=\"action\" value=\"reset\"><p><input type=\"submit\" class=\"btn btn-danger\" value=\"Reset Majestic settings\" title=\"Restore original configuration\"></p></form>"
+  echo "<form action=\"majestic-config-actions.cgi\" method=\"post\">" \
+    "<input type=\"hidden\" name=\"action\" value=\"reset\">"
+  button_submit "Reset Majestic" "danger"
+  echo "</form>"
+}
+
+button_reboot() {
+  echo "<form action=\"reboot.cgi\" method=\"post\">" \
+    "<input type=\"hidden\" name=\"action\" value=\"reboot\">"
+  button_submit "Reboot camera" "danger"
+  echo "</form>"
 }
 
 button_refresh() {
   echo "<a href=\"${REQUEST_URI}\" class=\"btn btn-primary refresh\">Refresh</a>"
+}
+
+button_reset_firmware() {
+  echo "<form action=\"firmware-reset.cgi\" method=\"post\">" \
+    "<input type=\"hidden\" name=\"action\" value=\"reset\">"
+  button_submit "Reset firmware" "danger"
+  echo "</form>"
 }
 
 # button_submit "text" "type" "extras"
@@ -97,131 +121,213 @@ ex() {
   echo "</pre>"
 }
 
-field_() {
-  echo "<p class=\"$1\">"
-}
-
-_field() {
-  echo "</p>"
-}
-
-# field_checkbox "name" "extras"
+# field_checkbox "name" "label" "hint"
 field_checkbox() {
-  field_ "boolean form-check"
-    echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}-false\" value=\"false\">"
-    echo "<input type=\"checkbox\" name=\"${1}\" id=\"${1}\" $(t_checked "$1" "true") value=\"true\" class=\"form-check-input\" ${2}>"
-    label "$1" "$2"
-  _field
+  _l=$2
+  [ -z "$_l" ] && _l="$(t_label "$1")"
+  [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
+
+  _h=$3
+  [ -z "$_h" ] && _h="$(t_hint "$1")"
+
+  echo "<p class=\"boolean form-check\">" \
+    "<input type=\"hidden\" name=\"${1}\" id=\"${1}-false\" value=\"false\">" \
+    "<input type=\"checkbox\" name=\"${1}\" id=\"${1}\"value=\"true\" class=\"form-check-input\"$(t_checked "$1" "true")>" \
+    "<label for=\"${1}\" class=\"form-label\">${_l}</label>"
+  [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
+  echo "</p>"
+  unset _h; unset _l
 }
 
-# field_file "name"
+# field_file "name" "label" "hint"
 field_file() {
-  field_ "file"
-    label "$1"
-    input "file" "$1" "$2"
-    help "$1"
-  _field
+  _l=$2
+  [ -z "$_l" ] && _l="$(t_label "$1")"
+  [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
+
+  _h=$3
+  [ -z "$_h" ] && _h="$(t_hint "$1")"
+
+  echo "<p class=\"file\">" \
+    "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
+    "<input type=\"file\" id=\"${1}\" name=\"${1}\" class=\"form-control\">"
+  [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
+  echo "</p>"
 }
 
 # field_hidden "name"
 field_hidden() {
-  input "hidden" "$1" "hidden"
+  echo "<input type=\"hidden\" id=\"${1}\" name=\"${1}\" class=\"form-hidden\">"
 }
 
-# field_number "name"
+# field_number "name" "label" "range" "hint"
 field_number() {
-  field_ "number"
-    label "$1"
-    input "text" "$1" "form-control text-end"
-    help "$1"
-  _field
-}
+  _l=$2
+  [ -z "$_l" ] && _l="$(t_label "$1")"
+  [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
 
-# field_password "name"
-field_password() {
-  field_ "password"
-    label "$1"
-    echo "<span class=\"input-group\">"
-      input "password" "$1"
-      echo "<label class=\"input-group-text\"><input class=\"form-check-input me-1\" type=\"checkbox\" data-for=\"${1}\">  show</label>"
-      echo "</span>"
-    help "$1"
-  _field
-}
-
-# field_range "name"
-field_range() {
   # min, max, step, button
-  _r=$(t_range "$1")
+  _r=$3
   _f=$(echo "$_r" | cut -d, -f1)
   _t=$(echo "$_r" | cut -d, -f2)
   _s=$(echo "$_r" | cut -d, -f3)
   _b=$(echo "$_r" | cut -d, -f4)
 
+  _h=$4
+  [ -z "$_h" ] && _h="$(t_hint "$1")"
+
+  _v=$(t_value "$1")
+  [ -z "$_v" ] && _v=$(t_default "$1")
+
+  echo "<p class=\"number\">" \
+    "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
+    "<input type=\"number\" name=\"${1}\" id=\"${1}\" class=\"form-control text-end\" value=\"${_v}\" min=\"${_f}\" max=\"${_t}\" step=\"${_s}\" value=\"${_v}\">"
+  [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
+  echo "</p>"
+}
+
+# field_password "name" "label" "hint"
+field_password() {
+  _l=$2
+  [ -z "$_l" ] && _l="$(t_label "$1")"
+  [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
+
+  _h=$3
+  [ -z "$_h" ] && _h="$(t_hint "$1")"
+
+  echo "<p class=\"password\">" \
+    "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
+    "<span class=\"input-group\">" \
+    "<input type=\"password\" id=\"${1}\" name=\"${1}\" class=\"form-control\" placeholder=\"K3wLHaZk3R!\">" \
+    "<label class=\"input-group-text\">" \
+    "<input class=\"form-check-input me-1\" type=\"checkbox\" data-for=\"${1}\"> show" \
+    "</label>" \
+    "</span>"
+  [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
+  echo "</p>"
+}
+
+# field_range "name" "label" "range" "hint"
+field_range() {
+  _l=$2
+  [ -z "$_l" ] && _l="$(t_label "$1")"
+  [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
+
+  # min, max, step, button
+  _r=$3
+  _f=$(echo "$_r" | cut -d, -f1)
+  _t=$(echo "$_r" | cut -d, -f2)
+  _s=$(echo "$_r" | cut -d, -f3)
+  _b=$(echo "$_r" | cut -d, -f4)
+
+  _h=$4
+  [ -z "$_h" ] && _h="$(t_hint "$1")"
+
   _v=$(t_value "$1")
   [ -z "$_v" ] && _v=$(t_default "$1")
   [ "auto" = "$_v" ] && _v=$(( (_t + _f )/ 2 ))
 
-  field_ "range"
-    label "$1"
-    echo "<span class=\"input-group\">"
-      if [ -n "$_b" ]; then
-        echo "<label class=\"input-group-text\">${_b}"
-        echo "<input class=\"form-check-input auto-value ms-1\" type=\"checkbox\" data-for=\"${1}\" data-value=\"${_dv}\" $(t_checked "$1" "${_b}")>"
-        echo "</label>"
-      fi
-      echo "<input type=\"range\" name=\"${1}-range\" id=\"${1}-range\" class=\"form-control form-range\" value=\"${_v}\" min=\"${_f}\" max=\"${_t}\" step=\"${_s}\">"
-      echo "<span class=\"input-group-text show-value\" id=\"${1}-show\">${_v}</span>"
-    echo "</span>"
-    echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}\" value=\"${_v}\">"
-    help "$1"
-  _field
+  echo "<p class=\"range\"><label for=\"${1}\" class=\"form-label\">${_l}</label>" \
+    "<span class=\"input-group\">"
+  [ -n "$_b" ] && echo "<label class=\"input-group-text\">${_b}" \
+    "<input class=\"form-check-input auto-value ms-1\" type=\"checkbox\" data-for=\"${1}\" data-value=\"${_dv}\" $(t_checked "$1" "${_b}")>" \
+    "</label>"
+  # NB! no name on range, since we don't want its data submitted
+  echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}\" value=\"${_v}\">" \
+    "<input type=\"range\" id=\"${1}-range\" class=\"form-control form-range\" value=\"${_v}\" min=\"${_f}\" max=\"${_t}\" step=\"${_s}\">" \
+    "<span class=\"input-group-text show-value\" id=\"${1}-show\">${_v}</span>" \
+    "</span>"
+  [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
+  echo "</p>"
   unset _b; unset _f; unset _r; unset _s; unset _t; unset _v
 }
 
-# field_select "name"
+# field_select "name" "label" "options" "hint"
 field_select() {
-  field_ "select"
-    label "$1"
-    echo "<select class=\"form-select\" id=\"${1}\" name=\"${1}\">"
-    [ -z "$(t_value "$1")" ] && echo "<option value=\"\">Select from available options</option>"
-    for o in $(t_options "$1"); do
-      _v="${o%|*}"; _n="${o#*|}"; [ "$1" != "mj_isp_sensorConfig" ] && _n=${_n//_/ }
-      echo "<option value=\"${_v}\" $(t_selected "$1" "${_v}")>${_n}</option>"
-      unset _v; unset _n
-    done
-    echo "</select>"
-    units "$1"
-    help "$1"
-  _field
+  _l=$2
+  [ -z "$_l" ] && _l="$(t_label "$1")"
+  [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
+
+  options=$3
+  options=${options//,/ }
+
+  _h=$4
+  [ -z "$_h" ] && _h="$(t_hint "$1")"
+
+  echo "<p class=\"select\">" \
+    "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
+    "<select class=\"form-select\" id=\"${1}\" name=\"${1}\">"
+  [ -z "$(t_value "$1")" ] && echo "<option value=\"\">Select from available options</option>"
+  for o in $options; do
+    _v="${o%|*}"; _n="${o#*|}"; [ "$1" != "mj_isp_sensorConfig" ] && _n=${_n//_/ }
+    echo "<option value=\"${_v}\" $(t_selected "$1" "${_v}")>${_n}</option>"
+    unset _v; unset _n
+  done
+  echo "</select>"
+#  units "$1"
+  [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
+  echo "</p>"
 }
 
-# field_swith "name"
+# field_swith "name" "label" "hint"
 field_switch() {
-  field_ "boolean"
-    echo "<span class=\"form-check form-switch\">"
-      input "switch" "$1"
-      label "$1" "form-check-label"
-    echo "</span>"
-    help "$1"
-  _field
+  _l=$2
+  [ -z "$_l" ] && _l="$(t_label "$1")"
+  [ -z "$_l" ] && _l="<span class=\"bg-warning\">$1</span>"
+
+  _h=$3
+  [ -z "$_h" ] && _h="$(t_hint "$1")"
+
+  _v=$(t_value "$1")
+  [ -z "$_v" ] && _v=$(t_default "$1")
+
+  echo "<p class=\"boolean\">" \
+    "<span class=\"form-check form-switch\">" \
+    "<input type=\"hidden\" id=\"${1}-false\" name=\"${1}\" value=\"false\">" \
+    "<input type=\"checkbox\" id=\"${1}\" name=\"${1}\" value=\"true\" role=\"switch\" class=\"form-check-input\"$(t_checked "$1" "$_v")>" \
+    "<label for=\"$1\" class=\"form-check-label\">${_l}</label>" \
+    "</span>"
+  [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
+  echo "</p>"
 }
 
-# field_text "name" "classes" "extras"
+# field_text "name" "label" "hint"
 field_text() {
-  field_ "string"
-    label "$1"
-    input "text" "$1" "$2" "$3"
-    help "$1"
-  _field
+  _l=$2
+  [ -z "$_l" ] && _l="$(t_label "$1")"
+  [ -z "$_l" ] && _l="<span class=\"bg-warning\">$1</span>"
+
+  _h=$3
+  [ -z "$_h" ] && _h="$(t_hint "$1")"
+
+  _v=$(t_value "$1")
+  [ -z "$_v" ] && _v=$(t_default "$1")
+
+  #  placeholder="FQDN or IP address"
+  echo "<p class=\"string\">" \
+    "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
+    "<input type=\"text\" id=\"${1}\" name=\"${1}\" class=\"form-control\" value=\"${_v}\">"
+  [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
+  echo "</p>"
 }
 
+# field_textarea "name" "label" "hint"
 field_textarea() {
-  field_ "text"
-    label "$1"
-    input "textarea" "$1"
-    help "$1"
-  _field
+  _l=$2
+  [ -z "$_l" ] && _l="$(t_label "$1")"
+  [ -z "$_l" ] && _l="<span class=\"bg-warning\">$1</span>"
+
+  _h=$3
+  [ -z "$_h" ] && _h="$(t_hint "$1")"
+
+  _v=$(t_value "$1")
+  [ -z "$_v" ] && _v=$(t_default "$1")
+
+  echo "<p class=\"textarea\">" \
+    "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
+    "<textarea id=\"${1}\" name=\"${1}\" class=\"form-control\">${_v}</textarea>"
+  [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
+  echo "</p>"
 }
 
 flash_append() {
@@ -249,7 +355,6 @@ flash_save() {
 
 get_soc_temp() {
   [ "true" = "$has_soc_temp" ] && soc_temp=$(ipcinfo --temp)
-  [ "$debug" -ge 1 ] && soc_temp="99.99"
 }
 
 header_ok() {
@@ -257,15 +362,10 @@ header_ok() {
 Content-type: application/json; charset=UTF-8
 Cache-Control: no-store
 Pragma: no-cache
-Date: $(TZ=GMT0 date +'%a, %d %b %Y %T %Z')
+Date: $(time_http)
 Server: $SERVER_SOFTWARE
 
 {}"
-}
-
-help() {
-  [ -z "$(t_hint "$1")" ] && return
-  echo "<span class=\"hint text-secondary\">$(t_hint "$1")</span>"
 }
 
 html_title() {
@@ -273,68 +373,68 @@ html_title() {
   echo -n "OpenIPC"
 }
 
-# input "type" "name" "classes" "value" "extras"
-input() {
-  # input type
-  _t="$1"
-
-  # input name
-  _n="$2"
-
-  # css class
-  _c="form-control"
-
-  # extra css class
-  _c2="$3"
-
-  # placeholder
-  eval _p=\$sP_${_n}
-  [ -n "$_p" ] && _p=" placeholder=\"${_p}\""
-
-  #  value
-  _v="$(t_value "$_n")"
-
-  # extra attributes
-  _x2="$4"
-
-  case "$1" in
-  checkbox)
-    _c="form-check-input"
-    _v="true"
-    _x="$(t_checked "$_n" "$_v")"
-    echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}-false\" value=\"false\">"
-    ;;
-  switch)
-    _t="checkbox"
-    _c="form-check-input"
-    _v="true"
-    _x="role=\"switch\""; [ -n "$(t_checked "$2" "$_v")" ] && _x="$_x $(t_checked "$2" "$_v")"
-    echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}-false\" value=\"false\">"
-    ;;
-  text)
-    ;;
-  textarea)
-    ;;
-  range)
-    _c="${_c} form-range"
-    _o="$(t_options "$_n")"
-    _x="$(t_disabled "$_n" "auto") data-units=\"$(t_units "$_n")\""
-    ;;
-  *)
-    ;;
-  esac
-
-  [ -n "$_c2" ] && _c="${_c} ${_c2}"; [ -n "$_c" ] && _c=" class=\"${_c}\""
-  [ -n "$_x2" ] && _x="${_x} ${_x2}"; [ -n "$_x" ] && _x=" ${_x}"
-
-  if [ "textarea" = "$1" ]; then
-    echo "<textarea id=\"${_n}\" name=\"${_n}\"${_c}${_x}>${_v}</textarea>"
-  else
-    [ -n "$_v" ] && _v=" value=\"${_v}\""
-    echo "<input type=\"${_t}\" id=\"${_n}\" name=\"${_n}\"${_v}${_c}${_p}${_x}>"
-  fi
-  unset _c; unset _c2; unset _n; unset _o; unset _p; unset _t; unset _v; unset _x; unset _x2
-}
+## input "type" "name" "classes" "value" "extras"
+#input() {
+#  # input type
+#  _t="$1"
+#
+#  # input name
+#  _n="$2"
+#
+#  # css class
+#  _c="form-control"
+#
+#  # extra css class
+#  _c2="$3"
+#
+#  # placeholder
+#  eval _p=\$sP_${_n}
+#  [ -n "$_p" ] && _p=" placeholder=\"${_p}\""
+#
+#  #  value
+#  _v="$(t_value "$_n")"
+#
+#  # extra attributes
+#  _x2="$4"
+#
+#  case "$1" in
+#  checkbox)
+#    _c="form-check-input"
+#    _v="true"
+#    _x="$(t_checked "$_n" "$_v")"
+#    echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}-false\" value=\"false\">"
+#    ;;
+#  switch)
+#    _t="checkbox"
+#    _c="form-check-input"
+#    _v="true"
+#    _x="role=\"switch\""; [ -n "$(t_checked "$2" "$_v")" ] && _x="$_x $(t_checked "$2" "$_v")"
+#    echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}-false\" value=\"false\">"
+#    ;;
+#  text)
+#    ;;
+#  textarea)
+#    ;;
+#  range)
+#    _c="${_c} form-range"
+#    _o="$(t_options "$_n")"
+#    _x="$(t_disabled "$_n" "auto") data-units=\"$(t_units "$_n")\""
+#    ;;
+#  *)
+#    ;;
+#  esac
+#
+#  [ -n "$_c2" ] && _c="${_c} ${_c2}"; [ -n "$_c" ] && _c=" class=\"${_c}\""
+#  [ -n "$_x2" ] && _x="${_x} ${_x2}"; [ -n "$_x" ] && _x=" ${_x}"
+#
+#  if [ "textarea" = "$1" ]; then
+#    echo "<textarea id=\"${_n}\" name=\"${_n}\"${_c}${_x}>${_v}</textarea>"
+#  else
+#    [ -n "$_v" ] && _v=" value=\"${_v}\""
+#    echo "<input type=\"${_t}\" id=\"${_n}\" name=\"${_n}\"${_v}${_c}${_p}${_x}>"
+#  fi
+#  unset _c; unset _c2; unset _n; unset _o; unset _p; unset _t; unset _v; unset _x; unset _x2
+#}
 
 # label "name" "classes" "extras"
 label() {
@@ -358,6 +458,20 @@ log() {
   echo $1 >/tmp/webui.log
 }
 
+majestic_diff() {
+  config_file=/etc/majestic.yaml
+  diff /rom$config_file $config_file > /tmp/majestic.patch
+  cat /tmp/majestic.patch
+}
+
+# select_option "name" "value"
+select_option() {
+  _v=$2
+  [ -z "$_v" ] && _v=$1
+  _s=""; [ "$_v" = eval \$$_v ] && $s=" selected"
+  echo "<option value=\"${_v}\"${_s}>${1}</label>"
+}
+
 # pre "text" "classes" "extras"
 pre() {
   # replace <, >, &, ", and ' with HTML entities
@@ -375,7 +489,7 @@ redirect_to() {
 Content-type: text/html; charset=UTF-8
 Cache-Control: no-store
 Pragma: no-cache
-Date: $(TZ=GMT0 date +'%a, %d %b %Y %T %Z')
+Date: $(time_http)
 Location: $1
 Server: $SERVER_SOFTWARE
 Status: 302 Moved Temporarily
@@ -447,9 +561,12 @@ signature() {
 }
 
 tab_lap() {
-  echo "<li class=\"nav-item\" role=\"presentation\"><button role=\"tab\" class=\"nav-link\" \
-   data-bs-toggle=\"tab\" data-bs-target=\"#${1}-tab-pane\" id=\"#${1}-tab\" \
-   aria-controls=\"${1}-tab-pane\" aria-selected=\"false\">${2}</button></li>"
+  _c=""; _s="false"; [ -n "$3" ] && _s="true" && _c=" active"
+  echo "<li class=\"nav-item\" role=\"presentation\">" \
+    "<button role=\"tab\" id=\"#${1}-tab\" class=\"nav-link${_c}\"" \
+    " data-bs-toggle=\"tab\" data-bs-target=\"#${1}-tab-pane\"" \
+    " aria-controls=\"${1}-tab-pane\" aria-selected=\"${_s}\">${2}</button></li>"
+   unset _c; unset _s
 }
 
 t_checked() {
@@ -514,7 +631,6 @@ update_caminfo() {
   # ipcinfo reports to stderr
   if [ "Temperature cannot be retrieved" = "$(ipcinfo --temp 2>&1)" ]; then
     has_soc_temp="false"
-    [ $debug -ge 1 ] && has_soc_temp="true"
   else
     has_soc_temp="true"
   fi
@@ -590,8 +706,13 @@ xl() {
 }
 
 
+d() {
+  echo "$1" >&2
+}
+
 dump() {
   echo "Content-Type: text/plain; charset=UTF-8
+Date: $(time_http)
 Pragma: no-cache
 Connection: close
 

@@ -2,30 +2,12 @@
 <%in p/common.cgi %>
 <%
 page_title="Monitoring tools"
-tOptions_tools_interface="auto ${interfaces}"
 tools_action="${POST_tools_action:=ping}"
 tools_target="${POST_tools_target:=4.2.2.1}"
 tools_interface="${POST_tools_interface:=auto}"
 tools_packet_size="${POST_tools_packet_size:=56}" # 56-1500 for ping, 38-32768 for trace
 tools_duration="${POST_tools_duration:=5}"
-%>
-<%in p/header.cgi %>
-<div class="row g-4">
-<div class="col col-md-4 col-lg-3">
-<h3>Ping Quality</h3>
-<form action="<%= $SCRIPT_NAME %>" method="post">
-<%
-field_select "tools_action"
-field_text "tools_target" "data-pattern=pat-host-ip required"
-field_select "tools_interface" "data-pattern=pat-host-ip required"
-field_number "tools_packet_size"
-field_number "tools_duration" "min=1 max=30 step=1"
-button_submit "Run"
-%>
-</form>
-</div>
-<div class="col col-md-8 col-lg-9">
-<%
+
 if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$tools_action" in
     ping)
@@ -49,11 +31,29 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     *)
       ;;
   esac
+fi
 %>
-<h3><%= $title %></h3>
-<h4># <%= $cmd %></h4>
-<pre id="output" data-cmd="<%= $cmd %>"></pre>
-<% fi %>
+<%in p/header.cgi %>
+
+<div class="row g-4">
+  <div class="col col-md-4 col-lg-3">
+    <h3>Ping Quality</h3>
+    <form action="<%= $SCRIPT_NAME %>" method="post">
+      <% field_select "tools_action" "Action" "ping,trace" %>
+      <% field_text "tools_target" "Target FQDN or IP address" %>
+      <% field_select "tools_interface" "Network interface" "auto,${interfaces}" %>
+      <% field_number "tools_packet_size" "Packet size" "56,65535,1" "Bytes" %>
+      <% field_number "tools_duration" "Number of packets" "1,30,1" %>
+      <% button_submit "Run" %>
+    </form>
+  </div>
+  <div class="col col-md-8 col-lg-9">
+    <h3><%= $title %></h3>
+    <h4># <%= $cmd %></h4>
+  <% if [ -n "$cmd" ]; then %>
+    <pre id="output" data-cmd="<%= $cmd %>"></pre>
+  <% fi %>
+  </div>
 </div>
-</div>
+
 <%in p/footer.cgi %>

@@ -56,12 +56,13 @@ dl.list {
 }
 
 dl.list dt {
-    flex: 1 10rem;
+    flex-grow: 1;
+    width: 33%;
 }
 
 dl.list dd {
-    flex: 1 20rem;
-    flex-flow: row wrap;
+    flex-grow: 2;
+    width: 66%;
 }
 
 .btn {

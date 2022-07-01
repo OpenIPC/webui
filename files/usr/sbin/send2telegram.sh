@@ -1,6 +1,6 @@
 #!/bin/sh
 
-config_file="/etc/webui/telegram.cfg"
+config_file="/etc/webui/telegram.conf"
 curl_timeout=100
 
 if [ -n "$1" ] && [ -n "$2" ]; then

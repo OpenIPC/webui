@@ -1,6 +1,6 @@
 #!/bin/sh
 
-config_file="/etc/yadisk.cfg"
+config_file="/etc/yadisk.conf"
 curl_timeout=100
 
 if [ ! -f "$config_file" ]; then

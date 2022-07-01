@@ -3,7 +3,7 @@
 <% page_title="About OpenIPC" %>
 <%in p/header.cgi %>
 <%
-TEAM="# OpenIPC Team members in following format: Username | GitHub PhotoID | Projects | GitHub name | Telegram name
+TEAM="# OpenIPC Team members in following format: Username|GitHub PhotoID|Projects|GitHub name|Telegram name
 FlyRouter|88846|Project Coordination|ZigFisher|FlyRouter
 widgetii|6576495|Majestic Streamer, IPCtool|widgetii|widgetii
 dimerrr|106577375|U-Boot, Kernels, Coupler, IPCtool|dimerrr|dimerrr
@@ -30,9 +30,7 @@ team() {
 <div class="alert alert-primary">
   <div class="row">
     <div class="col-md-6 text-end">
-      <p class="mb-0">
-        <a href="https://opencollective.com/openipc"><img class="img-fluid" src="https://opencollective.com/webpack/donate/button.png?color=blue" alt="Image: OpenCollective donation button" title="Donate to our collective"></a>
-      </p>
+      <p class="mb-0"><a href="https://opencollective.com/openipc"><img class="img-fluid" src="https://opencollective.com/webpack/donate/button.png?color=blue" alt="Image: OpenCollective donation button" title="Donate to our collective"></a></p>
     </div>
     <div class="col-md-6">
       <h5>Do you like what we do?</h4>

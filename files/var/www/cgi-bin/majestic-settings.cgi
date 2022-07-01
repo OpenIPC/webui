@@ -22,6 +22,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   # make a copy of the actual config into memory
   cp -f $mj_conf $temp_yaml
 
+  OIFS=$IFS
   IFS=$'\n' # make newlines the only separator
   for yaml_param_name in $(printenv|grep POST_); do
     form_field_name=$(echo $yaml_param_name | sed 's/^POST_mj_//')
@@ -59,6 +60,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
       [ "$oldvalue" != "$value" ] && yaml-cli -s $key "$value" -i "$temp_yaml" -o "$temp_yaml"
     fi
   done
+  IFS=$OIFS
 
   # update config if differs
   [ -n "$(diff -q $temp_yaml $mj_conf)" ] && cp -f $temp_yaml $mj_conf

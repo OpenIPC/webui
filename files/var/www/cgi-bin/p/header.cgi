@@ -60,6 +60,7 @@ Pragma: no-cache
               <li><a class="dropdown-item" href="network-tz.cgi">System Timezone</a></li>
               <li><a class="dropdown-item" href="network-ntp.cgi">NTP Settings</a></li>
               <li><a class="dropdown-item" href="network-socks5.cgi">SOCKS5 Proxy</a></li>
+              <li><a class="dropdown-item" href="admin.cgi">Admin profile</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="reset.cgi">Reset...</a></li>
             </ul>

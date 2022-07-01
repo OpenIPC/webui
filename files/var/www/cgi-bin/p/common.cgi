@@ -506,9 +506,10 @@ row() {
 }
 
 sanitize() {
-  z="$1"
-  eval $z=$(eval echo \$$z | sed s/^\\/// | sed s/\\/$//)
-  unset z
+  _n=$1
+  # strip trailing whitespace
+  eval $_n=$(echo \$${_n})
+  unset _n
 }
 
 signature() {

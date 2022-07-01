@@ -1,24 +1,26 @@
 #!/bin/sh
 
-conf_file=/etc/coredump.config
+config_file=/etc/coredump.conf
+admin_file=/etc/webui/admin.conf
 core_file=dump.core
 info_file=info.txt
 log_file=/root/coredump.log
-log() {
-  echo "$(date +"%F %T") $1" >> $log_file
-}
-:>$log_file
 
+# use local time
+log() { echo "$(date +"%F %T") $1" >> $log_file; }
+
+:>$log_file
 log "Majectic crashed"
 
-if [ ! -f "$conf_file" ]; then
-  log "Config file ${conf_file} not found."
-  exit 1
-fi
+[ ! -f "$config_file" ] && log "Config file ${config_file} not found." && exit 1
+source "$config_file"
 
-if [ ! "$(grep ^savedumps $conf_file | cut -d= -f2)" = "true" ]; then
+[ ! -f "$admin_file" ] && log "Admin config file ${config_file} not found." && exit 2
+source "$admin_file"
+
+if [ -z "$coredump_enabled" ] || [ "true" != "$coredump_enabled" ]; then
   log "Core dump not enabled."
-  exit 2
+  exit 3
 fi
 
 log "Stopping watchdog"
@@ -33,9 +35,7 @@ log "done"
 
 bundle_name=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/[: ]//g" | uniq)-$(date +"%Y%m%d-%H%M%S").tgz
 
-name=$(grep ^contact_name $conf_file | cut -d= -f2)
-email=$(grep ^contact_email $conf_file | cut -d= -f2)
-telegram=$(grep ^contact_telegram $conf_file | cut -d= -f2)
+# FIXME: can be read from /tmp/sysinfo.txt
 soc=$(ipcinfo --chip-name)
 family=$(ipcinfo --family)
 vendor=$(ipcinfo --vendor)
@@ -46,10 +46,10 @@ mj=$(majestic -v)
 
 :>$info_file
 echo "
-Date: $(TZ=GMT date)
-Name: ${name}
-Email: ${email}
-Telegram: ${telegram}
+Date: $(TZ=GMT0 date)
+Name: ${admin_name}
+Email: ${admin_email}
+Telegram: ${admin_telegram}
 
 Hardware:
 ---------
@@ -73,35 +73,29 @@ log "done"
 
 rm "$core_file" "$info_file" majestic.yaml
 
-if [ "$(grep ^send2devs $conf_file | cut -d= -f2)" = "true" ]; then
+if [ "true" = "$coredump_send2devs" ]; then
   log "Sending to S3 bucket"
   curl -s "https://majdumps.s3.eu-north-1.amazonaws.com/${bundle_name}" --upload-file "$bundle_name"
   log "done"
 fi
 
-if [ "$(grep ^send2tftp $conf_file | cut -d= -f2)" = "true" ]; then
+if [ "true" = "$coredump_send2tftp" ]; then
   log "Sending to TFTP server"
-  tftphost=$(grep ^tftphost $conf_file | cut -d= -f2)
-  tftp -p -l "$bundle_name" $tftphost
+  tftp -p -l "$bundle_name" $coredump_tftphost
   log "done"
 fi
 
-if [ "$(grep ^send2ftp $conf_file | cut -d= -f2)" = "true" ]; then
+if [ "true" = "$coredump_send2ftp" ]; then
   log "Sending to FTP server"
-  ftphost=$(grep ^ftphost $conf_file | cut -d= -f2)
-  ftppath=$(grep ^ftppath $conf_file | cut -d= -f2)
-  ftpuser=$(grep ^ftpuser $conf_file | cut -d= -f2)
-  ftppass=$(grep ^ftppass $conf_file | cut -d= -f2)
-  curl -s "ftp://${ftphost}/${ftppath}/" --upload-file "$bundle_name" --user "${ftpuser}:${ftppass}" --ftp-create-dirs
+  curl -s "ftp://${coredump_ftphost}/${coredump_ftppath}/" --upload-file "$bundle_name" --user "${coredump_ftpuser}:${coredump_ftppass}" --ftp-create-dirs
   log "done"
 fi
 
-if [ "$(grep save4web $conf_file | cut -d= -f2)" = "true" ]; then
-  localpath=$(grep ^localpath $conf_file | cut -d= -f2)
-  [ -z "$localpath" ] && localpath="/root"
-  [ ! -d "$localpath" ] && mkdir -p "$localpath"
-  log "Saving locally to ${localpath}/coredump.tgz"
-  mv "$bundle_name" "${localpath}/coredump.tgz"
+if [ "true" = "$coredump_save4web" ]; then
+  [ -z "$coredump_localpath" ] && coredump_localpath="/root"
+  [ ! -d "$coredump_localpath" ] && mkdir -p "$coredump_localpath"
+  log "Saving locally to ${coredump_localpath}/coredump.tgz"
+  mv "$bundle_name" "${coredump_localpath}/coredump.tgz"
   log "done"
 else
   rm "$bundle_name"

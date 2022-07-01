@@ -9,7 +9,5 @@ tOptions_ipeye_rtsp_feed="rtsp://${network_address}/stream=0,rtsp://${network_ad
 sP_mj_restore_file="majestic.yaml"
 sP_tools_target="FQDN or IP address"
 sP_socks5_port="1080"
-sP_webui_password="K3wLHaZk3R!"
-sP_webui_password_confirmation="K3wLHaZk3R!"
 
 tUnits_tools_packet_size="Byte"

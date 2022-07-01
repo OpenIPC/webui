@@ -19,11 +19,22 @@
         <% button_submit "Refresh Environment" %>
       </form>
 
-      <% ex "env | sort" %>
-      <% ex "cat /tmp/sysinfo.txt" %>
+      <ul class="nav nav-tabs" role="tablist">
+        <% tab_lap "t1" "sysinfo" "active" %>
+        <% tab_lap "t2" "env" %>
+      </ul>
+      <div class="tab-content p-2" id="tab-content">
+        <div id="t1-tab-pane" role="tabpanel" class="tab-pane fade active show" aria-labelledby="t1-tab" tabindex="0">
+          <% ex "env | sort" %>
+        </div>
+        <div id="t2-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="t2-tab" tabindex="0">
+          <% ex "cat /tmp/sysinfo.txt" %>
+        </div>
+      </div>
     </div>
   </div>
-  <button type="button" class="btn btn-primary fixed-bottom" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDebug" aria-controls="offcanvasDebug">Debug</button>
+
+  <button type="button" class="btn btn-primary btn-sm fixed-bottom m-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDebug" aria-controls="offcanvasDebug">Debug</button>
 <% fi %>
 </body>
 </html>

@@ -506,10 +506,8 @@ sanitize() {
 }
 
 signature() {
-  _f=/tmp/webui-signature.txt
-  if [ ! -f "$_f" ]; then
-    echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash. ${fw_version}-${fw_variant}. ${hostname}, ${wan_mac}" > $_f
-  fi
+  _f=/tmp/webui/signature.txt
+  [ ! -f "$_f" ] && echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash. ${fw_version}-${fw_variant}. ${hostname}, ${wan_mac}" > $_f
   cat $_f
   unset _f
 }

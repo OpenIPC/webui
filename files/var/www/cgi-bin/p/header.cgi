@@ -101,7 +101,7 @@ Pragma: no-cache
   </nav>
   <main>
     <div class="container">
-      <p class="text-end x-small"><% signature %></p>
+      <p class="text-end x-small"><%= $(signature) %></p>
 
 <% if [ "true" = "$telegram_socks5_enabled" ] || [ "true" = "$yadisk_socks5_enabled" ]; then
   if [ -z "$socks5_server" ] || [ -z "$socks5_port" ]; then %>

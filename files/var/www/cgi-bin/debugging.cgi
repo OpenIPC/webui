@@ -63,7 +63,7 @@ save4web=${coredump_save4web}
 localpath=${coredump_localpath}
 " > /etc/coredump.config
     flash_save "success" "Majestic debug config updated."
-    redirect_to "majestic-debug.cgi"
+    redirect_back
   fi
 else
   if [ -f $conf_file ]; then
@@ -117,14 +117,11 @@ fi
     <div class="col">
       <h3>Core dump saving</h3>
       <% field_switch "coredump_enabled" "Enable core dump saving" %>
-      <% field_text "coredump_name" "Name" %>
-      <% field_text "coredump_email" "Email address" %>
-      <% field_text "coredump_telegram" "Telegram username" %>
     </div>
     <div class="col">
       <h3>Upload to AWS S3 bucket</h3>
       <% field_switch "coredump_send2devs" "Upload to developers" %>
-      <% field_switch "coredump_consent" "I am aware of sensitive information in core dumps and I trust the developers." %>
+      <% field_checkbox "coredump_consent" "I am aware of sensitive information in core dumps and I trust the developers" %>
     </div>
     <div class="col">
       <h3>Leave on camera</h3>

@@ -61,6 +61,7 @@ Pragma: no-cache
               <li><a class="dropdown-item" href="timezone.cgi">Timezone</a></li>
               <li><a class="dropdown-item" href="network-socks5.cgi">SOCKS5 Proxy</a></li>
               <li><a class="dropdown-item" href="admin.cgi">Admin profile</a></li>
+              <li><a class="dropdown-item" href="debugging.cgi">Debugging</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="reset.cgi">Reset...</a></li>
             </ul>
@@ -69,7 +70,6 @@ Pragma: no-cache
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownMajestic" role="button">Majestic</a>
             <ul aria-labelledby="dropdownMajestic" class="dropdown-menu">
               <li><a class="dropdown-item" href="majestic-config-actions.cgi">Majestic Maintenance</a></li>
-              <li><a class="dropdown-item" href="majestic-debug.cgi">Majestic Debugging</a></li>
             </ul>
           </li>
           <li class="nav-item dropdown">
@@ -103,6 +103,15 @@ Pragma: no-cache
   <main>
     <div class="container">
       <p class="text-end x-small"><%= $(signature) %></p>
+
+<% if [ "true" = "$coredump_enabled" ] && [ "true" = "$coredump_send2devs" ]; then
+  if [ -z "$admin_name" ] || [ -z "$admin_email" ]; then %>
+<div class="alert alert-danger">
+<p class="mb-0">You want to set up core dump delivery to developers S3 bucket but your admin profile does not include contact information.
+  Please <a href="admin.cgi">fill out the admin profile</a>.</p>
+</div>
+<% fi; fi %>
+
 
 <% if [ "true" = "$telegram_socks5_enabled" ] || [ "true" = "$yadisk_socks5_enabled" ]; then
   if [ -z "$socks5_server" ] || [ -z "$socks5_port" ]; then %>

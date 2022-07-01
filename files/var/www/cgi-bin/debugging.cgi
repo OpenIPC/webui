@@ -1,111 +1,77 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
 <%
+plugin="coredump"
 page_title="Majestic debugging"
+params="consent enabled ftphost ftppath ftppass ftpuser localpath save4web send2devs send2ftp send2tftp tftphost"
+
+tmp_file=/tmp/${plugin}.conf
+# FIXME: rename in S95 files
+config_file=/etc/${plugin}.conf
+[ ! -f "$config_file" ] && touch $config_file
 
 [ ! -f "/rom/${mj_bin_file}" ] && redirect_to "status.cgi" "danger" "Majestic is not supported on this system."
 
-conf_file=/etc/coredump.config
-
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  ### Assigning values
-  coredump_savedumps="$POST_coredump_enabled"
-  coredump_haveconsent="$POST_coredump_consent"
-  coredump_send2devs="$POST_coredump_send2devs"
-  coredump_contact_name="$POST_coredump_name"
-  coredump_contact_email="$POST_coredump_email"
-  coredump_contact_telegram="$POST_coredump_telegram"
-  coredump_send2tftp="$POST_coredump_send2tftp"
-  coredump_tftphost="$POST_coredump_tftphost"
-  coredump_send2ftp="$POST_coredump_send2ftp"
-  coredump_ftphost="$POST_coredump_ftphost"
-  coredump_ftppath="$POST_coredump_ftppath"
-  coredump_ftpuser="$POST_coredump_ftpuser"
-  coredump_ftppass="$POST_coredump_ftppass"
-  coredump_save4web="$POST_coredump_save4web"
-  coredump_localpath="$POST_coredump_localpath"
+  # parse values from parameters
+  for _p in $params; do
+    eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
+    sanitize "${plugin}_${_p}"
+  done; unset _p
 
   ### Normalization
-  # strip trailing slashes
-  sanitize "coredump_localpath"
-  sanitize "coredump_ftppath"
+  # FIXME: strip trailing slashes
+  #sanitize "coredump_localpath"
+  #sanitize "coredump_ftppath"
 
   ### Validation
-  if [ "$coredump_savedumps" = "true" ]; then
-    if [ ! "$coredump_haveconsent" = "true" ]; then
-      error="$t_form_error_6"
-    else
-      if [ "$coredump_send2tftp" = "true" ]; then
-        [ -z "$coredump_tftphost" ] && error="$t_form_error_7"
-      fi
-      if [ "$coredump_save4web" = "true" ]; then
-        [ -z "$coredump_localpath" ] && error="$t_form_error_8"
-      fi
+
+  if [ "true" = "$coredump_enabled" ]; then
+    if [ "true" = "$coredump_send2devs" ]; then
+      # FIXME: add admin_ to globals
+      [ -f "${ui_config_dir}/admin.conf" ] && source "${ui_config_dir}/admin.conf"
+      [ -z "$admin_name" ] || [ -z "$admin_email" ] && flash_append "danger" "Please <a href=\"admin.cgi\">fill out the admin profile</a> first." && error=1
     fi
+    [ "true" != "$coredump_consent"  ] && flash_append "danger" "You have to understand and acknowledge security risk." && error=1
+    [ "true" = "$coredump_send2ftp"  ] && [ -z "$coredump_ftphost"   ] && flash_append "danger" "FTP address cannot be empty." && error=1
+    [ "true" = "$coredump_send2tftp" ] && [ -z "$coredump_tftphost"  ] && flash_append "danger" "TFTP address cannot be empty." && error=1
+    [ "true" = "$coredump_save4web"  ] && [ -z "$coredump_localpath" ] && flash_append "danger" "Local path cannot be empty." && error=1
   fi
 
   if [ -z "$error" ]; then
-    echo "# /etc/coredump.config
-savedumps=${coredump_savedumps}
-haveconsent=${coredump_haveconsent}
-contact_name=${coredump_contact_name}
-contact_email=${coredump_contact_email}
-contact_telegram=${coredump_contact_telegram}
-send2devs=${coredump_send2devs}
-send2tftp=${coredump_send2tftp}
-tftphost=${coredump_tftphost}
-send2ftp=${coredump_send2ftp}
-ftphost=${coredump_ftphost}
-ftppath=${coredump_ftppath}
-ftpuser=${coredump_ftpuser}
-ftppass=${coredump_ftppass}
-save4web=${coredump_save4web}
-localpath=${coredump_localpath}
-" > /etc/coredump.config
-    flash_save "success" "Majestic debug config updated."
-    redirect_back
+    # create temp config file
+    :> $tmp_file
+    for _p in $params; do
+      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >> $tmp_file
+    done; unset _p
+    mv $tmp_file $config_file
+
+    update_caminfo
+    redirect_back "success" "Majestic debugging config updated."
   fi
 else
-  if [ -f $conf_file ]; then
-    coredump_enabled=$(grep ^savedumps $conf_file | cut -d= -f2)
-    coredump_consent=$(grep ^haveconsent $conf_file | cut -d= -f2)
-    coredump_name=$(grep ^contact_name $conf_file | cut -d= -f2)
-    coredump_email=$(grep ^contact_email $conf_file | cut -d= -f2)
-    coredump_telegram=$(grep ^contact_telegram $conf_file | cut -d= -f2)
-    coredump_send2devs=$(grep ^send2devs $conf_file | cut -d= -f2)
-    coredump_send2tftp=$(grep ^send2tftp $conf_file | cut -d= -f2)
-    coredump_tftphost=$(grep ^tftphost $conf_file | cut -d= -f2)
-    coredump_send2ftp=$(grep ^send2ftp $conf_file | cut -d= -f2)
-    coredump_ftphost=$(grep ^ftphost $conf_file | cut -d= -f2)
-    coredump_ftppath=$(grep ^ftppath $conf_file | cut -d= -f2)
-    coredump_ftpuser=$(grep ^ftpuser $conf_file | cut -d= -f2)
-    coredump_ftppass=$(grep ^ftppass $conf_file | cut -d= -f2)
-    coredump_save4web=$(grep ^save4web $conf_file | cut -d= -f2)
-    coredump_localpath=$(grep ^localpath $conf_file | cut -d= -f2)
-  fi
+  include $config_file
+fi
 
-  if [ -z "$coredump_localpath" ]; then
-    if [ -d "/mnt/mmc" ]; then
-      coredump_localpath="/mnt/mmc"
-    else
-      coredump_localpath="/root"
-    fi
+[ -z "$coredump_ftpuser" ] && coredump_ftpuser="anonymous"
+[ -z "$coredump_ftppass" ] && coredump_ftppass="anonymous"
+
+if [ -z "$coredump_localpath" ]; then
+  if [ -d "/mnt/mmc" ]; then
+    coredump_localpath="/mnt/mmc"
+  else
+    coredump_localpath="/root"
   fi
 fi
 %>
 <%in p/header.cgi %>
-<%
-if [ -n "$error" ]; then
-  report_error "$error"
-fi
 
-if [ -z "$(grep sendcoredump.sh /etc/init.d/S95*)" ]; then
-%>
+<% if [ -z "$(grep sendcoredump.sh /etc/init.d/S95*)" ]; then %>
   <div class="alert alert-warning">
     <p><b>This service requires a slight modification of /etc/init.d/S95... file.</b></p>
     <p>Please insert the following code inside <code>load_majestic()</code> block, right before <code>start-stop-daemon</code> line:</p>
     <pre class="bg-light p-3 text-black">
-if [ $(grep ^savedumps /etc/coredump.config | cut -d= -f2) == "true" ]; then
+if [ -f "$config_file" ] && [ $(grep ^savedumps "$config_file" | cut -d= -f2) == "true" ]; then
   ulimit -c unlimited && echo "| /usr/sbin/sendcoredump.sh" > /proc/sys/kernel/core_pattern
 fi
 </pre>
@@ -137,19 +103,19 @@ fi
     <div class="col">
       <h3>Upload to TFTP server</h3>
       <% field_switch "coredump_send2tftp" "Upload to TFTP server" %>
-      <% field_text "coredump_tftphost" "Hostname or IP address" %>
+      <% field_text "coredump_tftphost" "Host" "FQDN or IP address" %>
     </div>
     <div class="col">
       <h3>Upload to FTP server</h3>
       <% field_switch "coredump_send2ftp" "Upload to FTP server" %>
-      <% field_text "coredump_ftphost" "Hostname or IP address" %>
+      <% field_text "coredump_ftphost" "Host" "FQDN or IP address" %>
       <% field_text "coredump_ftppath" "Target directory" "relative to ftp root directory" %>
       <% field_text "coredump_ftpuser" "Username" %>
       <% field_password "coredump_ftppass" "Password" %>
     </div>
     <div class="col">
       <h3>Config</h3>
-      <% ex "cat $conf_file" %>
+      <% [ -f "$config_file" ] && ex "cat $config_file" %>
     </div>
     <div class="col">
       <h3>Log of last core dumping</h3>

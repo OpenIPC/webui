@@ -196,12 +196,15 @@ field_password() {
   _h=$3
   [ -z "$_h" ] && _h="$(t_hint "$1")"
 
+  _v=$(t_value "$1")
+  [ -z "$_v" ] && _v=$(t_default "$1")
+
   echo "<p class=\"password\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<span class=\"input-group\">" \
-    "<input type=\"password\" id=\"${1}\" name=\"${1}\" class=\"form-control\" placeholder=\"K3wLHaZk3R!\">" \
+    "<input type=\"password\" id=\"${1}\" name=\"${1}\" class=\"form-control\" value=\"${_v}\" placeholder=\"K3wLHaZk3R!\">" \
     "<label class=\"input-group-text\">" \
-    "<input class=\"form-check-input me-1\" type=\"checkbox\" data-for=\"${1}\"> show" \
+    "<input type=\"checkbox\" class=\"form-check-input me-1\" data-for=\"${1}\"> show" \
     "</label>" \
     "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
@@ -306,6 +309,7 @@ field_switch() {
     "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
+  unset _h; unset _l; unset _v
 }
 
 # field_text "name" "label" "hint"

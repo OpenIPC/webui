@@ -104,15 +104,6 @@ Pragma: no-cache
     <div class="container">
       <p class="text-end x-small"><%= $(signature) %></p>
 
-<% if [ "true" = "$coredump_enabled" ] && [ "true" = "$coredump_send2devs" ]; then
-  if [ -z "$admin_name" ] || [ -z "$admin_email" ]; then %>
-<div class="alert alert-danger">
-<p class="mb-0">You want to set up core dump delivery to developers S3 bucket but your admin profile does not include contact information.
-  Please <a href="admin.cgi">fill out the admin profile</a>.</p>
-</div>
-<% fi; fi %>
-
-
 <% if [ "true" = "$telegram_socks5_enabled" ] || [ "true" = "$yadisk_socks5_enabled" ]; then
   if [ -z "$socks5_server" ] || [ -z "$socks5_port" ]; then %>
 <div class="alert alert-danger">

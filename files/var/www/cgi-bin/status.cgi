@@ -30,9 +30,9 @@ page_title="Device status"
       <dt>Build</dt>
       <dd><%= $fw_build %></dd>
       <dt>Hostname</dt>
-      <dd><%= $hostname %></dd>
+      <dd><%= $network_hostname %></dd>
       <dt>WAN MAC</dt>
-      <dd><%= $wan_mac %></dd>
+      <dd><%= $network_wan_mac %></dd>
     </dl>
   </div>
   <div class="col">

@@ -357,11 +357,18 @@ flash_delete() {
 
 flash_read() {
   [ ! -f "$flash_file" ] && return
-  flash=$(cat "$flash_file")
-  [ -z "$flash" ] && return
-  _c="$(echo $flash | cut -d':' -f1)"
-  _m="$(echo $flash | cut -d':' -f2-)"
-  echo "<div class=\"alert alert-${_c} alert-dismissible fade show\" role=\"alert\">${_m}<button type=\"button\" class=\"btn btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></div>"
+  [ -z $(cat "$flash_file") ] && return
+
+  echo "OK"
+
+  OIFS="$IFS"
+  IFS=$'\n'
+  for _l in $(cat "$flash_file"); do
+    _c="$(echo $_l | cut -d':' -f1)"
+    _m="$(echo $_l | cut -d':' -f2-)"
+    echo "<div class=\"alert alert-${_c} alert-dismissible fade show\" role=\"alert\">${_m}<button type=\"button\" class=\"btn btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></div>"
+  done
+  IFS=$OIFS
   flash_delete
   unset _c; unset _m
 }
@@ -432,6 +439,7 @@ pre() {
   tag "pre" "$(echo -e "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g")" "$2" "$3"
 }
 
+# redirect_back "flash class" "flash text"
 redirect_back() {
   redirect_to "$HTTP_REFERER" "$1" "$2"
 }
@@ -680,12 +688,15 @@ include() {
   [ -f "$1" ] && source "$1"
 }
 
+ui_tmp_dir=/tmp/webui
+ui_config_dir=/etc/webui
+
 mj_bin_file=/usr/bin/majestic
 flash_file=/tmp/webui-flash.txt
 sysinfo_file=/tmp/sysinfo.txt
 
-config_path=/etc/webui
-[ ! -d $config_path ] && mkdir -p $config_path
+[ ! -d $ui_tmp_dir ] && mkdir -p $ui_tmp_dir
+[ ! -d $ui_config_dir ] && mkdir -p $ui_config_dir
 
 lang_path=/var/www/lang/
 [ ! -d $lang_path ] && mkdir -p $lang_path

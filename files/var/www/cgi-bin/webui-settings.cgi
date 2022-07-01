@@ -45,12 +45,14 @@ page_title="Web Interface Settings"
 ui_username="admin"
 ui_language="$locale"
 
-tOptions_webui_language="en|English"
-for i in /var/www/lang/; do
-  code="$(basename $i)"; code="${code%%.sh}"
-  name="$(sed -n 2p $i|sed "s/ /_/g"|cut -d: -f2)"
-  tOptions_webui_language="${tOptions_webui_language},${code}|${name}"
-done
+ui_locales="en|English"
+if [ -d /var/www/lang/ ]; then
+ for i in $(ls -1 /var/www/lang/); do
+    code="$(basename $i)"; code="${code%%.sh}"
+    name="$(sed -n 2p $i|sed "s/ /_/g"|cut -d: -f2)"
+    ui_locales="${ui_locales},${code}|${name}"
+  done
+fi
 %>
 <%in p/header.cgi %>
 
@@ -72,7 +74,7 @@ done
     <h3>Locale</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">
       <% field_hidden "action" "locale" %>
-      <% field_select "ui_language" "Interface Language" "en|English" %>
+      <% field_select "ui_language" "Interface Language" "$ui_locales" %>
       <% field_file "ui_locale_file" "Locale file" %>
       <% button_submit %>
     </form>

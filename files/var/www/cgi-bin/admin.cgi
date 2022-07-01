@@ -32,11 +32,11 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     mv $tmp_file $config_file
 
     update_caminfo
-    redirect_to $SCRIPT_NAME
+    redirect_back "success" "Admin profile updated."
   fi
+else
+  include $config_file
 fi
-
-include $config_file
 %>
 <%in p/header.cgi %>
 

@@ -4,36 +4,32 @@
 if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in
   access)
-    new_password="$POST_webui_password"
+    new_password="$POST_ui_password"
     [ -z "$new_password" ] && error="Password cannot be empty!"
-    [ "$password_fw" = "$new_password" ] && error="You cannot use default password!"
+    [ "$ui_password_fw" = "$new_password" ] && error="You cannot use default password!"
     [ -n "$(echo "$new_password" | grep " ")" ] && error="Password cannot have spaces!"
     [ "5" -ge "${#new_password}" ] && error="Password cannot be shorter than 6 characters!"
 
-#    new_password_confirmation="$POST_webui_password_confirmation"
-#    [ -z "$new_password_confirmation" ] && error="Password requires confirmation!"
-#    [ "$new_password" != "$new_password_confirmation" ] && error="Password does not match its confirmation!"
+    [ -n "$error" ] && redirect_to $SCRIPT_NAME "danger" "$error"
 
-    if [ -z "$error" ]; then
-      sed -i s/:admin:.*/:admin:${new_password}/ /etc/httpd.conf
-      redirect_to $SCRIPT_NAME "success" "Password updated."
-    else
-      redirect_to $SCRIPT_NAME "danger" "$error"
-    fi
+    sed -i s/:admin:.*/:admin:${new_password}/ /etc/httpd.conf
+    update_caminfo
+    redirect_to $SCRIPT_NAME "success" "Password updated."
     ;;
 
   locale)
-    locale="$POST_webui_language" # set language.
+    locale="$POST_ui_language" # set language.
     # upload new language and switch to it. overrides aboveset language.
-    _fname="$POST_webui_locale_file_name"
+    _fname="$POST_ui_locale_file_name"
     if [ -n "$_fname" ]; then
-      mv "$POST_webui_locale_file_path" /var/www/lang/$_fname
+      mv "$POST_ui_locale_file_path" /var/www/lang/$_fname
       locale=${_fname%%.*}
     fi
     # save new language settings and reload locale
     [ -z "$locale" ] && locale="en"
     echo "$locale" > /etc/web_locale
     reload_locale
+    update_caminfo
     redirect_to $SCRIPT_NAME "success" "Locale updated."
     ;;
 
@@ -46,8 +42,8 @@ fi
 page_title="Web Interface Settings"
 
 # data for form fields
-webui_username="admin"
-webui_language="$locale"
+ui_username="admin"
+ui_language="$locale"
 
 tOptions_webui_language="en|English"
 for i in /var/www/lang/; do
@@ -64,10 +60,10 @@ done
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_hidden "action" "access" %>
       <p class="string">
-        <label for="webui_username" class="form-label">Username</label>
-        <input type="text" id="webui_username" name="webui_username" value="admin" class="form-control" autocomplete="username" disabled>
+        <label for="ui_username" class="form-label">Username</label>
+        <input type="text" id="ui_username" name="ui_username" value="admin" class="form-control" autocomplete="username" disabled>
       </p>
-      <% field_password "webui_password" "Password" %>
+      <% field_password "ui_password" "Password" %>
       <% # field_password "webui_password_confirmation" "Confirm Password" %>
       <% button_submit %>
     </form>
@@ -76,8 +72,8 @@ done
     <h3>Locale</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">
       <% field_hidden "action" "locale" %>
-      <% field_select "webui_language" "Interface Language" "en|English" %>
-      <% field_file "webui_locale_file" "Locale file" %>
+      <% field_select "ui_language" "Interface Language" "en|English" %>
+      <% field_file "ui_locale_file" "Locale file" %>
       <% button_submit %>
     </form>
   </div>

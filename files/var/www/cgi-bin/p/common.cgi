@@ -105,7 +105,7 @@ button_submit() {
 #check_password() {
 #  [ "0${debug}" -ge "1" ] && return
 #  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui.cgi" ] && return
-#  if [ -z "$password" ] || [ "$password_fw" = "$password" ]; then
+#  if [ -z "$ui_password" ] || [ "$ui_password_fw" = "$ui_password" ]; then
 #    redirect_to "webui.cgi" "danger" "You must set your own secure password!"
 #  fi
 #}
@@ -597,8 +597,8 @@ update_caminfo() {
 
   # WebUI version
   ui_version="bundled"; [ -f /var/www/.version ] && ui_version=$(cat /var/www/.version)
-  password=$(grep admin /etc/httpd.conf|cut -d: -f3)
-  password_fw=$(grep admin /rom/etc/httpd.conf|cut -d: -f3)
+  ui_password=$(grep admin /etc/httpd.conf|cut -d: -f3)
+  ui_password_fw=$(grep admin /rom/etc/httpd.conf|cut -d: -f3)
 
   # Network
   network_dhcp="false"; [ "$(cat /etc/network/interfaces | grep "eth0 inet" | grep dhcp)" ] && network_dhcp="true"
@@ -637,8 +637,6 @@ network_macaddr=\"$network_macaddr\"
 network_netmask=\"$network_netmask\"
 network_wan_mac=\"$network_wan_mac\"
 mj_version=\"$mj_version\"
-password=\"$password\"
-password_fw=\"$password_fw\"
 soc=\"$soc\"
 soc_family=\"$soc_family\"
 soc_has_temp=\"$soc_has_temp\"
@@ -646,6 +644,8 @@ sensor=\"$sensor\"
 sensor_ini=\"$sensor_ini\"
 tz_data=\"$tz_data\"
 tz_name=\"$tz_name\"
+ui_password=\"$ui_password\"
+ui_password_fw=\"$ui_password_fw\"
 ui_version=\"$ui_version\"
 # end " > $sysinfo_file
 }

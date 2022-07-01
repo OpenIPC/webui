@@ -3,41 +3,36 @@
 <%
 plugin="network"
 page_title="Network settings"
+params="address dhcp dns_1 dns_2 gateway hostname netmask"
+tmp_file=/tmp/${plugin}.conf
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
-
-  tmp_file=/tmp/${plugin}.conf
-  :> $tmp_file
-  for v in address dhcp dns_1 dns_2 gateway hostname netmask; do
-    eval echo "${plugin}_${v}=\\\"\$POST_${plugin}_${v}\\\"" >> $tmp_file
-  done
-  include $tmp_file
-
-  for _i in hostname address netmask dateway dns_1 dns_2; do
-    sanitize "network_${_i}"
-  done; unset _i
+  # parse values from parameters
+  for _p in $params; do
+    eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
+    sanitize "${plugin}_${_p}"
+  done; unset _p
 
   if [ "false" = "$network_dhcp" ]; then
-    [ -z "$network_address" ] && error="IP address cannot be empty."
-    [ -z "$network_netmask" ] && error="Networking mask cannot be empty."
-    [ -z "$network_gateway" ] && error="Gateway IP address cannot be empty."
-    [ -z "$network_dns_1" ] && error="Nameserver address cannot be empty."
-    [ -z "$network_dns_2" ] && error="Nameserver address cannot be empty."
+    [ -z "$network_address" ] && flash_append "danger" "IP address cannot be empty." && error=1
+    [ -z "$network_netmask" ] && flash_append "danger" "Networking mask cannot be empty." && error=1
+    [ -z "$network_gateway" ] && flash_append "danger" "Gateway IP address cannot be empty." && error=1
+    [ -z "$network_dns_1" ] && flash_append "danger" "Nameserver address cannot be empty." && error=1
+    [ -z "$network_dns_2" ] && flash_append "danger" "Nameserver address cannot be empty." && error=1
   fi
 
-  [ -n "$error" ] && redirect_to $SCRIPT_NAME "danger" "$error"
-
-  :> $tmp_file
-  cat /etc/network/interfaces | sed '/^auto eth0$/,/^$/d' | sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' > $tmp_file
-  if [ "true" = "$network_dhcp" ]; then
-    echo "
+  if [ -z "$error" ]; then
+    :> $tmp_file
+    cat /etc/network/interfaces | sed '/^auto eth0$/,/^$/d' | sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' > $tmp_file
+    if [ "true" = "$network_dhcp" ]; then
+      echo "
 auto eth0
 iface eth0 inet dhcp
   hwaddress ether \$(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)
 " >> $tmp_file
-  else
-    [ -z "$network_dns_2" ] && network_dns_2="$network_dns_1"
-    echo "
+    else
+      [ -z "$network_dns_2" ] && network_dns_2="$network_dns_1"
+      echo "
 auto eth0
 iface eth0 inet static
   hwaddress ether \$(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)
@@ -46,27 +41,28 @@ iface eth0 inet static
   gateway ${network_gateway}
   pre-up echo -e \"nameserver ${network_dns_1}\nnameserver ${network_dns_2}\n\" >/tmp/resolv.conf
 " >> $tmp_file
-    echo -e "nameserver ${network_dns_1}\nnameserver ${network_dns_2}" >/tmp/resolv.conf
-  fi
-  mv $tmp_file /etc/network/interfaces
-
-  if [ -n "$network_hostname" ]; then
-    if [ "$network_hostname" != "$hostname" ]; then
-      echo "$network_hostname" > /etc/hostname
-      hostname "$network_hostname"
-#      sed -i 's/127.0.1.1.*${hostname}/127.0.1.1\t${network_hostname}/g' /etc/hosts
-      sed -i "/127.0.1.1\s/s/^.*$/127.0.1.1\t${network_hostname}/" /etc/hosts # FIXME: hangs on update
-      killall udhcpc
-      udhcpc -x hostname:$network_hostname -T 1 -t 5 -R -b -O search
+      echo -e "nameserver ${network_dns_1}\nnameserver ${network_dns_2}" >/tmp/resolv.conf
     fi
-  fi
+    mv $tmp_file /etc/network/interfaces
 
-  update_caminfo
-  touch /tmp/network-restart.txt
-  redirect_to $SCRIPT_NAME
+    if [ -n "$network_hostname" ]; then
+      if [ "$network_hostname" != "$(hostname)" ]; then
+        echo "$network_hostname" > /etc/hostname
+        hostname "$network_hostname"
+#        sed -i 's/127.0.1.1.*${hostname}/127.0.1.1\t${network_hostname}/g' /etc/hosts
+        sed -i "/127.0.1.1\s/s/^.*$/127.0.1.1\t${network_hostname}/" /etc/hosts
+        # FIXME: hangs on update
+        killall udhcpc
+        udhcpc -x hostname:$network_hostname -T 1 -t 5 -R -b -O search
+      fi
+    fi
+
+    update_caminfo
+    touch /tmp/network-restart.txt
+    redirect_back "success" "Network settings updated."
+  fi
 fi
 %>
-
 <%in p/header.cgi %>
 
 <div class="row">
@@ -74,7 +70,7 @@ fi
     <h3>Settings</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_hidden "action" "update" %>
-      <% field_text "network_hostname" "Hostname" "Make hostname unique using MAC address information: ${macaddr}" %>
+      <% field_text "network_hostname" "Hostname" "Make hostname unique using MAC address information: ${network_macaddr//:/-}" %>
       <% field_switch "network_dhcp" "Use DHCP" %>
       <% field_text "network_address" "IP Address" %>
       <% field_text "network_netmask" "IP Netmask" %>

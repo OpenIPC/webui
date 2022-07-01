@@ -115,7 +115,9 @@ Pragma: no-cache
 
 <% if [ "true" = "$telegram_socks5_enabled" ] || [ "true" = "$yadisk_socks5_enabled" ]; then
   if [ -z "$socks5_server" ] || [ -z "$socks5_port" ]; then %>
-<p class="alert alert-danger">You want to use SOCKS5 proxy but it is not configured! Please <a href="network-socks5.cgi">configure the proxy</a>.</p>
+<div class="alert alert-danger">
+<p>You want to use SOCKS5 proxy but it is not configured! Please <a href="network-socks5.cgi">configure the proxy</a>.</p>
+</div>
 <% fi; fi %>
 
 <% if [ "$(cat /etc/TZ)" != "$TZ" ]; then %>
@@ -129,7 +131,13 @@ Pragma: no-cache
 <% fi %>
 
 <% if [ -f /tmp/network-restart.txt ]; then %>
-<p class="alert alert-danger">Network settings have been updated. Restart to apply changes. <a class="btn btn-danger ms-2" href="reboot.cgi">Reboot camera</a></p>
+<div class="alert alert-danger">
+<p>Network settings have been updated. Restart to apply changes.</p>
+<span class="d-flex gap-3">
+<a class="btn btn-danger" href="reboot.cgi">Reboot camera</a>
+<a class="btn btn-primary" href="network.cgi">See network settings</a>
+</span>
+</div>
 <% fi %>
 
       <h2><%= $page_title %></h2>

@@ -3,7 +3,9 @@
 <%
 plugin="tz"
 page_title="Timezone"
-config_file="/etc/webui/tz.conf"
+
+config_file="${ui_config_dir}/${plugin}.conf"
+[ ! -f "$config_file" ] && touch $config_file
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   tmp_file=/tmp/${plugin}.conf

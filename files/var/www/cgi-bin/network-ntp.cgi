@@ -3,7 +3,9 @@
 <%
 plugin="ntp"
 page_title="NTP servers"
-config_file="/etc/ntp.conf"
+
+config_file="${ui_config_dir}/${plugin}.conf"
+[ ! -f "$config_file" ] && touch $config_file
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in

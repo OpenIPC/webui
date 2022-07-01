@@ -5,7 +5,7 @@ plugin="bigbro"
 plugin_name="BigBro"
 page_title="BigBro"
 
-config_file="${config_path}/${plugin}.conf"
+config_file="${ui_config_dir}/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
 
 # include $config_file

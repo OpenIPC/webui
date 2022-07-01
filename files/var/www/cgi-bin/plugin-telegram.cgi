@@ -4,10 +4,13 @@
 plugin="telegram"
 plugin_name="Telegram bot"
 page_title="Telegram"
-config_file="/etc/webui/${plugin}.conf"
+
+config_file="${ui_config_dir}/${plugin}.conf"
+[ ! -f "$config_file" ] && touch $config_file
+
 tmp_file=/tmp/${plugin}.conf
 
-mkdir -p /etc/webui
+config_file="${ui_config_dir}/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
 
 # convert old config format

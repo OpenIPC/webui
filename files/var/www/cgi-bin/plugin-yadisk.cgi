@@ -4,11 +4,11 @@
 plugin="yadisk"
 plugin_name="Yandex Disk"
 page_title="Yandex Disk"
-config_file="/etc/webui/${plugin}.conf";
-tmp_file=/tmp/${plugin}.conf
 
-mkdir -p /etc/webui
+config_file="${ui_config_dir}/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
+
+tmp_file=/tmp/${plugin}.conf
 
 # convert old config format
 old_config_file=/etc/yadisk.cfg

@@ -522,7 +522,7 @@ sanitize() {
 
 signature() {
   _f=/tmp/webui/signature.txt
-  [ ! -f "$_f" ] && echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash. ${fw_version}-${fw_variant}. ${network_hostname}, ${network_wan_mac}" > $_f
+  [ ! -f "$_f" ] && echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash, ${fw_version}-${fw_variant}, ${network_hostname}, ${network_wan_mac}" > $_f
   cat $_f
   unset _f
 }

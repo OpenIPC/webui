@@ -357,7 +357,7 @@ flash_delete() {
 
 flash_read() {
   [ ! -f "$flash_file" ] && return
-  [ -z $(cat "$flash_file") ] && return
+  [ -z "$(cat $flash_file)" ] && return
 
   OIFS="$IFS"
   IFS=$'\n'

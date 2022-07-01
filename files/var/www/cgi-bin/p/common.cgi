@@ -130,13 +130,17 @@ field_checkbox() {
   _h=$3
   [ -z "$_h" ] && _h="$(t_hint "$1")"
 
+  _v=$(t_value "$1")
+  [ -z "$_v" ] && _v=$(t_default "$1")
+  [ -z "$_v" ] && _v="false"
+
   echo "<p class=\"boolean form-check\">" \
     "<input type=\"hidden\" name=\"${1}\" id=\"${1}-false\" value=\"false\">" \
-    "<input type=\"checkbox\" name=\"${1}\" id=\"${1}\"value=\"true\" class=\"form-check-input\"$(t_checked "$1" "true")>" \
+    "<input type=\"checkbox\" name=\"${1}\" id=\"${1}\"value=\"true\" class=\"form-check-input\"$(t_checked "true" "$_v")>" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
-  unset _h; unset _l
+  unset _h; unset _l; unset _v
 }
 
 # field_file "name" "label" "hint"

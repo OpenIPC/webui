@@ -57,8 +57,8 @@ Pragma: no-cache
               <li><a class="dropdown-item" href="majestic-settings.cgi">Majestic Settings</a></li>
               <li><a class="dropdown-item" href="network.cgi">Network Settings</a></li>
               <li><a class="dropdown-item" href="webui-settings.cgi">Web Interface Settings</a></li>
-              <li><a class="dropdown-item" href="network-tz.cgi">System Timezone</a></li>
               <li><a class="dropdown-item" href="network-ntp.cgi">NTP Settings</a></li>
+              <li><a class="dropdown-item" href="timezone.cgi">Timezone</a></li>
               <li><a class="dropdown-item" href="network-socks5.cgi">SOCKS5 Proxy</a></li>
               <li><a class="dropdown-item" href="admin.cgi">Admin profile</a></li>
               <li><hr class="dropdown-divider"></li>
@@ -110,7 +110,13 @@ Pragma: no-cache
 <% fi; fi %>
 
 <% if [ "$(cat /etc/TZ)" != "$TZ" ]; then %>
-<p class="alert alert-danger">$TZ variable in system environment needs updating! <a class="btn btn-danger ms-2" href="reboot.cgi">Reboot camera</a></p>
+<div class="alert alert-danger">
+<p>$TZ variable in system environment needs updating!</p>
+<span class="d-flex gap-3">
+<a class="btn btn-danger" href="reboot.cgi">Reboot camera</a>
+<a class="btn btn-primary" href="timezone.cgi">See timezone settings</a>
+</span>
+</div>
 <% fi %>
 
 <% if [ -f /tmp/network-restart.txt ]; then %>

@@ -52,7 +52,7 @@ if [ -f "$mj_meta_file" ]; then
   # NB! size in bytes, but since blocks are 1024 bytes each, we are safe here for now.
   mj_filesize_new=$(( ($mj_filesize_new + 1024) / 1024 )) # Rounding up by priming, since $(()) sucks at floats.
   free_space=$(df | grep ${overlay_root} | xargs | cut -d' ' -f4)
-  available_space=$(( $free_space + $mj_filesize_overlay - 1 ))
+  available_space=$(( ${free_space:=0} + ${mj_filesize_overlay:=0} ))
 else
   mj_version_new="unavailable"
 fi
@@ -87,7 +87,13 @@ fi
       <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
         <p><a href="majestic-update.cgi" class="btn btn-warning"><%= $t_btn_update %></a></p>
       <% else %>
-        <p class="alert alert-danger">Not enough space to update Majestic.</p>
+        <div class="alert alert-danger">
+          <p class="mb-1"><b>Not enough space to update Majestic!</b></p>
+          <p class="mb-0">Update requires <%= $mj_filesize_new %>K,
+          but only <%= $available_space %>K is available in overlay,
+          as <%= $free_space %>K of unallocated space,
+          plus <%= ${mj_filesize_overlay:=0} %>K size of Majestic installed in overlay.</p>
+        </div>
       <% fi %>
       <% if [ -f "$mj_bin_file_overlay" ]; then %>
         <div class="alert alert-warning">

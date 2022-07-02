@@ -28,8 +28,6 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
   if [ "true" = "$coredump_enabled" ]; then
     if [ "true" = "$coredump_send2devs" ]; then
-      # FIXME: add admin_ to globals
-      [ -f "${ui_config_dir}/admin.conf" ] && source "${ui_config_dir}/admin.conf"
       [ -z "$admin_name" ] || [ -z "$admin_email" ] && flash_append "danger" "Please <a href=\"admin.cgi\">fill out the admin profile</a> first." && error=1
     fi
     [ "true" != "$coredump_consent"  ] && flash_append "danger" "You have to understand and acknowledge security risk." && error=1

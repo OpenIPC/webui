@@ -588,6 +588,14 @@ update_caminfo() {
   # Debug flag
   debug=$(fw_printenv -n debug); [ -z "$debug" ] && debug="0"
 
+  _tmpfile=${ui_tmp_dir}/sysinfo.tmp
+  :> $_tmpfile
+  # add all web-related config files
+  # do not include bigbro, ntp
+  for _f in admin socks5 telegram yadisk; do
+    [ -f "${ui_config_dir}/${_f}.conf" ] && cat "${ui_config_dir}/${_f}.conf" >> $_tmpfile
+  done; unset _f
+
   # Hardware
   flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
   sensor=$(ipcinfo --short-sensor)
@@ -633,9 +641,7 @@ update_caminfo() {
     tz_name="Etc/GMT"; echo "$tz_name" > /etc/tz_name
   fi
 
-  echo "# caminfo $(date +"%F %T")
-debug=\"$debug\"
-flash_size=\"$flash_size\"
+  echo "flash_size=\"$flash_size\"
 fw_version=\"$fw_version\"
 fw_variant=\"$fw_variant\"
 fw_build=\"$fw_build\"
@@ -660,7 +666,12 @@ tz_name=\"$tz_name\"
 ui_password=\"$ui_password\"
 ui_password_fw=\"$ui_password_fw\"
 ui_version=\"$ui_version\"
-# end " > $sysinfo_file
+" >> $_tmpfile
+
+  # sort content alphabetically
+  sort < $_tmpfile > $sysinfo_file && rm $_tmpfile && unset _tmpfile
+
+  echo -e "debug=\"$debug\"\n# caminfo $(date +"%F %T")\n" >> $sysinfo_file
 }
 
 xl() {
@@ -671,7 +682,6 @@ xl() {
   [ -n "$_o" ] && echo "<div class=\"x-small p-3\"><i>${_o}</i></div>"
   unset _c; unset _o
 }
-
 
 d() {
   echo "$1" >&2

@@ -11,6 +11,20 @@ tmp_file=/tmp/${plugin}.conf
 config_file=/etc/${plugin}.conf
 [ ! -f "$config_file" ] && touch $config_file
 
+# convert old config format
+old_config_file=/etc/coredump.config
+if [ -f $old_config_file ]; then
+  mv $old_config_file $tmp_file
+  if [ -f "$(wc -l $tmp_file | cut -d " " -f 1)" = "2" ]; then
+    sed -i "/contact_/d" $tmp_file
+    sed -i "s/^/coredump_/" $tmp_file
+    sed -i "s/savedumps/enabled/" $tmp_file
+    sed -i "s/haveconsent/consent/" $tmp_file
+  fi
+  mv $tmp_file $config_file
+  flash_save "success" "Configuration file converted to new format."
+fi
+unset old_config_file
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   # parse values from parameters

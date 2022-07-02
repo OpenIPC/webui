@@ -445,6 +445,14 @@ pre() {
   tag "pre" "$(echo -e "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g")" "$2" "$3"
 }
 
+progressbar() {
+  _c="primary"; [ "$1" -ge "75" ] && _c="danger"
+  echo "<div class=\"progress\">" \
+    "<div class=\"progress-bar progress-bar-striped progress-bar-animated bg-${_c}\"" \
+      " role=\"progressbar\" style=\"width:${1}%\" aria-valuenow=\"${1}\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>" \
+    "</div>"
+}
+
 # redirect_back "flash class" "flash text"
 redirect_back() {
   redirect_to "$HTTP_REFERER" "$1" "$2"

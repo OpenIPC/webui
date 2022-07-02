@@ -98,7 +98,7 @@ button_submit() {
   _t="$1"; [ -z "$_t" ] && _t="$t_btn_submit"
   _c="$2"; [ -z "$_c" ] && _c="primary"
   _x="$3"; [ -z "$_x" ] && _x=" ${_x}"
-  echo "<p class=\"mt-2\"><input type=\"submit\" class=\"btn btn-${_c}\"${_x} value=\"${_t}\"></p>"
+  echo "<div class=\"mt-2\"><input type=\"submit\" class=\"btn btn-${_c}\"${_x} value=\"${_t}\"></div>"
   unset _c; unset _t; unset _x
 }
 

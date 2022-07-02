@@ -631,15 +631,24 @@ update_caminfo() {
 
   # Network
   network_dhcp="false"; [ "$(cat /etc/network/interfaces | grep "eth0 inet" | grep dhcp)" ] && network_dhcp="true"
-  network_dns_1=$(cat /etc/resolv.conf | grep nameserver | sed -n 1p | cut -d' ' -f2)
-  network_dns_2=$(cat /etc/resolv.conf | grep nameserver | sed -n 2p | cut -d' ' -f2)
-  network_gateway=$(ip r | grep default | cut -d' ' -f3)
+  if [ -f /etc/resolv.conf ]; then
+    network_dns_1=$(cat /etc/resolv.conf | grep nameserver | sed -n 1p | cut -d' ' -f2)
+    network_dns_2=$(cat /etc/resolv.conf | grep nameserver | sed -n 2p | cut -d' ' -f2)
+  fi
+
+  # if gateway is not set then no default route nor wan mac present
+  _default_route="$(ip r | grep ^default)"
+  if [ -n "$default_route" ]; then
+    _default_iface=$(echo "$_default_route" | awk '{print $5}')
+    network_wan_mac=$(cat /sys/class/net/${_default_iface}/address)
+    network_gateway=$(echo "$_default_route" | cut -d' ' -f3)
+  fi; unset _default_route;unset _default_iface
+
   network_hostname=$(hostname -s)
   network_interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | tr '\n' ' ' | sed 's/ $//' )
   network_address=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
   network_macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/ //g" | uniq)
   network_netmask=$(ifconfig eth0 | grep "inet " | cut -d: -f4)
-  network_wan_mac=$(cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address)
 
   overlay_root=$(mount | grep upperdir= | sed -r 's/^.*upperdir=([a-z\/]+).+$/\1/')
 

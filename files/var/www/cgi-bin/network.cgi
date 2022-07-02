@@ -16,32 +16,43 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   if [ "false" = "$network_dhcp" ]; then
     [ -z "$network_address" ] && flash_append "danger" "IP address cannot be empty." && error=1
     [ -z "$network_netmask" ] && flash_append "danger" "Networking mask cannot be empty." && error=1
-    [ -z "$network_gateway" ] && flash_append "danger" "Gateway IP address cannot be empty." && error=1
-    [ -z "$network_dns_1" ] && flash_append "danger" "Nameserver address cannot be empty." && error=1
-    [ -z "$network_dns_2" ] && flash_append "danger" "Nameserver address cannot be empty." && error=1
+#    [ -z "$network_gateway" ] && flash_append "danger" "Gateway IP address cannot be empty." && error=1
+#    [ -z "$network_dns_1" ] && flash_append "danger" "Nameserver address cannot be empty." && error=1
+#    [ -z "$network_dns_2" ] && flash_append "danger" "Nameserver address cannot be empty." && error=1
   fi
 
   if [ -z "$error" ]; then
     :> $tmp_file
     cat /etc/network/interfaces | sed '/^auto eth0$/,/^$/d' | sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' > $tmp_file
     if [ "true" = "$network_dhcp" ]; then
-      echo "
-auto eth0
-iface eth0 inet dhcp
-  hwaddress ether \$(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)
-" >> $tmp_file
+      echo -e "\nauto eth0\niface eth0 inet dhcp\n  hwaddress ether \$(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)" >> $tmp_file
     else
-      [ -z "$network_dns_2" ] && network_dns_2="$network_dns_1"
-      echo "
-auto eth0
-iface eth0 inet static
-  hwaddress ether \$(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)
-  address ${network_address}
-  netmask ${network_netmask}
-  gateway ${network_gateway}
-  pre-up echo -e \"nameserver ${network_dns_1}\nnameserver ${network_dns_2}\n\" >/tmp/resolv.conf
-" >> $tmp_file
-      echo -e "nameserver ${network_dns_1}\nnameserver ${network_dns_2}" >/tmp/resolv.conf
+      echo -e "\nauto eth0" >> $tmp_file
+      echo "iface eth0 inet static" >> $tmp_file
+      echo "  hwaddress ether \$(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)" >> $tmp_file
+      echo "  address ${network_address}" >> $tmp_file
+      echo "  netmask ${network_netmask}" >> $tmp_file
+
+      # skip gateway if empty
+      [ -n "$network_gateway" ] && echo "  gateway ${network_gateway}" >> $tmp_file
+
+      # shift dns2 to dns1 if dns1 if empty
+      if [ -z "$network_dns_1" ]; then
+        network_dns_1="$network_dns_2"
+        network_dns_2=""
+      fi
+
+      # set dns1 to localhost if none provided
+      # [ -z "$network_dns_1" ] && network_dns_1="127.0.0.1"
+
+      if [ -n "$network_dns_1" ]; then
+        echo -n "  pre-up echo -e \"nameserver ${network_dns_1}\n" >> $tmp_file
+        [ -n "$network_dns_2" ] && echo -n "nameserver ${network_dns_2}\n" >> $tmp_file
+        echo "\" >/tmp/resolv.conf" >> $tmp_file
+      fi
+
+      # no need for that unless we skip rebooting
+      # echo -e "nameserver ${network_dns_1}\nnameserver ${network_dns_2}" >/tmp/resolv.conf
     fi
     mv $tmp_file /etc/network/interfaces
 
@@ -49,8 +60,9 @@ iface eth0 inet static
       if [ "$network_hostname" != "$(hostname)" ]; then
         echo "$network_hostname" > /etc/hostname
         hostname "$network_hostname"
-#        sed -i 's/127.0.1.1.*${hostname}/127.0.1.1\t${network_hostname}/g' /etc/hosts
-        sed -i "/127.0.1.1\s/s/^.*$/127.0.1.1\t${network_hostname}/" /etc/hosts
+        _old_hostname=$(hostname)
+        sed -r -i '/127.0.1.1/s/(\b)${_old_hostname}(\b)/\1${network_hostname}\2/' /etc/hosts
+#        sed -i "/127.0.1.1\s/s/^.*$/127.0.1.1\t${network_hostname}/" /etc/hosts
         # FIXME: hangs on update
         killall udhcpc
         udhcpc -x hostname:$network_hostname -T 1 -t 5 -R -b -O search
@@ -86,7 +98,7 @@ fi
     <% ex "cat /etc/network/interfaces" %>
     <% ex "ip address" %>
     <% ex "ip route list" %>
-    <% ex "cat /etc/resolv.conf" %>
+    <% [ -f /etc/resolv.conf ] && ex "cat /etc/resolv.conf" %>
     <% ex "netstat -tulpan" %>
   </div>
 </div>

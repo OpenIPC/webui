@@ -104,10 +104,16 @@ Pragma: no-cache
     <div class="container">
       <p class="text-end x-small"><%= $(signature) %></p>
 
+<% if [ -z "$network_gateway" ]; then %>
+<div class="alert alert-warning">
+<p class="mb-0">No Internet connection. Please <a href="network.cgi">check your network settings</a>.</p>
+</div>
+<% fi %>
+
 <% if [ "true" = "$telegram_socks5_enabled" ] || [ "true" = "$yadisk_socks5_enabled" ]; then
   if [ -z "$socks5_server" ] || [ -z "$socks5_port" ]; then %>
 <div class="alert alert-danger">
-<p>You want to use SOCKS5 proxy but it is not configured! Please <a href="network-socks5.cgi">configure the proxy</a>.</p>
+<p class="mb-0">You want to use SOCKS5 proxy but it is not configured! Please <a href="network-socks5.cgi">configure the proxy</a>.</p>
 </div>
 <% fi; fi %>
 

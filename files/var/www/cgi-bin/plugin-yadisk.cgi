@@ -33,14 +33,12 @@ eval $(grep = $config_file)
   <div class="col">
     <h3>Yandex Disk</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
-<%
-field_switch "yadisk_enabled" "Enable Yandex Disk bot"
-field_text "yadisk_login" "Yandex Disk login"
-field_password "yadisk_password" "Yandex Disk password"
-field_text "yadisk_path" "Yandex Disk path"
-field_switch "yadisk_socks5_enabled" "Use SOCKS5"
-button_submit
-%>
+      <% field_switch "yadisk_enabled" "Enable Yandex Disk bot" %>
+      <% field_text "yadisk_login" "Yandex Disk login" %>
+      <% field_password "yadisk_password" "Yandex Disk password" %>
+      <% field_text "yadisk_path" "Yandex Disk path" %>
+      <% field_switch "yadisk_socks5_enabled" "Use SOCKS5" %>
+      <% button_submit %>
     </form>
   </div>
   <div class="col">

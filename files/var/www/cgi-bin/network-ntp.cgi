@@ -38,19 +38,13 @@ fi
 
 <%in p/header.cgi %>
 
-<div class="row row-cols-1 row-cols-xxl-3 g-4">
+<div class="row row-cols-1 row-cols-xl-3 g-4">
   <div class="col">
     <h3>NTP Servers</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
-<%
-field_hidden "action" "update"
-for i in 0 1 2 3; do
-  x=$(expr $i + 1)
-  eval "ntp_server_${i}=$(sed -n ${x}p /etc/ntp.conf | cut -d' ' -f2)"
-  field_text "ntp_server_${i}" "NTP Server $(( i + 1 ))"
-done
-button_submit
-%>
+      <% field_hidden "action" "update" %>
+      <% for i in 0 1 2 3; do =$(expr $i + 1); eval "ntp_server_${i}=$(sed -n ${x}p /etc/ntp.conf | cut -d' ' -f2)"; field_text "ntp_server_${i}" "NTP Server $(( i + 1 ))"; done %>
+      <% button_submit %>
     </form>
   </div>
   <div class="col">

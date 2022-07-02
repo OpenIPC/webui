@@ -83,7 +83,7 @@ fi
     <p><b>This service requires a slight modification of /etc/init.d/S95... file.</b></p>
     <p>Please insert the following code inside <code>load_majestic()</code> block, right before <code>start-stop-daemon</code> line:</p>
     <pre class="bg-light p-3 text-black">
-if [ -f $config_file ] && [ $(grep ^savedumps $config_file | cut -d= -f2) == "true" ]; then
+if [ -f $config_file ] && [ "true" = "$(grep ^savedumps $config_file | cut -d= -f2)" ]; then
   ulimit -c unlimited && echo "| /usr/sbin/sendcoredump.sh" > /proc/sys/kernel/core_pattern
 fi
 </pre>

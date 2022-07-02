@@ -41,8 +41,8 @@ page_title="Device status"
     <h3>Date & Time</h3>
     <% ex "/bin/date" %>
     <div class="d-flex gap-2 mx-auto">
-      <a href="timezone.cgi" class="btn btn-primary">Edit timezone</a>
-      <a href="network-ntp.cgi" class="btn btn-primary">Edit time synchronization</a>
+      <a href="timezone.cgi" class="btn btn-primary">Change timezone</a>
+      <a href="network-ntp.cgi" class="btn btn-primary">Set up time synchronization</a>
     </div>
   </div>
 </div>

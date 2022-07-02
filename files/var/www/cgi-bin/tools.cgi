@@ -49,8 +49,8 @@ fi
   </div>
   <div class="col col-md-8 col-lg-9">
     <h3><%= $title %></h3>
-    <h4># <%= $cmd %></h4>
   <% if [ -n "$cmd" ]; then %>
+    <h5># <%= $cmd %></h5>
     <pre id="output" data-cmd="<%= $cmd %>"></pre>
   <% fi %>
   </div>

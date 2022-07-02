@@ -11,6 +11,6 @@ reboot="true"
 [ "true" = "$POST_fw_enforce"  ] && c="${c} --force_ver"
 %>
 <%in p/header.cgi %>
-<h4># <%= $c %></h4>
+<h5># <%= $c %></h5>
 <pre id="output" data-cmd="<%= $c %>" data-reboot="<%= $reboot %>"></pre>
 <%in p/footer.cgi %>

@@ -116,7 +116,7 @@ e() {
 
 ex() {
   # NB! $() forks process and stalls output.
-  echo "<h4># ${1}</h4><pre class=\"small\">"
+  echo "<h5># ${1}</h5><pre class=\"small\">"
   eval "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g"
   echo "</pre>"
 }

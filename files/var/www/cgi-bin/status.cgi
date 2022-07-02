@@ -9,7 +9,7 @@ page_title="Device status"
 <div class="row row-cols-lg-3 g-4 mb-4">
   <div class="col">
     <h3>Camera</h3>
-    <h4>Hardware</h4>
+    <h5>Hardware</h5>
     <dl class="small list">
       <dt>Processor</dt>
       <dd><%= $soc %></dd>
@@ -24,7 +24,7 @@ page_title="Device status"
 
   <div class="col">
     <h3>System</h3>
-    <h4>Firmware</h4>
+    <h5>Firmware</h5>
     <dl class="small list">
       <dt>Version</dt>
       <dd><%= "${fw_version}-${fw_variant}" %></dd>

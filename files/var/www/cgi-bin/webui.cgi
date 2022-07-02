@@ -20,7 +20,7 @@ web_version="master"
 %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
   <div class="col">
     <h3>Version</h3>
     <dl class="list small">
@@ -31,6 +31,7 @@ web_version="master"
   </div>
   <div class="col">
     <h3>Upgrade</h3>
+  <% if [ -n "$network_gateway" ]; then %>
     <form action="webui-update.cgi" method="post">
       <% field_hidden "action" "update" %>
       <% field_select "web_version" "Branch" "master|Stable,dev|Development" %>
@@ -39,6 +40,9 @@ web_version="master"
       <% field_checkbox "web_noreboot" "Do not reboot after upgrade." %>
       <% button_submit "Install update from GitHub" "warning" %>
     </form>
+  <% else %>
+    <p class="alert alert-danger">Upgrading requires access to GitHub.</p>
+  <% fi %>
   </div>
 </div>
 

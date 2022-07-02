@@ -4,7 +4,7 @@
 page_title="SSH key"
 
 function readKey() {
-  [ -n "$(fw_printenv key_${1})" ] && alert "$(fw_printenv key_${1})" "secondary" "style=\"overflow-wrap: anywhere;\""
+  [ -n "$(fw_printenv -n key_${1})" ] && alert "$(fw_printenv -n key_${1})" "secondary" "style=\"overflow-wrap: anywhere;\""
 }
 
 function saveKey() {
@@ -19,7 +19,7 @@ function restoreKey() {
   if [ -z "$(fw_printenv key_${1})" ]; then
     flash_save "danger" "${1} key is not in the environment."
   else
-    fw_printenv key_${1} | sed s/^key_${1}=// | base64 -d | dropbearconvert openssh dropbear - /etc/dropbear/dropbear_${1}_host_key
+    fw_printenv -n key_${1} | base64 -d | dropbearconvert openssh dropbear - /etc/dropbear/dropbear_${1}_host_key
     flash_save "success" "${1} key restored from environment."
   fi
 }
@@ -50,7 +50,7 @@ case "$POST_action" in
 %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
   <div class="col">
     <h3>Key Backup</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">

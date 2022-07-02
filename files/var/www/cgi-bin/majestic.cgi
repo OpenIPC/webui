@@ -4,11 +4,9 @@
 page_title="Majestic"
 
 # NB! size in allocated blocks.
-
 mj_filesize_fw=$(ls -s $mj_bin_file | xargs | cut -d' ' -f1)
 
 mj_bin_file_overlay="${overlay_root}${mj_bin_file}"
-
 if [ -f "$mj_bin_file_overlay" ]; then
   mj_filesize_overlay=$(ls -s $mj_bin_file_overlay | xargs | cut -d' ' -f1)
   mj_filesize_old=$mj_filesize_overlay
@@ -34,27 +32,30 @@ update_meta() {
   fi
 }
 
-update_meta
-
 mj_version_fw=$(/rom${mj_bin_file} -v)
 
 mj_version_ol="<span class=\"text-secondary\">- not installed in overlay -</span>"
 [ -f "$mj_bin_file_overlay" ] && mj_version_ol=$($mj_bin_file_overlay -v)
 
-if [ -f "$mj_meta_file" ]; then
-  # parse version, date and file size
-  if [ "$(wc -l $mj_meta_file | cut -d' ' -f1)" = "1" ]; then
-    mj_filesize_new=$(sed -n 1p $mj_meta_file)
+if [ -n "$network_gateway" ]; then
+  update_meta
+  if [ -f "$mj_meta_file" ]; then
+    # parse version, date and file size
+    if [ "$(wc -l $mj_meta_file | cut -d' ' -f1)" = "1" ]; then
+      mj_filesize_new=$(sed -n 1p $mj_meta_file)
+    else
+      mj_version_new=$(sed -n 1p $mj_meta_file)
+      mj_filesize_new=$(sed -n 2p $mj_meta_file)
+    fi
+    # NB! size in bytes, but since blocks are 1024 bytes each, we are safe here for now.
+    mj_filesize_new=$(( ($mj_filesize_new + 1024) / 1024 )) # Rounding up by priming, since $(()) sucks at floats.
+    free_space=$(df | grep /overlay | xargs | cut -d' ' -f4)
+    available_space=$(( ${free_space:=0} + ${mj_filesize_overlay:=0} ))
   else
-    mj_version_new=$(sed -n 1p $mj_meta_file)
-    mj_filesize_new=$(sed -n 2p $mj_meta_file)
+    mj_version_new="unavailable"
   fi
-  # NB! size in bytes, but since blocks are 1024 bytes each, we are safe here for now.
-  mj_filesize_new=$(( ($mj_filesize_new + 1024) / 1024 )) # Rounding up by priming, since $(()) sucks at floats.
-  free_space=$(df | grep /overlay | xargs | cut -d' ' -f4)
-  available_space=$(( ${free_space:=0} + ${mj_filesize_overlay:=0} ))
 else
-  mj_version_new="unavailable"
+  mj_version_new="<span class=\"text-danger\">- no access to S3 bucket -</span>"
 fi
 %>
 <%in p/header.cgi %>
@@ -83,6 +84,7 @@ fi
   </div>
   <div class="col">
     <h3>Update</h3>
+  <% if [ -n "$network_gateway" ]; then %>
     <% if [ -f "$mj_meta_file" ]; then %>
       <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
         <p><a href="majestic-update.cgi" class="btn btn-warning"><%= $t_btn_update %></a></p>
@@ -106,6 +108,9 @@ fi
         </div>
       <% fi %>
     <% fi %>
+  <% else %>
+    <p class="alert alert-danger">Upgrading requires access to Amazon S3.</p>
+  <% fi %>
   </div>
 </div>
 

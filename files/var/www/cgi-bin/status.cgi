@@ -6,7 +6,7 @@ page_title="Device status"
 %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-lg-3 g-4 mb-4">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
   <div class="col">
     <h3>Camera</h3>
     <h5>Hardware</h5>
@@ -40,7 +40,7 @@ page_title="Device status"
   <div class="col">
     <h3>Date & Time</h3>
     <% ex "/bin/date" %>
-    <div class="d-flex gap-2 mx-auto">
+    <div class="d-grid d-xl-flex gap-2 mx-auto">
       <a href="timezone.cgi" class="btn btn-primary">Change timezone</a>
       <a href="network-ntp.cgi" class="btn btn-primary">Set up time synchronization</a>
     </div>

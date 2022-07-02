@@ -2,7 +2,11 @@
 <%in p/common.cgi %>
 <%
 page_title="Firmware"
-fw_date=$(date -D "%a, %d %b %Y %T GMT" +"2.2.%m.%d" --date "$(curl -ILs https://github.com/OpenIPC/firmware/releases/download/latest/openipc.${soc}-br.tgz | grep Last-Modified | cut -d' ' -f2-)")
+if [ -n "$network_gateway" ]; then
+  fw_date=$(date -D "%a, %d %b %Y %T GMT" +"2.2.%m.%d" --date "$(curl -ILs https://github.com/OpenIPC/firmware/releases/download/latest/openipc.${soc}-br.tgz | grep Last-Modified | cut -d' ' -f2-)")
+else
+  fw_date="<span class=\"text-danger\">- no access to GitHub -</span>"
+fi
 fw_kernel="true"
 fw_rootfs="true"
 %>
@@ -20,14 +24,18 @@ fw_rootfs="true"
   </div>
   <div class="col">
     <h3>Upgrade</h3>
-    <form action="firmware-update.cgi" method="post">
-      <% field_checkbox "fw_kernel" "Upgrade kernel." %>
-      <% field_checkbox "fw_rootfs" "Upgrade rootfs." %>
-      <% field_checkbox "fw_reset" "Reset firmware." %>
-      <% field_checkbox "fw_noreboot" "Do not reboot after upgrade." %>
-      <% field_checkbox "fw_enforce" "Install even if matches the existing version." %>
-      <% button_submit "Install update from GitHub" "warning" %>
-    </form>
+    <% if [ -n "$network_gateway" ]; then %>
+      <form action="firmware-update.cgi" method="post">
+        <% field_checkbox "fw_kernel" "Upgrade kernel." %>
+        <% field_checkbox "fw_rootfs" "Upgrade rootfs." %>
+        <% field_checkbox "fw_reset" "Reset firmware." %>
+        <% field_checkbox "fw_noreboot" "Do not reboot after upgrade." %>
+        <% field_checkbox "fw_enforce" "Install even if matches the existing version." %>
+        <% button_submit "Install update from GitHub" "warning" %>
+      </form>
+    <% else %>
+      <p class="alert alert-danger">Upgrading requires access to GitHub.</p>
+    <% fi %>
   </div>
   <div class="col">
     <h3>Upload Kernel & RootFS</h3>

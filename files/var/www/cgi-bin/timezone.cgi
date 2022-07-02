@@ -21,7 +21,7 @@ fi
 
 <%in p/header.cgi %>
 
-<div class="row row-cols-1 row-cols-xl-3 g-4">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
   <div class="col">
     <h3>Set up timezone</h3>
     <p><a href="#" id="frombrowser">Pick up from browser</a></p>

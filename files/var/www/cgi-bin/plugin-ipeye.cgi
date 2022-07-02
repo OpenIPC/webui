@@ -12,8 +12,8 @@ ipeye_camera_name=$network_hostname
 <p class="alert alert-warning">Attention! This is only a proof of concept for the prospective subsystem of additional services. No real functionality here.</p>
 
 <% if [ "$(yaml-cli -g .ipeye.enabled)" = "true" ]; then %>
-  <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-4">
-    <div class="col order-2 order-xl-1">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col order-2 order-lg-1">
       <h3>Add a feed</h3>
       <form action="<%= $SCRIPT_NAME %>" method="post">
         <% field_text "ipeye_login" "IPEYE cloud login" %>
@@ -23,7 +23,7 @@ ipeye_camera_name=$network_hostname
         <% button_submit "Add camera to the cloud" %>
       </form>
     </div>
-    <div class="col order-1 order-xl-2">
+    <div class="col order-1 order-lg-2">
       <p><img src="/a/logo-ipeye.webp" alt="Image: IPEYE logo" title="IPEYE Logo"></p>
       <p><a href="https://www.ipeye.ru/" target="_blank">www.ipeye.ru</a></p>
       <p>Don't have an account? <a href="https://www.ipeye.ru/" target="_blank">Sign-up here</a></p>

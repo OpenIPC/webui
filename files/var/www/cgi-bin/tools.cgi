@@ -35,8 +35,8 @@ fi
 %>
 <%in p/header.cgi %>
 
-<div class="row g-4">
-  <div class="col col-md-4 col-lg-3">
+<div class="row g-4 mb-4">
+  <div class="col col-md-4">
     <h3>Ping Quality</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_select "tools_action" "Action" "ping,trace" %>
@@ -47,7 +47,7 @@ fi
       <% button_submit "Run" %>
     </form>
   </div>
-  <div class="col col-md-8 col-lg-9">
+  <div class="col col-md-8">
     <h3><%= $title %></h3>
   <% if [ -n "$cmd" ]; then %>
     <h5># <%= $cmd %></h5>

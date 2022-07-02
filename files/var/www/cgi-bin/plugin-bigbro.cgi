@@ -24,7 +24,7 @@ case "$REQUEST_METHOD" in
 
 <p class="alert alert-warning">Attention! This is only a proof of concept for the prospective subsystem of additional services. No real functionality here.</p>
 
-<div class="row row-cols-1 row-cols-xl-3 g-4">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
   <div class="col">
     <h3>Add a device</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">

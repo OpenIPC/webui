@@ -4,6 +4,8 @@
 plugin="ipeye"
 plugin_name="IPEYE"
 page_title="IPEYE Cloud"
+
+ipeye_camera_name=$network_hostname
 %>
 <%in p/header.cgi %>
 
@@ -14,14 +16,11 @@ page_title="IPEYE Cloud"
     <div class="col order-2 order-xl-1">
       <h3>Add a feed</h3>
       <form action="<%= $SCRIPT_NAME %>" method="post">
-<%
-ipeye_camera_name="$hostname"
-field_text "ipeye_login" "IPEYE cloud login"
-field_password "ipeye_password" "IPEYE cloud password"
-field_text "ipeye_camera_name" "Camera name"
-field_select "ipeye_rtsp_feed" "RTSP feed"
-button_submit "Add camera to the cloud"
-%>
+        <% field_text "ipeye_login" "IPEYE cloud login" %>
+        <% field_password "ipeye_password" "IPEYE cloud password" %>
+        <% field_text "ipeye_camera_name" "Camera name" %>
+        <% field_select "ipeye_rtsp_feed" "RTSP feed" "rtsp://${network_address}/stream=0,rtsp://${network_address}/stream=1" %>
+        <% button_submit "Add camera to the cloud" %>
       </form>
     </div>
     <div class="col order-1 order-xl-2">

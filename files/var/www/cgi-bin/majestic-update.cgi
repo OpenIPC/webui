@@ -17,9 +17,9 @@ if [ ! -f "/rom/${mj_bin_file}" ]; then
 elif [ check_url -ne 1 ]; then
   error="Cannot retrieve update from server."
 else
-  free_space=$(df | grep /overlay | xargs | cut -d' ' -f4)
+  free_space=$(df | grep $overlay_root | xargs | cut -d' ' -f4)
   mj_filesize_old=0
-  [ -f "/overlay/root/${mj_bin_file}" ] && mj_filesize_old=$(ls -s $mj_bin_file | xargs | cut -d' ' -f1)
+  [ -f "${$overlay_root}${mj_bin_file}" ] && mj_filesize_old=$(ls -s $mj_bin_file | xargs | cut -d' ' -f1)
   available_space=$(( $free_space + $mj_filesize_old - 1 ))
 
   log="curl -s -k -L -o ${mj_bz2_file} ${mj_bz2_url}\n"

@@ -4,9 +4,13 @@
 page_title="Majestic"
 
 # NB! size in allocated blocks.
+
 mj_filesize_fw=$(ls -s $mj_bin_file | xargs | cut -d' ' -f1)
-if [ -f "/overlay/$mj_bin_file" ]; then
-  mj_filesize_overlay=$(ls -s /overlay/$mj_bin_file | xargs | cut -d' ' -f1)
+
+mj_bin_file_overlay="${overlay_root}${mj_bin_file}"
+
+if [ -f "$mj_bin_file_overlay" ]; then
+  mj_filesize_overlay=$(ls -s $mj_bin_file_overlay | xargs | cut -d' ' -f1)
   mj_filesize_old=$mj_filesize_overlay
 else
   mj_filesize_old=$mj_filesize_fw
@@ -35,7 +39,7 @@ update_meta
 mj_version_fw=$(/rom${mj_bin_file} -v)
 
 mj_version_ol="<span class=\"text-secondary\">- not installed in overlay -</span>"
-[ -f /overlay${mj_bin_file} ] && mj_version_ol=$(/overlay${mj_bin_file} -v)
+[ -f "$mj_bin_file_overlay" ] && mj_version_ol=$($mj_bin_file_overlay -v)
 
 if [ -f "$mj_meta_file" ]; then
   # parse version, date and file size
@@ -47,7 +51,7 @@ if [ -f "$mj_meta_file" ]; then
   fi
   # NB! size in bytes, but since blocks are 1024 bytes each, we are safe here for now.
   mj_filesize_new=$(( ($mj_filesize_new + 1024) / 1024 )) # Rounding up by priming, since $(()) sucks at floats.
-  free_space=$(df | grep /overlay | xargs | cut -d' ' -f4)
+  free_space=$(df | grep ${overlay_root} | xargs | cut -d' ' -f4)
   available_space=$(( $free_space + $mj_filesize_overlay - 1 ))
 else
   mj_version_new="unavailable"
@@ -85,7 +89,7 @@ fi
       <% else %>
         <p class="alert alert-danger">Not enough space to update Majestic.</p>
       <% fi %>
-      <% if [ -f "/overlay/root/${mj_mj_bin_file}" ]; then %>
+      <% if [ -f "$mj_bin_file_overlay" ]; then %>
         <div class="alert alert-warning">
           <p>More recent version of Majestic found in overlay partition.
            It takes <%= $mj_filesize_overlay %> KB of space.</p>

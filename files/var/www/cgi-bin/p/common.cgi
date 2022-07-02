@@ -641,6 +641,8 @@ update_caminfo() {
   network_netmask=$(ifconfig eth0 | grep "inet " | cut -d: -f4)
   network_wan_mac=$(cat /sys/class/net/$(ip r | awk '/default/ {print $5}')/address)
 
+  overlay_root=$(mount | grep upperdir= | sed -r 's/^.*upperdir=([a-z\/]+).+$/\1/')
+
   # Default timezone is GMT
   tz_data=$(cat /etc/TZ)
   tz_name=$(cat /etc/tz_name)
@@ -663,6 +665,7 @@ network_interfaces=\"$network_interfaces\"
 network_macaddr=\"$network_macaddr\"
 network_netmask=\"$network_netmask\"
 network_wan_mac=\"$network_wan_mac\"
+overlay_root=\"$overlay_root\"
 mj_version=\"$mj_version\"
 soc=\"$soc\"
 soc_family=\"$soc_family\"

@@ -56,7 +56,7 @@ Pragma: no-cache
             <ul aria-labelledby="dropdownSettings" class="dropdown-menu">
               <li><a class="dropdown-item" href="network.cgi">Network</a></li>
               <li><a class="dropdown-item" href="timezone.cgi">Timezone</a></li>
-              <li><a class="dropdown-item" href="network-ntp.cgi">NTP Servers</a></li>
+              <li><a class="dropdown-item" href="network-ntp.cgi">Time Synchronization</a></li>
               <li><a class="dropdown-item" href="network-socks5.cgi">SOCKS5 Proxy</a></li>
               <li><a class="dropdown-item" href="majestic-settings.cgi">Majestic Streamer</a></li>
               <li><a class="dropdown-item" href="webui-settings.cgi">Web Interface</a></li>

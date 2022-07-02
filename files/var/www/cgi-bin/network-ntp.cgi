@@ -2,7 +2,7 @@
 <%in p/common.cgi %>
 <%
 plugin="ntp"
-page_title="NTP servers"
+page_title="Time Synchronization"
 
 config_file="/etc/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
@@ -11,7 +11,15 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in
     reset)
       cp /rom/etc/ntp.conf /etc/ntp.conf
-      redirect_to $SCRIPT_NAME "success" "Configuration reset to firware defaults."
+      redirect_back "success" "Configuration reset to firware defaults."
+      ;;
+    sync)
+      /usr/sbin/ntpd -n -q -N
+      if [ $? -eq 0 ]; then
+        redirect_back "success" "Camera time synchronized with NTP server."
+      else
+        redirect_back "danger" "Synchronization failed!"
+      fi
       ;;
     update)
       tmp_file=/tmp/${plugin}.conf
@@ -22,7 +30,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
       done
       unset i; unset s
       mv $tmp_file $config_file
-      redirect_to $SCRIPT_NAME "success" "Configuration updated."
+      redirect_back "success" "Configuration updated."
       ;;
   esac
 fi
@@ -54,6 +62,14 @@ button_submit
       <% button_submit "Restore firmware defaults" "danger" %>
     </form>
     <% fi %>
+  </div>
+  <div class="col">
+    <h3>Camera time</h3>
+    <h4 class="display-1 text-center bg-light"><% date +%H:%M %></h4>
+    <form action="<%= $SCRIPT_NAME %>" method="post">
+      <% field_hidden "action" "sync" %>
+      <% button_submit "Synchronize camera time" "primary" %>
+    </form>
   </div>
 </div>
 

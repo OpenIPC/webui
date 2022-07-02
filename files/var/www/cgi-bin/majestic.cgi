@@ -51,7 +51,7 @@ if [ -f "$mj_meta_file" ]; then
   fi
   # NB! size in bytes, but since blocks are 1024 bytes each, we are safe here for now.
   mj_filesize_new=$(( ($mj_filesize_new + 1024) / 1024 )) # Rounding up by priming, since $(()) sucks at floats.
-  free_space=$(df | grep ${overlay_root} | xargs | cut -d' ' -f4)
+  free_space=$(df | grep /overlay | xargs | cut -d' ' -f4)
   available_space=$(( ${free_space:=0} + ${mj_filesize_overlay:=0} ))
 else
   mj_version_new="unavailable"

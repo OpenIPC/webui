@@ -24,11 +24,11 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     update)
       tmp_file=/tmp/${plugin}.conf
       :> $tmp_file
-      for i in 0 1 2 3; do
-        eval s=\$POST_ntp_server_${i}
-        [ -n "$s" ] && echo "server ${s} iburst" >> $tmp_file
+      for _i in 0 1 2 3; do
+        eval _s="\$POST_ntp_server_${_i}"
+        [ -n "$_s" ] && echo "server ${_s} iburst" >> $tmp_file
       done
-      unset i; unset s
+      unset _i; unset _s
       mv $tmp_file $config_file
       redirect_back "success" "Configuration updated."
       ;;
@@ -43,7 +43,13 @@ fi
     <h3>NTP Servers</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_hidden "action" "update" %>
-      <% for i in 0 1 2 3; do =$(expr $i + 1); eval "ntp_server_${i}=$(sed -n ${x}p /etc/ntp.conf | cut -d' ' -f2)"; field_text "ntp_server_${i}" "NTP Server $(( i + 1 ))"; done %>
+<%
+for _i in 0 1 2 3; do
+  _x=$(expr $_i + 1)
+  eval ntp_server_${_i}="$(sed -n ${_x}p /etc/ntp.conf | cut -d' ' -f2)"
+  field_text "ntp_server_${_i}" "NTP Server $(( _i + 1 ))"
+done; unset _i; unset _x
+%>
       <% button_submit %>
     </form>
   </div>

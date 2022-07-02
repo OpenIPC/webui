@@ -40,8 +40,8 @@ fi
 %>
 <%in p/header.cgi %>
 
-<div class="row">
-  <div class="col col-md-6 col-lg-4 col-xxl-3">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  <div class="col">
     <h3>Settings</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_hidden "action" "update" %>
@@ -51,7 +51,8 @@ fi
       <% button_submit %>
     </form>
   </div>
-  <div class="col col-md-6 col-lg-8 col-xxl-9">
+  <div class="col">
+    <h3>Config file</h3>
     <% ex "cat $config_file" %>
   </div>
 </div>

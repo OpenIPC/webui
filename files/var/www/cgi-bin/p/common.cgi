@@ -730,6 +730,6 @@ include /etc/webui/socks5.conf
 include /etc/webui/telegram.conf
 include /etc/webui/yadisk.conf
 
-reload_locale
+# reload_locale
 # check_password
 %>

@@ -75,7 +75,7 @@ fi
     <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">
       <% field_hidden "action" "locale" %>
       <% field_select "ui_language" "Interface Language" "$ui_locales" %>
-      <% field_file "ui_locale_file" "Locale file" %>
+      <%# field_file "ui_locale_file" "Locale file" %>
       <% button_submit %>
     </form>
   </div>

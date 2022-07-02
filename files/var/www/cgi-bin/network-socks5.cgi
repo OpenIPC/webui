@@ -26,7 +26,7 @@ include $config_file
   <div class="col">
     <h3>SOCKS5 Proxy Settings</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
-      <% field_hidden "action" "update" %> %>
+      <% field_hidden "action" "update" %>
       <% field_text "socks5_server" "SOCKS5 Server" %>
       <% field_number "socks5_port" "SOCKS5 Port" %>
       <% field_text "socks5_login" "SOCKS5 Login" %>

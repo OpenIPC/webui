@@ -5,11 +5,12 @@ plugin="coredump"
 page_title="Majestic debugging"
 params="consent enabled ftphost ftppath ftppass ftpuser localpath save4web send2devs send2ftp send2tftp tftphost"
 
+[ ! -f "/rom/${mj_bin_file}" ] && redirect_to "status.cgi" "danger" "Majestic is not supported on this system."
+
 tmp_file=/tmp/${plugin}.conf
 config_file=/etc/${plugin}.conf
 [ ! -f "$config_file" ] && touch $config_file
 
-[ ! -f "/rom/${mj_bin_file}" ] && redirect_to "status.cgi" "danger" "Majestic is not supported on this system."
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   # parse values from parameters

@@ -6,7 +6,7 @@ page_title="Device status"
 %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-lg-3 g-4">
+<div class="row row-cols-lg-3 g-4 mb-4">
   <div class="col">
     <h3>Camera</h3>
     <h4>Hardware</h4>
@@ -21,6 +21,7 @@ page_title="Device status"
       <dd><%= $flash_size %> MB</dd>
     </dl>
   </div>
+
   <div class="col">
     <h3>System</h3>
     <h4>Firmware</h4>
@@ -35,6 +36,7 @@ page_title="Device status"
       <dd><%= $network_wan_mac %></dd>
     </dl>
   </div>
+
   <div class="col">
     <h3>Date & Time</h3>
     <% ex "/bin/date" %>
@@ -44,7 +46,8 @@ page_title="Device status"
     </div>
   </div>
 </div>
-<div class="row g-4">
+
+<div class="row g-4 mb-4">
   <div class="col ">
     <h3>Resources</h3>
     <% ex "/usr/bin/uptime" %>

@@ -6,7 +6,6 @@ page_title="Majestic debugging"
 params="consent enabled ftphost ftppath ftppass ftpuser localpath save4web send2devs send2ftp send2tftp tftphost"
 
 tmp_file=/tmp/${plugin}.conf
-# FIXME: rename in S95 files
 config_file=/etc/${plugin}.conf
 [ ! -f "$config_file" ] && touch $config_file
 
@@ -69,7 +68,7 @@ fi
     <p><b>This service requires a slight modification of /etc/init.d/S95... file.</b></p>
     <p>Please insert the following code inside <code>load_majestic()</code> block, right before <code>start-stop-daemon</code> line:</p>
     <pre class="bg-light p-3 text-black">
-if [ -f "$config_file" ] && [ $(grep ^savedumps "$config_file" | cut -d= -f2) == "true" ]; then
+if [ -f $config_file ] && [ $(grep ^savedumps $config_file | cut -d= -f2) == "true" ]; then
   ulimit -c unlimited && echo "| /usr/sbin/sendcoredump.sh" > /proc/sys/kernel/core_pattern
 fi
 </pre>

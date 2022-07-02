@@ -65,7 +65,7 @@ fi
 %>
 <%in p/header.cgi %>
 
-<div class="row">
+<div class="row g-4 mb-4">
   <div class="col col-md-6 col-lg-4 col-xxl-3">
     <h3>Settings</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">

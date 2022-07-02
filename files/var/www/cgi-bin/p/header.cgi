@@ -17,7 +17,7 @@ Pragma: no-cache
 <script src="/a/main.js"></script>
 </head>
 
-<body id="page-<%= $pagename %>" class="mb-5 <%= $fw_variant %><% [ "$debug" -ge "1" ] && echo -n " debug" %>">
+<body id="page-<%= $pagename %>" class="<%= $fw_variant %><% [ "$debug" -ge "1" ] && echo -n " debug" %>">
   <nav class="navbar navbar-dark navbar-expand-lg sticky-top">
     <div class="container">
       <a class="navbar-brand" href="status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg">
@@ -131,5 +131,5 @@ Pragma: no-cache
 </div>
 <% fi %>
 
-      <h2><%= $page_title %></h2>
-      <% flash_read %>
+<h2><%= $page_title %></h2>
+<% flash_read %>

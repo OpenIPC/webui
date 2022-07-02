@@ -25,10 +25,10 @@
       </ul>
       <div class="tab-content p-2" id="tab-content">
         <div id="t1-tab-pane" role="tabpanel" class="tab-pane fade active show" aria-labelledby="t1-tab" tabindex="0">
-          <% ex "env | sort" %>
+          <% ex "cat /tmp/sysinfo.txt" %>
         </div>
         <div id="t2-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="t2-tab" tabindex="0">
-          <% ex "cat /tmp/sysinfo.txt" %>
+          <% ex "env | sort" %>
         </div>
       </div>
     </div>

@@ -724,7 +724,6 @@ include $sysinfo_file
 pagename=$(basename "$SCRIPT_NAME")
 pagename="${pagename%%.*}"
 
-include p/settings.sh
 include p/locale_en.sh
 include /etc/webui/socks5.conf
 include /etc/webui/telegram.conf

@@ -74,7 +74,7 @@ fi
     <p>Restore custom Majestic configuration from a saved copy of majestic.yaml file.</p>
     <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">
       <% field_hidden "action" "restore" %>
-      <% field_file "mj_restore_file" "Backup file" %>
+      <% field_file "mj_restore_file" "Backup file" "majestic.yaml" %>
       <% button_submit "Upload config" "warning" %>
     </form>
   </div>

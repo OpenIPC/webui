@@ -1,17 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;700&display=swap');
 
+/* debugging start */
 @media (max-width: 575.98px) {body.debug:before{content:"xs"}}
 @media (min-width: 576px) and (max-width: 767.98px) {body.debug:before{content:"sm"}}
 @media (min-width: 768px) and (max-width: 991.98px) {body.debug:before{content:"md"}}
 @media (min-width: 992px) and (max-width: 1199.98px) {body.debug:before{content:"lg"}}
 @media (min-width: 1200px) and (max-width: 1399.98px) {body.debug:before{content:"xl"}}
 @media (min-width: 1400px) {body.debug:before{content:"xxl"}}
-body.debug:before {color:#4c60d811;display:block;font-size:10rem;font-variant:all-small-caps;font-weight:700;line-height:1;position:absolute;right:3rem;top:3rem;z-index:-1}
+body.debug:before {color:#4c60d811;display:block;font-size:10rem;font-variant:all-small-caps;font-weight:700;line-height:1;position:fixed;right:3rem;top:3rem;z-index:-1}
+body.debug .col {border: solid 1px lightslategray;}
+.offcanvas {--bs-offcanvas-width: 30vw; min-width: 25rem;}
+/* debugging end */
 
 :root {
     --bs-body-font-family: "IBM Plex Sans", sans-serif;
     --bs-font-monospace: "IBM Plex Mono", monospace;
     --bs-blue: #4c60d8;
+}
+
+body {
+    margin-bottom: 5rem;
 }
 
 body > main > .container > h2 {
@@ -33,7 +41,6 @@ h6 {
 pre {
     background: #4c60d812;
     font-size: 0.8125rem;
-    /*margin: 0.5rem 0 1rem;*/
     padding: 1rem;
 }
 
@@ -78,10 +85,6 @@ dl.list dd {
     font-size: 1.3rem;
     margin-bottom: 1.5rem;
 }
-.col > h4 {
-    font-size: 1.2rem;
-}
-
 .container {
     display: block;
 }
@@ -126,10 +129,6 @@ p.range span.show-value {
 
 .nav-link {
     cursor: pointer;
-}
-
-.offcanvas {
-    --bs-offcanvas-width: 30vw
 }
 
 .tab-pane {

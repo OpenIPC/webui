@@ -34,6 +34,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     value="$(echo $form_field_name | cut -d= -f2)"
 
     # normalization
+    # (that's why we can't have nice things)
     case "$key" in
       .image.rotate)
         value="${value//°/}"
@@ -86,49 +87,53 @@ olddomain=""
 for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
                                         # line: .isp.exposure|Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
   yaml_param_name=${line%%|*}           # => .isp.exposure
-  _n=${yaml_param_name#.}               # => isp.exposure
-  _n=${_n//./_}                         # => isp_exposure
-  _n=${_n//-/_}                         # => isp_exposure
-  domain=${_n%%_*}                      # => isp
-  form_field_name=mj_${_n}              # => mj_isp_exposure
-  line=${line#*|}                       # line: Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
-  label_text=${line%%|*}                # => Sensor_exposure_time
-  label_text=${label_text//_/ }         # => Sensor exposure time
-  line=${line#*|}                       # line: &micro;s|range|auto,1-500000|auto|From_1_to_500000.
-  units=${line%%|*}                     # => &micro;s
-  line=${line#*|}                       # line: range|auto,1-500000|auto|From_1_to_500000.
-  form_field_type=${line%%|*}           # => range
-  line=${line#*|}                       # line: auto,1-500000|auto|From_1_to_500000.
-  options=${line%%|*}                   # => auto,1-500000
-  line=${line#*|}                       # line: auto|From_1_to_500000.
-  placeholder=${line%%|*}               # => auto
-  line=${line#*|}                       # line: From_1_to_500000.
-  hint=$line                            # => From_1_to_500000.
-  hint=${hint//_/ }                     # => From 1 to 500000.
 
-  value=$(yaml-cli -g "$yaml_param_name")
+  # show parameter only if it is not in a stop-list or we are in a debug mode
+  if [ -z "$(echo $mj_params_debug | sed -n "/$yaml_param_name/p")" ] || [ "$debug" -ge "1" ]; then
+    _n=${yaml_param_name#.}               # => isp.exposure
+    _n=${_n//./_}                         # => isp_exposure
+    _n=${_n//-/_}                         # => isp_exposure
+    domain=${_n%%_*}                      # => isp
+    form_field_name=mj_${_n}              # => mj_isp_exposure
+    line=${line#*|}                       # line: Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
+    label_text=${line%%|*}                # => Sensor_exposure_time
+    label_text=${label_text//_/ }         # => Sensor exposure time
+    line=${line#*|}                       # line: &micro;s|range|auto,1-500000|auto|From_1_to_500000.
+    units=${line%%|*}                     # => &micro;s
+    line=${line#*|}                       # line: range|auto,1-500000|auto|From_1_to_500000.
+    form_field_type=${line%%|*}           # => range
+    line=${line#*|}                       # line: auto,1-500000|auto|From_1_to_500000.
+    options=${line%%|*}                   # => auto,1-500000
+    line=${line#*|}                       # line: auto|From_1_to_500000.
+    placeholder=${line%%|*}               # => auto
+    line=${line#*|}                       # line: From_1_to_500000.
+    hint=$line                            # => From_1_to_500000.
+    hint=${hint//_/ }                     # => From 1 to 500000.
 
-  if [ "$olddomain" != "$domain" ]; then
-    [ -n "$olddomain" ] && echo "</fieldset>"
-    echo "<fieldset><legend>${domain}</legend>"
-    olddomain="$domain"
+    value=$(yaml-cli -g "$yaml_param_name")
+
+    if [ "$olddomain" != "$domain" ]; then
+      [ -n "$olddomain" ] && echo "</fieldset>"
+      echo "<fieldset><legend>${domain}</legend>"
+      olddomain="$domain"
+    fi
+
+    # assign yaml_param_name's value to a variable with yaml_param_name's form_field_name for form fields values
+    eval $form_field_name=\"$(yaml-cli -g "$yaml_param_name")\"
+
+    # hide some params in config
+    [ "mj_netip_password_plain" != "$form_field_name" ] && config="${config}\n$(eval echo ${yaml_param_name}: \$$form_field_name)"
+
+    case "$form_field_type" in
+      boolean) field_switch "$form_field_name" "$label_text";;
+      hidden)  field_hidden "$form_field_name" "$label_text";;
+      number)  field_number "$form_field_name" "$label_text" "$options";;
+      range)   field_range  "$form_field_name" "$label_text" "$options";;
+      select)  field_select "$form_field_name" "$label_text" "$options";;
+      string)  field_text   "$form_field_name" "$label_text";;
+      *) echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>";;
+    esac
   fi
-
-  # assign yaml_param_name's value to a variable with yaml_param_name's form_field_name for form fields values
-  eval $form_field_name=\"$(yaml-cli -g "$yaml_param_name")\"
-
-  # hide some params in config
-  [ "mj_netip_password_plain" != "$form_field_name" ] && config="${config}\n$(eval echo ${yaml_param_name}: \$$form_field_name)"
-
-  case "$form_field_type" in
-    boolean) field_switch "$form_field_name" "$label_text";;
-    hidden)  field_hidden "$form_field_name" "$label_text";;
-    number)  field_number "$form_field_name" "$label_text" "$options";;
-    range)   field_range  "$form_field_name" "$label_text" "$options";;
-    select)  field_select "$form_field_name" "$label_text" "$options";;
-    string)  field_text   "$form_field_name" "$label_text";;
-    *) echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>";;
-  esac
 done
 echo "</fieldset>"
 button_submit

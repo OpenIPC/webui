@@ -30,6 +30,9 @@ mj="
 .isp.antiFlicker|Anti-flicker||select|disabled,50,60|disabled|Usually, the utility frequency in your grid line.
 .isp.blkCnt|Block count||number|1,32,1|4|Use 4 for small memory systems, 10+ for performant SoCs.
 .isp.exposure|Sensor exposure time|&micro;s|range|1,500000,1,auto|auto|From 1 to 500000.
+.isp.aGain|Sensor analog gain||number|1,100,1|1|
+.isp.dGain|Sensor digital gain||number|1,100,1|1|
+.isp.ispGain|ISP gain||number|1,100,1|1|
 .isp.drc|Dynamic Range Compression (DRC) rate|:1|number|1,1000,1|300|
 .isp.lowDelay|Low delay mode||boolean|true,false|false|
 .isp.rawMode|Raw feed mode||select|slow,fast,none|none|
@@ -115,9 +118,6 @@ mj="
 .cloud.enabled|Enable cloud support||boolean|true,false|false|
 "
 
-mj_debug="
-.isp.aGain|Sensor analog gain||number|1,100,1|1|
-.isp.dGain|Sensor digital gain||number|1,100,1|1|
-.isp.ispGain|ISP gain||number|1,100,1|1|
-"
+# hide these settings unless in debug mode
+mj_params_debug=".isp.aGain .isp.dGain .isp.ispGain"
 %>

@@ -689,7 +689,7 @@ ui_version=\"$ui_version\"
 " >> $_tmpfile
 
   # sort content alphabetically
-  sort < $_tmpfile > $sysinfo_file && rm $_tmpfile && unset _tmpfile
+  sort < $_tmpfile | sed /^$/d > $sysinfo_file && rm $_tmpfile && unset _tmpfile
 
   echo -e "debug=\"$debug\"\n# caminfo $(date +"%F %T")\n" >> $sysinfo_file
 }

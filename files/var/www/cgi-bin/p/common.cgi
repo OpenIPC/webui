@@ -638,10 +638,10 @@ update_caminfo() {
 
   # if gateway is not set then no default route nor wan mac present
   _default_route="$(ip r | grep ^default)"
-  if [ -n "$default_route" ]; then
+  if [ -n "$_default_route" ]; then
     _default_iface=$(echo "$_default_route" | awk '{print $5}')
     network_wan_mac=$(cat /sys/class/net/${_default_iface}/address)
-    network_gateway=$(echo "$_default_route" | cut -d' ' -f3)
+    network_gateway=$(echo "$_default_route" | awk '{print $3}')
   fi; unset _default_route;unset _default_iface
 
   network_hostname=$(hostname -s)

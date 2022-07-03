@@ -11,14 +11,14 @@
   <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasDebug" aria-labelledby="offcanvasDebugLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasDebugLabel">Debug Info</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body x-small">
       <form action="webui.cgi" method="post">
         <% field_hidden "action" "init" %>
         <% button_submit "Refresh Environment" %>
       </form>
 
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body x-small">
       <ul class="nav nav-tabs" role="tablist">
         <% tab_lap "t1" "sysinfo" "active" %>
         <% tab_lap "t2" "env" %>

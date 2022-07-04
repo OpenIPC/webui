@@ -105,7 +105,7 @@ fi
         <div class="alert alert-danger">
           <p class="mb-1"><b>Not enough space to update Majestic!</b></p>
           <p class="mb-0">Update requires <%= $mj_filesize_new %>K, but only <%= $available_space %>K is available
-          <% if [ "$mj_filesize_ol" -gr 0 ]; then %>
+          <% if [ "$mj_filesize_ol" -ge "1" ]; then %>
           (<%= $free_space %>K of unallocated space plus <%= ${mj_filesize_ol:=0} %>K size of Majestic installed in overlay)
           <% fi %>
           .</p>

@@ -31,6 +31,10 @@ available_space=$(( ${free_space:=0} + ${mj_filesize_ol:=0} - 1 ))
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in
+  rmmj)
+    [ -f "$mj_bin_file_ol" ] && rm $mj_bin_file_ol && mount -oremount /
+    redirect_back "success" "Majestic reverted to bundled version."
+    ;;
   update)
     [ -z "$network_gateway" ] && redirect_to "danger" "Updating requires an internet connection!"
 

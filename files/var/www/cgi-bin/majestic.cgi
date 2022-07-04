@@ -44,7 +44,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
     curl --silent --insecure --location -o - http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.bz2 | bunzip2 | tar -x ./majestic -C /usr/bin/
     [ $? -ne 0 ] && redirect_back "error" "Cannot retrieve update from server."
-    redirect_back "success" "Majestic updated to the latest available version."
+    redirect_to "reboot.cgi"
     ;;
   esac
 fi

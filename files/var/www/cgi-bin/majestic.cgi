@@ -1,20 +1,7 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
 <%
-page_title="Majestic"
-
-# NB! size in allocated blocks.
-mj_filesize_fw=$(ls -s $mj_bin_file | xargs | cut -d' ' -f1)
-
-mj_bin_file_overlay="${overlay_root}${mj_bin_file}"
-if [ -f "$mj_bin_file_overlay" ]; then
-  mj_filesize_overlay=$(ls -s $mj_bin_file_overlay | xargs | cut -d' ' -f1)
-  mj_filesize_old=$mj_filesize_overlay
-else
-  mj_filesize_old=$mj_filesize_fw
-fi
-
-mj_meta_file=/tmp/mj_meta.txt
+[ ! -f "/rom/${mj_bin_file}" ] && redirect_to '/' "danger" "Majestic is not supported on this system."
 
 update_meta() {
   # re-download metafile if older than 1 hour
@@ -27,15 +14,40 @@ update_meta() {
     rm $mj_meta_file
   fi
 
-  if [ "200" = $(curl $mj_meta_url -s -f -w %{http_code} -o /dev/null) ]; then
-    curl -s $mj_meta_url -o $mj_meta_file
-  fi
+  [ "200" = $(curl $mj_meta_url -s -f -w %{http_code} -o /dev/null) ] && curl -s $mj_meta_url -o $mj_meta_file
 }
 
-mj_version_fw=$(/rom${mj_bin_file} -v)
+page_title="Majestic"
+mj_meta_file=/tmp/mj_meta.txt
 
+# NB! sizes are in allocated blocks.
+mj_filesize_fw=$(ls -s $mj_bin_file | xargs | cut -d' ' -f1)
+
+mj_bin_file_ol="${overlay_root}${mj_bin_file}"
+[ -f "$mj_bin_file_ol" ] && mj_filesize_ol=$(ls -s $mj_bin_file_ol | xargs | cut -d' ' -f1)
+
+free_space=$(df | grep /overlay | xargs | cut -d' ' -f4)
+available_space=$(( ${free_space:=0} + ${mj_filesize_ol:=0} - 1 ))
+
+if [ "POST" = "$REQUEST_METHOD" ]; then
+  case "$POST_action" in
+  update)
+    [ -z "$network_gateway" ] && redirect_to "danger" "Updating requires an internet connection!"
+
+    update_meta
+    mj_filesize_new=$(( ($(cat $mj_meta_file | sed -n 2p) + 1024) / 1024 ))
+    [ "$mj_filesize_new" -gt "$available_space" ] && redirect_back "danger" "Not enough space to update Majestic. ${mj_filesize_new} KB > ${available_space} KB."
+
+    curl --silent --insecure --location -o - http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.bz2 | bunzip2 | tar -x ./majestic -C /usr/bin/
+    [ $? -ne 0 ] && redirect_back "error" "Cannot retrieve update from server."
+    redirect_back "success" "Majestic updated to the latest available version."
+    ;;
+  esac
+fi
+
+mj_version_fw=$(/rom${mj_bin_file} -v)
 mj_version_ol="<span class=\"text-secondary\">- not installed in overlay -</span>"
-[ -f "$mj_bin_file_overlay" ] && mj_version_ol=$($mj_bin_file_overlay -v)
+[ -f "$mj_bin_file_ol" ] && mj_version_ol=$($mj_bin_file_ol -v)
 
 if [ -n "$network_gateway" ]; then
   update_meta
@@ -49,8 +61,6 @@ if [ -n "$network_gateway" ]; then
     fi
     # NB! size in bytes, but since blocks are 1024 bytes each, we are safe here for now.
     mj_filesize_new=$(( ($mj_filesize_new + 1024) / 1024 )) # Rounding up by priming, since $(()) sucks at floats.
-    free_space=$(df | grep /overlay | xargs | cut -d' ' -f4)
-    available_space=$(( ${free_space:=0} + ${mj_filesize_overlay:=0} ))
   else
     mj_version_new="unavailable"
   fi
@@ -87,20 +97,24 @@ fi
   <% if [ -n "$network_gateway" ]; then %>
     <% if [ -f "$mj_meta_file" ]; then %>
       <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
-        <p><a href="majestic-update.cgi" class="btn btn-warning"><%= $t_btn_update %></a></p>
+        <form action="<%= $SCRIPT_NAME %>" method="post">
+          <% field_hidden "action" "update" %>
+          <% button_submit "$t_btn_update" "warning" %>
+        </form>
       <% else %>
         <div class="alert alert-danger">
           <p class="mb-1"><b>Not enough space to update Majestic!</b></p>
-          <p class="mb-0">Update requires <%= $mj_filesize_new %>K,
-          but only <%= $available_space %>K is available in overlay,
-          as <%= $free_space %>K of unallocated space,
-          plus <%= ${mj_filesize_overlay:=0} %>K size of Majestic installed in overlay.</p>
+          <p class="mb-0">Update requires <%= $mj_filesize_new %>K, but only <%= $available_space %>K is available
+          <% if [ "$mj_filesize_ol" -gr 0 ]; then %>
+          (<%= $free_space %>K of unallocated space plus <%= ${mj_filesize_ol:=0} %>K size of Majestic installed in overlay)
+          <% fi %>
+          .</p>
         </div>
       <% fi %>
-      <% if [ -f "$mj_bin_file_overlay" ]; then %>
+      <% if [ -f "$mj_bin_file_ol" ]; then %>
         <div class="alert alert-warning">
           <p>More recent version of Majestic found in overlay partition.
-           It takes <%= $mj_filesize_overlay %> KB of space.</p>
+           It takes <%= $mj_filesize_ol %> KB of space.</p>
           <form action="<%= $SCRIPT_NAME %>" method="post">
             <% field_hidden "action" "rmmj" %>
             <% button_submit "Revert to bundled version" "warning" %>

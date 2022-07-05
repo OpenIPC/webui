@@ -292,7 +292,7 @@ field_select() {
   echo "</p>"
 }
 
-# field_swith "name" "label" "hint"
+# field_swith "name" "label" "hint" "options"
 field_switch() {
   _l=$2
   [ -z "$_l" ] && _l="$(t_label "$1")"
@@ -301,19 +301,24 @@ field_switch() {
   _h=$3
   [ -z "$_h" ] && _h="$(t_hint "$1")"
 
+  _o=$4
+  [ -z "$_o" ] && options="true,false"
+  _o1=$(echo "$_o" | cut -d, -f1)
+  _o2=$(echo "$_o" | cut -d, -f2)
+
   _v=$(t_value "$1")
   [ -z "$_v" ] && _v=$(t_default "$1")
   [ -z "$_v" ] && _v="false"
 
   echo "<p class=\"boolean\">" \
     "<span class=\"form-check form-switch\">" \
-    "<input type=\"hidden\" id=\"${1}-false\" name=\"${1}\" value=\"false\">" \
-    "<input type=\"checkbox\" id=\"${1}\" name=\"${1}\" value=\"true\" role=\"switch\" class=\"form-check-input\"$(t_checked "true" "$_v")>" \
+    "<input type=\"hidden\" id=\"${1}-false\" name=\"${1}\" value=\"${_o2}\">" \
+    "<input type=\"checkbox\" id=\"${1}\" name=\"${1}\" value=\"${_o1}\" role=\"switch\" class=\"form-check-input\"$(t_checked "$_o1" "$_v")>" \
     "<label for=\"$1\" class=\"form-check-label\">${_l}</label>" \
     "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
-  unset _h; unset _l; unset _v
+  unset _h; unset _l; unset _o; unset _o1; unset _o2; unset _v
 }
 
 # field_text "name" "label" "hint"

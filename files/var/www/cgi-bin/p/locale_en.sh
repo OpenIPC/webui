@@ -13,7 +13,6 @@ tH_mj_records_path="Supports <a href=\"https://man7.org/linux/man-pages/man3/str
 tH_mj_rtsp_port="rtsp://[ip.add.re.ss]:[port]/stream={0,1}"
 tH_mj_system_buffer="per client"
 tH_mj_system_logLevel="Used for syslog messages."
-tH_mj_system_webAdmin="Experimental! Disable on camera with public access."
 tT_mj_audio="Audio"
 tT_mj_cloud="Cloud Support"
 tT_mj_hls="HTTP Live Streaming (HLS)"

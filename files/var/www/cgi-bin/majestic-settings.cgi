@@ -125,7 +125,7 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
     [ "mj_netip_password_plain" != "$form_field_name" ] && config="${config}\n$(eval echo ${yaml_param_name}: \$$form_field_name)"
 
     case "$form_field_type" in
-      boolean) field_switch "$form_field_name" "$label_text";;
+      boolean) field_switch "$form_field_name" "$label_text" "$hint" "$options";;
       hidden)  field_hidden "$form_field_name" "$label_text";;
       number)  field_number "$form_field_name" "$label_text" "$options";;
       range)   field_range  "$form_field_name" "$label_text" "$options";;

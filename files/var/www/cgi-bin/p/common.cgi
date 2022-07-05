@@ -302,7 +302,7 @@ field_switch() {
   [ -z "$_h" ] && _h="$(t_hint "$1")"
 
   _o=$4
-  [ -z "$_o" ] && options="true,false"
+  [ -z "$_o" ] && _o="true,false"
   _o1=$(echo "$_o" | cut -d, -f1)
   _o2=$(echo "$_o" | cut -d, -f2)
 

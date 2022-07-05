@@ -127,10 +127,10 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
     case "$form_field_type" in
       boolean) field_switch "$form_field_name" "$label_text" "$hint" "$options";;
       hidden)  field_hidden "$form_field_name" "$label_text";;
-      number)  field_number "$form_field_name" "$label_text" "$options";;
-      range)   field_range  "$form_field_name" "$label_text" "$options";;
-      select)  field_select "$form_field_name" "$label_text" "$options";;
-      string)  field_text   "$form_field_name" "$label_text";;
+      number)  field_number "$form_field_name" "$label_text" "$options" "$hint";;
+      range)   field_range  "$form_field_name" "$label_text" "$options" "$hint";;
+      select)  field_select "$form_field_name" "$label_text" "$options" "$hint";;
+      string)  field_text   "$form_field_name" "$label_text" "$hint";;
       *) echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>";;
     esac
   fi

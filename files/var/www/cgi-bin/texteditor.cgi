@@ -12,17 +12,17 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in
   restore)
     if [ ! -f "$editor_file" ]; then
-      redirect_to "${SCRIPT_NAME}?f=${editor_file}" "danger" "$t_form_error_a"
+      redirect_to "${SCRIPT_NAME}?f=${editor_file}" "danger" "File not found!"
     elif [ ! -f "$editor_file.backup" ]; then
-      redirect_to "${SCRIPT_NAME}?f=${editor_file}" "danger" "$t_form_error_a"
+      redirect_to "${SCRIPT_NAME}?f=${editor_file}" "danger" "File not found!"
     else
       mv "$editor_file.backup" "$editor_file"
-      redirect_to "${SCRIPT_NAME}?f=${editor_file}" "success" "$t_form_error_e"
+      redirect_to "${SCRIPT_NAME}?f=${editor_file}" "success" "File restored from backup."
     fi
     ;;
   save)
     if [ -z "$editor_text" ]; then
-      flash_save "warning" "$t_form_error_b $t_form_error_c"
+      flash_save "warning" "Empty payload. File not saved!"
     else
       if [ -n "$editor_backup" ]; then
         cp "$editor_file" "${editor_file}.backup"
@@ -30,7 +30,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         [ -f "${editor_file}.backup" ] && rm "${editor_file}.backup"
       fi
       echo "$editor_text" > "$editor_file"
-      redirect_to "${SCRIPT_NAME}?f=${editor_file}" "success" "$t_form_error_d"
+      redirect_to "${SCRIPT_NAME}?f=${editor_file}" "success" "File saved."
     fi
     ;;
   *)
@@ -40,12 +40,12 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 else
   editor_file="$GET_f"
   if [ ! -f "$editor_file" ]; then
-    flash_save "danger" "$t_form_error_a"
+    flash_save "danger" "File not found!"
   elif [ -n "$editor_file" ]; then
     if [ "b" = "$( (cat -v "$editor_file" | grep -q "\^@") && echo "b" )" ]; then
-      flash_save "danger" "$t_form_error_f"
+      flash_save "danger" "Not a text file!"
     elif [ "$(wc -c $editor_file | awk '{print $1}')" -gt "102400" ]; then
-      flash_save "danger" "$t_form_error_3"
+      flash_save "danger" "Uploded file is too large!"
     else
       editor_text="$(cat $editor_file | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g")"
     fi

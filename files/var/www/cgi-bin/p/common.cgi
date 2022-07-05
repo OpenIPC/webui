@@ -95,7 +95,7 @@ button_reset_firmware() {
 
 # button_submit "text" "type" "extras"
 button_submit() {
-  _t="$1"; [ -z "$_t" ] && _t="$t_btn_submit"
+  _t="$1"; [ -z "$_t" ] && _t="Save changes"
   _c="$2"; [ -z "$_c" ] && _c="primary"
   _x="$3"; [ -z "$_x" ] && _x=" ${_x}"
   echo "<div class=\"mt-2\"><input type=\"submit\" class=\"btn btn-${_c}\"${_x} value=\"${_t}\"></div>"
@@ -567,18 +567,6 @@ t_hint() {
 
 t_label() {
   eval "echo \$tL_${1}"
-}
-
-t_options() {
-  eval "echo \${tOptions_${1}//,/ }"
-}
-
-t_range() {
-  eval "echo \$tRange_${1}"
-}
-
-t_readonly() {
-  [ "$2" = "$(t_value "$1")" ] && echo -n "readonly"
 }
 
 t_selected() {

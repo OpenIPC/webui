@@ -43,10 +43,10 @@ Pragma: no-cache
       file_name="$POST_mj_restore_file_name"
       file_path="$POST_mj_restore_file_path"
       error=""
-      [ -z "$file_name" ] && error="$t_form_error_1"
-      [ ! -r "$file" ] && error="$t_form_error_2"
-      [ "$(wc -c "$file" | awk '{print $1}')" -gt "$maxsize" ] && error="$t_form_error_3 $(wc -c $file | awk '{print $1}') > ${maxsize}."
-      #[ "$magicnum" -ne "$(xxd -p -l 10 $file)" ] && error="$t_form_error_4 $(xxd -p -l 10 $file) != $magicnum"
+      [ -z "$file_name" ] && error="No file found! Did you forget to upload?"
+      [ ! -r "$file" ] && error="Cannot read uploded file!"
+      [ "$(wc -c "$file" | awk '{print $1}')" -gt "$maxsize" ] && error="Uploded file is too large! $(wc -c $file | awk '{print $1}') > ${maxsize}."
+      #[ "$magicnum" -ne "$(xxd -p -l 10 $file)" ] && error="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 10 $file) != $magicnum"
       if [ -z "$error" ]; then
         # yaml-cli -i $POST_upfile -o /tmp/majestic.yaml # FIXME: sanitize
         mv $file_path /etc/majestic.yaml

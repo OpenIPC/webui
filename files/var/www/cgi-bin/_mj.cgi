@@ -16,7 +16,7 @@ mj_retired="
 # range options: min,max,step,button
 # select options: value2,value2,value3...
 mj="
-.system.logLevel|Severity of logging||select|ERROR,WARN,INFO,DEBUG,TRACE|TRACE|
+.system.logLevel|Severity of logging||select|ERROR,WARN,INFO,DEBUG,TRACE|TRACE|Used for syslog messages.
 .system.webAdmin|Serve Web Admin via Majestic||boolean|enabled,disabled|disabled|Experimental! Disable on camera with public access.
 .system.staticDir|Home directory for static files||string||/var/www/html|
 .system.webPort|Port for HTTP access||number|1,65535,1|80|
@@ -24,7 +24,7 @@ mj="
 .system.httpsCertificate|Path to public SSL certificate||string||/etc/ssl/certs/www.example.com.crt|
 .system.httpsCertificateKey|Path to private SSL key||string||/etc/ssl/private/www.example.com.key|
 .system.buffer|Maximum buffer size|KB|number||1024|per client
-.isp.sensorConfig|Path to sensor configuration file||string||/etc/sensors/imx222_1080p_line.ini|
+.isp.sensorConfig|Path to sensor configuration file||string||/etc/sensors/imx222_1080p_line.ini|<a href=\"sensor.cgi\">Upload your own driver and config</a>
 .isp.memMode|Memory mode||select|normal,reduction|reduction|
 .isp.slowShutter|Slow shutter||select|disabled,low,medium,high|low|Automatic frame rate reduction mode.
 .isp.antiFlicker|Anti-flicker||select|disabled,50,60|disabled|Usually, the utility frequency in your grid line.
@@ -34,7 +34,7 @@ mj="
 .isp.dGain|Sensor digital gain||number|1,100,1|1|
 .isp.ispGain|ISP gain||number|1,100,1|1|
 .isp.drc|Dynamic Range Compression (DRC) rate|:1|number|1,1000,1|300|
-.isp.lowDelay|Low delay mode||boolean|true,false|false|
+.isp.lowDelay|Low delay mode||boolean|true,false|false|May break sophisticated settings.
 .isp.rawMode|Raw feed mode||select|slow,fast,none|none|
 .isp.iqProfile|Path to PQTools binary profile||string|||
 .image.mirror|Flip image horizontally||boolean|true,false|false|
@@ -46,7 +46,7 @@ mj="
 .image.luminance|Image luminance|%|range|1,100,1,auto|auto|
 .osd.enabled|Enable On-Screen Display (OSD)||boolean|true,false|false|
 .osd.font|Path to font file used in OSD||string||/usr/share/fonts/truetype/UbuntuMono-Regular.ttf|
-.osd.template|OSD template||string||%a %e %B %Y %H:%M:%S %Z|Supports strftime() format.
+.osd.template|OSD template||string||%a %e %B %Y %H:%M:%S %Z|Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format.
 .osd.posX|Horizontal position of OSD|px|number|-2000,2000,1|-100|
 .osd.posY|Vertical position of OSD|px|number|-2000,2000,1|-100|
 .osd.privacyMasks|Privacy masks|px|string||0x0x234x640,2124x0x468x1300|Coordinates of masked areas separated by commas.
@@ -60,7 +60,7 @@ mj="
 .nightMode.nightAPI|Use night mode API||boolean|true,false|false|
 .nightMode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1,1000,1|300|
 .records.enabled|Enable saving records||boolean|true,false|false|
-.records.path|Template for saving video records||string||/mnt/mmc/%Y/%m/%d/%H.mp4|Supports strftime() format.
+.records.path|Template for saving video records||string||/mnt/mmc/%Y/%m/%d/%H.mp4|Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format.
 .records.maxUsage|Limit of available space usage|%|range|1,100,1|95|
 .video0.enabled|Enable Video0||boolean|true,false|true|
 .video0.codec|Video0 codec||select|h264,h265|h264|
@@ -95,8 +95,8 @@ mj="
 .audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,aac,pcm,alaw,ulaw|opus|
 .audio.device|Audio card||string||hw:2|
 .audio.outputEnabled|Enable audio output||boolean|true,false|false|
-.rtsp.enabled|Enable output||boolean|true,false|true||
-.rtsp.port|Port for RTSP protocol||number|1,65535,1|554|
+.rtsp.enabled|Enable output||boolean|true,false|true|
+.rtsp.port|Port for RTSP protocol||number|1,65535,1|554|rtsp://[ip.add.re.ss]:[port]/stream={0,1}
 .hls.enabled|Enable HTTP Live Streaming (HLS)||boolean|true,false|true|
 .youtube.enabled|Enable Youtube support||boolean|true,false|false|
 .youtube.key|Youtube API key||string||xxxx-xxxx-xxxx-xxxx-xxxx|

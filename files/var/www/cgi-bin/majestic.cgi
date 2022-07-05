@@ -103,7 +103,7 @@ fi
       <% if [ "$mj_filesize_new" -le "$available_space" ]; then %>
         <form action="<%= $SCRIPT_NAME %>" method="post">
           <% field_hidden "action" "update" %>
-          <% button_submit "$t_btn_update" "warning" %>
+          <% button_submit "Install update" "warning" %>
         </form>
       <% else %>
         <div class="alert alert-danger">

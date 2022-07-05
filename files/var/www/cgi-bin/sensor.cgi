@@ -14,11 +14,11 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     file_path="$POST_sensor_driver_file_path"
 
     if [ -z "$file_name" ]; then
-      error="$t_form_error_1"
+      error="No file found! Did you forget to upload?"
     elif [ "$magicnum" != $(xxd -p -l 6 $file) ]; then
-      error="$t_form_error_4"
+      error="File magic number does not match. Did you upload a wrong file?"
     elif [ -f "/usr/lib/sensors/${file_name}" ]; then
-      error="$t_form_error_9"
+      error="File already exists!"
     fi
   fi
 
@@ -28,11 +28,11 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     file_name="$POST_sensor_config_file_name"
     file_path="$POST_sensor_config_file_path"
     if [ -z "$file_name" ]; then
-      error="$t_form_error_1"
+      error="No file found! Did you forget to upload?"
     elif [ -n $(grep "\[sensor\]" $file) ]; then
-      error="$t_form_error_4"
+      error="File magic number does not match. Did you upload a wrong file?"
     elif [ -f "/etc/sensors/${file_name}" ]; then
-      error="$t_form_error_9"
+      error="File already exists!"
     fi
   fi
 
@@ -63,7 +63,7 @@ fi
     <h3>Upload sensor driver</h3>
     <form action="sensor-upload.cgi" method="post" enctype="multipart/form-data">
       <% field_file "sensor_driver_file" "Sensor driver file" %>
-      <% button_submit "$t_btn_upload" %>
+      <% button_submit "Upload file" %>
     </form>
   </div>
   <div class="col">
@@ -74,7 +74,7 @@ fi
     <h3>Upload sensor config</h3>
     <form action="sensor-upload.cgi" method="post" enctype="multipart/form-data">
       <% field_file "sensor_config_file" "Sensor config file" %>
-      <% button_submit "$t_btn_upload" %>
+      <% button_submit "Upload file" %>
     </form>
   </div>
 </div>

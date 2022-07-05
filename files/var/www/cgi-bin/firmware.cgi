@@ -43,7 +43,7 @@ fw_rootfs="true"
       <% field_file "parts_file" "Binary file" %>
       <% field_select "parts_type" "Type of the binary file" "kernel,roots" %>
       <p class="text-danger small">Destructive! Make sure you know what you are doing.</p>
-      <% button_submit "$t_btn_upload" "danger" %>
+      <% button_submit "Upload file" "danger" %>
     </form>
   </div>
 </div>

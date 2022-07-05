@@ -26,11 +26,11 @@ rootfs)
   ;;
 esac
 
-[ -z "$file_name"  ] && error="$t_form_error_1"
-[ ! -r "$file" ] && error="$t_form_error_2"
-[ "$(wc -c $file | awk '{print $1}')" -gt "$maxsize" ] && error="$t_form_error_3 $(wc -c $file | awk '{print $1}') > ${maxsize}."
-[ "$magicnum" -ne "$(xxd -p -l 4 $file)" ] && error="$t_form_error_4 $(xxd -p -l 4 $file) != $magicnum"
-[ "$sysupgrade_date" -lt "$new_sysupgrade_date" ] && error="$t_form_error_5"
+[ -z "$file_name"  ] && error="No file found! Did you forget to upload?"
+[ ! -r "$file" ] && error="Cannot read uploded file!"
+[ "$(wc -c $file | awk '{print $1}')" -gt "$maxsize" ] && error="Uploded file is too large! $(wc -c $file | awk '{print $1}') > ${maxsize}."
+[ "$magicnum" -ne "$(xxd -p -l 4 $file)" ] && error="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 4 $file) != $magicnum"
+[ "$sysupgrade_date" -lt "$new_sysupgrade_date" ] && error="This feature requires the latest sysupgrade tool. Please upgrade firmware first."
 
 if [ -n "$error" ]; then
   redirect_back "danger" "$error"

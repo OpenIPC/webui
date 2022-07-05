@@ -91,7 +91,7 @@ mj="
 .mjpeg.bitrate|Video bitrate|kbps|number|1,4096,1|1024|
 .audio.enabled|Enable audio||boolean|true,false|false|
 .audio.volume|Audio volume level|%|range|1,100,1,auto|auto|
-.audio.srate|Audio sampling rate|kHz|number|1,44100,1|8000|
+.audio.srate|Audio sampling rate|kHz|number|1,96000,1|8000|
 .audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,aac,pcm,alaw,ulaw|opus|
 .audio.device|Audio card||string||hw:2|
 .audio.outputEnabled|Enable audio output||boolean|true,false|false|

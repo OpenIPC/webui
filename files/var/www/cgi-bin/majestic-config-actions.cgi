@@ -60,7 +60,7 @@ fi
 <% page_title="Majestic Maintenance" %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-1 row-cols-lg-3 g-4">
+<div class="row row-cols-1 row-cols-lg-3 g-4 mb-4">
   <div class="col">
     <h3>Backup config</h3>
     <p>Download recent majestic.yaml to preserve changes you made to the default configuration.</p>

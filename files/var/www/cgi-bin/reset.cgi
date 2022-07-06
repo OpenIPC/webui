@@ -3,7 +3,7 @@
 <% page_title="Reset things" %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-md-3 g-4">
+<div class="row row-cols-md-3 g-4 mb-4">
   <div class="col">
     <div class="alert alert-danger">
       <h4>Reboot camera</h4>

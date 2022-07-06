@@ -12,7 +12,7 @@ ipeye_camera_name=$network_hostname
 <p class="alert alert-warning">Attention! This is only a proof of concept for the prospective subsystem of additional services. No real functionality here.</p>
 
 <% if [ "$(yaml-cli -g .ipeye.enabled)" = "true" ]; then %>
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
     <div class="col order-2 order-lg-1">
       <h3>Add a feed</h3>
       <form action="<%= $SCRIPT_NAME %>" method="post">

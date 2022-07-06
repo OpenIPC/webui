@@ -54,7 +54,7 @@ fi
 
 <% [ -n "$error" ] && report_error "$error" %>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
   <div class="col">
     <h3>Sensor Drivers</h3>
     <% ex "ls /usr/lib/sensors/" %>

@@ -5,7 +5,7 @@
 
 <p>Detailed information available <a href="https://github.com/OpenIPC/wiki/blob/master/en/majestic-streamer.md">in the wiki</a>.</p>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
   <div class="col">
     <h3>Web Pages</h3>
     <dl>

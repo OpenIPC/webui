@@ -128,10 +128,8 @@ field_checkbox() {
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
 
   _h=$3
-  [ -z "$_h" ] && _h="$(t_hint "$1")"
 
   _v=$(t_value "$1")
-  [ -z "$_v" ] && _v=$(t_default "$1")
   [ -z "$_v" ] && _v="false"
 
   echo "<p class=\"boolean form-check\">" \
@@ -150,13 +148,13 @@ field_file() {
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
 
   _h=$3
-  [ -z "$_h" ] && _h="$(t_hint "$1")"
 
   echo "<p class=\"file\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<input type=\"file\" id=\"${1}\" name=\"${1}\" class=\"form-control\">"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
+  unset _h; unset _l
 }
 
 # field_hidden "name" "value"
@@ -179,16 +177,16 @@ field_number() {
   _b=$(echo "$_r" | cut -d, -f4)
 
   _h=$4
-  [ -z "$_h" ] && _h="$(t_hint "$1")"
 
   _v=$(t_value "$1")
-  [ -z "$_v" ] && _v=$(t_default "$1")
 
   echo "<p class=\"number\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
-    "<input type=\"number\" name=\"${1}\" id=\"${1}\" class=\"form-control text-end\" value=\"${_v}\" min=\"${_f}\" max=\"${_t}\" step=\"${_s}\" value=\"${_v}\">"
+    "<input type=\"number\" name=\"${1}\" id=\"${1}\" class=\"form-control text-end\"" \
+      " value=\"${_v}\" min=\"${_f}\" max=\"${_t}\" step=\"${_s}\" value=\"${_v}\">"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
+  unset _b; unset _f; unset _h; unset _l; unset _r; unset _s; unset _t; unset _v
 }
 
 # field_password "name" "label" "hint"
@@ -198,10 +196,8 @@ field_password() {
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
 
   _h=$3
-  [ -z "$_h" ] && _h="$(t_hint "$1")"
 
   _v=$(t_value "$1")
-  [ -z "$_v" ] && _v=$(t_default "$1")
 
   echo "<p class=\"password\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
@@ -213,6 +209,7 @@ field_password() {
     "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
+  unset _h; unset _l; unset _v
 }
 
 # field_range "name" "label" "range" "hint"
@@ -229,11 +226,9 @@ field_range() {
   _st=$(echo "$_r" | cut -d, -f3)
   _ab=$(echo "$_r" | cut -d, -f4)
 
-  _hint=$4
-  [ -z "$_hint" ] && _hint="$(t_hint "$_n")"
+  _h=$4
 
   _v=$(t_value "$_n")
-  [ -z "$_v" ] && _v=$(t_default "$_n")
 
   _vr=$_v
   [ -z "$_vr" -o "$_ab" = "$_vr" ] && _vr=$(( ( $_mn + $_mx ) / 2 ))
@@ -241,28 +236,21 @@ field_range() {
   echo "<p class=\"range\">" \
     "<label class=\"form-label\" for=\"${_n}\">${_l}</label>" \
     "<span class=\"input-group\">"
-
   # NB! no name on checkbox, since we don't want its data submitted
   [ -n "$_ab" ] && echo "<label class=\"input-group-text\" for=\"${_n}-auto\">${_ab}" \
     "<input type=\"checkbox\" class=\"form-check-input auto-value ms-1\" id=\"${_n}-auto\"" \
-      " data-for=\"${_n}\" data-value=\"${_vr}\" $(t_checked "$_v" "$_ab")>" \
+      " data-for=\"${_n}\" data-value=\"${_vr}\" $(t_checked "$_ab" "$_v")>" \
     "</label>"
-
   # Input that holds the submitting value.
   echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}\" value=\"${_v}\">"
-
   # NB! no name on range, since we don't want its data submitted
   echo "<input type=\"range\" class=\"form-control form-range\" id=\"${_n}-range\"" \
       "value=\"${_vr}\" min=\"${_mn}\" max=\"${_mx}\" step=\"${_st}\">"
-
   echo "<span class=\"input-group-text show-value\" id=\"${_n}-show\">${_vr}</span>" \
     "</span>"
-
-  [ -n "$_hint" ] && echo "<span class=\"hint text-secondary\">${_hint}</span>"
-
+  [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
-
-  unset _ab; unset _mn; unset _mx; unset _n; unset _r; unset _st; unset _v; unset _vr;
+  unset _ab; unset $_h; unset _mn; unset _mx; unset _n; unset _r; unset _st; unset _v; unset _vr
 }
 
 # field_select "name" "label" "options" "hint"
@@ -271,25 +259,31 @@ field_select() {
   [ -z "$_l" ] && _l="$(t_label "$1")"
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
 
-  options=$3
-  options=${options//,/ }
+  _o=$3
+  _o=${options//,/ }
 
-  _h=$4
-  [ -z "$_h" ] && _h="$(t_hint "$1")"
+  _h=$4;
+
+  _u=$(t_units "$1")
 
   echo "<p class=\"select\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<select class=\"form-select\" id=\"${1}\" name=\"${1}\">"
   [ -z "$(t_value "$1")" ] && echo "<option value=\"\">Select from available options</option>"
-  for o in $options; do
-    _v="${o%|*}"; _n="${o#*|}"; [ "$1" != "mj_isp_sensorConfig" ] && _n=${_n//_/ }
-    echo "<option value=\"${_v}\" $(t_selected "$1" "${_v}")>${_n}</option>"
+  for o in $_o; do
+    _v="${o%|*}"
+    _n="${o#*|}"
+    [ "$1" != "mj_isp_sensorConfig" ] && _n=${_n//_/ }
+    echo -n "<option value=\"${_v}\""
+    [ "$(t_value "$1")" = "$_v" ] && echo -n " selected"
+    echo ">${_n}</option>"
     unset _v; unset _n
   done
   echo "</select>"
-#  units "$1"
+  [ -n "$_u" ] && echo "<span class=\"input-group-text\">${_u}</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
+  unset _h; unset _l; unset _o; unset _u
 }
 
 # field_swith "name" "label" "hint" "options"
@@ -299,21 +293,18 @@ field_switch() {
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">$1</span>"
 
   _h=$3
-  [ -z "$_h" ] && _h="$(t_hint "$1")"
 
-  _o=$4
-  [ -z "$_o" ] && _o="true,false"
+  _o=$4; [ -z "$_o" ] && _o="true,false"
   _o1=$(echo "$_o" | cut -d, -f1)
   _o2=$(echo "$_o" | cut -d, -f2)
 
-  _v=$(t_value "$1")
-  [ -z "$_v" ] && _v=$(t_default "$1")
-  [ -z "$_v" ] && _v="false"
+  _v=$(t_value "$1"); [ -z "$_v" ] && _v="false"
 
   echo "<p class=\"boolean\">" \
     "<span class=\"form-check form-switch\">" \
     "<input type=\"hidden\" id=\"${1}-false\" name=\"${1}\" value=\"${_o2}\">" \
-    "<input type=\"checkbox\" id=\"${1}\" name=\"${1}\" value=\"${_o1}\" role=\"switch\" class=\"form-check-input\"$(t_checked "$_o1" "$_v")>" \
+    "<input type=\"checkbox\" id=\"${1}\" name=\"${1}\" value=\"${_o1}\" role=\"switch\"" \
+      " class=\"form-check-input\"$(t_checked "$_o1" "$_v")>" \
     "<label for=\"$1\" class=\"form-check-label\">${_l}</label>" \
     "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
@@ -328,10 +319,8 @@ field_text() {
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">$1</span>"
 
   _h=$3
-  [ -z "$_h" ] && _h="$(t_hint "$1")"
 
   _v=$(t_value "$1")
-  [ -z "$_v" ] && _v=$(t_default "$1")
 
   #  placeholder="FQDN or IP address"
   echo "<p class=\"string\">" \
@@ -339,6 +328,7 @@ field_text() {
     "<input type=\"text\" id=\"${1}\" name=\"${1}\" class=\"form-control\" value=\"${_v}\">"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
+  unset _h; unset _l; unset _v
 }
 
 # field_textarea "name" "label" "hint"
@@ -348,16 +338,15 @@ field_textarea() {
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">$1</span>"
 
   _h=$3
-  [ -z "$_h" ] && _h="$(t_hint "$1")"
 
   _v=$(t_value "$1")
-  [ -z "$_v" ] && _v=$(t_default "$1")
 
   echo "<p class=\"textarea\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<textarea id=\"${1}\" name=\"${1}\" class=\"form-control\">${_v}</textarea>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
+  unset _h; unset _l; unset _v
 }
 
 flash_append() {
@@ -377,7 +366,10 @@ flash_read() {
   for _l in $(cat "$flash_file"); do
     _c="$(echo $_l | cut -d':' -f1)"
     _m="$(echo $_l | cut -d':' -f2-)"
-    echo "<div class=\"alert alert-${_c} alert-dismissible fade show\" role=\"alert\">${_m}<button type=\"button\" class=\"btn btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></div>"
+    echo "<div class=\"alert alert-${_c} alert-dismissible fade show\" role=\"alert\">" \
+      "${_m}" \
+      "<button type=\"button\" class=\"btn btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>" \
+      "</div>"
   done
   IFS=$OIFS
   flash_delete
@@ -453,8 +445,8 @@ pre() {
 progressbar() {
   _c="primary"; [ "$1" -ge "75" ] && _c="danger"
   echo "<div class=\"progress\">" \
-    "<div class=\"progress-bar progress-bar-striped progress-bar-animated bg-${_c}\"" \
-      " role=\"progressbar\" style=\"width:${1}%\" aria-valuenow=\"${1}\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>" \
+    "<div class=\"progress-bar progress-bar-striped progress-bar-animated bg-${_c}\" role=\"progressbar\"" \
+      " style=\"width:${1}%\" aria-valuenow=\"${1}\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>" \
     "</div>"
 }
 
@@ -553,24 +545,8 @@ t_checked() {
   [ "$2" = "$1" ] && echo "checked"
 }
 
-t_default() {
-  eval "echo \$tDefault_${1}"
-}
-
-t_disabled() {
-  [ "$2" = "$(t_value "$1")" ] && echo "disabled"
-}
-
-t_hint() {
-  eval "echo \$tH_${1}"
-}
-
 t_label() {
   eval "echo \$tL_${1}"
-}
-
-t_selected() {
-  [ "$2" = "$(t_value "$1")" ] && echo -n "selected"
 }
 
 t_units() {
@@ -579,10 +555,6 @@ t_units() {
 
 t_value() {
   eval "echo \$${1}"
-}
-
-units() {
-  [ -n "$(t_units "$1")" ] && span "$(t_units "$1")" "input-group-text"
 }
 
 update_caminfo() {

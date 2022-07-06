@@ -612,7 +612,8 @@ update_caminfo() {
   network_hostname=$(hostname -s)
   network_interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | tr '\n' ' ' | sed 's/ $//' )
   network_address=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
-  network_macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/ //g" | uniq)
+  # FIXME: multiple interfaces give multiple addresses
+  network_macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/ //g" | uniq | tail -1)
   network_netmask=$(ifconfig eth0 | grep "inet " | cut -d: -f4)
 
   overlay_root=$(mount | grep upperdir= | sed -r 's/^.*upperdir=([a-z\/]+).+$/\1/')

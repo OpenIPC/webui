@@ -61,10 +61,10 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
       if [ "$network_hostname" != "$_old_hostname" ]; then
         echo "$network_hostname" > /etc/hostname
         hostname "$network_hostname"
-        sed -r -i "/127.0.1.1/s/(\b)${_old_hostname}(\b)/\1${network_hostname}\2/" /etc/hosts 2>&1
-        # FIXME: hangs on update
+        sed -r -i "/127.0.1.1/s/(\b)${_old_hostname}(\b)/\1${network_hostname}\2/" /etc/hosts >&2
         killall udhcpc
-        udhcpc -x hostname:$network_hostname -T 1 -t 5 -R -b -O search
+        # page does not redirect without >/dev/null
+        udhcpc -x hostname:$network_hostname -T 1 -t 5 -R -b -O search > /dev/null
       fi
     fi
 

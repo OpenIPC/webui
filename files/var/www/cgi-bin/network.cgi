@@ -57,12 +57,11 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     mv $tmp_file /etc/network/interfaces
 
     if [ -n "$network_hostname" ]; then
-      if [ "$network_hostname" != "$(hostname)" ]; then
+      _old_hostname="$(hostname)"
+      if [ "$network_hostname" != "$_old_hostname" ]; then
         echo "$network_hostname" > /etc/hostname
         hostname "$network_hostname"
-        _old_hostname=$(hostname)
-        sed -r -i '/127.0.1.1/s/(\b)${_old_hostname}(\b)/\1${network_hostname}\2/' /etc/hosts
-#        sed -i "/127.0.1.1\s/s/^.*$/127.0.1.1\t${network_hostname}/" /etc/hosts
+        sed -r -i "/127.0.1.1/s/(\b)${_old_hostname}(\b)/\1${network_hostname}\2/" /etc/hosts 2>&1
         # FIXME: hangs on update
         killall udhcpc
         udhcpc -x hostname:$network_hostname -T 1 -t 5 -R -b -O search

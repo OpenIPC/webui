@@ -95,6 +95,7 @@ mj="
 .audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,aac,pcm,alaw,ulaw|opus|
 .audio.device|Audio card||string||hw:2|
 .audio.outputEnabled|Enable audio output||boolean|true,false|false|
+.audio.voiceEqualizer|Audio equalizer||select|disabled,common,music,noisy|disabled|
 .rtsp.enabled|Enable output||boolean|true,false|true|
 .rtsp.port|Port for RTSP protocol||number|1,65535,1|554|rtsp://[ip.add.re.ss]:[port]/stream={0,1}
 .hls.enabled|Enable HTTP Live Streaming (HLS)||boolean|true,false|true|
@@ -120,4 +121,7 @@ mj="
 
 # hide these settings unless in debug mode
 mj_params_debug=".isp.aGain .isp.dGain .isp.ispGain"
+
+# conditional settings limiters
+mj_limit_audio_voiceEqualizer="gk7205v200 hi3516cv300 hi3516cv500 hi3516ev300 hi3519v101"
 %>

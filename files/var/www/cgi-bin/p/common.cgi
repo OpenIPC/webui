@@ -260,7 +260,7 @@ field_select() {
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
 
   _o=$3
-  _o=${options//,/ }
+  _o=${_o//,/ }
 
   _h=$4;
 

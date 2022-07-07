@@ -41,7 +41,7 @@ fw_rootfs="true"
     <h3>Upload Kernel & RootFS</h3>
     <form action="firmware-upload-parts.cgi" method="post" enctype="multipart/form-data">
       <% field_file "parts_file" "Binary file" %>
-      <% field_select "parts_type" "Type of the binary file" "kernel,roots" %>
+      <% field_select "parts_type" "Type of the binary file" "kernel,rootfs" %>
       <p class="text-danger small">Destructive! Make sure you know what you are doing.</p>
       <% button_submit "Upload file" "danger" %>
     </form>

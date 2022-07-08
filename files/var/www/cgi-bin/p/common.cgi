@@ -250,7 +250,7 @@ field_range() {
     "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
-  unset _ab; unset $_h; unset _mn; unset _mx; unset _n; unset _r; unset _st; unset _v; unset _vr
+  unset _ab; unset _h; unset _mn; unset _mx; unset _n; unset _r; unset _st; unset _v; unset _vr
 }
 
 # field_select "name" "label" "options" "hint"

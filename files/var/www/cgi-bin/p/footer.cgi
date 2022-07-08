@@ -5,7 +5,6 @@
     <div class="container pt-3">
       <p class="text-end">Powered by <a href="https://github.com/OpenIPC/microbe-web">Microbe Web UI</a>, a part of <a href="https://openipc.org/">OpenIPC project</a>.</p>
     </div>
-  </footer>
 
 <% if [ "$debug" -ge "1" ]; then %>
   <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasDebug" aria-labelledby="offcanvasDebugLabel">
@@ -15,7 +14,6 @@
         <% field_hidden "action" "init" %>
         <% button_submit "Refresh Environment" %>
       </form>
-
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body x-small">
@@ -34,7 +32,8 @@
     </div>
   </div>
 
-  <button type="button" class="btn btn-primary btn-sm fixed-bottom m-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDebug" aria-controls="offcanvasDebug">Debug</button>
+  <button type="button" class="btn btn-primary btn-sm m-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDebug" aria-controls="offcanvasDebug">Debug</button>
 <% fi %>
+  </footer>
 </body>
 </html>

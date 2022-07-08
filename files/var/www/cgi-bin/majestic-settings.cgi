@@ -110,7 +110,7 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
     hint=$line                            # => From_1_to_500000.
     hint=${hint//_/ }                     # => From 1 to 500000.
 
-    value=$(yaml-cli -g "$yaml_param_name")
+    value="$(yaml-cli -g "$yaml_param_name")"
 
     if [ "$olddomain" != "$domain" ]; then
       [ -n "$olddomain" ] && echo "</fieldset>"
@@ -119,7 +119,7 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
     fi
 
     # assign yaml_param_name's value to a variable with yaml_param_name's form_field_name for form fields values
-    eval $form_field_name=\"$(yaml-cli -g "$yaml_param_name")\"
+    eval "$form_field_name=\"$(yaml-cli -g "$yaml_param_name")\""
 
     # hide some params in config
     [ "mj_netip_password_plain" != "$form_field_name" ] && config="${config}\n$(eval echo ${yaml_param_name}: \$$form_field_name)"

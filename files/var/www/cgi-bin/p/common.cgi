@@ -320,7 +320,7 @@ field_text() {
 
   _h=$3
 
-  _v=$(t_value "$1")
+  _v="$(t_value "$1")"
 
   #  placeholder="FQDN or IP address"
   echo "<p class=\"string\">" \
@@ -558,7 +558,7 @@ t_label() {
 }
 
 t_value() {
-  eval "echo \$${1}"
+  eval "echo \"\$${1}\""
 }
 
 update_caminfo() {

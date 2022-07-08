@@ -533,11 +533,13 @@ sanitize() {
   unset _n
 }
 
+generate_signature() {
+  echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash, ${fw_version}-${fw_variant}, ${network_hostname}, ${network_wan_mac}" > $signature_file
+}
+
 signature() {
-  _f=/tmp/webui/signature.txt
-  [ ! -f "$_f" ] && echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash, ${fw_version}-${fw_variant}, ${network_hostname}, ${network_wan_mac}" > $_f
-  cat $_f
-  unset _f
+  [ ! -f "$signature_file" ] && generate_signature
+  cat $signature_file
 }
 
 tab_lap() {
@@ -700,6 +702,7 @@ ui_config_dir=/etc/webui
 
 mj_bin_file=/usr/bin/majestic
 flash_file=/tmp/webui-flash.txt
+signature_file=/tmp/webui/signature.txt
 sysinfo_file=/tmp/sysinfo.txt
 
 [ ! -d $ui_tmp_dir ] && mkdir -p $ui_tmp_dir

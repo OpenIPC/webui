@@ -14,7 +14,7 @@ function refresh() {
 
 (function () {
     function initAll() {
-
+        // serve auto value on range form fields
         function toggleAuto(el) {
             const id = el.dataset.for;
             const p = $('#' + id);
@@ -35,6 +35,7 @@ function refresh() {
 
         $$('form').forEach(el => el.autocomplete = 'off');
 
+        // For .warning and .danger buttons, ask confirmation on action.
         $$('.btn-danger, .btn-warning, .confirm').forEach(el => {
             // for input, find its parent form and attach listener to it submit event
             if (el.nodeName === "INPUT") {
@@ -47,16 +48,13 @@ function refresh() {
 
         $$('.refresh').forEach(el => el.addEventListener('click', refresh));
 
+        // open links to external resources in a new window.
         $$('a[href^=http]').forEach(el => el.target = '_blank');
 
-        // add patterns
-        $$('input.pat-host').forEach(el => el.pattern = '^[a-zA-Z0-9-_.]+$');
-
-        $$('input.pat-host-ip').forEach(el => el.pattern = '^[a-zA-Z0-9-_.]+$');
-
+        // add auto toggle button and value display for range elements.
         $$('input[type=range]').forEach(el => {
             el.addEventListener('input', ev => {
-                const id = ev.target.id.replace(/-range/, '');
+                const id = ev.target.id.replace(/-range/, '');`1`
                 $('#' + id + '-show').textContent = ev.target.value;
                 $('#' + id).value = ev.target.value;
             })
@@ -77,6 +75,7 @@ function refresh() {
         // });
         // $$('pre').forEach(el => resizeObserver.observe(el));
 
+        // show password when "show" checkbox is checked
         $$(".password input[type=checkbox]").forEach(el => {
             el.addEventListener('change', ev => {
                 const pw = $('#' + ev.target.dataset['for']);

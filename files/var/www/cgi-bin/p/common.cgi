@@ -253,7 +253,7 @@ field_range() {
   unset _ab; unset _h; unset _mn; unset _mx; unset _n; unset _r; unset _st; unset _v; unset _vr
 }
 
-# field_select "name" "label" "options" "hint"
+# field_select "name" "label" "options" "hint" "units"
 field_select() {
   _l=$2
   [ -z "$_l" ] && _l="$(t_label "$1")"
@@ -264,7 +264,7 @@ field_select() {
 
   _h=$4;
 
-  _u=$(t_units "$1")
+  _u=$5
 
   echo "<p class=\"select\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
@@ -400,12 +400,20 @@ html_title() {
   echo -n "OpenIPC"
 }
 
-# label "name" "classes" "extras"
+# label "name" "classes" "extras" "units"
 label() {
-  _c="form-label"; [ -n "$2" ] && _c="${_c} ${2}"
-  _l="$(t_label "$1")"; [ -z "$_l" ] && _l="$1" && _c="${_c} bg-warning"
-  _u=$(t_units "$1"); [ -n "$_u" ] && _l="${_l}, <span class=\"units text-secondary x-small\">$_u</span>"
-  _x="$3"; [ -n "$_x" ] && _x=" ${_x}"
+  _c="form-label"
+  [ -n "$2" ] && _c="${_c} ${2}"
+
+  _l="$(t_label "$1")"
+  [ -z "$_l" ] && _l="$1" && _c="${_c} bg-warning"
+
+  _x="$3"
+  [ -n "$_x" ] && _x=" ${_x}"
+
+  _u="$4"
+  [ -n "$_u" ] && _l="${_l}, <span class=\"units text-secondary x-small\">$_u</span>"
+
   echo "<label for=\"${1}\" class=\"${_c}\"${_x}>${_l}</label>"
   unset _c; unset _l; unset _u; unset _x
 }
@@ -547,10 +555,6 @@ t_checked() {
 
 t_label() {
   eval "echo \$tL_${1}"
-}
-
-t_units() {
-  eval "echo \$tUnits_${1}"
 }
 
 t_value() {

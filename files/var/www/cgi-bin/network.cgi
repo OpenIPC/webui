@@ -69,6 +69,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     fi
 
     update_caminfo
+    generate_signature
     touch /tmp/network-restart.txt
     redirect_back "success" "Network settings updated."
   fi

@@ -122,8 +122,15 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
     eval "$form_field_name=\"$(yaml-cli -g "$yaml_param_name")\""
 
     # hide some params in config
-    [ "mj_netip_password_plain" != "$form_field_name" ] && config="${config}\n$(eval echo ${yaml_param_name}: \$$form_field_name)"
-    [ "mj_audio_voiceEqualizer" = "$form_field_name" ] && [ -z "$(echo $mj_limit_audio_voiceEqualizer | sed -n "/\b${soc_family}\b/p")" ] && continue
+    if [ "mj_netip_password_plain" != "$form_field_name" ]; then
+      config="${config}\n$(eval echo ${yaml_param_name}: \"\$$form_field_name\")"
+    fi
+
+    if [ "mj_audio_voiceEqualizer" = "$form_field_name" ]; then
+      if [ -z "$(echo $mj_limit_audio_voiceEqualizer | sed -n "/\b${soc_family}\b/p")" ]; then
+        continue
+      fi
+    fi
 
     case "$form_field_type" in
       boolean)  field_switch "$form_field_name" "$label_text" "$hint" "$options";;

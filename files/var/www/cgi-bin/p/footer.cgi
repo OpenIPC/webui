@@ -2,6 +2,8 @@
   </main>
 
   <footer class="fixed-bottom bg-light x-small">
+    <button type="button" class="btn btn-primary btn-sm m-2 float-start" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDebug" aria-controls="offcanvasDebug">Debug</button>
+
     <div class="container pt-3">
       <p class="text-end">Powered by <a href="https://github.com/OpenIPC/microbe-web">Microbe Web UI</a>, a part of <a href="https://openipc.org/">OpenIPC project</a>.</p>
     </div>
@@ -32,7 +34,6 @@
     </div>
   </div>
 
-  <button type="button" class="btn btn-primary btn-sm m-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDebug" aria-controls="offcanvasDebug">Debug</button>
 <% fi %>
   </footer>
 </body>

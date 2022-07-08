@@ -108,8 +108,8 @@ mj="
 .ipeye.enabled|Enable IPEYE support||boolean|true,false|false|
 .netip.enabled|Enable NETIP protocol support||boolean|true,false|false|
 .netip.user|NETIP user||string||admin|
-.netip.password|NETIP password||string||6V0Y4HLF|
-.netip.password-plain|NETIP password||string|||
+.netip.password-plain|NETIP password||password|||Pain-text password, it will be hashed for NETIP.
+.netip.password|NETIP password (hash)||hidden||6V0Y4HLF|
 .netip.port|NETIP port||number|1,65535,1|34567|
 .netip.snapshots|NETIP snaphots||boolean|true,false|true|
 .netip.ignoreSetTime|Ignore set time||boolean|true,false|false|

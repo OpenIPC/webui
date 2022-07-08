@@ -159,8 +159,8 @@ field_file() {
 
 # field_hidden "name" "value"
 field_hidden() {
-  # do we need id here? id=\"${1}\"
-  echo "<input type=\"hidden\" name=\"${1}\" value=\"${2}\" class=\"form-hidden\">"
+  # do we need id here? id=\"${1}\". We do for netip password!
+  echo "<input type=\"hidden\" name=\"${1}\" id=\"${1}\" value=\"${2}\" class=\"form-hidden\">"
 }
 
 # field_number "name" "label" "range" "hint"

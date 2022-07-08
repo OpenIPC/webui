@@ -126,12 +126,13 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
     [ "mj_audio_voiceEqualizer" = "$form_field_name" ] && [ -z "$(echo $mj_limit_audio_voiceEqualizer | sed -n "/\b${soc_family}\b/p")" ] && continue
 
     case "$form_field_type" in
-      boolean) field_switch "$form_field_name" "$label_text" "$hint" "$options";;
-      hidden)  field_hidden "$form_field_name" "$label_text";;
-      number)  field_number "$form_field_name" "$label_text" "$options" "$hint";;
-      range)   field_range  "$form_field_name" "$label_text" "$options" "$hint";;
-      select)  field_select "$form_field_name" "$label_text" "$options" "$hint";;
-      string)  field_text   "$form_field_name" "$label_text" "$hint";;
+      boolean)  field_switch "$form_field_name" "$label_text" "$hint" "$options";;
+      hidden)   field_hidden "$form_field_name" "$label_text" "$hint";;
+      number)   field_number "$form_field_name" "$label_text" "$options" "$hint";;
+      password) field_password "$form_field_name" "$label_text" "$hint";;
+      range)    field_range  "$form_field_name" "$label_text" "$options" "$hint";;
+      select)   field_select "$form_field_name" "$label_text" "$options" "$hint";;
+      string)   field_text   "$form_field_name" "$label_text" "$hint";;
       *) echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>";;
     esac
   fi
@@ -211,13 +212,13 @@ echo "<a class=\"list-group-item list-group-item-danger\" href=\"?tab=all\">Show
   }
 
   $("#mj_netip_enabled")?.addEventListener("change", (ev) => {
-      $("#mj_netip_user").required = ev.target.checked;
-      $("#mj_netip_password_plain").required = ev.target.checked;
+    $("#mj_netip_user").required = ev.target.checked;
+    $("#mj_netip_password_plain").required = ev.target.checked;
   })
 
   $("#mj_netip_password_plain") && $("form").addEventListener("submit", (ev) => {
-      const pw = $("#mj_netip_password_plain").value.trim();
-      if (pw !== "") $("#mj_netip_password").value = generateSofiaHash(pw);
+    const pw = $("#mj_netip_password_plain").value.trim();
+    if (pw !== "") $("#mj_netip_password").value = generateSofiaHash(pw);
   })
 </script>
 

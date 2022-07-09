@@ -97,7 +97,7 @@ mj="
 .audio.outputEnabled|Enable audio output||boolean|true,false|false|
 .audio.voiceEqualizer|Audio equalizer||select|disabled,common,music,noisy|disabled|
 .rtsp.enabled|Enable output||boolean|true,false|true|
-.rtsp.port|Port for RTSP protocol||number|1,65535,1|554|rtsp://[ip.add.re.ss]:[port]/stream={0,1}
+.rtsp.port|Port for RTSP protocol||number|1,65535,1|554|rtsp://${network_address}:[port]/stream={0,1}
 .hls.enabled|Enable HTTP Live Streaming (HLS)||boolean|true,false|true|
 .youtube.enabled|Enable Youtube support||boolean|true,false|false|
 .youtube.key|Youtube API key||string||xxxx-xxxx-xxxx-xxxx-xxxx|

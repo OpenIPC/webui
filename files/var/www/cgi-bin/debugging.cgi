@@ -83,11 +83,17 @@ fi
     <p><b>This service requires a slight modification of /etc/init.d/S95... file.</b></p>
     <p>Please insert the following code inside <code>load_majestic()</code> block, right before <code>start-stop-daemon</code> line:</p>
     <pre class="bg-light p-3 text-black">
-if [ -f $config_file ] && [ "true" = "$(grep ^savedumps $config_file | cut -d= -f2)" ]; then
-  ulimit -c unlimited && echo "| /usr/sbin/sendcoredump.sh" > /proc/sys/kernel/core_pattern
-fi
+[ -f /etc/coredump.conf ] && . /etc/coredump.conf
+[ "$coredump_enabled" ] && ulimit -c unlimited && echo "| /usr/sbin/sendcoredump.sh" > /proc/sys/kernel/core_pattern
 </pre>
   </div>
+<% fi %>
+
+<% if [ "true" = "$(yaml-cli -g .watchdog.enabled)" ] && [ "$(yaml-cli -g .watchdog.timeout)" -le 60 ]; then %>
+<div class="alert alert-warning">
+<p class="mb-0">Please disable watchdog or <a href="majestic-settings.cgi?tab=watchdog">change its timeout value</a> to 60 seconds or more.
+Shorter timeout may affect coredump saving.</p>
+</div>
 <% fi %>
 
 <form action="<%= $SCRIPT_NAME %>" method="post">

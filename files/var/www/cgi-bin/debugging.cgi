@@ -78,10 +78,10 @@ fi
 %>
 <%in p/header.cgi %>
 
-<% if [ -z "$(grep sendcoredump.sh /etc/init.d/S95*)" ]; then %>
+<% if [ -z "$(grep coredump_enabled /etc/init.d/S95*)" ]; then %>
   <div class="alert alert-warning">
     <p><b>This service requires a slight modification of /etc/init.d/S95... file.</b></p>
-    <p>Please insert the following code inside <code>load_majestic()</code> block, right before <code>start-stop-daemon</code> line:</p>
+    <p>Please insert or adjust the following code inside <code>load_majestic()</code> block, right before <code>start-stop-daemon</code> line:</p>
     <pre class="bg-light p-3 text-black">
 [ -f /etc/coredump.conf ] && . /etc/coredump.conf
 [ "$coredump_enabled" ] && ulimit -c unlimited && echo "| /usr/sbin/sendcoredump.sh" > /proc/sys/kernel/core_pattern
@@ -96,38 +96,35 @@ Shorter timeout may affect coredump saving.</p>
 </div>
 <% fi %>
 
+<button type="button" class="btn btn-info float-end" data-bs-toggle="modal" data-bs-target="#helpModal">How is works?</button>
+
 <form action="<%= $SCRIPT_NAME %>" method="post">
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4 g-4 mb-4">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
     <div class="col">
       <h3>Core dump saving</h3>
       <% field_switch "coredump_enabled" "Enable core dump saving" %>
-    </div>
-    <div class="col">
-      <h3>Upload to AWS S3 bucket</h3>
-      <% field_switch "coredump_send2devs" "Upload to developers" %>
+      <% field_switch "coredump_send2devs" "Upload core dump to developers" %>
       <% field_checkbox "coredump_consent" "I am aware of sensitive information in core dumps and I trust the developers" %>
     </div>
     <div class="col">
-      <h3>Leave on camera</h3>
-      <% field_switch "coredump_save4web" "Save file on camera" "Not recommended!" %>
-      <% field_text "coredump_localpath" "Local path" %>
+      <h3>Save on camera</h3>
+      <% field_switch "coredump_save4web" "Enable saving on camera" "Not recommended unless you save to an SD card!" %>
+      <% field_text "coredump_localpath" "Save to local directory" %>
 <% if [ -f "${coredump_localpath}/coredump.tgz" ]; then %>
       <div class="alert alert-danger">
         <h5>There is a core dump saved on the camera!</h5>
         <p class="mb-0">Please retrieve and delete file /root/coredump.tgz from the camera.</h5>
       </div>
 <% fi %>
-    </div>
-    <div class="col">
       <h3>Upload to TFTP server</h3>
-      <% field_switch "coredump_send2tftp" "Upload to TFTP server" %>
-      <% field_text "coredump_tftphost" "Host" "FQDN or IP address" %>
+      <% field_switch "coredump_send2tftp" "Enable uploading to TFTP server" %>
+      <% field_text "coredump_tftphost" "TFTP server host" "FQDN or IP address" %>
     </div>
     <div class="col">
       <h3>Upload to FTP server</h3>
-      <% field_switch "coredump_send2ftp" "Upload to FTP server" %>
-      <% field_text "coredump_ftphost" "Host" "FQDN or IP address" %>
-      <% field_text "coredump_ftppath" "Target directory" "relative to ftp root directory" %>
+      <% field_switch "coredump_send2ftp" "Enable uploading to FTP server" %>
+      <% field_text "coredump_ftphost" "FTP server host" "FQDN or IP address" %>
+      <% field_text "coredump_ftppath" "Save to FTP directory" "relative to FTP root directory" %>
       <% field_text "coredump_ftpuser" "Username" %>
       <% field_password "coredump_ftppass" "Password" %>
     </div>
@@ -162,7 +159,5 @@ Shorter timeout may affect coredump saving.</p>
     </div>
   </div>
 </div>
-
-<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#helpModal">How is works?</button>
 
 <%in p/footer.cgi %>

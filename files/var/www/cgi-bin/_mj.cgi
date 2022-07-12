@@ -13,7 +13,7 @@ mj_retired="
 
 # line format: parameter|label|units|type|o,p,t,i,o,n,s|placeholder|hint
 # number options: min,max,step
-# range options: min,max,step,button
+# range options: min,max,step[,button]
 # select options: value2,value2,value3...
 mj="
 .system.logLevel|Severity of logging||select|ERROR,WARN,INFO,DEBUG,TRACE|TRACE|Used for syslog messages.
@@ -55,7 +55,7 @@ mj="
 .nightMode.irSensorPinInvert|IR sensor is inverted||boolean|true,false|false|
 .nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|1,100,1|1|
 .nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|1,100,1|2|
-.nightMode.pinSwitchDelayUs|Delay before triggering IRcut filter||number|0,1000,1|150|
+.nightMode.dncDelay|Delay before triggering IRcut filter||range|1,60,1|20|
 .nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|1,100,1|65|
 .nightMode.nightAPI|Use night mode API||boolean|true,false|false|
 .nightMode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1,1000,1|300|

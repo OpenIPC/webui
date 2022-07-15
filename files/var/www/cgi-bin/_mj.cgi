@@ -69,7 +69,7 @@ mj="
 .video0.bitrate|Video bitrate|kbps|number|1,4096,1|4096|
 .video0.gopSize|Send I-frames each 1 second||number|1,20,1|1|
 .video0.gopMode|Group of Pictures (GOP) mode||select|normal,dual,smart|normal|
-.video0.rcMode|RC mode||select|avbr|avbr|
+.video0.rcMode|RC mode||select|avbr,cbr,vbr|avbr|
 .video0.crop|Crop video to size|px|string||0x0x960x540|
 .video0.sliceUnits|Number of slices per frame||number|1,10,1|4
 .video1.enabled|Enable Video1||boolean|true,false|false|

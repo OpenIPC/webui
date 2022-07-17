@@ -99,7 +99,7 @@ fi
   <div class="col">
   <% if [ -n "$network_gateway" ]; then %>
     <h3>Update</h3>
-    <% if [ "$mj_version_new" = "$mj_version_ol" ] || [ "$mj_version_new" = "$mj_version_fw" ]; then %>
+    <% if [ "$mj_version_new" = "$mj_version_ol" ] || [ -z "$mj_version_ol" -a "$mj_version_new" = "$mj_version_fw" ]; then %>
       <div class="alert alert-success">
         <p class="mb-1"><b>Nothing to update.</b></p>
         <p class="mb-0">Latest version is already installed.</p>

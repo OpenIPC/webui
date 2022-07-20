@@ -20,7 +20,7 @@ if [ $? -eq 0 ]; then
   curl_options="--silent --insecure --connect-timeout ${curl_timeout} --max-time ${curl_timeout}"
 
   # FTP credentials
-  culr_options="${curl_options} --user ${ftp_login}:${ftp_password}"
+  curl_options="${curl_options} --user ${ftp_login}:${ftp_password}"
 
   # SOCK5 proxy, if needed
   if [ "true" = "$ftp_socks5_enabled" ]; then

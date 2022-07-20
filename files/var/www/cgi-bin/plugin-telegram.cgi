@@ -48,7 +48,7 @@ include $config_file
       <% field_switch "telegram_enabled" "Enable Telegram bot" %>
       <% field_text "telegram_token" "Token" "Your Telegram Bot authentication token." %>
       <% field_text "telegram_channel" "Chat ID" "Numeric ID of the channel you want the bot to post images to." %>
-      <% field_switch "telegram_socks5_enabled" "Use SOCKS5" %>
+      <% field_switch "telegram_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
       <% button_submit %>
     </form>
   </div>
@@ -72,11 +72,20 @@ include $config_file
 <% fi %>
   <div class="col">
     <h3>Preview</h3>
-    <p><img src="http://<%= $network_address %>/image.jpg" alt="Image: Preview" class="img-fluid mb-3" id="preview" width="1280" height="720"></p>
+    <p><img src="http://<%= $network_address %>/image.jpg" alt="Image: Preview" class="img-fluid mb-3" id="preview-jpeg" width="1280" height="720"></p>
   <% if [ -n "$telegram_token" ] && [ -n "$telegram_channel" ]; then %>
     <p><a href="#" class="btn btn-primary" id="send-to-telegram">Send to Telegram</a></p>
   <% fi %>
   </div>
 </div>
+
+<script>
+async function updatePreview() {
+  await sleep(1000);
+  $('#preview-jpeg').src = "http://<%= $network_address %>/image.jpg?t=" + Date.now();
+}
+$('#preview-jpeg').addEventListener('load', updatePreview);
+updatePreview();
+</script>
 
 <%in p/footer.cgi %>

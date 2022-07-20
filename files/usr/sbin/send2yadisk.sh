@@ -42,7 +42,7 @@ curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
 if [ $? -eq 0 ]; then
   curl_options="--silent --insecure --connect-timeout ${curl_timeout} --max-time ${curl_timeout}"
 
-  # Yandex Disk user's credentials
+  # Yandex Disk credentials
   curl_options="${curl_options} --user ${yadisk_login}:${yadisk_password}"
 
   # SOCK5 proxy, if needed

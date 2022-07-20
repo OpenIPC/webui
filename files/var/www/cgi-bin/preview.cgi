@@ -87,15 +87,6 @@ function sendToApi(endpoint) {
   xhr.send();
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function updatePreview() {
-  await sleep(1000);
-  $('#preview-jpeg').src = "http://<%= $network_address %>/image.jpg?t=" + Date.now();
-}
-
 $$("a[id^=pan-],a[id^=zoom-]").forEach(el => {
   el.addEventListener("click", event => {
     event.preventDefault();
@@ -128,6 +119,11 @@ $$('button[data-bs-toggle=tab]').forEach(el => el.addEventListener('shown.bs.tab
     $('#preview-jpeg').removeEventListener('load', updatePreview);
   }
 }));
+
+async function updatePreview() {
+  await sleep(1000);
+  $('#preview-jpeg').src = "http://<%= $network_address %>/image.jpg?t=" + Date.now();
+}
 
 $('#preview-jpeg').addEventListener('load', updatePreview);
 updatePreview();

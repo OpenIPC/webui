@@ -12,6 +12,10 @@ function refresh() {
     window.location.reload()
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 (function () {
     function initAll() {
         // serve auto value on range form fields
@@ -84,11 +88,19 @@ function refresh() {
             });
         });
 
+        $("#send-to-ftp")?.addEventListener("click", event => {
+            event.preventDefault();
+            if (!confirm("Are you sure?")) return false;
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "/cgi-bin/send2ftp.cgi");
+            xhr.send();
+        })
+
         $("#send-to-telegram")?.addEventListener("click", event => {
             event.preventDefault();
             if (!confirm("Are you sure?")) return false;
             const xhr = new XMLHttpRequest();
-            xhr.open("GET", "/cgi-bin/telegram-bot-send.cgi");
+            xhr.open("GET", "/cgi-bin/send2telegram.cgi");
             xhr.send();
         });
 
@@ -96,7 +108,7 @@ function refresh() {
             event.preventDefault();
             if (!confirm("Are you sure?")) return false;
             const xhr = new XMLHttpRequest();
-            xhr.open("GET", "/cgi-bin/yadisk-bot-send.cgi");
+            xhr.open("GET", "/cgi-bin/send2yadisk.cgi");
             xhr.send();
         });
 

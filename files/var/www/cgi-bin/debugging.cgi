@@ -2,6 +2,7 @@
 <%in p/common.cgi %>
 <%
 plugin="coredump"
+plugin_name="Majestic debugging"
 page_title="Majestic debugging"
 params="consent enabled ftphost ftppath ftppass ftpuser localpath save4web send2devs send2ftp send2tftp tftphost"
 
@@ -39,7 +40,6 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   #sanitize "coredump_ftppath"
 
   ### Validation
-
   if [ "true" = "$coredump_enabled" ]; then
     if [ "true" = "$coredump_send2devs" ]; then
       [ -z "$admin_name" ] || [ -z "$admin_email" ] && flash_append "danger" "Please <a href=\"admin.cgi\">fill out the admin profile</a> first." && error=1
@@ -59,7 +59,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     mv $tmp_file $config_file
 
     update_caminfo
-    redirect_back "success" "Majestic debugging config updated."
+    redirect_back "success" "${plugin_name} config updated."
   fi
 else
   include $config_file
@@ -96,8 +96,6 @@ Shorter timeout may affect coredump saving.</p>
 </div>
 <% fi %>
 
-<button type="button" class="btn btn-info float-end" data-bs-toggle="modal" data-bs-target="#helpModal">How is works?</button>
-
 <form action="<%= $SCRIPT_NAME %>" method="post">
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
     <div class="col">
@@ -105,6 +103,8 @@ Shorter timeout may affect coredump saving.</p>
       <% field_switch "coredump_enabled" "Enable core dump saving" %>
       <% field_switch "coredump_send2devs" "Upload core dump to developers" %>
       <% field_checkbox "coredump_consent" "I am aware of sensitive information in core dumps and I trust the developers" %>
+
+      <button type="button" class="btn btn-info my-3" data-bs-toggle="modal" data-bs-target="#helpModal">How does it work?</button>
     </div>
     <div class="col">
       <h3>Save on camera</h3>

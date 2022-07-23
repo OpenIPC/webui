@@ -20,7 +20,7 @@ fi
 # exit if plugin is not enabled and not ran with parameters
 [ "$force" != "true" ] && [ "$telegram_enabled" != "true" ] && exit 0
 
-snapshot="/tmp/telegram_snap.jpg"
+snapshot="/tmp/${plugin}_snap.jpg"
 
 # get image from camera
 curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent

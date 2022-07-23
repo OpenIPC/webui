@@ -12,7 +12,7 @@ fi
 # read variables from config
 [ -f "$config_file" ] && source $config_file
 
-snapshot="/tmp/ftp_snap.jpg"
+snapshot="/tmp/${plugin}_snap.jpg"
 
 # get image from camera
 curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent

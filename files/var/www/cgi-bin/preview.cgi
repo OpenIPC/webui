@@ -62,6 +62,12 @@ size_h=${size#*x}
           <a href="plugin-yadisk.cgi" title="Yandex Disk bot settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
+      <div class="input-group">
+        <button class="form-control btn btn-primary text-start" type="button" id="send-to-ftp">Send to FTP</button>
+        <div class="input-group-text">
+          <a href="plugin-ftp.cgi" title="FTP Storage settings"><img src="/a/gear.svg" alt="Gear"></a>
+        </div>
+      </div>
     </div>
     <div class="alert alert-danger small">
       PTZ feature is not ready. Please consider <a href="https://t.me/OpenIPC">supporting further development</a>.

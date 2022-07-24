@@ -62,12 +62,12 @@ fi
       <% field_text "email_smtp_port" "SMTP port" %>
       <% field_text "email_smtp_login" "SMTP server login" %>
       <% field_password "email_smtp_password" "SMTP server password" %>
-      <% field_text "email_from_name" "Email from name" %>
-      <% field_text "email_from_address" "Email from address" "Use an email address where bounce reports can be sent to." %>
-      <% field_text "email_to_name" "Email to name" %>
-      <% field_text "email_to_address" "Email to address" %>
+      <% field_text "email_from_name" "Sender's name" %>
+      <% field_text "email_from_address" "Sender's address" "Use an email address where bounce reports can be sent to." %>
+      <% field_text "email_to_name" "Recipient's name" %>
+      <% field_text "email_to_address" "Recipient's address" %>
       <% field_text "email_subject" "Email subject" %>
-      <% field_textarea "email_body" "Email body" "Line breaks will be replaced with whitespace." %>
+      <% field_textarea "email_body" "Email text" "Line breaks will be replaced with whitespace." %>
       <% # field_switch "email_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
       <% button_submit %>
     </div>

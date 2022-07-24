@@ -46,7 +46,7 @@ fi
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
   <div class="col">
-    <h3>FTP Storage</h3>
+    <h3>Settings</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_switch "ftp_enabled" "Enable FTP Storage" %>
       <% field_text "ftp_template" "File template" "Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format." %>

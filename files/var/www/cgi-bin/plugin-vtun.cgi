@@ -3,7 +3,7 @@
 <%
 plugin="vtun"
 plugin_name="Virtual Tunnel"
-page_title="Virtual tunnel plugin"
+page_title="Virtual tunnel"
 service_file=/etc/init.d/S98vtun
 
 if [ -n "$POST_action" ] && [ "$POST_action" = "reset" ]; then
@@ -24,7 +24,7 @@ fi
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
   <div class="col">
-    <h3>Virtual Tunnel</h3>
+    <h3>Settings</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
 <%
 if [ -f "$service_file" ]; then

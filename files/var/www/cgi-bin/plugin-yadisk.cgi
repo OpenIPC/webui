@@ -47,7 +47,7 @@ fi
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
   <div class="col">
-    <h3>Yandex Disk</h3>
+    <h3>Settings</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_switch "yadisk_enabled" "Enable Yandex Disk bot" %>
       <% field_text "yadisk_login" "Yandex Disk login" %>

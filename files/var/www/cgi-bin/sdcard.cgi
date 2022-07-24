@@ -31,7 +31,7 @@ else
     fi
 
     if [ -z "$error" ]; then
-      _c="echo -e "o\nn\np\n1\n\n\nw"|fdisk $card_device"
+      _c="echo -e 'o\nn\np\n1\n\n\nw'|fdisk $card_device"
       _o="${_o}\n${_c}\n$($_c 2>&1)"
       [ $? -ne 0 ] && error="Cannot create an SD Card partition."
     fi

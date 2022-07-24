@@ -26,10 +26,10 @@ fi
 
 $curl_options=""
 if [ "true" = "$email_smtp_use_ssl" ]; then
-  $curl_options="--ssl"
-  $email_smtp_protocol="smtps"
+  curl_options="--ssl"
+  email_smtp_protocol="smtps"
 else
-  $email_smtp_protocol="smtp"
+  email_smtp_protocol="smtp"
 fi
 
 snapshot="/tmp/${plugin}_snap.jpg"

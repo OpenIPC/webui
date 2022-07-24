@@ -24,12 +24,20 @@ fi
 [ -z "$email_subject"   ] && email_subject="Snapshot from OpenIPC Camera"
 [ -z "$email_body"      ] && email_body="$(date)"
 
+$curl_options=""
+if [ "true" = "$email_smtp_use_ssl" ]; then
+  $curl_options="--ssl"
+  $email_smtp_protocol="smtps"
+else
+  $email_smtp_protocol="smtp"
+fi
+
 snapshot="/tmp/${plugin}_snap.jpg"
 
 # get image from camera
 curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
 if [ $? -eq 0 ]; then
-  curl --url smtp://${email_smtp_server}:${email_smtp_port} --user ${email_smtp_login}:${email_smtp_password} \
+  curl ${curl_options} --url ${email_smtp_protocol}://${email_smtp_server}:${email_smtp_port} --user ${email_smtp_login}:${email_smtp_password} \
     --mail-from ${email_from_address} --mail-rcpt ${email_to_address} \
     -F '=(;type=multipart/mixed' -F "=${email_body};type=text/plain" -F "file=@${snapshot};type=image/jpeg;encoder=base64" -F '=)' \
     -H "Subject: ${email_subject}" -H "From: \"${email_from_name}\" <${email_from_address}>" -H "To: \"${email_to_name}\" <${email_to_address}>"

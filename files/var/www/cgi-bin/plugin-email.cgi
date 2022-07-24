@@ -4,7 +4,7 @@
 plugin="email"
 plugin_name="Send to email"
 page_title="Send to email"
-params="enabled from_name from_address to_name to_address subject body smtp_server smtp_port smtp_login smtp_password socks5_enabled"
+params="enabled from_name from_address to_name to_address subject body smtp_server smtp_port smtp_login smtp_password smtp_use_ssl socks5_enabled"
 
 tmp_file=/tmp/${plugin}.conf
 config_file="${ui_config_dir}/${plugin}.conf"
@@ -59,6 +59,7 @@ fi
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
     <div class="col">
       <% field_text "email_smtp_server" "SMTP server" %>
+      <% field_switch "email_smtp_use_ssl" "Use SSL" %>
       <% field_text "email_smtp_port" "SMTP port" %>
       <% field_text "email_smtp_login" "SMTP server login" %>
       <% field_password "email_smtp_password" "SMTP server password" %>
@@ -91,6 +92,16 @@ async function updatePreview() {
   await sleep(1000);
   $('#preview-jpeg').src = "http://<%= $network_address %>/image.jpg?t=" + Date.now();
 }
+
+$('#email_smtp_use_ssl').addEventListener('change', evt => {
+  const elPort=$('#email_smtp_port');
+  if (evt.target.checked) {
+    if (elPort.value === "25") elPort.value="465";
+  } else {
+    if (elPort.value === "465") elPort.value="25";
+  }
+});
+
 $('#preview-jpeg').addEventListener('load', updatePreview);
 updatePreview();
 </script>

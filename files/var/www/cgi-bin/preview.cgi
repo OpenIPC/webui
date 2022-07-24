@@ -71,7 +71,7 @@ size_h=${size#*x}
       <div class="input-group">
         <button class="form-control btn btn-primary text-start" type="button" id="send-to-email">Send to email</button>
         <div class="input-group-text">
-          <a href="plugin-ftp.cgi" title="Email settings"><img src="/a/gear.svg" alt="Gear"></a>
+          <a href="plugin-email.cgi" title="Email settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
     </div>

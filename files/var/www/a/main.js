@@ -88,6 +88,14 @@ function sleep(ms) {
             });
         });
 
+        $("#send-to-email")?.addEventListener("click", event => {
+            event.preventDefault();
+            if (!confirm("Are you sure?")) return false;
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "/cgi-bin/send2email.cgi");
+            xhr.send();
+        })
+
         $("#send-to-ftp")?.addEventListener("click", event => {
             event.preventDefault();
             if (!confirm("Are you sure?")) return false;

@@ -42,6 +42,12 @@ else
       [ $? -ne 0 ] && error="Cannot format SD Card partition."
     fi
 
+    if [ -z "$error" ] && [ ! -d "$mount_point" ]; then
+      _c="mkdir -p $mount_point"
+      _o="${_o}\n${_c}\n$($_c 2>&1)"
+      [ $? -ne 0 ] && error="Cannot create SD Card mount point."
+    fi
+
     if [ -z "$error" ]; then
       _c="mount $card_partition $mount_point"
       _o="${_o}\n${_c}\n$($_c 2>&1)"

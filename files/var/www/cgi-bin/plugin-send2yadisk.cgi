@@ -67,21 +67,11 @@ fi
     <% ex "cat $config_file" %>
   </div>
   <div class="col">
-    <h3>Preview</h3>
-    <p><img src="http://<%= $network_address %>/image.jpg" alt="Image: preview" class="img-fluid mb-3" id="preview-jpeg" width="1280" height="720"></p>
+    <% preview %>
     <% if [ "true" = "$yadisk_enabled" ]; then %>
       <p><a href="#" class="btn btn-primary" id="send-to-yadisk">Send to Yandex Disk</a></p>
     <% fi %>
   </div>
 </div>
-
-<script>
-async function updatePreview() {
-  await sleep(1000);
-  $('#preview-jpeg').src = "http://<%= $network_address %>/image.jpg?t=" + Date.now();
-}
-$('#preview-jpeg').addEventListener('load', updatePreview);
-updatePreview();
-</script>
 
 <%in p/footer.cgi %>

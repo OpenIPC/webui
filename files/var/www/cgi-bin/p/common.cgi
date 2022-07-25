@@ -450,6 +450,16 @@ pre() {
   tag "pre" "$(echo -e "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g")" "$2" "$3"
 }
 
+preview() {
+  echo "<h3>Preview</h3>"
+  if [ "true" = "$(yaml-cli -g .jpeg.enabled)" ]; then
+    echo "<p><img src=\"http://${network_address}/image.jpg\" alt=\"Image: preview\" class=\"img-fluid mb-3\" id=\"preview-jpeg\" width=\"1280\" height=\"720\"></p>"
+  else
+    echo "<p class=\"alert alert-warning\"><a href=\"majestic-settings.cgi?tab=jpeg\">Enable JPEG support</a> to see the preview.</p>"
+  fi
+  echo "<script>async function updatePreview() { await sleep(1000); \$('#preview-jpeg').src = 'http://${network_address}/image.jpg?t=' + Date.now(); } \$('#preview-jpeg').addEventListener('load', updatePreview); updatePreview();</script>"
+}
+
 progressbar() {
   _c="primary"; [ "$1" -ge "75" ] && _c="danger"
   echo "<div class=\"progress\">" \

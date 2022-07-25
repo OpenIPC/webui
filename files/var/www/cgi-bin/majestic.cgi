@@ -121,20 +121,19 @@ fi
             .</p>
           </div>
         <% fi %>
-        <% if [ -f "$mj_bin_file_ol" ]; then %>
-          <div class="alert alert-warning">
-            <p>More recent version of Majestic found in overlay partition.
-             It takes <%= $mj_filesize_ol %> KB of space.</p>
-            <form action="<%= $SCRIPT_NAME %>" method="post">
-              <% field_hidden "action" "rmmj" %>
-              <% button_submit "Revert to bundled version" "warning" %>
-            </form>
-          </div>
-        <% fi %>
       <% fi %>
     <% fi %>
   <% else %>
     <p class="alert alert-danger">Upgrading requires access to Amazon S3.</p>
+  <% fi %>
+  <% if [ -f "$mj_bin_file_ol" ]; then %>
+    <div class="alert alert-warning">
+      <p>More recent version of Majestic found in overlay partition. It takes <%= $mj_filesize_ol %> KB of space.</p>
+      <form action="<%= $SCRIPT_NAME %>" method="post">
+        <% field_hidden "action" "rmmj" %>
+        <% button_submit "Revert to bundled version" "warning" %>
+      </form>
+    </div>
   <% fi %>
   </div>
 </div>

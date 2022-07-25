@@ -23,8 +23,7 @@ fi
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
   <div class="col">
-    <h3>Set up timezone</h3>
-    <p><a href="#" id="frombrowser">Pick up from browser</a></p>
+    <p><a href="#" id="frombrowser">Pick up timezone from browser</a></p>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <datalist id="tz_list"></datalist>
       <p class="string">
@@ -41,12 +40,8 @@ fi
     </form>
   </div>
   <div class="col">
-    <h3>Config files</h3>
     <% ex "cat /etc/tz_name" %>
     <% ex "cat /etc/TZ" %>
-  </div>
-  <div class="col">
-    <h3>System settings</h3>
     <% ex "echo \$TZ" %>
   </div>
 </div>

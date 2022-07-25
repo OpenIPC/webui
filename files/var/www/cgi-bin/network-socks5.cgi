@@ -24,7 +24,6 @@ include $config_file
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
   <div class="col">
-    <h3>SOCKS5 Proxy Settings</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_hidden "action" "update" %>
       <% field_text "socks5_host" "SOCKS5 Host" %>
@@ -35,7 +34,6 @@ include $config_file
     </form>
   </div>
   <div class="col">
-    <h3>Config file</h3>
     <% ex "cat $config_file" %>
   </div>
 </div>

@@ -40,7 +40,6 @@ fi
 
 <div class="row row-cols-1 row-cols-lg-3 g-4 mb-4">
   <div class="col">
-    <h3>NTP Servers</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_hidden "action" "update" %>
 <%
@@ -54,7 +53,6 @@ done; unset _i; unset _x
     </form>
   </div>
   <div class="col">
-    <h3>NTP Settings</h3>
     <% ex "cat $config_file" %>
     <% if [ "$(diff -q -- "/rom${config_file}" "$config_file")" ]; then %>
     <form action="<%= $SCRIPT_NAME %>" method="post">
@@ -64,8 +62,7 @@ done; unset _i; unset _x
     <% fi %>
   </div>
   <div class="col">
-    <h3>Camera time</h3>
-    <h4 class="display-1 text-center bg-light"><% date +%H:%M %></h4>
+    <p>Camera time: <% date +"%H:%M %Z" %></p>
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_hidden "action" "sync" %>
       <% button_submit "Synchronize camera time" "primary" %>

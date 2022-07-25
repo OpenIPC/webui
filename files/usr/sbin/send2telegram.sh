@@ -1,6 +1,7 @@
 #!/bin/sh
 
-config_file="/etc/webui/telegram.conf"
+plugin="telegram"
+config_file="/etc/webui/${plugin}.conf"
 curl_timeout=100
 
 if [ -n "$1" ] && [ -n "$2" ]; then
@@ -17,33 +18,44 @@ if [ -z "$telegram_channel" ] || [ -z "$telegram_token" ]; then
   exit 1
 fi
 
-# exit if plugin is not enabled and not ran with parameters
-[ "$force" != "true" ] && [ "$telegram_enabled" != "true" ] && exit 0
+if [ "true" != "$telegram_enabled" ] && [ "true" != "$force" ]; then
+  echo "Sending to Telegram is not enabled."
+  exit 10
+fi
+
+# validate mandatory values
+[ -z "$telegram_token"   ] && echo -e "Telegram token not found in config" && exit 11
+[ -z "$telegram_channel" ] && echo -e "Telegram channel not found in config" && exit 12
+
+curl_options="--silent --insecure --connect-timeout ${curl_timeout} --max-time ${curl_timeout}"
+
+# SOCK5 proxy, if needed
+if [ "true" = "$telegram_socks5_enabled" ]; then
+  include /etc/webui/socks5.conf
+  curl_options="${curl_options} --socks5-hostname ${socks5_host}:${socks5_port} --proxy-user ${socks5_login}:${socks5_password}"
+fi
+
+url="https://api.telegram.org/bot${telegram_token}/sendPhoto?chat_id=${telegram_channel}"
 
 snapshot="/tmp/${plugin}_snap.jpg"
 
 # get image from camera
 curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
 if [ $? -eq 0 ]; then
-  curl_options="--silent --insecure --connect-timeout ${curl_timeout} --max-time ${curl_timeout}"
-
-  # SOCK5 proxy, if needed
-  if [ "true" = "$telegram_socks5_enabled" ]; then
-    include /etc/webui/socks5.conf
-    curl_options="${curl_options} --socks5-hostname ${socks5_server}:${socks5_port} --proxy-user ${socks5_login}:${socks5_password}"
-  fi
-
-  url="https://api.telegram.org/bot${telegram_token}/sendPhoto?chat_id=${telegram_channel}"
-  result=$(curl $curl_options --request POST $url -H "Content-Type: multipart/form-data" -F "photo=@${snapshot}" -F "caption=$(hostname -s), $(date +"%F %T")")
+  result=$(curl ${curl_options} \
+    --request POST ${url} \
+    -H "Content-Type: multipart/form-data" \
+    -F "photo=@${snapshot}" \
+    -F "caption=$(hostname -s), $(date +"%F %T")")
   if [ "${result:1:6}" = '"ok":f' ]; then
     echo "Cannot post snapshot to Telegram."
     echo $result
     exit 1
   fi
-  rm -f $snapshot
+  rm -f ${snapshot}
 else
   echo "Cannot get a snapshot."
-  exit 1
+  exit 2
 fi
 
 exit 0

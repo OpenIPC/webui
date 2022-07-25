@@ -13,8 +13,8 @@ if [ -n "$POST_action" ] && [ "$POST_action" = "reset" ]; then
   redirect_to "$SCRIPT_NAME"
 fi
 
-if [ -n "$POST_vtun_server" ]; then
-  echo -e "#!/bin/sh\n\ntunnel $POST_vtun_server" > $service_file
+if [ -n "$POST_vtun_host" ]; then
+  echo -e "#!/bin/sh\n\ntunnel $POST_vtun_host" > $service_file
   chmod +x $service_file
   $service_file
   redirect_to "$SCRIPT_NAME"
@@ -32,7 +32,7 @@ if [ -f "$service_file" ]; then
   field_hidden "action" "reset"
   button_submit "Reset configuration"
 else
-  field_text "vtun_server" "Virtual Tunnel Server" "Your Virtual Tunnel server address."
+  field_text "vtun_host" "Virtual Tunnel host" "Your Virtual Tunnel server address."
   button_submit
 fi
 %>

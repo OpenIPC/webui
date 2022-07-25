@@ -1,18 +1,21 @@
 #!/bin/sh
 
-config_file="/etc/yadisk.conf"
+plugin="yadisk"
+config_file="/etc/webui/${plugin}.conf"
 curl_timeout=100
 
 if [ ! -f "$config_file" ]; then
-  echo -e "Error: ${config_file} not found."
+  echo "Error: ${config_file} not found."
   exit 1
 fi
 
 # read variables from config
 [ -f "$config_file" ] && source $config_file
 
-# exit if plugin is not enabled
-# [ "$yadisk_enabled" != "true" ] && exit 0
+if [ "true" != "$yadisk_enabled" ]; then
+  echo "Sending to Yandex Disk is not enabled."
+  exit 10
+fi
 
 webdav_mkdir()  {
   url="${url}/${1}"
@@ -20,7 +23,7 @@ webdav_mkdir()  {
   if [ "${result:1:6}" = '"ok":f' ]; then
     echo "Cannot create folder at Yandex Disk."
     echo $result
-    exit 1
+    exit 3
   fi
 }
 
@@ -30,27 +33,32 @@ webdav_upload() {
   if [ "${result:1:6}" = '"ok":f' ]; then
     echo "Cannot upload snapshot to Yandex Disk."
     echo $result
-    exit 1
+    exit 4
   fi
 }
 
+# validate mandatory values
+[ -z "$yadisk_login"    ] && echo -e "Yandex Disk login not found in config" && exit 11
+[ -z "$yadisk_password" ] && echo -e "Yandex Disk password not found in config" && exit 12
+
+curl_options="--silent --insecure --connect-timeout ${curl_timeout} --max-time ${curl_timeout}"
+
+# Yandex Disk credentials
+curl_options="${curl_options} --user ${yadisk_login}:${yadisk_password}"
+
+# SOCK5 proxy, if needed
+if [ "true" = "$yadisk_socks5_enabled" ]; then
+  source /etc/webui/socks5.conf
+  curl_options="${curl_options} --socks5-hostname ${socks5_host}:${socks5_port} --proxy-user ${socks5_login}:${socks5_password}"
+fi
+
 url="https://webdav.yandex.ru"
+
 snapshot="/tmp/${plugin}_snap.jpg"
 
 # get image from camera
 curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
 if [ $? -eq 0 ]; then
-  curl_options="--silent --insecure --connect-timeout ${curl_timeout} --max-time ${curl_timeout}"
-
-  # Yandex Disk credentials
-  curl_options="${curl_options} --user ${yadisk_login}:${yadisk_password}"
-
-  # SOCK5 proxy, if needed
-  if [ "true" = "$yadisk_socks5_enabled" ]; then
-    source /etc/webui/socks5.conf
-    curl_options="${curl_options} --socks5-hostname ${socks5_server}:${socks5_port} --proxy-user ${socks5_login}:${socks5_password}"
-  fi
-
   # create path to destination directory
   subdirs="${yadisk_path// /_}"
   subdirs="$(echo "$yadisk_path" | sed "s/$/\//")"
@@ -59,11 +67,13 @@ if [ $? -eq 0 ]; then
     [ -n "$subdir" ] && webdav_mkdir "$subdir"
     subdirs="${subdirs#*/}"
   done
+
   # upload file
   webdav_upload "$snapshot"
+  rm -f ${snapshot}
 else
   echo "Cannot get a snapshot."
-  exit 1
+  exit 2
 fi
 
 exit 0

@@ -2,11 +2,12 @@
 <%in p/common.cgi %>
 <%
 plugin="ftp"
-plugin_name="FTP Storage"
-page_title="FTP Storage"
-params="enabled template host login password path socks5_enabled"
+plugin_name="Send to FTP"
+page_title="Send to FTP"
+params="enabled host login password path port socks5_enabled template"
 
 tmp_file=/tmp/${plugin}.conf
+
 config_file="${ui_config_dir}/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
 
@@ -40,24 +41,27 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   redirect_to $SCRIPT_NAME
 else
   include $config_file
+
+  # Default values
+  [ -z "$ftp_port" ] && ftp_port="21"
 fi
 %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
-  <div class="col">
-    <h3>Settings</h3>
-    <form action="<%= $SCRIPT_NAME %>" method="post">
-      <% field_switch "ftp_enabled" "Enable FTP Storage" %>
+<form action="<%= $SCRIPT_NAME %>" method="post">
+  <% field_switch "ftp_enabled" "Enable FTP Storage" %>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+    <div class="col">
+      <% field_text "ftp_host" "FTP host" %>
+      <% field_text "ftp_port" "FTP port" %>
+      <% field_text "ftp_login" "FTP login" %>
+      <% field_password "ftp_password" "FTP password" %>
+      <% field_text "ftp_path" "FTP path" "relative to FTP root directory" %>
       <% field_text "ftp_template" "File template" "Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format." %>
-      <% field_text "ftp_host" "FTP Storage host" %>
-      <% field_text "ftp_login" "FTP Storage login" %>
-      <% field_password "ftp_password" "FTP Storage password" %>
-      <% field_text "ftp_path" "FTP Storage path" "relative to FTP root directory" %>
       <% field_switch "ftp_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
       <% button_submit %>
-    </form>
-  </div>
+    </div>
+  </form>
   <div class="col">
     <h3>Config file</h3>
     <% ex "cat $config_file" %>
@@ -65,7 +69,7 @@ fi
   <div class="col">
     <h3>Preview</h3>
     <p><img src="http://<%= $network_address %>/image.jpg" alt="Image: preview" class="img-fluid mb-3" id="preview-jpeg" width="1280" height="720"></p>
-    <% if [ -n "$ftp_login" ] && [ -n "$ftp_password" ]; then %>
+    <% if [ "true" = "$ftp_enabled" ]; then %>
       <p><a href="#" class="btn btn-primary" id="send-to-ftp">Send to FTP Storage</a></p>
     <% fi %>
   </div>

@@ -4,9 +4,10 @@
 plugin="email"
 plugin_name="Send to email"
 page_title="Send to email"
-params="enabled from_name from_address to_name to_address subject body smtp_server smtp_port smtp_login smtp_password smtp_use_ssl socks5_enabled"
+params="enabled from_name from_address to_name to_address subject body smtp_host smtp_port smtp_login smtp_password smtp_use_ssl socks5_enabled"
 
 tmp_file=/tmp/${plugin}.conf
+
 config_file="${ui_config_dir}/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
 
@@ -22,11 +23,11 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
   ### Validation
   if [ "true" = "$email_enabled" ]; then
-    [ -z "$email_smtp_server"  ] && flash_append "danger" "SMTP server address cannot be empty." && error=1
-    [ -z "$email_from_address" ] && flash_append "danger" "Sender email address cannot be empty." && error=1
-    [ -z "$email_from_name"    ] && flash_append "danger" "Sender name cannot be empty." && error=1
-    [ -z "$email_to_address"   ] && flash_append "danger" "Recipient email address cannot be empty." && error=1
-    [ -z "$email_to_name"      ] && flash_append "danger" "Recipient name cannot be empty." && error=1
+    [ -z "$email_smtp_host"    ] && flash_append "danger" "SMTP host cannot be empty." && error=11
+    [ -z "$email_from_address" ] && flash_append "danger" "Sender email address cannot be empty." && error=12
+    [ -z "$email_from_name"    ] && flash_append "danger" "Sender name cannot be empty." && error=13
+    [ -z "$email_to_address"   ] && flash_append "danger" "Recipient email address cannot be empty." && error=14
+    [ -z "$email_to_name"      ] && flash_append "danger" "Recipient name cannot be empty." && error=15
   fi
 
   if [ -z "$error" ]; then
@@ -58,7 +59,7 @@ fi
   <% field_switch "email_enabled" "Enable sending to email" %>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
     <div class="col">
-      <% field_text "email_smtp_server" "SMTP server" %>
+      <% field_text "email_smtp_host" "SMTP host" %>
       <% field_switch "email_smtp_use_ssl" "Use SSL" %>
       <% field_text "email_smtp_port" "SMTP port" %>
       <% field_text "email_smtp_login" "SMTP server login" %>
@@ -88,10 +89,6 @@ fi
 
 <script>
 $('#email_body').style.height = "6rem";
-async function updatePreview() {
-  await sleep(1000);
-  $('#preview-jpeg').src = "http://<%= $network_address %>/image.jpg?t=" + Date.now();
-}
 
 $('#email_smtp_use_ssl').addEventListener('change', evt => {
   const elPort=$('#email_smtp_port');
@@ -102,6 +99,10 @@ $('#email_smtp_use_ssl').addEventListener('change', evt => {
   }
 });
 
+async function updatePreview() {
+  await sleep(1000);
+  $('#preview-jpeg').src = "http://<%= $network_address %>/image.jpg?t=" + Date.now();
+}
 $('#preview-jpeg').addEventListener('load', updatePreview);
 updatePreview();
 </script>

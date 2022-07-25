@@ -51,27 +51,27 @@ size_h=${size#*x}
         <button class="form-control btn btn-primary text-start" type="button" id="preview_night_mode">Toggle night mode</button>
       </div>
       <div class="input-group">
-        <button class="form-control btn btn-primary text-start" type="button" id="send-to-telegram">Send to Telegram</button>
+        <button class="form-control btn btn-primary text-start" type="button" id="send-to-email">Send to email</button>
         <div class="input-group-text">
-          <a href="plugin-telegram.cgi" title="Telegram bot settings"><img src="/a/gear.svg" alt="Gear"></a>
-        </div>
-      </div>
-      <div class="input-group">
-        <button class="form-control btn btn-primary text-start" type="button" id="send-to-yadisk">Send to Yandex Disk</button>
-        <div class="input-group-text">
-          <a href="plugin-yadisk.cgi" title="Yandex Disk bot settings"><img src="/a/gear.svg" alt="Gear"></a>
+          <a href="plugin-send2email.cgi" title="Email settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
       <div class="input-group">
         <button class="form-control btn btn-primary text-start" type="button" id="send-to-ftp">Send to FTP</button>
         <div class="input-group-text">
-          <a href="plugin-ftp.cgi" title="FTP Storage settings"><img src="/a/gear.svg" alt="Gear"></a>
+          <a href="plugin-send2ftp.cgi" title="FTP Storage settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
       <div class="input-group">
-        <button class="form-control btn btn-primary text-start" type="button" id="send-to-email">Send to email</button>
+        <button class="form-control btn btn-primary text-start" type="button" id="send-to-telegram">Send to Telegram</button>
         <div class="input-group-text">
-          <a href="plugin-email.cgi" title="Email settings"><img src="/a/gear.svg" alt="Gear"></a>
+          <a href="plugin-send2telegram.cgi" title="Telegram bot settings"><img src="/a/gear.svg" alt="Gear"></a>
+        </div>
+      </div>
+      <div class="input-group">
+        <button class="form-control btn btn-primary text-start" type="button" id="send-to-yadisk">Send to Yandex Disk</button>
+        <div class="input-group-text">
+          <a href="plugin-send2yadisk.cgi" title="Yandex Disk bot settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
     </div>
@@ -84,8 +84,10 @@ size_h=${size#*x}
 <script>
 const network_address = "<%= $network_address %>";
 
+<% [ "true" != "$email_enabled"    ] && echo "\$('#send-to-email').disabled = true;" %>
+<% [ "true" != "$ftp_enabled"      ] && echo "\$('#send-to-ftp').disabled = true;" %>
 <% [ "true" != "$telegram_enabled" ] && echo "\$('#send-to-telegram').disabled = true;" %>
-<% [ "true" != "$yadisk_enabled" ] && echo "\$('#send-to-yadisk').disabled = true;" %>
+<% [ "true" != "$yadisk_enabled"   ] && echo "\$('#send-to-yadisk').disabled = true;" %>
 
 function reqListener(data) {
   console.log(data.responseText);

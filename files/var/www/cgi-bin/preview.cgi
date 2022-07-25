@@ -18,9 +18,7 @@ size_h=${size#*x}
     </ul>
     <div class="tab-content p-2" id="tab-content">
       <div id="jpeg-tab-pane" role="tabpanel" class="tab-pane fade active show" aria-labelledby="jpeg-tab" tabindex="0">
-        <div class="ratio ratio-16x9">
-          <img src="http://<%= $network_address %>/image.jpg" class="img-fluid" id="preview-jpeg" width="1280" height="720" alt="">
-        </div>
+        <% preview %>
       </div>
       <div id="mjpeg-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="mjpeg-tab" tabindex="0">
         <div class="ratio ratio-16x9">
@@ -133,14 +131,6 @@ $$('button[data-bs-toggle=tab]').forEach(el => el.addEventListener('shown.bs.tab
     $('#preview-jpeg').removeEventListener('load', updatePreview);
   }
 }));
-
-async function updatePreview() {
-  await sleep(1000);
-  $('#preview-jpeg').src = "http://<%= $network_address %>/image.jpg?t=" + Date.now();
-}
-
-$('#preview-jpeg').addEventListener('load', updatePreview);
-updatePreview();
 </script>
 
 <%in p/footer.cgi %>

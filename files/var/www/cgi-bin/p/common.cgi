@@ -451,9 +451,8 @@ pre() {
 }
 
 preview() {
-  echo "<h3>Preview</h3>"
   if [ "true" = "$(yaml-cli -g .jpeg.enabled)" ]; then
-    echo "<p><img src=\"http://${network_address}/image.jpg\" alt=\"Image: preview\" class=\"img-fluid mb-3\" id=\"preview-jpeg\" width=\"1280\" height=\"720\"></p>"
+    echo "<div class=\"ratio ratio-16x9 mb-3\"><img src=\"http://${network_address}/image.jpg\" alt=\"Image: preview\" class=\"img-fluid mb-3\" id=\"preview-jpeg\" width=\"1280\" height=\"720\"></div>"
   else
     echo "<p class=\"alert alert-warning\"><a href=\"majestic-settings.cgi?tab=jpeg\">Enable JPEG support</a> to see the preview.</p>"
   fi

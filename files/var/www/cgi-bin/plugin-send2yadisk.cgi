@@ -63,7 +63,6 @@ fi
     </div>
   </form>
   <div class="col">
-    <h3>Config file</h3>
     <% ex "cat $config_file" %>
   </div>
   <div class="col">

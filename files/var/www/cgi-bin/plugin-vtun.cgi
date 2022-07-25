@@ -36,7 +36,6 @@ else
   button_submit
 fi
 %>
-
     </form>
   </div>
 </div>

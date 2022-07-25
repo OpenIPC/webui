@@ -83,7 +83,7 @@ mj="
 .video1.crop|Crop video to size|px|string||0x0x960x540|
 .video1.sliceUnits|Number of slices per frame||number|1,10,1|4
 .jpeg.enabled|Enable JPEG support||boolean|true,false|true|
-.jpeg.size|Snapshot size|px|string||1920x1080||
+.jpeg.size|Snapshot size|px|string||1920x1080|
 .jpeg.qfactor|JPEG quality level|%|range|1,100,1|50|
 .jpeg.toProgressive|Progressive JPEG||boolean|true,false|false|
 .mjpeg.size|Video resolution|px|string||640x360|

@@ -580,7 +580,7 @@ update_caminfo() {
   :> $_tmpfile
   # add all web-related config files
   # do not include bigbro, ntp
-  for _f in admin email ftp socks5 telegram yadisk; do
+  for _f in admin email ftp socks5 telegram yadisk yucca; do
     [ -f "${ui_config_dir}/${_f}.conf" ] && cat "${ui_config_dir}/${_f}.conf" >> $_tmpfile
   done; unset _f
 

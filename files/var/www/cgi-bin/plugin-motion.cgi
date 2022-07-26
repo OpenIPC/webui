@@ -66,7 +66,7 @@ fi
       <% field_checkbox "motion_send2ftp" "Upload to FTP" "<a href=\"plugin-send2ftp.cgi\">Configure uploading to FTP</a>" %>
       <% field_checkbox "motion_send2telegram" "Send to Telegram" "<a href=\"plugin-send2telegram.cgi\">Configure sending to Telegram</a>" %>
       <% field_checkbox "motion_send2yadisk" "Upload to Yandex Disk" "<a href=\"plugin-send2yadisk.cgi\">Configure sending to Yandex Disk</a>" %>
-      <% field_checkbox "motion_send2yucca" "Notify Yucca NVR" "<a href=\"plugin-send2yucca.cgi\">Configure notication to Yucca NVR</a>" %>
+      <% field_checkbox "motion_send2yucca" "Notify Yucca NVR" "<a href=\"plugin-send2yucca.cgi\">Configure notification of Yucca NVR</a>" %>
       <% button_submit %>
     </div>
     <div class="col col-lg-8">

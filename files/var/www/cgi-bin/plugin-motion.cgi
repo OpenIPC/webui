@@ -4,11 +4,13 @@
 plugin="motion"
 plugin_name="Motion guard"
 page_title="Motion guard"
-params="enabled sensitivity send2email send2ftp send2telegram send2yadisk"
+params="enabled sensitivity send2email send2ftp send2telegram send2yadisk send2yucca"
 
 service_file=/etc/init.d/S92motion
-
 tmp_file=/tmp/${plugin}
+
+config_file="${ui_config_dir}/${plugin}.conf"
+[ ! -f "$config_file" ] && touch $config_file
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   # parse values from parameters
@@ -17,42 +19,64 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     sanitize "${plugin}_${_p}"
   done; unset _p
 
+  ### Validation
   if [ "true" = "$motion_enabled" ]; then
-    if [ "false" = "$motion_send2email" ] && [ "false" = "$motion_send2ftp" ] && [ "false" = "$motion_send2telegram" ] && [ "false" = "$motion_send2yadisk" ]; then
-      flash_append "danger" "You need to select at least on method of notification"
+    [ "false" = "$motion_send2email" ] && \
+    [ "false" = "$motion_send2ftp" ] && \
+    [ "false" = "$motion_send2telegram" ] && \
+    [ "false" = "$motion_send2yadisk" ] && \
+    flash_append "danger" "You need to select at least on method of notification" && error=11
+  fi
+
+  if [ -z "$error" ]; then
+    # create temp config file
+    :>$tmp_file
+    for _p in $params; do
+      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >> $tmp_file
+    done; unset _p
+    mv $tmp_file $config_file
+
+    update_caminfo
+
+    # create service file
+    if [ "true" = "$motion_enabled" ]; then
+      :>$tmp_file
+      echo "#!/bin/sh" >>$tmp_file
+      echo "thrashold=${motion_sensitivity}" >>$tmp_file
+      echo "logread -f | grep \"Motion detected in \d* regions\" | while read BEER; do" >>$tmp_file
+      echo "  [ \"\$(echo \$BEER | cut -d' ' -f4)\" -lt \"\$thrashold\" ] && exit;" >>$tmp_file
+      [ "true" = "$motion_send2email"    ] && echo "  send2email.sh"    >>$tmp_file
+      [ "true" = "$motion_send2ftp"      ] && echo "  send2ftp.sh"      >>$tmp_file
+      [ "true" = "$motion_send2telegram" ] && echo "  send2telegram.sh" >>$tmp_file
+      [ "true" = "$motion_send2yadisk"   ] && echo "  send2yadisk.sh"   >>$tmp_file
+      [ "true" = "$motion_send2yucca"    ] && echo "  send2yucca.sh"    >>$tmp_file
+      echo "done &" >>$tmp_file
+      mv $tmp_file $service_file
+      chmod +x $service_file
+      touch /tmp/motionguard-restart.txt
       redirect_to "$SCRIPT_NAME"
-      exit
     fi
 
-    :>$tmp_file
-    echo "#!/bin/sh" >>$tmp_file
-    echo "thrashold=${motion_sensitivity}"
-    echo "logread -f | grep \"Motion detected in \d* regions\" | while read BEER; do" >>$tmp_file
-    echo "  [ \"\$(echo \$BEER | cut -d' ' -f4)\" -lt \"\$thrashold\" ] && exit;" >>$tmp_file
-    [ "true" = "$motion_send2email"    ] && echo "  send2email.sh"    >>$tmp_file
-    [ "true" = "$motion_send2ftp"      ] && echo "  send2ftp.sh"      >>$tmp_file
-    [ "true" = "$motion_send2telegram" ] && echo "  send2telegram.sh" >>$tmp_file
-    [ "true" = "$motion_send2yadisk"   ] && echo "  send2yadisk.sh"   >>$tmp_file
-    [ "true" = "$motion_send2yucca"    ] && echo "  send2yucca.sh"    >>$tmp_file
-    echo "done &" >>$tmp_file
-    mv $tmp_file $service_file
-    chmod +x $service_file
-    touch /tmp/motionguard-restart.txt
-    redirect_to "$SCRIPT_NAME"
-  else
-    [ -f $service_file ] && rm $service_file
-    redirect_to "$SCRIPT_NAME"
+    # remove service file
+    if [ "false" = "$motion_enabled" ]; then
+      [ -f $service_file ] && rm $service_file
+      touch /tmp/motionguard-restart.txt
+      redirect_to "$SCRIPT_NAME"
+    fi
   fi
-fi
+else
+  include $config_file
 
-[ -z "$motion_sensitivity" ] && motion_sensitivity=3
-if [ -f "$service_file" ]; then
-  motion_enabled="true"
-  [ -n "$(grep send2email.sh $service_file)"    ] && motion_send2email="true"
-  [ -n "$(grep send2ftp.sh $service_file)"      ] && motion_send2ftp="true"
-  [ -n "$(grep send2telegram.sh $service_file)" ] && motion_send2telegram="true"
-  [ -n "$(grep send2yadisk.sh $service_file)"   ] && motion_send2yadisk="true"
-  [ -n "$(grep send2yucca.sh $service_file)"    ] && motion_send2yucca="true"
+  # Default values
+  [ -z "$motion_sensitivity" ] && motion_sensitivity=3
+  if [ -f "$service_file" ]; then
+    motion_enabled="true"
+    [ -n "$(grep send2email.sh $service_file)"    ] && motion_send2email="true"
+    [ -n "$(grep send2ftp.sh $service_file)"      ] && motion_send2ftp="true"
+    [ -n "$(grep send2telegram.sh $service_file)" ] && motion_send2telegram="true"
+    [ -n "$(grep send2yadisk.sh $service_file)"   ] && motion_send2yadisk="true"
+    [ -n "$(grep send2yucca.sh $service_file)"    ] && motion_send2yucca="true"
+  fi
 fi
 %>
 <%in p/header.cgi %>
@@ -70,6 +94,7 @@ fi
       <% button_submit %>
     </div>
     <div class="col col-lg-8">
+      <% [ -f $config_file ] && ex "cat $config_file" %>
       <% [ -f $service_file ] && ex "cat $service_file" %>
     </div>
   </div>

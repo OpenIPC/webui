@@ -26,7 +26,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
     :>$tmp_file
     echo "#!/bin/sh" >>$tmp_file
-    echo "logread -f | grep \"Motion detected in $(echo "6 - 0$motion_sensitivity" | bc) regions\" | while read BEER; do" >>$tmp_file
+    echo "thrashold=${motion_sensitivity}"
+    echo "logread -f | grep \"Motion detected in \d* regions\" | while read BEER; do" >>$tmp_file
+    echo "  [ \"\$(echo \$BEER | cut -d' ' -f4)\" -lt \"\$thrashold\" ] && exit;" >>$tmp_file
     [ "true" = "$motion_send2email"    ] && echo "  send2email.sh"    >>$tmp_file
     [ "true" = "$motion_send2ftp"      ] && echo "  send2ftp.sh"      >>$tmp_file
     [ "true" = "$motion_send2telegram" ] && echo "  send2telegram.sh" >>$tmp_file

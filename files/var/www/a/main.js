@@ -120,6 +120,14 @@ function sleep(ms) {
             xhr.send();
         });
 
+        $("#send-to-yucca")?.addEventListener("click", event => {
+            event.preventDefault();
+            if (!confirm("Are you sure?")) return false;
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "/cgi-bin/send2yucca.cgi");
+            xhr.send();
+        });
+
         // async output of a command running on camera
         if ($('pre#output[data-cmd]')) {
             const el = $('pre#output[data-cmd]');

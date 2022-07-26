@@ -33,6 +33,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     [ "true" = "$motion_send2ftp"      ] && echo "  send2ftp.sh"      >>$tmp_file
     [ "true" = "$motion_send2telegram" ] && echo "  send2telegram.sh" >>$tmp_file
     [ "true" = "$motion_send2yadisk"   ] && echo "  send2yadisk.sh"   >>$tmp_file
+    [ "true" = "$motion_send2yucca"    ] && echo "  send2yucca.sh"    >>$tmp_file
     echo "done &" >>$tmp_file
     mv $tmp_file $service_file
     chmod +x $service_file
@@ -51,6 +52,7 @@ if [ -f "$service_file" ]; then
   [ -n "$(grep send2ftp.sh $service_file)"      ] && motion_send2ftp="true"
   [ -n "$(grep send2telegram.sh $service_file)" ] && motion_send2telegram="true"
   [ -n "$(grep send2yadisk.sh $service_file)"   ] && motion_send2yadisk="true"
+  [ -n "$(grep send2yucca.sh $service_file)"    ] && motion_send2yucca="true"
 fi
 %>
 <%in p/header.cgi %>
@@ -64,6 +66,7 @@ fi
       <% field_checkbox "motion_send2ftp" "Upload to FTP" "<a href=\"plugin-send2ftp.cgi\">Configure uploading to FTP</a>" %>
       <% field_checkbox "motion_send2telegram" "Send to Telegram" "<a href=\"plugin-send2telegram.cgi\">Configure sending to Telegram</a>" %>
       <% field_checkbox "motion_send2yadisk" "Upload to Yandex Disk" "<a href=\"plugin-send2yadisk.cgi\">Configure sending to Yandex Disk</a>" %>
+      <% field_checkbox "motion_send2yucca" "Notify Yucca NVR" "<a href=\"plugin-send2yucca.cgi\">Configure notication to Yucca NVR</a>" %>
       <% button_submit %>
     </div>
     <div class="col col-lg-8">
@@ -77,6 +80,7 @@ fi
 <% [ "true" != "$ftp_enabled"      ] && echo "\$('#motion_send2ftp').disabled = true;" %>
 <% [ "true" != "$telegram_enabled" ] && echo "\$('#motion_send2telegram').disabled = true;" %>
 <% [ "true" != "$yadisk_enabled"   ] && echo "\$('#motion_send2yadisk').disabled = true;" %>
+<% [ "true" != "$yucca_enabled"    ] && echo "\$('#motion_send2yucca').disabled = true;" %>
 </script>
 
 <%in p/footer.cgi %>

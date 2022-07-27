@@ -49,6 +49,8 @@ snapshot="/tmp/${plugin}_snap.jpg"
 # get image from camera
 curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
 if [ $? -eq 0 ]; then
+  :>/tmp/webui/${plugin}.log
+  echo "curl ${curl_options} --url ${email_smtp_protocol}://${email_smtp_host}:${email_smtp_port} --mail-from ${email_from_address} --mail-rcpt ${email_to_address} -F '=(;type=multipart/mixed' -F \"=${email_body};type=text/plain\" -F \"file=@${snapshot};type=image/jpeg;encoder=base64\" -F '=)' -H \"Subject: ${email_subject}\" -H \"From: \\\"${email_from_name}\\\" <${email_from_address}>\" -H \"To: \\\"${email_to_name}\\\" <${email_to_address}>\"" >>/tmp/webui/${plugin}.log 2>&1
   curl ${curl_options} \
     --url ${email_smtp_protocol}://${email_smtp_host}:${email_smtp_port} \
     --mail-from ${email_from_address} \
@@ -60,7 +62,7 @@ if [ $? -eq 0 ]; then
     -H "Subject: ${email_subject}" \
     -H "From: \"${email_from_name}\" <${email_from_address}>" \
     -H "To: \"${email_to_name}\" <${email_to_address}>" \
-    >/tmp/webui/${plugin}.log 2>&1
+    >>/tmp/webui/${plugin}.log 2>&1
   rm -f ${snapshot}
 else
   echo "Cannot get a snapshot."

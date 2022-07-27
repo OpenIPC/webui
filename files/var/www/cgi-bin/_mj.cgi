@@ -67,7 +67,7 @@ mj="
 .video0.size|Video resolution|px|string|1920x1080,1280x720,704x576|1920x1080|
 .video0.fps|Video frame rate|fps|number|1,60,1|25|
 .video0.bitrate|Video bitrate|kbps|number|1,4096,1|4096|
-.video0.gopSize|Send I-frames each 1 second||number|1,20,1|1|
+.video0.gopSize|Send I-frames each 1 second||number|0.1,20,0.1|1|
 .video0.gopMode|Group of Pictures (GOP) mode||select|normal,dual,smart|normal|
 .video0.rcMode|RC mode||select|avbr,cbr,vbr|avbr|
 .video0.crop|Crop video to size|px|string||0x0x960x540|

@@ -37,7 +37,6 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     # (that's why we can't have nice things)
     case "$key" in
       .image.rotate)
-        value="${value//°/}"
         [ "0" = "$value" ] && value="none"
         ;;
       .isp.antiFlicker)

@@ -39,7 +39,7 @@ mj="
 .isp.iqProfile|Path to PQTools binary profile||string|||
 .image.mirror|Flip image horizontally||boolean|true,false|false|
 .image.flip|Flip image vertically||boolean|true,false|false|
-.image.rotate|Rotate image clockwise||select|0°,90°,270°|0|
+.image.rotate|Rotate image clockwise, °||select|0,90,270|0|
 .image.contrast|Image contrast|%|range|1,100,1,auto|auto|
 .image.hue|Image hue|%|range|1,100,1|50|
 .image.saturation|Image saturation|%|range|1,100,1|50|

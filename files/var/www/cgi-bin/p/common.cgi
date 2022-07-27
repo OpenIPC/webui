@@ -478,14 +478,13 @@ redirect_back() {
 # redirect_to "url" "flash class" "flash text"
 redirect_to() {
   [ -n "$3" ] && flash_save "$2" "$3"
-  echo "HTTP/1.1 302 Moved Temporarily
+  echo "HTTP/1.1 303 See Other
 Content-type: text/html; charset=UTF-8
 Cache-Control: no-store
 Pragma: no-cache
 Date: $(time_http)
 Location: $1
 Server: $SERVER_SOFTWARE
-Status: 302 Moved Temporarily
 "
   exit 0
 }
@@ -625,7 +624,7 @@ update_caminfo() {
     _default_iface=$(echo "$_default_route" | awk '{print $5}')
     network_wan_mac=$(cat /sys/class/net/${_default_iface}/address)
     network_gateway=$(echo "$_default_route" | awk '{print $3}')
-  fi; unset _default_route;unset _default_iface
+  fi; unset _default_route; unset _default_iface
 
   network_hostname=$(hostname -s)
   network_interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | tr '\n' ' ' | sed 's/ $//' )

@@ -21,7 +21,7 @@ fi
 [ -z "$ftp_host" ] && echo -e "FTP host not found in config" && exit 11
 [ -z "$ftp_port" ] && echo -e "FTP port not found in config" && exit 12
 
-curl_options="--silent --insecure --connect-timeout ${curl_timeout} --max-time ${curl_timeout}"
+curl_options="--verbose --silent --connect-timeout ${curl_timeout} --max-time ${curl_timeout}" # --insecure
 
 # FTP credentials, if given
 if [ -n "$ftp_login" ] && [ -n "$ftp_password" ]; then
@@ -46,7 +46,7 @@ if [ $? -eq 0 ]; then
   curl ${curl_options} \
     --url ${url} \
     --upload-file ${snapshot} \
-    --ftp-create-dirs
+    --ftp-create-dirs >/tmp/webui/${plugin}.log 2>&1
   rm -f ${snapshot}
 else
   echo "Cannot get a snapshot."

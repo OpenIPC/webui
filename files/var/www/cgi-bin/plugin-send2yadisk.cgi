@@ -73,4 +73,6 @@ fi
   </div>
 </div>
 
+<% [ -f "/tmp/webui/${plugin}.log" ] && ex "cat /tmp/webui/${plugin}.log" %>
+
 <%in p/footer.cgi %>

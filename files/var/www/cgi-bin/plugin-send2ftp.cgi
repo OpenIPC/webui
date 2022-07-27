@@ -65,7 +65,6 @@ fi
   </form>
   <div class="col">
     <% ex "cat $config_file" %>
-    <% [ -f "/tmp/webui/${plugin}.log" ] && ex "cat /tmp/webui/${plugin}.log" %>
   </div>
   <div class="col">
     <% preview %>
@@ -74,5 +73,7 @@ fi
     <% fi %>
   </div>
 </div>
+
+<% [ -f "/tmp/webui/${plugin}.log" ] && ex "cat /tmp/webui/${plugin}.log" %>
 
 <%in p/footer.cgi %>

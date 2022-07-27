@@ -85,6 +85,8 @@ fi
   </div>
 </div>
 
+<% [ -f "/tmp/webui/${plugin}.log" ] && ex "cat /tmp/webui/${plugin}.log" %>
+
 <script>
 $('#email_body').style.height = "6rem";
 

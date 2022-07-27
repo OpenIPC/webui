@@ -4,6 +4,8 @@ plugin="ftp"
 config_file="/etc/webui/${plugin}.conf"
 curl_timeout=100
 
+mkdir -p /tmp/webui
+
 if [ ! -f "$config_file" ]; then
   echo "Error: ${config_file} not found."
   exit 1
@@ -46,7 +48,8 @@ if [ $? -eq 0 ]; then
   curl ${curl_options} \
     --url ${url} \
     --upload-file ${snapshot} \
-    --ftp-create-dirs >/tmp/webui/${plugin}.log 2>&1
+    --ftp-create-dirs \
+    >/tmp/webui/${plugin}.log 2>&1
   rm -f ${snapshot}
 else
   echo "Cannot get a snapshot."

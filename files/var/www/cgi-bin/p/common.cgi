@@ -136,7 +136,7 @@ field_checkbox() {
     "<input type=\"hidden\" id=\"${1}-false\" name=\"${1}\" value=\"false\">" \
     "<input type=\"checkbox\" name=\"${1}\" id=\"${1}\" value=\"true\" class=\"form-check-input\"$(t_checked "true" "$_v")>" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>"
-  [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
+  [ -n "$_h" ] && echo "<span class=\"hint text-secondary d-block mb-2\">${_h}</span>"
   echo "</p>"
   unset _h; unset _l; unset _v
 }

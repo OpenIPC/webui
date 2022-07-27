@@ -35,7 +35,7 @@ if [ "true" = "$ftp_socks5_enabled" ]; then
 fi
 
 url="ftp://${ftp_host}"
-[ -n "$ftp_path" ] && url="${url}/${ftp_path}"
+[ -n "$ftp_path" ] && url="${url}/${ftp_path// /%20}"
 url="${url}/$(date +"$ftp_template")"
 
 snapshot="/tmp/${plugin}_snap.jpg"

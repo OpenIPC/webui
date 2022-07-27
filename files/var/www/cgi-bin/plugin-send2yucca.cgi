@@ -64,7 +64,7 @@ fi
   <div class="col">
     <% preview %>
     <% if [ "true" = "$yucca_enabled" ]; then %>
-      <p><a href="#" class="btn btn-primary" id="send-to-yucca">Send to Yucca</a></p>
+      <p><a href="send2yucca.cgi" class="btn btn-primary" id="send-to-yucca">Send to Yucca</a></p>
     <% fi %>
   </div>
 </div>

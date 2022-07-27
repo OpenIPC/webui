@@ -69,7 +69,7 @@ fi
   <div class="col">
     <% preview %>
     <% if [ "true" = "$ftp_enabled" ]; then %>
-      <p><a href="#" class="btn btn-primary" id="send-to-ftp">Send to FTP Storage</a></p>
+      <p><a href="send2ftp.cgi" class="btn btn-primary" id="send-to-ftp">Send to FTP Storage</a></p>
     <% fi %>
   </div>
 </div>

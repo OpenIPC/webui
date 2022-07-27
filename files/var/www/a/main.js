@@ -88,46 +88,6 @@ function sleep(ms) {
             });
         });
 
-        $("#send-to-email")?.addEventListener("click", event => {
-            event.preventDefault();
-            if (!confirm("Are you sure?")) return false;
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", "/cgi-bin/send2email.cgi");
-            xhr.send();
-        })
-
-        $("#send-to-ftp")?.addEventListener("click", event => {
-            event.preventDefault();
-            if (!confirm("Are you sure?")) return false;
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", "/cgi-bin/send2ftp.cgi");
-            xhr.send();
-        })
-
-        $("#send-to-telegram")?.addEventListener("click", event => {
-            event.preventDefault();
-            if (!confirm("Are you sure?")) return false;
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", "/cgi-bin/send2telegram.cgi");
-            xhr.send();
-        });
-
-        $("#send-to-yadisk")?.addEventListener("click", event => {
-            event.preventDefault();
-            if (!confirm("Are you sure?")) return false;
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", "/cgi-bin/send2yadisk.cgi");
-            xhr.send();
-        });
-
-        $("#send-to-yucca")?.addEventListener("click", event => {
-            event.preventDefault();
-            if (!confirm("Are you sure?")) return false;
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", "/cgi-bin/send2yucca.cgi");
-            xhr.send();
-        });
-
         // async output of a command running on camera
         if ($('pre#output[data-cmd]')) {
             const el = $('pre#output[data-cmd]');

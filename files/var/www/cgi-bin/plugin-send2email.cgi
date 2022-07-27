@@ -80,7 +80,7 @@ fi
   <div class="col">
     <% preview %>
     <% if [ "true" = "$email_enabled" ]; then %>
-      <p><a href="#" class="btn btn-primary" id="send-to-email">Send to email</a></p>
+      <p><a href="send2email.cgi" class="btn btn-primary" id="send-to-email">Send to email</a></p>
     <% fi %>
   </div>
 </div>

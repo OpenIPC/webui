@@ -87,7 +87,7 @@ fi
   <div class="col">
     <% preview %>
     <% if [ "true" = "$telegram_enabled" ]; then %>
-      <p><a href="#" class="btn btn-primary" id="send-to-telegram">Send to Telegram</a></p>
+      <p><a href="send2telegram.cgi" class="btn btn-primary" id="send-to-telegram">Send to Telegram</a></p>
     <% fi %>
   </div>
 </div>

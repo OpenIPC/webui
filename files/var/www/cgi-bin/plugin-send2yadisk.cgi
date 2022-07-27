@@ -68,7 +68,7 @@ fi
   <div class="col">
     <% preview %>
     <% if [ "true" = "$yadisk_enabled" ]; then %>
-      <p><a href="#" class="btn btn-primary" id="send-to-yadisk">Send to Yandex Disk</a></p>
+      <p><a href="send2yadisk.cgi" class="btn btn-primary" id="send-to-yadisk">Send to Yandex Disk</a></p>
     <% fi %>
   </div>
 </div>

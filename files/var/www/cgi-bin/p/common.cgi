@@ -419,11 +419,14 @@ label() {
 }
 
 load_plugins() {
-  for i in $(ls -1 plugin-*); do
-    eval "$(grep 'plugin_name=' $i)"
-    echo "<li><a class=\"dropdown-item\" href=\"${i}\">${plugin_name}</a></li>"
-    unset plugin_name
-  done
+  for _i in $(ls -1 plugin-*); do
+    _p="$(sed -r -n '/^plugin=/s/plugin="(.*)"/\1/p' $_i)"
+    _n="$(sed -r -n '/^plugin_name=/s/plugin_name="(.*)"/\1/p' $_i)"
+    eval _e=\$${_p}_enabled
+    [ "true" = "$_e" ] && _css=" on"
+    echo "<li><a class=\"dropdown-item${_css}\" href=\"${_i}\">${_n}</a></li>"
+    unset _e; unset _n; unset _p; unset _css
+  done; unset _i
 }
 
 log() {

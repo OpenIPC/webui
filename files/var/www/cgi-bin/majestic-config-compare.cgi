@@ -7,7 +7,7 @@
   <div class="col-md-8 col-lg-9 col-xl-9 col-xxl-10">
 <%
 config_file=/etc/majestic.yaml
-diff /rom$config_file $config_file > /tmp/majestic.patch
+diff /rom$config_file $config_file >/tmp/majestic.patch
 ex "cat /tmp/majestic.patch"
 %>
   </div>

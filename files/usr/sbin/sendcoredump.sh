@@ -7,7 +7,7 @@ info_file=info.txt
 log_file=/root/coredump.log
 
 # use local time
-log() { echo "$(date +"%F %T") $1" >> $log_file; }
+log() { echo "$(date +"%F %T") $1" >>$log_file; }
 
 :>$log_file
 log "Majectic crashed"
@@ -30,7 +30,7 @@ log "done"
 cd /tmp
 
 log "Dumping core"
-cat /dev/stdin > $core_file
+cat /dev/stdin >$core_file
 log "done"
 
 bundle_name=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/[: ]//g" | uniq)-$(date +"%Y%m%d-%H%M%S").tgz
@@ -63,7 +63,7 @@ Firmware:
 ---------
 ${os}
 MAJESTIC_VERSION=\"${mj}\"
-" >> $info_file
+" >>$info_file
 
 cat /etc/majestic.yaml > majestic.yaml
 

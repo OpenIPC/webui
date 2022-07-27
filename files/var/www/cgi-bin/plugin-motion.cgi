@@ -32,7 +32,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     # create temp config file
     :>$tmp_file
     for _p in $params; do
-      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >> $tmp_file
+      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
     done; unset _p
     mv $tmp_file $config_file
 

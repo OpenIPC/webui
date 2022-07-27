@@ -23,10 +23,10 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
       ;;
     update)
       tmp_file=/tmp/${plugin}.conf
-      :> $tmp_file
+      :>$tmp_file
       for _i in 0 1 2 3; do
         eval _s="\$POST_ntp_server_${_i}"
-        [ -n "$_s" ] && echo "server ${_s} iburst" >> $tmp_file
+        [ -n "$_s" ] && echo "server ${_s} iburst" >>$tmp_file
       done
       unset _i; unset _s
       mv $tmp_file $config_file

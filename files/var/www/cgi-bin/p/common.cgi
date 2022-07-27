@@ -350,11 +350,11 @@ field_textarea() {
 }
 
 flash_append() {
-  echo "$1:$2" >> "$flash_file"
+  echo "$1:$2" >>"$flash_file"
 }
 
 flash_delete() {
-  :> "$flash_file"
+  :>"$flash_file"
 }
 
 flash_read() {
@@ -377,7 +377,7 @@ flash_read() {
 }
 
 flash_save() {
-  echo "${1}:${2}" > $flash_file
+  echo "${1}:${2}" >$flash_file
 }
 
 get_soc_temp() {
@@ -432,7 +432,7 @@ log() {
 
 majestic_diff() {
   config_file=/etc/majestic.yaml
-  diff /rom$config_file $config_file > /tmp/majestic.patch
+  diff /rom$config_file $config_file >/tmp/majestic.patch
   cat /tmp/majestic.patch
 }
 
@@ -543,7 +543,7 @@ sanitize() {
 }
 
 generate_signature() {
-  echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash, ${fw_version}-${fw_variant}, ${network_hostname}, ${network_wan_mac}" > $signature_file
+  echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash, ${fw_version}-${fw_variant}, ${network_hostname}, ${network_wan_mac}" >$signature_file
 }
 
 signature() {
@@ -577,11 +577,11 @@ update_caminfo() {
   debug=$(fw_printenv -n debug); [ -z "$debug" ] && debug="0"
 
   _tmpfile=${ui_tmp_dir}/sysinfo.tmp
-  :> $_tmpfile
+  :>$_tmpfile
   # add all web-related config files
   # do not include bigbro, ntp
-  for _f in admin email ftp socks5 telegram yadisk yucca; do
-    [ -f "${ui_config_dir}/${_f}.conf" ] && cat "${ui_config_dir}/${_f}.conf" >> $_tmpfile
+  for _f in admin email ftp motion socks5 telegram yadisk yucca; do
+    [ -f "${ui_config_dir}/${_f}.conf" ] && cat "${ui_config_dir}/${_f}.conf" >>$_tmpfile
   done; unset _f
 
   # Hardware
@@ -637,8 +637,8 @@ update_caminfo() {
   tz_data=$(cat /etc/TZ)
   tz_name=$(cat /etc/tz_name)
   if [ -z "$tz_data" ] || [ -z "$tz_name" ]; then
-    tz_data="GMT0"; echo "$tz_data" > /etc/TZ
-    tz_name="Etc/GMT"; echo "$tz_name" > /etc/tz_name
+    tz_data="GMT0"; echo "$tz_data" >/etc/TZ
+    tz_name="Etc/GMT"; echo "$tz_name" >/etc/tz_name
   fi
 
   echo "flash_size=\"$flash_size\"
@@ -667,12 +667,12 @@ tz_name=\"$tz_name\"
 ui_password=\"$ui_password\"
 ui_password_fw=\"$ui_password_fw\"
 ui_version=\"$ui_version\"
-" >> $_tmpfile
+" >>$_tmpfile
 
   # sort content alphabetically
-  sort < $_tmpfile | sed /^$/d > $sysinfo_file && rm $_tmpfile && unset _tmpfile
+  sort <$_tmpfile | sed /^$/d >$sysinfo_file && rm $_tmpfile && unset _tmpfile
 
-  echo -e "debug=\"$debug\"\n# caminfo $(date +"%F %T")\n" >> $sysinfo_file
+  echo -e "debug=\"$debug\"\n# caminfo $(date +"%F %T")\n" >>$sysinfo_file
 }
 
 xl() {

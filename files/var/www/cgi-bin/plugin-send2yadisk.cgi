@@ -34,9 +34,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
   if [ -z "$error" ]; then
     # create temp config file
-    :> $tmp_file
+    :>$tmp_file
     for _p in $params; do
-      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >> $tmp_file
+      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
     done; unset _p
     mv $tmp_file $config_file
 
@@ -56,7 +56,7 @@ fi
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
     <div class="col">
       <% field_text "yadisk_login" "Yandex Disk login" %>
-      <% field_password "yadisk_password" "Yandex Disk password" %>
+      <% field_password "yadisk_password" "Yandex Disk password" "Create a dedicated password for application (WebDAV)." %>
       <% field_text "yadisk_path" "Yandex Disk path" %>
       <% field_switch "yadisk_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
       <% button_submit %>

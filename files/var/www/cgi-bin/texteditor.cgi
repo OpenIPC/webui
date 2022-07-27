@@ -29,7 +29,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
       else
         [ -f "${editor_file}.backup" ] && rm "${editor_file}.backup"
       fi
-      echo "$editor_text" > "$editor_file"
+      echo "$editor_text" >"$editor_file"
       redirect_to "${SCRIPT_NAME}?f=${editor_file}" "success" "File saved."
     fi
     ;;
@@ -97,8 +97,8 @@ page_title="Text editor"
 <%
 # it's ugly but shows non-printed characters (^M/^I)
 _n=$(basename $editor_file)
-cat -t $editor_file > /tmp/${_n}.np
-cat -t ${editor_file}.backup > /tmp/${_n}.backup.np
+cat -t $editor_file >/tmp/${_n}.np
+cat -t ${editor_file}.backup >/tmp/${_n}.backup.np
 pre "$(diff -s -d -U0 /tmp/${_n}.backup.np -L ${editor_file}.backup /tmp/${_n}.np -L $editor_file)"
 rm /tmp/${_n}.np /tmp/${_n}.backup.np
 unset _n

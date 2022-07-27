@@ -27,7 +27,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     fi
     # save new language settings and reload locale
     [ -z "$locale" ] && locale="en"
-    echo "$locale" > /etc/web_locale
+    echo "$locale" >/etc/web_locale
     reload_locale
     update_caminfo
     redirect_to $SCRIPT_NAME "success" "Locale updated."

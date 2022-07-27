@@ -20,7 +20,7 @@ Pragma: no-cache
       ;;
     patch)
       patch_file=/tmp/majestic.patch
-      diff $config_file_fw $config_file > $patch_file
+      diff $config_file_fw $config_file >$patch_file
       echo "HTTP/1.0 200 OK
 Date: $(time_http)
 Server: $SERVER_SOFTWARE

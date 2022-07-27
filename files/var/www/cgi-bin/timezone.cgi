@@ -9,11 +9,11 @@ config_file="${ui_config_dir}/${plugin}.conf"
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   tmp_file=/tmp/${plugin}.conf
-  :> $tmp_file
+  :>$tmp_file
   [ -z "$POST_tz_name" ] && redirect_to $SCRIPT_NAME "warning" "Empty timezone name. Skipping."
   [ -z "$POST_tz_data" ] && redirect_to $SCRIPT_NAME "warning" "Empty timezone value. Skipping."
-  [ "$tz_data" != "$POST_tz_data" ] && echo "${POST_tz_data}" > /etc/TZ
-  [ "$tz_name" != "$POST_tz_name" ] && echo "${POST_tz_name}" > /etc/tz_name
+  [ "$tz_data" != "$POST_tz_data" ] && echo "${POST_tz_data}" >/etc/TZ
+  [ "$tz_name" != "$POST_tz_name" ] && echo "${POST_tz_name}" >/etc/tz_name
   update_caminfo
   redirect_to $SCRIPT_NAME "success" "Timezone updated."
 fi

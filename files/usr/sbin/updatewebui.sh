@@ -112,7 +112,7 @@ echo_c 97 "Delete temp directory"
 rm -fr /tmp/microbe-web-${branch}
 
 if [ -z "$error" ]; then
-  echo "${branch}+${commit}, ${timestamp}" > /var/www/.version
+  echo "${branch}+${commit}, ${timestamp}" >/var/www/.version
   [ -f /tmp/sysinfo.txt ] && rm /tmp/sysinfo.txt
   exit 0
 else

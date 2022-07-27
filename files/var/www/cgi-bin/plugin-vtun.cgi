@@ -16,7 +16,7 @@ if [ -n "$POST_action" ] && [ "$POST_action" = "reset" ]; then
 fi
 
 if [ -n "$POST_vtun_host" ]; then
-  echo -e "#!/bin/sh\n\ntunnel $POST_vtun_host\n" > $service_file
+  echo -e "#!/bin/sh\n\ntunnel $POST_vtun_host\n" >$service_file
   chmod +x $service_file
   $service_file
   redirect_to "$SCRIPT_NAME" "success" "Tunnel is up"

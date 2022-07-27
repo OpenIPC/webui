@@ -9,9 +9,9 @@ config_file="${ui_config_dir}/${plugin}.conf"
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   tmp_file=/tmp/${plugin}.conf
-  :> $tmp_file
+  :>$tmp_file
   for v in enabled server port login password; do
-    eval echo "${plugin}_${v}=\\\"\$POST_${plugin}_${v}\\\"" >> $tmp_file
+    eval echo "${plugin}_${v}=\\\"\$POST_${plugin}_${v}\\\"" >>$tmp_file
   done
   mv $tmp_file $config_file
   redirect_to $SCRIPT_NAME

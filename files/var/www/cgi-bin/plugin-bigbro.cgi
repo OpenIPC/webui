@@ -15,7 +15,7 @@ case "$REQUEST_METHOD" in
     pin="$POST_bigbro_pin"
     signature=$(echo -ne "$(date +%s):$pin"|md5sum|awk '{print $1}')
     sed -i /^${pin}:/d $config_file
-    echo "${pin}:${signature}" >> $config_file
+    echo "${pin}:${signature}" >>$config_file
     redirect_to "${SCRIPT_NAME}?pin=${pin}"
     ;;
   GET)

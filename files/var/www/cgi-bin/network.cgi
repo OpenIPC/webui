@@ -22,19 +22,19 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   fi
 
   if [ -z "$error" ]; then
-    :> $tmp_file
-    cat /etc/network/interfaces | sed '/^auto eth0$/,/^$/d' | sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' > $tmp_file
+    :>$tmp_file
+    cat /etc/network/interfaces | sed '/^auto eth0$/,/^$/d' | sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' >$tmp_file
     if [ "true" = "$network_dhcp" ]; then
-      echo -e "\nauto eth0\niface eth0 inet dhcp\n  hwaddress ether \$(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)" >> $tmp_file
+      echo -e "\nauto eth0\niface eth0 inet dhcp\n  hwaddress ether \$(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)" >>$tmp_file
     else
-      echo -e "\nauto eth0" >> $tmp_file
-      echo "iface eth0 inet static" >> $tmp_file
-      echo "  hwaddress ether \$(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)" >> $tmp_file
-      echo "  address ${network_address}" >> $tmp_file
-      echo "  netmask ${network_netmask}" >> $tmp_file
+      echo -e "\nauto eth0" >>$tmp_file
+      echo "iface eth0 inet static" >>$tmp_file
+      echo "  hwaddress ether \$(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)" >>$tmp_file
+      echo "  address ${network_address}" >>$tmp_file
+      echo "  netmask ${network_netmask}" >>$tmp_file
 
       # skip gateway if empty
-      [ -n "$network_gateway" ] && echo "  gateway ${network_gateway}" >> $tmp_file
+      [ -n "$network_gateway" ] && echo "  gateway ${network_gateway}" >>$tmp_file
 
       # shift dns2 to dns1 if dns1 if empty
       if [ -z "$network_dns_1" ]; then
@@ -46,9 +46,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
       # [ -z "$network_dns_1" ] && network_dns_1="127.0.0.1"
 
       if [ -n "$network_dns_1" ]; then
-        echo -n "  pre-up echo -e \"nameserver ${network_dns_1}\n" >> $tmp_file
-        [ -n "$network_dns_2" ] && echo -n "nameserver ${network_dns_2}\n" >> $tmp_file
-        echo "\" >/tmp/resolv.conf" >> $tmp_file
+        echo -n "  pre-up echo -e \"nameserver ${network_dns_1}\n" >>$tmp_file
+        [ -n "$network_dns_2" ] && echo -n "nameserver ${network_dns_2}\n" >>$tmp_file
+        echo "\" >/tmp/resolv.conf" >>$tmp_file
       fi
 
       # no need for that unless we skip rebooting
@@ -59,12 +59,12 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     if [ -n "$network_hostname" ]; then
       _old_hostname="$(hostname)"
       if [ "$network_hostname" != "$_old_hostname" ]; then
-        echo "$network_hostname" > /etc/hostname
+        echo "$network_hostname" >/etc/hostname
         hostname "$network_hostname"
         sed -r -i "/127.0.1.1/s/(\b)${_old_hostname}(\b)/\1${network_hostname}\2/" /etc/hosts >&2
         killall udhcpc
         # page does not redirect without >/dev/null
-        udhcpc -x hostname:$network_hostname -T 1 -t 5 -R -b -O search > /dev/null
+        udhcpc -x hostname:$network_hostname -T 1 -t 5 -R -b -O search >/dev/null
       fi
     fi
 

@@ -84,8 +84,8 @@ fi
 config=""
 olddomain=""
 for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
-                                        # line: .isp.exposure|Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
-  yaml_param_name=${line%%|*}           # => .isp.exposure
+                                          # line: .isp.exposure|Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
+  yaml_param_name=${line%%|*}             # => .isp.exposure
 
   # show parameter only if it is not in a stop-list or we are in a debug mode
   if [ -z "$(echo $mj_params_debug | sed -n "/$yaml_param_name/p")" ] || [ "$debug" -ge "1" ]; then
@@ -132,13 +132,13 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
     fi
 
     case "$form_field_type" in
-      boolean)  field_switch "$form_field_name" "$label_text" "$hint" "$options";;
-      hidden)   field_hidden "$form_field_name" "$label_text" "$hint";;
-      number)   field_number "$form_field_name" "$label_text" "$options" "$hint";;
+      boolean)  field_switch   "$form_field_name" "$label_text" "$hint" "$options";;
+      hidden)   field_hidden   "$form_field_name" "$label_text" "$hint";;
+      number)   field_number   "$form_field_name" "$label_text" "$options" "$hint";;
       password) field_password "$form_field_name" "$label_text" "$hint";;
-      range)    field_range  "$form_field_name" "$label_text" "$options" "$hint";;
-      select)   field_select "$form_field_name" "$label_text" "$options" "$hint";;
-      string)   field_text   "$form_field_name" "$label_text" "$hint";;
+      range)    field_range    "$form_field_name" "$label_text" "$options" "$hint";;
+      select)   field_select   "$form_field_name" "$label_text" "$options" "$hint";;
+      string)   field_text     "$form_field_name" "$label_text" "$hint";;
       *) echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>";;
     esac
   fi

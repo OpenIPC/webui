@@ -18,7 +18,7 @@ if [ -f $old_config_file ]; then
   if [ -f "$(wc -l $tmp_file | cut -d " " -f 1)" = "2" ]; then
     sed -i "1s/\(.*\)/telegram_token=\"\1\"/" $tmp_file
     sed -i "2s/\(.*\)/telegram_channel=\"\1\"/" $tmp_file
-    echo "telegram_enabled=\"true\"" >> $tmp_file
+    echo "telegram_enabled=\"true\"" >>$tmp_file
   fi
   mv $tmp_file $config_file
   flash_save "success" "Configuration file converted to new format."
@@ -40,9 +40,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
   if [ -z "$error" ]; then
     # create temp config file
-    :> $tmp_file
+    :>$tmp_file
     for _p in $params; do
-      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >> $tmp_file
+      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
     done; unset _p
     mv $tmp_file $config_file
 

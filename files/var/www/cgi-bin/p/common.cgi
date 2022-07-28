@@ -490,7 +490,7 @@ Server: $SERVER_SOFTWARE
 }
 
 reload_locale() {
-  [ -f /etc/web_locale ] && _l="$(cat /etc/web_locale)"
+  [ -f /etc/webui/locale ] && _l="$(cat /etc/webui/locale)"
   if [ -n "$_l" ] && [ -f "/var/www/lang/${_l}.sh" ]; then
     source "/var/www/lang/${_l}.sh"
     locale="$_l"

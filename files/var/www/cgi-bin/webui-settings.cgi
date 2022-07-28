@@ -1,6 +1,8 @@
 #!/usr/bin/haserl --upload-limit=100 --upload-dir=/tmp
 <%in p/common.cgi %>
 <%
+locale_file=/etc/webui/locale
+
 if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in
   access)
@@ -27,7 +29,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     fi
     # save new language settings and reload locale
     [ -z "$locale" ] && locale="en"
-    echo "$locale" >/etc/web_locale
+    echo "$locale" >$locale_file
     reload_locale
     update_caminfo
     redirect_to $SCRIPT_NAME "success" "Locale updated."
@@ -86,7 +88,7 @@ fi
     <%
     ex "cat /etc/httpd.conf"
     #ex "echo \$locale"
-    #ex "cat /etc/web_locale"
+    #ex "cat $locale_file"
     #ex "ls /var/www/lang/"
     %>
   </div>

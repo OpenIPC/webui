@@ -29,7 +29,7 @@ fi
 [ -z "$telegram_token"   ] && echo -e "Telegram token not found in config" && exit 11
 [ -z "$telegram_channel" ] && echo -e "Telegram channel not found in config" && exit 12
 
-curl_options="--verbose --silent --insecure --connect-timeout ${curl_timeout} --max-time ${curl_timeout}"
+curl_options="--verbose --insecure --connect-timeout ${curl_timeout} --max-time ${curl_timeout}"
 
 # SOCK5 proxy, if needed
 if [ "true" = "$telegram_socks5_enabled" ]; then
@@ -45,9 +45,9 @@ snapshot="/tmp/${plugin}_snap.jpg"
 curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
 if [ $? -eq 0 ]; then
   :>/tmp/webui/${plugin}.log
-  cmd="curl ${curl_options} --request POST ${url} -H \"Content-Type: multipart/form-data\" -F \"photo=@${snapshot}\" -F \"caption=$(hostname -s), $(date +"%F %T")\""
-  echo "$cmd" >>/tmp/webui/${plugin}.log
-  result="$($cmd 2>&1)"
+  now="$(date +"%F %T")"
+  echo "curl ${curl_options} --url ${url} -H \"Content-Type: multipart/form-data\" -F \"photo=@${snapshot}\" -F \"caption=$(hostname -s), ${now}\"" >>/tmp/webui/${plugin}.log
+  result=$(curl ${curl_options} --url ${url} -H "Content-Type: multipart/form-data" -F "photo=@${snapshot}" -F "caption=$(hostname -s), ${now}" 2>&1)
   echo "$result" >>/tmp/webui/${plugin}.log
   if [ "${result:1:6}" = '"ok":f' ]; then
     echo "Cannot post snapshot to Telegram."

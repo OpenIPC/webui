@@ -123,6 +123,38 @@ $("#toggle-night-mode")?.addEventListener("click", event => {
   xhr.send("mode=toggle");
 });
 
+$("#send-to-email")?.addEventListener("click", event => {
+    event.preventDefault();
+    if (!confirm("Are you sure?")) return false;
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "/cgi-bin/send2email.cgi");
+    xhr.send();
+})
+
+$("#send-to-ftp")?.addEventListener("click", event => {
+    event.preventDefault();
+    if (!confirm("Are you sure?")) return false;
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "/cgi-bin/send2ftp.cgi");
+    xhr.send();
+})
+
+$("#send-to-telegram")?.addEventListener("click", event => {
+    event.preventDefault();
+    if (!confirm("Are you sure?")) return false;
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "/cgi-bin/send2telegram.cgi");
+    xhr.send();
+});
+
+$("#send-to-yadisk")?.addEventListener("click", event => {
+    event.preventDefault();
+    if (!confirm("Are you sure?")) return false;
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "/cgi-bin/send2yadisk.cgi");
+    xhr.send();
+});
+
 $("#speed")?.addEventListener("click", event => {
   event.preventDefault();
   event.target.src = (event.target.src.split("/").pop() == "speed-slow.svg") ? "/a/speed-fast.svg" : "/a/speed-slow.svg";

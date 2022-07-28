@@ -637,10 +637,10 @@ update_caminfo() {
 
   # Default timezone is GMT
   tz_data=$(cat /etc/TZ)
-  tz_name=$(cat /etc/tz_name)
+  tz_name=$(cat /etc/tzname)
   if [ -z "$tz_data" ] || [ -z "$tz_name" ]; then
     tz_data="GMT0"; echo "$tz_data" >/etc/TZ
-    tz_name="Etc/GMT"; echo "$tz_name" >/etc/tz_name
+    tz_name="Etc/GMT"; echo "$tz_name" >/etc/tzname
   fi
 
   echo "flash_size=\"$flash_size\"

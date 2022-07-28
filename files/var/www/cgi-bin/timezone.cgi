@@ -13,7 +13,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   [ -z "$POST_tz_name" ] && redirect_to $SCRIPT_NAME "warning" "Empty timezone name. Skipping."
   [ -z "$POST_tz_data" ] && redirect_to $SCRIPT_NAME "warning" "Empty timezone value. Skipping."
   [ "$tz_data" != "$POST_tz_data" ] && echo "${POST_tz_data}" >/etc/TZ
-  [ "$tz_name" != "$POST_tz_name" ] && echo "${POST_tz_name}" >/etc/tz_name
+  [ "$tz_name" != "$POST_tz_name" ] && echo "${POST_tz_name}" >/etc/tzname
   update_caminfo
   redirect_to $SCRIPT_NAME "success" "Timezone updated."
 fi
@@ -40,7 +40,7 @@ fi
     </form>
   </div>
   <div class="col">
-    <% ex "cat /etc/tz_name" %>
+    <% ex "cat /etc/tzname" %>
     <% ex "cat /etc/TZ" %>
     <% ex "echo \$TZ" %>
   </div>

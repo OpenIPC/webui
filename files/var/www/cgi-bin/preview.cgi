@@ -50,7 +50,10 @@ size_h=${size#*x}
   <div class="col-md-4 col-xl-3 col-xxl-3 pt-5">
     <div class="d-grid gap-2 mb-3">
       <div class="input-group">
-        <button class="form-control btn btn-primary text-start" type="button" id="preview_night_mode">Toggle night mode</button>
+        <button class="form-control btn btn-primary text-start" type="button" id="toggle-night-mode">Toggle night mode</button>
+        <div class="input-group-text">
+          <img src="/a/light-off.svg" alt="Image: Night mode indicator" id="night-mode-status">
+        </div>
       </div>
       <div class="input-group">
         <button class="form-control btn btn-primary text-start" type="button" id="send-to-email">Send to email</button>
@@ -110,9 +113,9 @@ $$("a[id^=pan-],a[id^=zoom-]").forEach(el => {
   });
 });
 
-$("#night-mode")?.addEventListener("click", event => {
+$("#toggle-night-mode")?.addEventListener("click", event => {
   event.preventDefault();
-  event.target.src = (event.target.src.split("/").pop() == "light-on.svg") ? "/a/light-off.svg" : "/a/light-on.svg";
+  $('#night-mode-status').src = ($('#night-mode-status').src.split("/").pop() == "light-on.svg") ? "/a/light-off.svg" : "/a/light-on.svg";
   // sendToApi("/night/toggle");
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "/cgi-bin/night.cgi");

@@ -22,7 +22,11 @@ size_h=${size#*x}
       </div>
       <div id="mjpeg-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="mjpeg-tab" tabindex="0">
         <div class="ratio ratio-16x9">
-          <img src="http://<%= $network_address %>/mjpeg" class="d-block img-fluid bg-light" height="<%= $size_h %>" width="<%= $size_w %>" alt="MJPEG Preview. If you don't see it, it's not supported by your browser, or MJPEG steam does not work.">
+          <% if [ "true" = "$(yaml-cli -g .jpeg.enabled)" ]; then %>
+            <img src="http://<%= $network_address %>/image.jpg" class="d-block img-fluid bg-light" id="preview-mjpeg" height="<%= $size_h %>" width="<%= $size_w %>" alt="MJPEG Preview. If you don't see it, it's not supported by your browser, or MJPEG steam does not work.">
+          <% else %>
+            <p class="alert alert-warning"><a href="majestic-settings.cgi?tab=jpeg">Enable JPEG support</a> to see the preview.</p>
+          <% fi %>
           <% if [ "true" = "$(yaml-cli -g .audio.enabled)" ]; then %>
             <audio autoplay controls class="d-block img-fluid">
               <source src="http://<%= $network_address %>/audio.opus" type="audio/ogg; codecs=opus">
@@ -127,8 +131,17 @@ $$('button[data-bs-toggle=tab]').forEach(el => el.addEventListener('shown.bs.tab
     $('#preview-jpeg').addEventListener('load', updatePreview);
     updatePreview();
   }
-  if (event.relatedTarget && event.relatedTarget.id == "#jpeg-tab") {
-    $('#preview-jpeg').removeEventListener('load', updatePreview);
+  if (event.target.id == "#mjpeg-tab") {
+    $('#preview-mjpeg').src = "http://<%= $network_address %>/mjpeg";
+  }
+
+  if (event.relatedTarget) {
+    if (event.relatedTarget.id == "#jpeg-tab") {
+      $('#preview-jpeg').removeEventListener('load', updatePreview);
+    }
+    if (event.relatedTarget.id == "#mjpeg-tab") {
+      $('#preview-mjpeg').src="http://<%= $network_address %>/image.jpg";
+    }
   }
 }));
 </script>

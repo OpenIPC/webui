@@ -44,21 +44,6 @@ if [ -z "$yadisk_file" ]; then
   yadisk_file=$snapshot
 fi
 
-webdav_mkdir() {
-  url="${url}/${1}"
-  cmd="curl ${curl_options} --request MKCOL ${url}"
-  echo "$cmd" >>/tmp/webui/${plugin}.log
-  result="$($cmd 2>&1)"
-  echo "$result" >>/tmp/webui/${plugin}.log
-  if [ "${result:1:6}" = '"ok":f' ]; then
-    echo "Cannot create folder at Yandex Disk."
-    echo "$result"
-    exit 3
-  fi
-  unset cmd
-  unset result
-}
-
 # validate mandatory values
 [ -z "$yadisk_username" ] &&
   echo "Yandex Disk username not found" && exit 11
@@ -83,20 +68,21 @@ fi
 url="https://webdav.yandex.ru"
 subdirs="${yadisk_path// /_}" # prevent splitting by whitespaces
 subdirs="$(echo "$yadisk_path" | sed "s/[^\/]$/\//")" # add final slash if missing
+suburl=""
 while [ -n "$subdirs" ]; do
   subdir="${subdirs%%/*}"
   subdir="${subdir// /%20}" # convert each space into %20
   if [ -n "$subdir" ]; then
-    url="${url}/${subdir}"
-    _command="${command} --request MKCOL ${url}" # disposable subcommand
+    suburl="${suburl}/${subdir}"
+    _command="${command} --request MKCOL ${url}/${_url}/ " # disposable subcommand
     echo "$_command" >>$log_file
     eval "$_command" >>$log_file 2>&1
   fi
   subdirs="${subdirs#*/}"
-done
+done; unset _command
 
 # upload file
-url="${url}/$(TZ=$(cat /etc/TZ) date +"%G%m%d-%H%M%S").jpg"
+url="${url}${_url}/$(TZ=$(cat /etc/TZ) date +"%G%m%d-%H%M%S").jpg"
 command="${command} --url ${url}"
 command="${command} --request PUT"
 command="${command} --upload-file ${snapshot}"

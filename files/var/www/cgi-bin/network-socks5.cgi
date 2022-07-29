@@ -10,7 +10,7 @@ config_file="${ui_config_dir}/${plugin}.conf"
 if [ "POST" = "$REQUEST_METHOD" ]; then
   tmp_file=/tmp/${plugin}.conf
   :>$tmp_file
-  for v in enabled server port login password; do
+  for v in enabled server port username password; do
     eval echo "${plugin}_${v}=\\\"\$POST_${plugin}_${v}\\\"" >>$tmp_file
   done
   mv $tmp_file $config_file
@@ -28,7 +28,7 @@ include $config_file
       <% field_hidden "action" "update" %>
       <% field_text "socks5_host" "SOCKS5 Host" %>
       <% field_number "socks5_port" "SOCKS5 Port" "1080" %>
-      <% field_text "socks5_login" "SOCKS5 Login" %>
+      <% field_text "socks5_username" "SOCKS5 Username" %>
       <% field_password "socks5_password" "SOCKS5 Password" %>
       <% button_submit %>
     </form>

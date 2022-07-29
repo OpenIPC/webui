@@ -4,7 +4,7 @@
 plugin="yadisk"
 plugin_name="Send to Yandex Disk"
 page_title="Send to Yandex Disk"
-params="enabled login password path socks5_enabled"
+params="enabled username password path socks5_enabled"
 
 tmp_file=/tmp/${plugin}.conf
 
@@ -28,7 +28,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
   ### Validation
   if [ "true" = "$email_enabled" ]; then
-    [ -z "$yadisk_login"    ] && flash_append "danger" "Yandex Disk login cannot be empty." && error=11
+    [ -z "$yadisk_username" ] && flash_append "danger" "Yandex Disk username cannot be empty." && error=11
     [ -z "$yadisk_password" ] && flash_append "danger" "Yandex Disk password cannot be empty." && error=12
   fi
 
@@ -55,7 +55,7 @@ fi
   <% field_switch "yadisk_enabled" "Enable Yandex Disk bot" %>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
     <div class="col">
-      <% field_text "yadisk_login" "Yandex Disk login" %>
+      <% field_text "yadisk_username" "Yandex Disk username" %>
       <% field_password "yadisk_password" "Yandex Disk password" "Create a dedicated password for application (WebDAV)." %>
       <% field_text "yadisk_path" "Yandex Disk path" %>
       <% field_switch "yadisk_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
@@ -73,6 +73,6 @@ fi
   </div>
 </div>
 
-<% [ -f "/tmp/webui/${plugin}.log" ] && ex "cat /tmp/webui/${plugin}.log" %>
+<% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
 
 <%in p/footer.cgi %>

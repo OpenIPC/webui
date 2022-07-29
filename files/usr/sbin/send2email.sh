@@ -4,69 +4,99 @@ plugin="email"
 config_file="/etc/webui/${plugin}.conf"
 curl_timeout=100
 
-mkdir -p /tmp/webui
+log_file=/tmp/webui/${plugin}.log
+mkdir -p $(dirname $log_file)
+:>$log_file
 
-if [ ! -f "$config_file" ]; then
-  echo "Error: ${config_file} not found."
-  exit 1
-fi
+show_help() {
+  echo "Usage: $0 [-f address] [-t address] [-s subject] [-b body] [-h]
+  -f address  Sender's email address
+  -t address  Recipeint's email address
+  -s subject  Subject line.
+  -b body     Letter body.
+  -h          Show this help.
+"
+  exit 0
+}
 
 # read variables from config
 [ -f "$config_file" ] && source $config_file
 
-if [ "true" != "$email_enabled" ]; then
-  echo "Sending to email is not enabled."
-  exit 10
-fi
+# override config values with command line arguments
+while getopts f:t:s:b:h flag; do
+  case ${flag} in
+  b) email_body=${OPTARG} ;;
+  f) email_from_address=${OPTARG} ;;
+  s) email_subject=${OPTARG} ;;
+  t) email_to_address=${OPTARG} ;;
+  h) show_help ;;
+  esac
+done
+
+[ "false" = "$email_enabled" ] &&
+  echo "Sending to email is disabled." && exit 10
 
 # validate mandatory values
-[ -z "$email_smtp_host"    ] && echo -e "SMTP host not found in config" && exit 11
-[ -z "$email_smtp_port"    ] && echo -e "SMTP port not found in config" && exit 12
-[ -z "$email_from_address" ] && echo -e "Sender's address not found in config" && exit 13
-[ -z "$email_to_address"   ] && echo -e "Recipient's address not found in config" && exit 14
+[ -z "$email_smtp_host" ] &&
+  echo "SMTP host not found in config" && exit 11
+[ -z "$email_smtp_port" ] &&
+  echo "SMTP port not found in config" && exit 12
+[ -z "$email_from_address" ] &&
+  echo "Sender's email address not found" && exit 13
+[ -z "$email_to_address" ] &&
+  echo "Recipient's email address not found" && exit 14
 
 # assign default values if not set
-[ -z "$email_from_name" ] && email_from_name="OpenIPC Camera"
-[ -z "$email_to_name"   ] && email_to_name="OpenIPC Camera Admin"
-[ -z "$email_subject"   ] && email_subject="Snapshot from OpenIPC Camera"
-[ -z "$email_body"      ] && email_body="$(date)"
+#[ -z "$email_from_name" ] && email_from_name="OpenIPC Camera"
+#[ -z "$email_to_name"   ] && email_to_name="OpenIPC Camera Admin"
+#[ -z "$email_subject"   ] && email_subject="Snapshot from OpenIPC Camera"
 
-curl_options="--verbose --silent --connect-timeout ${curl_timeout} --max-time ${curl_timeout}"
+command="curl --verbose --silent" # --insecure
+command="${command} --connect-timeout ${curl_timeout}"
+command="${command} --max-time ${curl_timeout}"
 
 if [ "true" = "$email_smtp_use_ssl" ]; then
-  curl_options="--ssl"
-  email_smtp_protocol="smtps"
+  command="${command} --ssl --url smtps://"
 else
-  email_smtp_protocol="smtp"
+  command="${command} --url smtp://"
 fi
+command="${command}${email_smtp_host}:${email_smtp_port}"
 
-if [ -n "$email_smtp_login" ] || [ -n "$email_smtp_password" ]; then
-  curl_options="${curl_options} --user ${email_smtp_login}:${email_smtp_password}"
-fi
+command="${command} --mail-from ${email_from_address}"
+command="${command} --mail-rcpt ${email_to_address}"
+command="${command} --user '${email_smtp_login}:${email_smtp_password}'"
 
-snapshot="/tmp/${plugin}_snap.jpg"
+if [ "$#" -eq 0 ]; then
+  snapshot="/tmp/${plugin}_snap.jpg"
+  curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
+  [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
 
-# get image from camera
-curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
-if [ $? -eq 0 ]; then
-  :>/tmp/webui/${plugin}.log
-  echo "curl ${curl_options} --url ${email_smtp_protocol}://${email_smtp_host}:${email_smtp_port} --mail-from ${email_from_address} --mail-rcpt ${email_to_address} -F '=(;type=multipart/mixed' -F \"=${email_body};type=text/plain\" -F \"file=@${snapshot};type=image/jpeg;encoder=base64\" -F '=)' -H \"Subject: ${email_subject}\" -H \"From: \\\"${email_from_name}\\\" <${email_from_address}>\" -H \"To: \\\"${email_to_name}\\\" <${email_to_address}>\"" >>/tmp/webui/${plugin}.log 2>&1
-  curl ${curl_options} \
-    --url ${email_smtp_protocol}://${email_smtp_host}:${email_smtp_port} \
-    --mail-from ${email_from_address} \
-    --mail-rcpt ${email_to_address} \
-    -F '=(;type=multipart/mixed' \
-    -F "=${email_body};type=text/plain" \
-    -F "file=@${snapshot};type=image/jpeg;encoder=base64" \
-    -F '=)' \
-    -H "Subject: ${email_subject}" \
-    -H "From: \"${email_from_name}\" <${email_from_address}>" \
-    -H "To: \"${email_to_name}\" <${email_to_address}>" \
-    >>/tmp/webui/${plugin}.log 2>&1
-  rm -f ${snapshot}
+  email_body="$(date -R)"
+  command="${command} -H 'Subject: ${email_subject}'"
+  command="${command} -H 'From: "${email_from_name}" <${email_from_address}>'"
+  command="${command} -H 'To: "${email_to_name}" <${email_to_address}>'"
+  command="${command} -F '=(;type=multipart/mixed'"
+  command="${command} -F '=${email_body};type=text/plain'"
+  command="${command} -F 'file=@${snapshot};type=image/jpeg;encoder=base64'"
+  command="${command} -F '=)'"
 else
-  echo "Cannot get a snapshot."
-  exit 2
+  email_file="/tmp/email.$$.txt"
+  {
+    echo "From: ${email_from_name} <${email_from_address}>"
+    echo "To: ${email_to_name} <${email_to_address}>"
+    echo "Subject: ${email_subject}"
+    echo "Date: $(date -R)"
+    echo ""
+    echo "${email_body}"
+  } >>$email_file
+  command="${command} --upload-file ${email_file}"
 fi
+
+echo "$command" >>$log_file
+eval "$command" >>$log_file 2>&1
+cat $log_file
+
+[ -f ${snapshot} ] && rm -f ${snapshot}
+[ -f ${email_file} ] && rm -f ${email_file}
 
 exit 0

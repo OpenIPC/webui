@@ -418,6 +418,10 @@ label() {
   unset _c; unset _l; unset _u; unset _x
 }
 
+link_to() {
+  echo "<a href=\"${2}\">${1}</a>"
+}
+
 load_plugins() {
   for _i in $(ls -1 plugin-*); do
     _p="$(sed -r -n '/^plugin=/s/plugin="(.*)"/\1/p' $_i)"

@@ -4,7 +4,7 @@
 plugin="ftp"
 plugin_name="Send to FTP"
 page_title="Send to FTP"
-params="enabled host login password path port socks5_enabled template"
+params="enabled host username password path port socks5_enabled template"
 
 tmp_file=/tmp/${plugin}.conf
 
@@ -55,7 +55,7 @@ fi
     <div class="col">
       <% field_text "ftp_host" "FTP host" %>
       <% field_text "ftp_port" "FTP port" %>
-      <% field_text "ftp_login" "FTP login" %>
+      <% field_text "ftp_username" "FTP username" %>
       <% field_password "ftp_password" "FTP password" %>
       <% field_text "ftp_path" "FTP path" "relative to FTP root directory" %>
       <% field_text "ftp_template" "File template" "Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format." %>
@@ -74,6 +74,6 @@ fi
   </div>
 </div>
 
-<% [ -f "/tmp/webui/${plugin}.log" ] && ex "cat /tmp/webui/${plugin}.log" %>
+<% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
 
 <%in p/footer.cgi %>

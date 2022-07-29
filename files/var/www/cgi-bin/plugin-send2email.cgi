@@ -73,17 +73,17 @@ fi
       <% # field_switch "email_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
       <% button_submit %>
     </div>
-  </form>
-  <div class="col">
-    <% ex "cat $config_file" %>
+    <div class="col">
+      <% ex "cat $config_file" %>
+    </div>
+    <div class="col">
+      <% preview %>
+      <% if [ "true" = "$email_enabled" ]; then %>
+        <p><a href="send2email.cgi" class="btn btn-primary" id="send-to-email">Send to email</a></p>
+      <% fi %>
+    </div>
   </div>
-  <div class="col">
-    <% preview %>
-    <% if [ "true" = "$email_enabled" ]; then %>
-      <p><a href="send2email.cgi" class="btn btn-primary" id="send-to-email">Send to email</a></p>
-    <% fi %>
-  </div>
-</div>
+</form>
 
 <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
 

@@ -16,7 +16,7 @@ ipeye_camera_name=$network_hostname
     <div class="col order-2 order-lg-1">
       <h3>Add a feed</h3>
       <form action="<%= $SCRIPT_NAME %>" method="post">
-        <% field_text "ipeye_login" "IPEYE cloud login" %>
+        <% field_text "ipeye_username" "IPEYE cloud username" %>
         <% field_password "ipeye_password" "IPEYE cloud password" %>
         <% field_text "ipeye_camera_name" "Camera name" %>
         <% field_select "ipeye_rtsp_feed" "RTSP feed" "rtsp://${network_address}/stream=0,rtsp://${network_address}/stream=1" %>

@@ -92,6 +92,6 @@ fi
   </div>
 </div>
 
-<% [ -f "/tmp/webui/${plugin}.log" ] && ex "cat /tmp/webui/${plugin}.log" %>
+<% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
 
 <%in p/footer.cgi %>

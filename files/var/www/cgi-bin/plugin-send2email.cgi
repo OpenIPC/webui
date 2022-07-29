@@ -4,7 +4,7 @@
 plugin="email"
 plugin_name="Send to email"
 page_title="Send to email"
-params="enabled from_name from_address to_name to_address subject body smtp_host smtp_port smtp_login smtp_password smtp_use_ssl socks5_enabled"
+params="enabled from_name from_address to_name to_address subject body smtp_host smtp_port smtp_username smtp_password smtp_use_ssl socks5_enabled"
 
 tmp_file=/tmp/${plugin}.conf
 
@@ -50,7 +50,7 @@ else
   [ -z "$email_smtp_port" ] && email_smtp_port="25"
   [ -z "$email_from_name" ] && email_from_name="Camera ${network_hostname}"
   [ -z "$email_to_name" ] && email_to_name="Camera admin"
-  [ -z "$email_subject" ] && email_subject="Snapshot from ${network_hostname}"
+#  [ -z "$email_subject" ] && email_subject="Snapshot from ${network_hostname}"
 fi
 %>
 <%in p/header.cgi %>
@@ -62,7 +62,7 @@ fi
       <% field_text "email_smtp_host" "SMTP host" %>
       <% field_switch "email_smtp_use_ssl" "Use SSL" %>
       <% field_text "email_smtp_port" "SMTP port" %>
-      <% field_text "email_smtp_login" "SMTP server login" %>
+      <% field_text "email_smtp_username" "SMTP server username" %>
       <% field_password "email_smtp_password" "SMTP server password" %>
       <% field_text "email_from_name" "Sender's name" %>
       <% field_text "email_from_address" "Sender's address" "Use an email address where bounce reports can be sent to." %>
@@ -85,7 +85,7 @@ fi
   </div>
 </div>
 
-<% [ -f "/tmp/webui/${plugin}.log" ] && ex "cat /tmp/webui/${plugin}.log" %>
+<% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
 
 <script>
 $('#email_body').style.height = "6rem";

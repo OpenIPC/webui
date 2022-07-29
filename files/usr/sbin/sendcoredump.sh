@@ -9,19 +9,19 @@ log_file=/root/coredump.log
 # use local time
 log() { echo "$(date +"%F %T") $1" >>$log_file; }
 
-:>$log_file
+: >$log_file
 log "Majectic crashed"
 
-[ ! -f "$config_file" ] && log "Config file ${config_file} not found." && exit 1
+[ ! -f "$config_file" ] &&
+  log "Config file ${config_file} not found." && exit 1
 source "$config_file"
 
-[ ! -f "$admin_file" ] && log "Admin config file ${config_file} not found." && exit 2
+[ ! -f "$admin_file" ] &&
+  log "Admin config file ${config_file} not found." && exit 2
 source "$admin_file"
 
-if [ -z "$coredump_enabled" ] || [ "true" != "$coredump_enabled" ]; then
-  log "Core dump not enabled."
-  exit 3
-fi
+[ "true" != "$coredump_enabled" ] &&
+  log "Core dump not enabled." && exit 3
 
 log "Stopping watchdog"
 rmmod wdt
@@ -44,7 +44,7 @@ mac=$(ipcinfo --xm-mac)
 os=$(cat /etc/os-release)
 mj=$(majestic -v)
 
-:>$info_file
+: >$info_file
 echo "
 Date: $(TZ=GMT0 date)
 Name: ${admin_name}
@@ -65,10 +65,10 @@ ${os}
 MAJESTIC_VERSION=\"${mj}\"
 " >>$info_file
 
-cat /etc/majestic.yaml > majestic.yaml
+cat /etc/majestic.yaml >majestic.yaml
 
 log "Creating bundle"
-tar c -h "$core_file" "$info_file" majestic.yaml | gzip > "$bundle_name"
+tar c -h "$core_file" "$info_file" majestic.yaml | gzip >"$bundle_name"
 log "done"
 
 rm "$core_file" "$info_file" majestic.yaml

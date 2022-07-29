@@ -102,13 +102,13 @@ button_submit() {
   unset _c; unset _t; unset _x
 }
 
-#check_password() {
-#  [ "0${debug}" -ge "1" ] && return
-#  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui.cgi" ] && return
-#  if [ -z "$ui_password" ] || [ "$ui_password_fw" = "$ui_password" ]; then
-#    redirect_to "webui.cgi" "danger" "You must set your own secure password!"
-#  fi
-#}
+check_password() {
+  [ "0${debug}" -ge "1" ] && return
+  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui.cgi" ] && return
+  if [ -z "$ui_password" ] || [ "$ui_password_fw" = "$ui_password" ]; then
+    redirect_to "webui.cgi" "danger" "You must set your own secure password!"
+  fi
+}
 
 e() {
   echo -e -n "$1"
@@ -418,6 +418,10 @@ label() {
   unset _c; unset _l; unset _u; unset _x
 }
 
+link_to() {
+  echo "<a href=\"${2}\">${1}</a>"
+}
+
 load_plugins() {
   for _i in $(ls -1 plugin-*); do
     _p="$(sed -r -n '/^plugin=/s/plugin="(.*)"/\1/p' $_i)"
@@ -472,7 +476,7 @@ progressbar() {
 
 # redirect_back "flash class" "flash text"
 redirect_back() {
-  redirect_to "$HTTP_REFERER" "$1" "$2"
+  redirect_to "${HTTP_REFERER:-/}" "$1" "$2"
 }
 
 # redirect_to "url" "flash class" "flash text"
@@ -483,8 +487,9 @@ Content-type: text/html; charset=UTF-8
 Cache-Control: no-store
 Pragma: no-cache
 Date: $(time_http)
-Location: $1
 Server: $SERVER_SOFTWARE
+Location: $1
+
 "
   exit 0
 }
@@ -734,5 +739,5 @@ include /etc/webui/telegram.conf
 include /etc/webui/yadisk.conf
 
 # reload_locale
-# check_password
+check_password
 %>

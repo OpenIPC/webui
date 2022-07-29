@@ -4,88 +4,93 @@ plugin="yadisk"
 config_file="/etc/webui/${plugin}.conf"
 curl_timeout=100
 
-mkdir -p /tmp/webui
+log_file=/tmp/webui/${plugin}.log
+mkdir -p $(dirname $log_file)
+:>$log_file
 
-if [ ! -f "$config_file" ]; then
-  echo "Error: ${config_file} not found."
-  exit 1
-fi
+show_help() {
+  echo "Usage: $0 [-u username] [-P password] [-h]
+  -d path     Directory on server.
+  -f file     File to upload.
+  -u username Yandex Disk username.
+  -P password Yandex Disk username.
+  -h          Show this help.
+"
+  exit 0
+}
 
 # read variables from config
 [ -f "$config_file" ] && source $config_file
 
-if [ "true" != "$yadisk_enabled" ]; then
-  echo "Sending to Yandex Disk is not enabled."
-  exit 10
+# override config values with command line arguments
+while getopts d:f:P:u:h flag; do
+  case ${flag} in
+  d) yadisk_path=${OPTARG} ;;
+  f) yadisk_file=${OPTARG} ;;
+  P) yadisk_password=${OPTARG} ;;
+  u) yadisk_username=${OPTARG} ;;
+  h) show_help ;;
+  esac
+done
+
+[ "false" = "$yadisk_enabled" ] &&
+  echo "Sending to Yandex Disk is disabled." && exit 10
+
+
+if [ -z "$yadisk_file" ]; then
+  snapshot="/tmp/${plugin}_snap.jpg"
+  curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
+  [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+  yadisk_file=$snapshot
 fi
 
-webdav_mkdir()  {
-  url="${url}/${1}"
-  cmd="curl ${curl_options} --request MKCOL ${url}"
-  echo "$cmd" >>/tmp/webui/${plugin}.log
-  result="$($cmd 2>&1)"
-  echo "$result" >>/tmp/webui/${plugin}.log
-  if [ "${result:1:6}" = '"ok":f' ]; then
-    echo "Cannot create folder at Yandex Disk."
-    echo "$result"
-    exit 3
-  fi
-  unset cmd; unset result
-}
-
-webdav_upload() {
-  url="${url}/$(TZ=$(cat /etc/TZ) date +"%G%m%d-%H%M%S").jpg"
-  cmd="curl ${curl_options} --request PUT --upload-file ${1} ${url}"
-  echo "$cmd" >>/tmp/webui/${plugin}.log
-  result="$($cmd 2>&1)"
-  echo "$result" >>/tmp/webui/${plugin}.log
-  if [ "${result:1:6}" = '"ok":f' ]; then
-    echo "Cannot upload snapshot to Yandex Disk."
-    echo "$result"
-    exit 4
-  fi
-  unset cmd; unset result
-}
-
 # validate mandatory values
-[ -z "$yadisk_login"    ] && echo -e "Yandex Disk login not found in config" && exit 11
-[ -z "$yadisk_password" ] && echo -e "Yandex Disk password not found in config" && exit 12
+[ -z "$yadisk_username" ] &&
+  echo "Yandex Disk username not found" && exit 11
+[ -z "$yadisk_password" ] &&
+  echo "Yandex Disk password not found" && exit 12
 
-curl_options="--verbose --silent --insecure --connect-timeout ${curl_timeout} --max-time ${curl_timeout}"
+command="curl --verbose" # --silent --insecure
+command="${command} --connect-timeout ${curl_timeout}"
+command="${command} --max-time ${curl_timeout}"
 
 # Yandex Disk credentials
-curl_options="${curl_options} --user ${yadisk_login}:${yadisk_password}"
+command="${command} --user '${yadisk_username}:${yadisk_password}'"
 
 # SOCK5 proxy, if needed
 if [ "true" = "$yadisk_socks5_enabled" ]; then
   source /etc/webui/socks5.conf
-  curl_options="${curl_options} --socks5-hostname ${socks5_host}:${socks5_port} --proxy-user ${socks5_login}:${socks5_password}"
+  command="${command} --socks5-hostname ${socks5_host}:${socks5_port}"
+  command="${command} --proxy-user ${socks5_login}:${socks5_password}"
 fi
 
+# create path to destination directory
 url="https://webdav.yandex.ru"
+subdirs="${yadisk_path// /_}" # prevent splitting by whitespaces
+subdirs="$(echo "$yadisk_path" | sed "s/[^\/]$/\//")" # add final slash if missing
+suburl=""
+while [ -n "$subdirs" ]; do
+  subdir="${subdirs%%/*}"
+  subdir="${subdir// /%20}" # convert each space into %20
+  if [ -n "$subdir" ]; then
+    suburl="${suburl}/${subdir}"
+    _command="${command} --request MKCOL ${url}/${_url}/ " # disposable subcommand
+    echo "$_command" >>$log_file
+    eval "$_command" >>$log_file 2>&1
+  fi
+  subdirs="${subdirs#*/}"
+done; unset _command
 
-snapshot="/tmp/${plugin}_snap.jpg"
+# upload file
+url="${url}${_url}/$(TZ=$(cat /etc/TZ) date +"%G%m%d-%H%M%S").jpg"
+command="${command} --url ${url}"
+command="${command} --request PUT"
+command="${command} --upload-file ${snapshot}"
 
-# get image from camera
-curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
-if [ $? -eq 0 ]; then
-  :>/tmp/webui/${plugin}.log
-  # create path to destination directory
-  subdirs="${yadisk_path// /_}" # prevent splitting by whitespaces
-  subdirs="$(echo "$yadisk_path" | sed "s/[^\/]$/\//")" # add final slash if missing
-  while [ -n "$subdirs" ]; do
-    subdir="${subdirs%%/*}"
-    subdir="${subdir// /%20}" # convert each space to %20 for url
-    [ -n "$subdir" ] && webdav_mkdir "${subdir}"
-    subdirs="${subdirs#*/}"
-  done
+echo "$command" >>$log_file
+eval "$command" >>$log_file 2>&1
+cat $log_file
 
-  # upload file
-  webdav_upload "$snapshot"
-  rm -f ${snapshot}
-else
-  echo "Cannot get a snapshot."
-  exit 2
-fi
+[ -f ${snapshot} ] && rm -f ${snapshot}
 
 exit 0

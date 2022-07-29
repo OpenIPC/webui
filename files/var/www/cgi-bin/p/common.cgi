@@ -102,13 +102,13 @@ button_submit() {
   unset _c; unset _t; unset _x
 }
 
-#check_password() {
-#  [ "0${debug}" -ge "1" ] && return
-#  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui.cgi" ] && return
-#  if [ -z "$ui_password" ] || [ "$ui_password_fw" = "$ui_password" ]; then
-#    redirect_to "webui.cgi" "danger" "You must set your own secure password!"
-#  fi
-#}
+check_password() {
+  [ "0${debug}" -ge "1" ] && return
+  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui.cgi" ] && return
+  if [ -z "$ui_password" ] || [ "$ui_password_fw" = "$ui_password" ]; then
+    redirect_to "webui.cgi" "danger" "You must set your own secure password!"
+  fi
+}
 
 e() {
   echo -e -n "$1"
@@ -739,5 +739,5 @@ include /etc/webui/telegram.conf
 include /etc/webui/yadisk.conf
 
 # reload_locale
-# check_password
+check_password
 %>

@@ -476,7 +476,7 @@ progressbar() {
 
 # redirect_back "flash class" "flash text"
 redirect_back() {
-  redirect_to "$HTTP_REFERER" "$1" "$2"
+  redirect_to "${HTTP_REFERER:-/}" "$1" "$2"
 }
 
 # redirect_to "url" "flash class" "flash text"
@@ -487,8 +487,9 @@ Content-type: text/html; charset=UTF-8
 Cache-Control: no-store
 Pragma: no-cache
 Date: $(time_http)
-Location: $1
 Server: $SERVER_SOFTWARE
+Location: $1
+
 "
   exit 0
 }

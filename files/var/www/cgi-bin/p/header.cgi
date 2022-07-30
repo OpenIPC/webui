@@ -91,7 +91,7 @@ Pragma: no-cache
           <li class="nav-item dropdown">
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownHelp" role="button">Help</a>
             <ul aria-labelledby="dropdownHelp" class="dropdown-menu">
-              <li><a class="dropdown-item" href="about.cgi">About OpenIPC</a></li>
+              <li><a class="dropdown-item" href="https://openipc.org/">About OpenIPC</a></li>
               <li><a class="dropdown-item" href="endpoints.cgi">Endpoints</a></li>
               <li><a class="dropdown-item" href="https://openipc.org/wiki/">OpenIPC Wiki</a></li>
             </ul>

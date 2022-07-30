@@ -125,9 +125,15 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
     fi
 
     if [ "mj_audio_voiceEqualizer" = "$form_field_name" ]; then
-      if [ -z "$(echo $mj_limit_audio_voiceEqualizer | sed -n "/\b${soc_family}\b/p")" ]; then
-        continue
-      fi
+      [ -z "$(echo "$mj_show_audio_voiceEqualizer" | sed -n "/\b${soc_family}\b/p")" ] && continue
+    fi
+
+    if [ "mj_video0_codec" = "$form_field_name" ]; then
+      [ -n "$(echo "$mj_hide_video0_codec" | sed -n "/\b${soc_family}\b/p")" ] && continue
+    fi
+
+    if [ "mj_video1_codec" = "$form_field_name" ]; then
+      [ -n "$(echo "$mj_hide_video1_codec" | sed -n "/\b${soc_family}\b/p")" ] && continue
     fi
 
     case "$form_field_type" in

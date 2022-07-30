@@ -49,6 +49,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     mv $tmp_file $config_file
 
     update_caminfo
+    touch /tmp/coredump-restart.txt
     redirect_back "success" "${plugin_name} config updated."
   fi
 else

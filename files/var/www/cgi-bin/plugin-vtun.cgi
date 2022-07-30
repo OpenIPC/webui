@@ -27,7 +27,6 @@ fi
 <div class="row g-4 mb-4">
   <div class="col col-lg-4">
   <% if [ -f "$conf_file" ]; then %>
-    <h3>Settings</h3>
     <div class="alert alert-success">
       <h4>Virtual Tunnel is up</h4>
       <p>Use the following credentials to set up remote access via active virtual tunnel:</p>
@@ -40,6 +39,7 @@ fi
     </div>
   <% fi %>
 
+    <h3>Settings</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
     <% if [ -f "$service_file" ]; then %>
       <% field_hidden "action" "reset" %>

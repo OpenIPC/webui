@@ -57,6 +57,7 @@ fi
 
 [ -z "$coredump_ftpuser" ] && coredump_ftpuser="anonymous"
 [ -z "$coredump_ftppass" ] && coredump_ftppass="anonymous"
+[ -z "$coredump_tftphost" ] && coredump_tftphost=$(fw_printenv -n serverip)
 
 if [ -z "$coredump_localpath" ]; then
   if [ -d "/mnt/mmc" ]; then

@@ -8,6 +8,7 @@ and is available on port 85 of your camera.
 
 Default credentials to access the web interface are: username _admin_, and
 password _12345_. You will be asked to change the password at the first login.
+Please note that this will also assign the same password to user _root_!
 
 ### Support
 

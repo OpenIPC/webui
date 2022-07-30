@@ -76,7 +76,8 @@ fi
     <p>Please insert or adjust the following code inside <code>load_majestic()</code> block, right before <code>start-stop-daemon</code> line:</p>
     <pre class="bg-light p-3 text-black">
 [ -f /etc/coredump.conf ] && . /etc/coredump.conf
-[ "$coredump_enabled" ] && ulimit -c unlimited && echo "| /usr/sbin/sendcoredump.sh" >/proc/sys/kernel/core_pattern
+yaml-cli -i /etc/majestic.yaml -s .watchdog.timeout 30
+[ "$coredump_enabled" ] && ulimit -c unlimited && echo "|/usr/sbin/sendcoredump.sh" >/proc/sys/kernel/core_pattern
 </pre>
   </div>
 <% fi %>

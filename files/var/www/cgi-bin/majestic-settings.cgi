@@ -15,6 +15,11 @@ else
   eval title="\$tT_mj_${only}"
 fi
 
+# hide certain domains if not supported
+if [ -n "$(eval echo "\$mj_hide_${only}" | sed -n "/\b${soc_family}\b/p")" ]; then
+  redirect_to "majestic-settings.cgi" "danger" "$title is not supported on your system."
+fi
+
 if [ "POST" = "$REQUEST_METHOD" ]; then
   mj_conf=/etc/majestic.yaml
   temp_yaml=/tmp/majestic.yaml
@@ -83,64 +88,65 @@ fi
 config=""
 olddomain=""
 for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
-                                          # line: .isp.exposure|Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
-  yaml_param_name=${line%%|*}             # => .isp.exposure
+                                    # line: .isp.exposure|Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
+  yaml_param_name=${line%%|*}       # => .isp.exposure
+  _param_name=${yaml_param_name#.}  # => isp.exposure
+  _param_name=${_param_name//./_}   # => isp_exposure
+  _param_name=${_param_name//-/_}   # => isp_exposure
+  domain=${_param_name%%_*}         # => isp
 
   # show parameter only if it is not in a stop-list or we are in a debug mode
-  if [ -z "$(echo $mj_params_debug | sed -n "/$yaml_param_name/p")" ] || [ "$debug" -ge "1" ]; then
-    _n=${yaml_param_name#.}               # => isp.exposure
-    _n=${_n//./_}                         # => isp_exposure
-    _n=${_n//-/_}                         # => isp_exposure
-    domain=${_n%%_*}                      # => isp
-    form_field_name=mj_${_n}              # => mj_isp_exposure
-    line=${line#*|}                       # line: Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
-    label_text=${line%%|*}                # => Sensor_exposure_time
-    label_text=${label_text//_/ }         # => Sensor exposure time
-    line=${line#*|}                       # line: &micro;s|range|auto,1-500000|auto|From_1_to_500000.
-    units=${line%%|*}                     # => &micro;s
-    line=${line#*|}                       # line: range|auto,1-500000|auto|From_1_to_500000.
-    form_field_type=${line%%|*}           # => range
-    line=${line#*|}                       # line: auto,1-500000|auto|From_1_to_500000.
-    options=${line%%|*}                   # => auto,1-500000
-    line=${line#*|}                       # line: auto|From_1_to_500000.
-    placeholder=${line%%|*}               # => auto
-    line=${line#*|}                       # line: From_1_to_500000.
-    hint=$line                            # => From_1_to_500000.
-    hint=${hint//_/ }                     # => From 1 to 500000.
-
-    value="$(yaml-cli -g "$yaml_param_name")"
-
-    if [ "$olddomain" != "$domain" ]; then
-      [ -n "$olddomain" ] && echo "</fieldset>"
-      echo "<fieldset><legend>${domain}</legend>"
-      olddomain="$domain"
-    fi
-
-    # assign yaml_param_name's value to a variable with yaml_param_name's form_field_name for form fields values
-    eval "$form_field_name=\"$(yaml-cli -g "$yaml_param_name")\""
-
-    # hide some params in config
-    if [ "mj_netip_password_plain" != "$form_field_name" ]; then
-      config="${config}\n$(eval echo ${yaml_param_name}: \"\$$form_field_name\")"
-    fi
-
-    if [ "mj_audio_voiceEqualizer" = "$form_field_name" ]; then
-      if [ -z "$(echo $mj_limit_audio_voiceEqualizer | sed -n "/\b${soc_family}\b/p")" ]; then
-        continue
-      fi
-    fi
-
-    case "$form_field_type" in
-      boolean)  field_switch   "$form_field_name" "$label_text" "$hint" "$options";;
-      hidden)   field_hidden   "$form_field_name" "$label_text" "$hint";;
-      number)   field_number   "$form_field_name" "$label_text" "$options" "$hint";;
-      password) field_password "$form_field_name" "$label_text" "$hint";;
-      range)    field_range    "$form_field_name" "$label_text" "$options" "$hint";;
-      select)   field_select   "$form_field_name" "$label_text" "$options" "$hint";;
-      string)   field_text     "$form_field_name" "$label_text" "$hint";;
-      *) echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>";;
-    esac
+  if [ "0$debug" -lt "1" ]; then
+    # hide certain domains if blacklisted
+    [ -n "$(eval echo "\$mj_hide_${domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+    # hide certain parameters if blacklisted
+    [ -n "$(eval echo "\$mj_hide_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+    # show certain parameters only if whitelisted
+    [ -n "$(eval echo "\$mj_show_${_param_name}")" ] && [ -z "$(eval echo "\$mj_show_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
   fi
+
+  form_field_name=mj_${_param_name} # => mj_isp_exposure
+  line=${line#*|}                   # line: Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
+  label_text=${line%%|*}            # => Sensor_exposure_time
+  label_text=${label_text//_/ }     # => Sensor exposure time
+  line=${line#*|}                   # line: &micro;s|range|auto,1-500000|auto|From_1_to_500000.
+  units=${line%%|*}                 # => &micro;s
+  line=${line#*|}                   # line: range|auto,1-500000|auto|From_1_to_500000.
+  form_field_type=${line%%|*}       # => range
+  line=${line#*|}                   # line: auto,1-500000|auto|From_1_to_500000.
+  options=${line%%|*}               # => auto,1-500000
+  line=${line#*|}                   # line: auto|From_1_to_500000.
+  placeholder=${line%%|*}           # => auto
+  line=${line#*|}                   # line: From_1_to_500000.
+  hint=$line                        # => From_1_to_500000.
+  hint=${hint//_/ }                 # => From 1 to 500000.
+
+  value="$(yaml-cli -g "$yaml_param_name")"
+
+  if [ "$olddomain" != "$domain" ]; then
+    [ -n "$olddomain" ] && echo "</fieldset>"
+    echo "<fieldset><legend>${domain}</legend>"
+    olddomain="$domain"
+  fi
+
+  # assign yaml_param_name's value to a variable with yaml_param_name's form_field_name for form fields values
+  eval "$form_field_name=\"$(yaml-cli -g "$yaml_param_name")\""
+
+  # hide some params in config
+  if [ "mj_netip_password_plain" != "$form_field_name" ]; then
+    config="${config}\n$(eval echo ${yaml_param_name}: \"\$$form_field_name\")"
+  fi
+
+  case "$form_field_type" in
+    boolean)  field_switch   "$form_field_name" "$label_text" "$hint" "$options";;
+    hidden)   field_hidden   "$form_field_name" "$label_text" "$hint";;
+    number)   field_number   "$form_field_name" "$label_text" "$options" "$hint";;
+    password) field_password "$form_field_name" "$label_text" "$hint";;
+    range)    field_range    "$form_field_name" "$label_text" "$options" "$hint";;
+    select)   field_select   "$form_field_name" "$label_text" "$options" "$hint";;
+    string)   field_text     "$form_field_name" "$label_text" "$hint";;
+    *) echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>";;
+  esac
 done
 echo "</fieldset>"
 button_submit
@@ -158,15 +164,20 @@ button_submit
     <h3>Majestic config sections</h3>
     <div class="list-group list-group-flush" id="mj-tabs">
 <%
-for _l in $mj; do
-  _p=${_l%%|*}; _n=${_p#.}; _d=${_n%.*}
-  if [ "$_o" != "$_d" ]; then
-    _o="$_d"
-    _c="class=\"list-group-item\""; [ "$_d" = "$only" ] && _c="class=\"list-group-item active\" aria-current=\"true\""
-    echo "<a ${_c} href=\"?tab=${_d}\">$(eval echo \$tT_mj_${_d})</a>"
+for _line in $mj; do
+  _parameter=${_line%%|*};
+  _param_name=${_parameter#.};
+  _param_domain=${_param_name%.*}
+  if [ "$_parameter_domain_old" != "$_param_domain" ]; then
+    # hide certain domains if not supported
+    [ -n "$(eval echo "\$mj_hide_${_param_domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+
+    _parameter_domain_old="$_param_domain"
+    _css="class=\"list-group-item\""; [ "$_param_domain" = "$only" ] && _css="class=\"list-group-item active\" aria-current=\"true\""
+    echo "<a ${_css} href=\"?tab=${_param_domain}\">$(eval echo \$tT_mj_${_param_domain})</a>"
   fi
 done
-unset _c; unset _d; unset _l; unset _n; unset _o; unset _p;
+unset _css; unset _param_domain; unset _line; unset _param_name; unset _parameter_domain_old; unset _parameter;
 
 echo "<a class=\"list-group-item list-group-item-danger\" href=\"?tab=all\">Show Everything (damn slow!)</a>"
 %>

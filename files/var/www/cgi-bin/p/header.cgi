@@ -137,6 +137,16 @@ Pragma: no-cache
 </div>
 <% fi %>
 
+<% if [ -f /tmp/coredump-restart.txt ]; then %>
+<div class="alert alert-danger">
+<p>Majestic debugging settings have been updated. Restart to apply changes.</p>
+<span class="d-flex gap-3">
+<a class="btn btn-danger" href="reboot.cgi">Reboot camera</a>
+<a class="btn btn-primary" href="debugging.cgi">See debugging settings</a>
+</span>
+</div>
+<% fi %>
+
 <% if [ -f /tmp/motionguard-restart.txt ]; then %>
 <div class="alert alert-danger">
 <p>Changes to motion guard configuration detected. Please restart camera to apply the changes.</p>
@@ -146,9 +156,6 @@ Pragma: no-cache
 </span>
 </div>
 <% fi %>
-
-
-
 
 <h2><%= $page_title %></h2>
 <% flash_read %>

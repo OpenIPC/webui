@@ -12,21 +12,6 @@ tmp_file=/tmp/${plugin}.conf
 config_file=/etc/${plugin}.conf
 [ ! -f "$config_file" ] && touch $config_file
 
-# convert old config format
-old_config_file=/etc/coredump.config
-if [ -f $old_config_file ]; then
-  mv $old_config_file $tmp_file
-  if [ -f "$(wc -l $tmp_file | cut -d " " -f 1)" = "2" ]; then
-    sed -i "/contact_/d" $tmp_file
-    sed -i "s/^/coredump_/" $tmp_file
-    sed -i "s/savedumps/enabled/" $tmp_file
-    sed -i "s/haveconsent/consent/" $tmp_file
-  fi
-  mv $tmp_file $config_file
-  flash_save "success" "Configuration file converted to new format."
-fi
-unset old_config_file
-
 if [ "POST" = "$REQUEST_METHOD" ]; then
   # parse values from parameters
   for _p in $params; do
@@ -42,12 +27,17 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   ### Validation
   if [ "true" = "$coredump_enabled" ]; then
     if [ "true" = "$coredump_send2devs" ]; then
-      [ -z "$admin_name" ] || [ -z "$admin_email" ] && flash_append "danger" "Please <a href=\"admin.cgi\">fill out the admin profile</a> first." && error=1
+      [ -z "$admin_name" ] || [ -z "$admin_email" ] &&
+        flash_append "danger" "Please <a href=\"admin.cgi\">fill out the admin profile</a> first." && error=1
     fi
-    [ "true" != "$coredump_consent"  ] && flash_append "danger" "You have to understand and acknowledge security risk." && error=1
-    [ "true" = "$coredump_send2ftp"  ] && [ -z "$coredump_ftphost"   ] && flash_append "danger" "FTP address cannot be empty." && error=1
-    [ "true" = "$coredump_send2tftp" ] && [ -z "$coredump_tftphost"  ] && flash_append "danger" "TFTP address cannot be empty." && error=1
-    [ "true" = "$coredump_save4web"  ] && [ -z "$coredump_localpath" ] && flash_append "danger" "Local path cannot be empty." && error=1
+    [ "true" != "$coredump_consent"  ] &&
+      flash_append "danger" "You have to understand and acknowledge security risk." && error=1
+    [ "true" = "$coredump_send2ftp"  ] && [ -z "$coredump_ftphost"   ] &&
+      flash_append "danger" "FTP address cannot be empty." && error=1
+    [ "true" = "$coredump_send2tftp" ] && [ -z "$coredump_tftphost"  ] &&
+      flash_append "danger" "TFTP address cannot be empty." && error=1
+    [ "true" = "$coredump_save4web"  ] && [ -z "$coredump_localpath" ] &&
+      flash_append "danger" "Local path cannot be empty." && error=1
   fi
 
   if [ -z "$error" ]; then
@@ -59,6 +49,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     mv $tmp_file $config_file
 
     update_caminfo
+    touch /tmp/coredump-restart.txt
     redirect_back "success" "${plugin_name} config updated."
   fi
 else
@@ -67,6 +58,7 @@ fi
 
 [ -z "$coredump_ftpuser" ] && coredump_ftpuser="anonymous"
 [ -z "$coredump_ftppass" ] && coredump_ftppass="anonymous"
+[ -z "$coredump_tftphost" ] && coredump_tftphost=$(fw_printenv -n serverip)
 
 if [ -z "$coredump_localpath" ]; then
   if [ -d "/mnt/mmc" ]; then
@@ -84,7 +76,8 @@ fi
     <p>Please insert or adjust the following code inside <code>load_majestic()</code> block, right before <code>start-stop-daemon</code> line:</p>
     <pre class="bg-light p-3 text-black">
 [ -f /etc/coredump.conf ] && . /etc/coredump.conf
-[ "$coredump_enabled" ] && ulimit -c unlimited && echo "| /usr/sbin/sendcoredump.sh" >/proc/sys/kernel/core_pattern
+[ "$(yaml-cli -i /etc/majestic.yaml -g .watchdog.timeout)" -lt "30" ] && yaml-cli -i /etc/majestic.yaml -s .watchdog.timeout 30
+[ "$coredump_enabled" ] && ulimit -c unlimited && echo "|/usr/sbin/sendcoredump.sh" >/proc/sys/kernel/core_pattern
 </pre>
   </div>
 <% fi %>

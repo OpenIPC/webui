@@ -7,9 +7,12 @@ info_file=info.txt
 log_file=/root/coredump.log
 
 # use local time
-log() { echo "$(date +"%F %T") $1" >>$log_file; }
+log() {
+  echo "$1"
+  echo "$(date +"%F %T") $1" >>$log_file;
+}
 
-: >$log_file
+:>$log_file
 log "Majectic crashed"
 
 [ ! -f "$config_file" ] &&
@@ -17,7 +20,7 @@ log "Majectic crashed"
 source "$config_file"
 
 [ ! -f "$admin_file" ] &&
-  log "Admin config file ${config_file} not found." && exit 2
+  log "Admin config file ${admin_file} not found." && exit 2
 source "$admin_file"
 
 [ "true" != "$coredump_enabled" ] &&
@@ -44,7 +47,7 @@ mac=$(ipcinfo --xm-mac)
 os=$(cat /etc/os-release)
 mj=$(majestic -v)
 
-: >$info_file
+:>$info_file
 echo "
 Date: $(TZ=GMT0 date)
 Name: ${admin_name}
@@ -75,19 +78,21 @@ rm "$core_file" "$info_file" majestic.yaml
 
 if [ "true" = "$coredump_send2devs" ]; then
   log "Sending to S3 bucket"
-  curl -s "https://majdumps.s3.eu-north-1.amazonaws.com/${bundle_name}" --upload-file "$bundle_name"
+  curl --silent --verbose "https://majdumps.s3.eu-north-1.amazonaws.com/${bundle_name}" \
+    --upload-file "$bundle_name" >>$log_file
   log "done"
 fi
 
 if [ "true" = "$coredump_send2tftp" ]; then
   log "Sending to TFTP server"
-  tftp -p -l "$bundle_name" $coredump_tftphost
+  tftp -p -l "$bundle_name" $coredump_tftphost >>$log_file
   log "done"
 fi
 
 if [ "true" = "$coredump_send2ftp" ]; then
   log "Sending to FTP server"
-  curl -s "ftp://${coredump_ftphost}/${coredump_ftppath}/" --upload-file "$bundle_name" --user "${coredump_ftpuser}:${coredump_ftppass}" --ftp-create-dirs
+  curl --silent --verbose "ftp://${coredump_ftphost}/${coredump_ftppath}/" \
+    --upload-file "$bundle_name" --user "${coredump_ftpuser}:${coredump_ftppass}" --ftp-create-dirs >>$log_file
   log "done"
 fi
 
@@ -102,4 +107,7 @@ else
 fi
 
 log "All done. Rebooting..."
+
+cat $log_file
+
 reboot -f

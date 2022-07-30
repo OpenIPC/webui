@@ -11,14 +11,6 @@ tmp_file=/tmp/${plugin}.conf
 config_file="${ui_config_dir}/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
 
-# convert old config format
-old_config_file=/etc/yadisk.cfg
-if [ -f $old_config_file ]; then
-  mv $old_config_file $config_file
-  flash_save "success" "Configuration file converted to new format."
-fi
-unset old_config_file
-
 if [ "POST" = "$REQUEST_METHOD" ]; then
   # parse values from parameters
   for _p in $params; do

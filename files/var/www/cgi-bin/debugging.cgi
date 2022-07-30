@@ -27,12 +27,17 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   ### Validation
   if [ "true" = "$coredump_enabled" ]; then
     if [ "true" = "$coredump_send2devs" ]; then
-      [ -z "$admin_name" ] || [ -z "$admin_email" ] && flash_append "danger" "Please <a href=\"admin.cgi\">fill out the admin profile</a> first." && error=1
+      [ -z "$admin_name" ] || [ -z "$admin_email" ] &&
+        flash_append "danger" "Please <a href=\"admin.cgi\">fill out the admin profile</a> first." && error=1
     fi
-    [ "true" != "$coredump_consent"  ] && flash_append "danger" "You have to understand and acknowledge security risk." && error=1
-    [ "true" = "$coredump_send2ftp"  ] && [ -z "$coredump_ftphost"   ] && flash_append "danger" "FTP address cannot be empty." && error=1
-    [ "true" = "$coredump_send2tftp" ] && [ -z "$coredump_tftphost"  ] && flash_append "danger" "TFTP address cannot be empty." && error=1
-    [ "true" = "$coredump_save4web"  ] && [ -z "$coredump_localpath" ] && flash_append "danger" "Local path cannot be empty." && error=1
+    [ "true" != "$coredump_consent"  ] &&
+      flash_append "danger" "You have to understand and acknowledge security risk." && error=1
+    [ "true" = "$coredump_send2ftp"  ] && [ -z "$coredump_ftphost"   ] &&
+      flash_append "danger" "FTP address cannot be empty." && error=1
+    [ "true" = "$coredump_send2tftp" ] && [ -z "$coredump_tftphost"  ] &&
+      flash_append "danger" "TFTP address cannot be empty." && error=1
+    [ "true" = "$coredump_save4web"  ] && [ -z "$coredump_localpath" ] &&
+      flash_append "danger" "Local path cannot be empty." && error=1
   fi
 
   if [ -z "$error" ]; then

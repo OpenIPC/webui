@@ -9,7 +9,7 @@
   <div class="col">
     <h3>Web Pages</h3>
     <dl>
-      <dt>http://<%= $network_address %>/</dt>
+      <dt>http://<%= $network_address %>/hls</dt>
       <dd>HLS live-streaming in web browser.</dd>
       <dt>http://<%= $network_address %>/mjpeg.html</dt>
       <dd>MJPEG & MP3 live-streaming in web browser.</dd>

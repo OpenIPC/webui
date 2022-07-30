@@ -3,34 +3,11 @@
 microbe-web
 ===========
 
-Microbe Web UI is a default web interface for [OpenIPC firmware][openipcfw].
+Microbe is a web interface for [OpenIPC Firmware][openipcfw],
+and is available on port 85 of your camera.
 
-Microbe Web is lightweight but powerful interface written mostly in shell
-and [haserl][haserl]. Web UI listens on port 85.
-
-### Muliti-language UI and Translation
-
-To change the Web Interface language, please select Settings -> Web UI Settings
-from the top menu, and then select your desired language from the dropdown list
-in the form. Submit the form to save apply changes.
-
-To add a missing language translation, please take a look at shell files in
-`/files/www/cgi-bin/locale/` directory. You might want to use `en.sh` file as a
-template. It contains all the variables you need to assign proper values to.
-Make a copy of that file, give the copy a name according to [ISO 639-1][iso639].
-
-Language file is a shell script that starts with a shebang and followed by the
-name of the language as a comment:
-```
-#!/bin/sh
-#name:Klingonese
-```
-
-Below that header goes a list of variables and their values that constitute the
-new language support. Update the values, test the new locale, then create a pull
-request.
-
-More documentation is available [in our wiki][wiki].
+Default credentials to access the web interface are: username _admin_, and
+password _12345_. You will be asked to change the password at the first login.
 
 ### Support
 

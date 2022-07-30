@@ -103,10 +103,11 @@ button_submit() {
 }
 
 check_password() {
+  _safepage="/cgi-bin/webui-settings.cgi"
   [ "0${debug}" -ge "1" ] && return
-  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui.cgi" ] && return
+  [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "${_safepage}" ] && return
   if [ -z "$ui_password" ] || [ "$ui_password_fw" = "$ui_password" ]; then
-    redirect_to "webui-settings.cgi" "danger" "You must set your own secure password!"
+    redirect_to "${_safepage}" "danger" "You must set your own secure password!"
   fi
 }
 

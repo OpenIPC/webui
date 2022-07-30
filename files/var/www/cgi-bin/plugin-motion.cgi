@@ -6,13 +6,7 @@ plugin_name="Motion guard"
 page_title="Motion guard"
 params="enabled sensitivity send2email send2ftp send2telegram send2yadisk"
 
-stoplist="hi3516cv100 hi3516av100"
-for _f in $stoplist; do
-  if [ "$soc_family" = "$_f" ]; then
-    redirect_to "/" "danger" "Motion detection is not supported on your camera."
-    exit 0
-  fi
-done; unset -f; unset stoplist
+[ -n "$(echo "$mj_hide_motionDetect" | sed -n "/\b${soc_family}\b/p")" ] && redirect_to "/" "danger" "Motion detection is not supported on your camera."
 
 service_file=/etc/init.d/S92motion
 tmp_file=/tmp/${plugin}

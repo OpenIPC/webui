@@ -106,7 +106,7 @@ check_password() {
   [ "0${debug}" -ge "1" ] && return
   [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "/cgi-bin/webui.cgi" ] && return
   if [ -z "$ui_password" ] || [ "$ui_password_fw" = "$ui_password" ]; then
-    redirect_to "webui.cgi" "danger" "You must set your own secure password!"
+    redirect_to "webui-settings.cgi" "danger" "You must set your own secure password!"
   fi
 }
 

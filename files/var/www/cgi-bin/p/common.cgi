@@ -589,7 +589,7 @@ update_caminfo() {
   _tmpfile=${ui_tmp_dir}/sysinfo.tmp
   :>$_tmpfile
   # add all web-related config files
-  # do not include bigbro, ntp
+  # do not include ntp
   for _f in admin email ftp motion socks5 telegram yadisk; do
     [ -f "${ui_config_dir}/${_f}.conf" ] && cat "${ui_config_dir}/${_f}.conf" >>$_tmpfile
   done; unset _f

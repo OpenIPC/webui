@@ -52,7 +52,7 @@ mj="
 .osd.privacyMasks|Privacy masks|px|string||0x0x234x640,2124x0x468x1300|Coordinates of masked areas separated by commas.
 .nightMode.enabled|Enable night mode||boolean|true,false|false|
 .nightMode.irSensorPin|GPIO pin of signal from IR sensor||number|1,100,1|62|
-.nightMode.irSensorPinInvert|IR sensor is inverted||boolean|true,false|false|
+.nightMode.irSensorPinInvert|IR sensor signal is inverted||boolean|true,false|false|
 .nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|1,100,1|1|
 .nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|1,100,1|2|
 .nightMode.dncDelay|Delay before toggling Day/Night mode||range|1,60,1|20|
@@ -96,6 +96,8 @@ mj="
 .audio.device|Audio card||string||hw:2|
 .audio.outputEnabled|Enable audio output||boolean|true,false|false|
 .audio.voiceEqualizer|Audio equalizer||select|disabled,common,music,noisy|disabled|
+.audio.speakerPin|GPIO pin of audio speaker||number|1,100,1|32|
+.audio.speakerPinInvert|Audio speaker signal is inverted||boolean|true,false|false|
 .rtsp.enabled|Enable output||boolean|true,false|true|
 .rtsp.port|Port for RTSP protocol||number|1,65535,1|554|rtsp://${network_address}:[port]/stream={0,1}
 .hls.enabled|Enable HTTP Live Streaming (HLS)||boolean|true,false|true|

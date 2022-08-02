@@ -17,7 +17,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     sed -i s/:admin:.*/:admin:${new_password}/ /etc/httpd.conf
     echo "root:${new_password}" | chpasswd
     update_caminfo
-    redirect_to $SCRIPT_NAME "success" "Password updated."
+    redirect_to "/" "success" "Password updated."
     ;;
 
   locale)

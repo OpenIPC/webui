@@ -743,4 +743,5 @@ include /etc/webui/yadisk.conf
 
 # reload_locale
 check_password
+get_soc_temp
 %>

@@ -23,7 +23,7 @@ network_macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/ //g" | 
 sensor=$(ipcinfo --short-sensor)
 soc=$(ipcinfo --chip-name)
 soc_temperature=$(ipcinfo --temp)
-uptime=$(uptime | awk '{print $1}')
+uptime=$(uptime | sed -r 's/^.+ up ([^,]+), .+$/\1/')
 
 # validate mandatory values
 [ ! -f "$snapshot" ] &&

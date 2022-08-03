@@ -215,7 +215,7 @@ echo "<a class=\"list-group-item list-group-item-danger\" href=\"?tab=all\">Show
     const inp = $("#mj_isp_sensorConfig");
     const sel = document.createElement("select");
     sel.classList.add("form-select");
-    sel.form_field_name=inp.form_field_name;
+    sel.name=inp.name;
     sel.id=inp.id;
     sel.options.add(new Option());
     let opt;

@@ -27,7 +27,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     [ "false" = "$motion_send2ftp" ] && \
     [ "false" = "$motion_send2telegram" ] && \
     [ "false" = "$motion_send2yadisk" ] && \
-    flash_append "danger" "You need to select at least one method of notification" && error=11
+    flash_append "danger" "You need to select at least one method of notification" && error=1
   fi
 
   if [ -z "$error" ]; then
@@ -47,6 +47,8 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
       echo "thrashold=${motion_sensitivity}" >>$tmp_file
       echo "logread -f | grep \"Motion detected in \d* regions\" | while read BEER; do" >>$tmp_file
       echo "  [ \"\$(echo \$BEER | cut -d' ' -f4)\" -lt \"\$thrashold\" ] && exit;" >>$tmp_file
+      echo "  snapshot4cron.sh -f" >>$tmp_file
+      echo "  [ $? -ne 0 ] && echo \"Cannot get a snapshot\" && exit 2" >>$tmp_file
       [ "true" = "$motion_send2email"    ] && echo "  send2email.sh"    >>$tmp_file
       [ "true" = "$motion_send2ftp"      ] && echo "  send2ftp.sh"      >>$tmp_file
       [ "true" = "$motion_send2telegram" ] && echo "  send2telegram.sh" >>$tmp_file

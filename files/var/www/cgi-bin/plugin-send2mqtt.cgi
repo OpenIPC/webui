@@ -54,7 +54,7 @@ else
   include $config_file
 
   # Default values
-  [ -z "$mqtt_client_id" ] && mqtt_client_id="${network_wan_mac//:/}"
+  [ -z "$mqtt_client_id" ] && mqtt_client_id="${network_macaddr//:/}"
   [ -z "$mqtt_port"      ] && mqtt_port="1883"
   [ -z "$mqtt_topic"     ] && mqtt_topic="openipc/${mqtt_client_id}"
   [ -z "$mqtt_message"   ] && mqtt_message=""

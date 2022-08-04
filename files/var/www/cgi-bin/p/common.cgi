@@ -553,7 +553,7 @@ sanitize() {
 }
 
 generate_signature() {
-  echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash, ${fw_version}-${fw_variant}, ${network_hostname}, ${network_wan_mac}" >$signature_file
+  echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash, ${fw_version}-${fw_variant}, ${network_hostname}, ${network_macaddr}" >$signature_file
 }
 
 signature() {
@@ -630,15 +630,13 @@ update_caminfo() {
   _default_route="$(ip r | grep ^default)"
   if [ -n "$_default_route" ]; then
     _default_iface=$(echo "$_default_route" | awk '{print $5}')
-    network_wan_mac=$(cat /sys/class/net/${_default_iface}/address)
+    network_macaddr=$(cat /sys/class/net/${_default_iface}/address)
     network_gateway=$(echo "$_default_route" | awk '{print $3}')
   fi; unset _default_route; unset _default_iface
 
   network_hostname=$(hostname -s)
   network_interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | tr '\n' ' ' | sed 's/ $//' )
   network_address=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
-  # FIXME: multiple interfaces give multiple addresses
-  network_macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/ //g" | uniq | tail -1)
   network_netmask=$(ifconfig eth0 | grep "inet " | cut -d: -f4)
 
   overlay_root=$(mount | grep upperdir= | sed -r 's/^.*upperdir=([a-z\/]+).+$/\1/')
@@ -664,7 +662,6 @@ network_hostname=\"$network_hostname\"
 network_interfaces=\"$network_interfaces\"
 network_macaddr=\"$network_macaddr\"
 network_netmask=\"$network_netmask\"
-network_wan_mac=\"$network_wan_mac\"
 overlay_root=\"$overlay_root\"
 mj_version=\"$mj_version\"
 soc=\"$soc\"

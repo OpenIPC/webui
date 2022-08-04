@@ -67,9 +67,10 @@ command="${command} --mail-rcpt ${email_to_address}"
 command="${command} --user '${email_smtp_login}:${email_smtp_password}'"
 
 if [ "$#" -eq 0 ]; then
-  snapshot="/tmp/${plugin}_snap.jpg"
-  curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
+  snapshot4cron.sh
   [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+  snapshot=/tmp/snapshot4cron.jpg
+  [ ! -f "$snapshot" ] && echo "Cannot find a snapshot" && exit 3
 
   email_body="$(date -R)"
   command="${command} -H 'Subject: ${email_subject}'"
@@ -96,7 +97,6 @@ echo "$command" >>$log_file
 eval "$command" >>$log_file 2>&1
 cat $log_file
 
-[ -f ${snapshot} ] && rm -f ${snapshot}
 [ -f ${email_file} ] && rm -f ${email_file}
 
 exit 0

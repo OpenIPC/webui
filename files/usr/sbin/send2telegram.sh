@@ -51,9 +51,10 @@ if [ -z "$telegram_message" ]; then
   telegram_message="$(hostname -s), $(date +"%F %T")"
 
   if [ -z "$telegram_photo" ]; then
-    snapshot="/tmp/${plugin}_snap.jpg"
-    curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
-    [ $? -ne 0 ] && echo "Cannot get a snapshot." && exit 2
+    snapshot4cron.sh
+    [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+    snapshot=/tmp/snapshot4cron.jpg
+    [ ! -f "$snapshot" ] && echo "Cannot find a snapshot" && exit 3
     telegram_photo=$snapshot
   fi
 fi
@@ -85,7 +86,5 @@ command="${command} -F 'disable_notification=${telegram_disable_notification}'"
 echo "$command" >>$log_file
 eval "$command" >>$log_file 2>&1
 cat $log_file
-
-[ -f ${snapshot} ] && rm -f ${snapshot}
 
 exit 0

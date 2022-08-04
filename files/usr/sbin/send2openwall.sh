@@ -11,9 +11,10 @@ mkdir -p $(dirname $log_file)
 [ "false" = "$openwall_enabled" ] &&
   echo "Sending to OpenIPC Wall is disabled." && exit 10
 
-snapshot="/tmp/${plugin}_snap.jpg"
-curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent && pid=$!
-wait $pid
+snapshot4cron.sh
+[ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+snapshot=/tmp/snapshot4cron.jpg
+[ ! -f "$snapshot" ] && echo "Cannot find a snapshot" && exit 3
 
 flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
 fw_variant=$(grep "BUILD_OPTION" /etc/os-release | cut -d= -f2 | tr -d /\"/); [ -z "$fw_variant" ] && fw_variant="lite"
@@ -56,7 +57,5 @@ command="${command} -F 'file=@${snapshot}'"
 echo "$command" >>$log_file
 eval "$command" >>$log_file 2>&1
 cat $log_file
-
-[ -f ${snapshot} ] && rm -f ${snapshot}
 
 exit 0

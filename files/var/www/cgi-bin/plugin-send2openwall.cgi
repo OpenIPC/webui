@@ -47,7 +47,7 @@ else
   include $config_file
 
   # Default values
-  [ -z "$openwall_interval" ] && openwall_interval="30"
+  [ -z "$openwall_interval" ] && openwall_interval="15"
 fi
 %>
 <%in p/header.cgi %>
@@ -63,7 +63,7 @@ fi
   <% field_switch "openwall_enabled" "Enable sending to OpenWall" %>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
     <div class="col">
-      <% field_number "openwall_interval" "Interval, minutes" "15,60,1" "Time between submissions. 15 minutes or longer." %>
+      <% field_select "openwall_interval" "Interval, minutes" "15,30,60" "Time between submissions. 15 minutes or longer." %>
       <% field_switch "openwall_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
       <% button_submit %>
     </div>

@@ -632,6 +632,9 @@ update_caminfo() {
     _default_iface=$(echo "$_default_route" | awk '{print $5}')
     network_macaddr=$(cat /sys/class/net/${_default_iface}/address)
     network_gateway=$(echo "$_default_route" | awk '{print $3}')
+  else
+    network_macaddr=$(fw_printenv -n ethaddr)
+    network_gateway=$(fw_printenv -n gatewayip)
   fi; unset _default_route; unset _default_iface
 
   network_hostname=$(hostname -s)

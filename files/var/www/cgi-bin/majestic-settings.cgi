@@ -1,6 +1,5 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
-<%in _mj.cgi %>
 <%
 page_title="Majestic settings"
 
@@ -8,12 +7,7 @@ mj=$(echo "$mj" | sed "s/ /_/g")
 
 only="$GET_tab"; [ -z "$only" ] && only="system"
 
-if [ "all" = "$only" ]; then
-  only=""
-  title="All settings"
-else
-  eval title="\$tT_mj_${only}"
-fi
+eval title="\$tT_mj_${only}"
 
 # hide certain domains if not supported
 if [ -n "$(eval echo "\$mj_hide_${only}" | sed -n "/\b${soc_family}\b/p")" ]; then
@@ -81,13 +75,18 @@ fi
 %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
-  <div class="col">
-    <form action="<%= $SCRIPT_NAME %>" method="post">
+<h3 class="mb-3"><%= $title %></h3>
+
+<form action="<%= $SCRIPT_NAME %>" method="post">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+    <div class="col">
 <%
 config=""
-olddomain=""
-for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
+_mj2="$(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only")"
+_mid="$(( $(echo "$_mj2" | wc -l) / 2 ))"
+_cnt=0
+for line in $_mj2; do
+  _cnt=$(( $_cnt + 1 ))
                                     # line: .isp.exposure|Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
   yaml_param_name=${line%%|*}       # => .isp.exposure
   _param_name=${yaml_param_name#.}  # => isp.exposure
@@ -123,12 +122,6 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
 
   value="$(yaml-cli -g "$yaml_param_name")"
 
-  if [ "$olddomain" != "$domain" ]; then
-    [ -n "$olddomain" ] && echo "</fieldset>"
-    echo "<fieldset><legend>${domain}</legend>"
-    olddomain="$domain"
-  fi
-
   # assign yaml_param_name's value to a variable with yaml_param_name's form_field_name for form fields values
   eval "$form_field_name=\"$(yaml-cli -g "$yaml_param_name")\""
 
@@ -147,43 +140,22 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
     string)   field_text     "$form_field_name" "$label_text" "$hint";;
     *) echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>";;
   esac
-done
-echo "</fieldset>"
-button_submit
-%>
-    </form>
-  </div>
-  <div class="col">
-    <h3>Related settings</h3>
-    <pre><% echo -e "$config" %></pre>
-    <p><a href="info-majestic.cgi">See majestic.yaml</a></p>
-    <pre><% majestic_diff %></pre>
-    <% button_mj_reset %>
-  </div>
-  <div class="col">
-    <h3>Majestic config sections</h3>
-    <div class="list-group list-group-flush" id="mj-tabs">
-<%
-for _line in $mj; do
-  _parameter=${_line%%|*};
-  _param_name=${_parameter#.};
-  _param_domain=${_param_name%.*}
-  if [ "$_parameter_domain_old" != "$_param_domain" ]; then
-    # hide certain domains if not supported
-    [ -n "$(eval echo "\$mj_hide_${_param_domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
 
-    _parameter_domain_old="$_param_domain"
-    _css="class=\"list-group-item\""; [ "$_param_domain" = "$only" ] && _css="class=\"list-group-item active\" aria-current=\"true\""
-    echo "<a ${_css} href=\"?tab=${_param_domain}\">$(eval echo \$tT_mj_${_param_domain})</a>"
+  if [ "$_cnt" -gt "$_mid" ]; then
+    echo "</div><div class=\"col\">"
+    _cnt=0
   fi
 done
-unset _css; unset _param_domain; unset _line; unset _param_name; unset _parameter_domain_old; unset _parameter;
-
-echo "<a class=\"list-group-item list-group-item-danger\" href=\"?tab=all\">Show Everything (damn slow!)</a>"
 %>
     </div>
+    <div class="col">
+      <h3>Related settings</h3>
+      <pre><% echo -e "$config" %></pre>
+      <p><a href="info-majestic.cgi">See majestic.yaml</a></p>
+    </div>
   </div>
-</div>
+  <% button_submit %>
+</form>
 
 <script>
   let MD5 = function(d){return V(Y(X(d),8*d.length))};

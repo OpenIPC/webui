@@ -1,4 +1,3 @@
-<%
 # line format: parameter|label|units|type|o,p,t,i,o,n,s|placeholder|hint
 # line format: parameter|type
 mj_retired="
@@ -129,4 +128,3 @@ mj_show_audio_voiceEqualizer="gk7205v200 hi3516cv300 hi3516cv500 hi3516ev300 hi3
 mj_hide_video0_codec="hi3516cv200 hi3516cv100"
 mj_hide_video1_codec="hi3516cv200 hi3516cv100"
 mj_hide_motionDetect="hi3516cv100 hi3516av100"
-%>

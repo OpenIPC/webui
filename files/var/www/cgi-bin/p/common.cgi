@@ -734,6 +734,7 @@ pagename=$(basename "$SCRIPT_NAME")
 pagename="${pagename%%.*}"
 
 include p/locale_en.sh
+include p/mj.cgi
 include /etc/webui/socks5.conf
 include /etc/webui/telegram.conf
 include /etc/webui/yadisk.conf

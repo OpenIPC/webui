@@ -9,7 +9,7 @@ Connection: close
 <%
 o=""
 echo -n "readConfigYaml({"
-for l in $(sed -n "/^\../p" _mj.cgi|cut -d\| -f1); do
+for l in $(sed -n "/^\../p" p/mj.cgi|cut -d\| -f1); do
   d=${l%.*}; d=${d/./}; name=${l##*.}
   value=$(yaml-cli -g "$l")
   if [ "$o" != "$d" ]; then

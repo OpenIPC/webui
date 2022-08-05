@@ -35,7 +35,6 @@ Pragma: no-cache
             <ul aria-labelledby="dropdownInformation" class="dropdown-menu">
               <li><a class="dropdown-item" href="status.cgi">Overview</a></li>
               <li><a class="dropdown-item" href="info-cron.cgi">Cron config</a></li>
-              <li><a class="dropdown-item" href="info-majestic.cgi">Majestic config</a></li>
               <li><a class="dropdown-item" href="info-dmesg.cgi">Diagnostic messages</a></li>
               <li><a class="dropdown-item" href="info-httpd.cgi">HTTPd environment</a></li>
               <li><a class="dropdown-item" href="info-modules.cgi">Modules</a></li>
@@ -58,7 +57,6 @@ Pragma: no-cache
               <li><a class="dropdown-item" href="timezone.cgi">Timezone</a></li>
               <li><a class="dropdown-item" href="network-ntp.cgi">Time Synchronization</a></li>
               <li><a class="dropdown-item" href="network-socks5.cgi">SOCKS5 Proxy</a></li>
-              <li><a class="dropdown-item" href="majestic-settings.cgi">Majestic Streamer</a></li>
               <li><a class="dropdown-item" href="webui-settings.cgi">Web Interface</a></li>
               <li><a class="dropdown-item" href="admin.cgi">Admin Profile</a></li>
               <li><a class="dropdown-item" href="debugging.cgi">Debugging</a></li>
@@ -69,6 +67,24 @@ Pragma: no-cache
           <li class="nav-item dropdown">
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownMajestic" role="button">Majestic</a>
             <ul aria-labelledby="dropdownMajestic" class="dropdown-menu">
+<%
+mj=$(echo "$mj" | sed "s/ /_/g")
+for _line in $mj; do
+  _parameter=${_line%%|*};
+  _param_name=${_parameter#.};
+  _param_domain=${_param_name%.*}
+  if [ "$_parameter_domain_old" != "$_param_domain" ]; then
+    # hide certain domains if not supported
+    [ -n "$(eval echo "\$mj_hide_${_param_domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+    _parameter_domain_old="$_param_domain"
+    _css="class=\"dropdown-item\""; [ "$_param_domain" = "$only" ] && _css="class=\"dropdown-item active\" aria-current=\"true\""
+    echo "<li><a ${_css} href=\"majestic-settings.cgi?tab=${_param_domain}\">$(eval echo \$tT_mj_${_param_domain})</a></li>"
+  fi
+done
+unset _css; unset _param_domain; unset _line; unset _param_name; unset _parameter_domain_old; unset _parameter;
+%>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="info-majestic.cgi">Majestic Config</a></li>
               <li><a class="dropdown-item" href="majestic-config-actions.cgi">Majestic Maintenance</a></li>
             </ul>
           </li>

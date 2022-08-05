@@ -59,27 +59,33 @@ size_h=${size#*x}
         </div>
       </div>
       <div class="input-group">
-        <button class="form-control btn btn-primary text-start" type="button" id="send-to-email">Send to email</button>
+        <button class="form-control btn btn-primary text-start" type="button" data-sendto="email">Send to email</button>
         <div class="input-group-text">
           <a href="plugin-send2email.cgi" title="Email settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
       <div class="input-group">
-        <button class="form-control btn btn-primary text-start" type="button" id="send-to-ftp">Send to FTP</button>
+        <button class="form-control btn btn-primary text-start" type="button" data-sendto="ftp">Send to FTP</button>
         <div class="input-group-text">
           <a href="plugin-send2ftp.cgi" title="FTP Storage settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
       <div class="input-group">
-        <button class="form-control btn btn-primary text-start" type="button" id="send-to-telegram">Send to Telegram</button>
+        <button class="form-control btn btn-primary text-start" type="button" data-sendto="telegram">Send to Telegram</button>
         <div class="input-group-text">
           <a href="plugin-send2telegram.cgi" title="Telegram bot settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
       <div class="input-group">
-        <button class="form-control btn btn-primary text-start" type="button" id="send-to-yadisk">Send to Yandex Disk</button>
+        <button class="form-control btn btn-primary text-start" type="button" data-sendto="yadisk">Send to Yandex Disk</button>
         <div class="input-group-text">
           <a href="plugin-send2yadisk.cgi" title="Yandex Disk bot settings"><img src="/a/gear.svg" alt="Gear"></a>
+        </div>
+      </div>
+      <div class="input-group">
+        <button class="form-control btn btn-primary text-start" type="button" data-sendto="openwall">Send to Open Wall</button>
+        <div class="input-group-text">
+          <a href="plugin-send2openwall.cgi" title="Open Wall settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
     </div>
@@ -126,37 +132,14 @@ $("#toggle-night-mode")?.addEventListener("click", event => {
   xhr.send("mode=toggle");
 });
 
-$("#send-to-email")?.addEventListener("click", event => {
+$$("button[data-sendto]").forEach(el => el.addEventListener("click", event => {
     event.preventDefault();
     if (!confirm("Are you sure?")) return false;
+    const tgt = event.target.dataset["sendto"];
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/cgi-bin/send2email.cgi");
+    xhr.open("GET", "/cgi-bin/send.cgi?to=" + tgt);
     xhr.send();
-})
-
-$("#send-to-ftp")?.addEventListener("click", event => {
-    event.preventDefault();
-    if (!confirm("Are you sure?")) return false;
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/cgi-bin/send2ftp.cgi");
-    xhr.send();
-})
-
-$("#send-to-telegram")?.addEventListener("click", event => {
-    event.preventDefault();
-    if (!confirm("Are you sure?")) return false;
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/cgi-bin/send2telegram.cgi");
-    xhr.send();
-});
-
-$("#send-to-yadisk")?.addEventListener("click", event => {
-    event.preventDefault();
-    if (!confirm("Are you sure?")) return false;
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/cgi-bin/send2yadisk.cgi");
-    xhr.send();
-});
+}))
 
 $("#speed")?.addEventListener("click", event => {
   event.preventDefault();

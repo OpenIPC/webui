@@ -57,13 +57,16 @@ fi
 
 <form action="<%= $SCRIPT_NAME %>" method="post">
   <% field_switch "email_enabled" "Enable sending to email" %>
+
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
     <div class="col">
       <% field_text "email_smtp_host" "SMTP host" %>
-      <% field_switch "email_smtp_use_ssl" "Use SSL" %>
       <% field_text "email_smtp_port" "SMTP port" %>
-      <% field_text "email_smtp_username" "SMTP server username" %>
-      <% field_password "email_smtp_password" "SMTP server password" %>
+      <% field_switch "email_smtp_use_ssl" "Use TLS/SSL" %>
+      <% field_text "email_smtp_username" "SMTP username" %>
+      <% field_password "email_smtp_password" "SMTP password" %>
+    </div>
+    <div class="col">
       <% field_text "email_from_name" "Sender's name" %>
       <% field_text "email_from_address" "Sender's address" "Use an email address where bounce reports can be sent to." %>
       <% field_text "email_to_name" "Recipient's name" %>
@@ -71,21 +74,14 @@ fi
       <% field_text "email_subject" "Email subject" %>
       <% field_textarea "email_body" "Email text" "Line breaks will be replaced with whitespace." %>
       <% # field_switch "email_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
-      <% button_submit %>
     </div>
     <div class="col">
       <% ex "cat $config_file" %>
-    </div>
-    <div class="col">
-      <% preview %>
-      <% if [ "true" = "$email_enabled" ]; then %>
-        <p><a href="send2email.cgi" class="btn btn-primary" id="send-to-email">Send to email</a></p>
-      <% fi %>
+      <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
     </div>
   </div>
+  <% button_submit %>
 </form>
-
-<% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
 
 <script>
 $('#email_body').style.height = "6rem";

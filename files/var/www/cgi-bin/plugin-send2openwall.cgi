@@ -65,21 +65,16 @@ fi
     <div class="col">
       <% field_select "openwall_interval" "Interval, minutes" "15,30,60" "Time between submissions. 15 minutes or longer." %>
       <% field_switch "openwall_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
-      <% button_submit %>
     </div>
-  </form>
-  <div class="col">
-    <% ex "cat $config_file" %>
-    <% ex "grep send2openwall /etc/crontabs/root" %>
+    <div class="col">
+      <% ex "grep send2openwall /etc/crontabs/root" %>
+    </div>
+    <div class="col">
+      <% ex "cat $config_file" %>
+      <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
+    </div>
   </div>
-  <div class="col">
-    <% preview %>
-    <% if [ "true" = "$openwall_enabled" ]; then %>
-      <p><a href="send2openwall.cgi" class="btn btn-primary" id="send-to-ftp">Send to OpenWall</a></p>
-    <% fi %>
-  </div>
-</div>
-
-<% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
+  <% button_submit %>
+</form>
 
 <%in p/footer.cgi %>

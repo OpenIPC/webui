@@ -72,24 +72,19 @@ fi
       <% field_text "mqtt_client_id" "MQTT client ID" %>
       <% field_text "mqtt_username" "MQTT broker username" %>
       <% field_password "mqtt_password" "MQTT broker password" %>
+    </div>
+    <div class="col">
       <% field_text "mqtt_topic" "MQTT topic" %>
       <% field_text "mqtt_message" "MQTT message" "Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format." %>
       <% field_switch "mqtt_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
-      <% button_submit %>
     </div>
+    <div class="col">
+      <% ex "cat $config_file" %>
+      <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
+    </div>
+    <% button_submit %>
   </form>
-  <div class="col">
-    <% ex "cat $config_file" %>
-  </div>
-  <div class="col">
-    <% preview %>
-    <% if [ "true" = "$mqtt_enabled" ]; then %>
-      <p><a href="send2mqtt.cgi" class="btn btn-primary" id="send-to-ftp">Send to MQTT broker</a></p>
-    <% fi %>
-  </div>
 </div>
-
-<% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
 
 <script>
 $('#mqtt_use_ssl').addEventListener('change', evt => {

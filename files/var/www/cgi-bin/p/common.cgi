@@ -600,6 +600,7 @@ update_caminfo() {
   sensor_ini=$(ipcinfo --long-sensor)
   soc=$(ipcinfo --chip-name)
   soc_family=$(ipcinfo --family)
+  soc_vendor=$(ipcinfo --vendor)
 
   # ipcinfo reports to stderr
   if [ "Temperature cannot be retrieved" = "$(ipcinfo --temp 2>&1)" ]; then
@@ -670,6 +671,7 @@ mj_version=\"$mj_version\"
 soc=\"$soc\"
 soc_family=\"$soc_family\"
 soc_has_temp=\"$soc_has_temp\"
+soc_vendor=\"$soc_vendor\"
 sensor=\"$sensor\"
 sensor_ini=\"$sensor_ini\"
 tz_data=\"$tz_data\"

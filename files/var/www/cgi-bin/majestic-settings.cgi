@@ -99,7 +99,10 @@ for line in $_mj2; do
     # hide certain domains if blacklisted
     [ -n "$(eval echo "\$mj_hide_${domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
     # hide certain parameters if blacklisted
+    [ -n "$(eval echo "\$mj_hide_${_param_name}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
     [ -n "$(eval echo "\$mj_hide_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+    # show certain domains only if whitelisted
+    [ -n "$(eval echo "\$mj_show_${domain}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${domain}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
     # show certain parameters only if whitelisted
     [ -n "$(eval echo "\$mj_show_${_param_name}")" ] && [ -z "$(eval echo "\$mj_show_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
   fi
@@ -183,6 +186,7 @@ done
     return h;
   }
 
+<% if [ -d /etc/sensors/ ]; then %>
   if ($("#mj_isp_sensorConfig")) {
     const inp = $("#mj_isp_sensorConfig");
     const sel = document.createElement("select");
@@ -198,6 +202,7 @@ done
     <% done %>
     inp.replaceWith(sel);
   }
+<% fi %>
 
   $("#mj_netip_enabled")?.addEventListener("change", (ev) => {
     $("#mj_netip_user").required = ev.target.checked;

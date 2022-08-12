@@ -13,13 +13,14 @@ size_h=${size#*x}
   <div class="col-md-8 col-xl-9 col-xxl-9 position-relative mb-3">
     <ul class="nav nav-tabs" role="tablist">
       <% tab_lap "jpeg" "JPEG" "active" %>
-      <% tab_lap "mjpeg" "MJPEG" %>
+      <% [ "hisilicon" = "$soc_vendor" ] && tab_lap "mjpeg" "MJPEG" %>
       <% tab_lap "video" "Video" %>
     </ul>
     <div class="tab-content p-2" id="tab-content">
       <div id="jpeg-tab-pane" role="tabpanel" class="tab-pane fade active show" aria-labelledby="jpeg-tab" tabindex="0">
         <% preview 1 %>
       </div>
+    <% if [ "hisilicon" = "$soc_vendor" ]; then %>
       <div id="mjpeg-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="mjpeg-tab" tabindex="0">
         <div class="ratio ratio-16x9">
           <% if [ "true" = "$(yaml-cli -g .jpeg.enabled)" ]; then %>
@@ -37,6 +38,7 @@ size_h=${size#*x}
           <% fi %>
         </div>
       </div>
+    <% fi %>
       <div id="video-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="video-tab" tabindex="0">
         <div class="ratio ratio-16x9">
           <video id="preview-video" poster="http://<%= $network_address %>/image.jpg" autoplay>
@@ -152,17 +154,21 @@ $$('button[data-bs-toggle=tab]').forEach(el => el.addEventListener('shown.bs.tab
     $('#preview-jpeg').addEventListener('load', updatePreview);
     updatePreview();
   }
+<% if [ "hisilicon" = "$soc_vendor" ]; then %>
   if (event.target.id == "#mjpeg-tab") {
     $('#preview-mjpeg').src = "http://<%= $network_address %>/mjpeg";
   }
+<% fi %>
 
   if (event.relatedTarget) {
     if (event.relatedTarget.id == "#jpeg-tab") {
       $('#preview-jpeg').removeEventListener('load', updatePreview);
     }
+<% if [ "hisilicon" = "$soc_vendor" ]; then %>
     if (event.relatedTarget.id == "#mjpeg-tab") {
       $('#preview-mjpeg').src="http://<%= $network_address %>/image.jpg";
     }
+<% fi %>
   }
 }));
 </script>

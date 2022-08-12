@@ -94,18 +94,17 @@ for line in $_mj2; do
   _param_name=${_param_name//-/_}   # => isp_exposure
   domain=${_param_name%%_*}         # => isp
 
-  # show parameter only if it is not in a stop-list or we are in a debug mode
-  if [ "0$debug" -lt "1" ]; then
-    # hide certain domains if blacklisted
-    [ -n "$(eval echo "\$mj_hide_${domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
-    # hide certain parameters if blacklisted
-    [ -n "$(eval echo "\$mj_hide_${_param_name}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
-    [ -n "$(eval echo "\$mj_hide_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
-    # show certain domains only if whitelisted
-    [ -n "$(eval echo "\$mj_show_${domain}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${domain}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
-    # show certain parameters only if whitelisted
-    [ -n "$(eval echo "\$mj_show_${_param_name}")" ] && [ -z "$(eval echo "\$mj_show_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
-  fi
+  # hide certain domains if blacklisted
+  [ -n "$(eval echo "\$mj_hide_${domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+  # hide certain parameters if blacklisted
+  [ -n "$(eval echo "\$mj_hide_${_param_name}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
+  [ -n "$(eval echo "\$mj_hide_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+  # show certain domains only if whitelisted
+  [ -n "$(eval echo "\$mj_show_${domain}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${domain}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
+  # show certain parameters only if whitelisted
+  [ -n "$(eval echo "\$mj_show_${_param_name}")" ] && [ -z "$(eval echo "\$mj_show_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+  # show certain parameters only in debug mode
+  [ -n "$(echo "$mj_hide_unless_debug" | sed -n "/\b${_param_name}\b/p")" ] && [ "0$debug" -lt "1" ] && continue
 
   form_field_name=mj_${_param_name} # => mj_isp_exposure
   line=${line#*|}                   # line: Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.

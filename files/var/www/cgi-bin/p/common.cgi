@@ -61,6 +61,10 @@ time_http() {
   fi
 }
 
+button_download() {
+  echo "<a href=\"dl2.cgi?log=${1}\" class=\"btn btn-primary\">Download log</a>"
+}
+
 button_mj_backup() {
   echo "<form action=\"majestic-config-actions.cgi\" method=\"post\">" \
     "<input type=\"hidden\" name=\"action\" value=\"backup\">"

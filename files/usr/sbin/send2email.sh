@@ -11,7 +11,7 @@ mkdir -p $(dirname $log_file)
 show_help() {
   echo "Usage: $0 [-f address] [-t address] [-s subject] [-b body] [-h]
   -f address  Sender's email address
-  -t address  Recipeint's email address
+  -t address  Recipient's email address
   -s subject  Subject line.
   -b body     Letter body.
   -h          Show this help.

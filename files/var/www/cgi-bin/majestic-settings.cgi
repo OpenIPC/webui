@@ -2,11 +2,8 @@
 <%in p/common.cgi %>
 <%
 page_title="Majestic settings"
-
 mj=$(echo "$mj" | sed "s/ /_/g")
-
 only="$GET_tab"; [ -z "$only" ] && only="system"
-
 eval title="\$tT_mj_${only}"
 
 # hide certain domains if not supported

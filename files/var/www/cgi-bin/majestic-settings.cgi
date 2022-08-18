@@ -39,6 +39,8 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         [ "50Hz" = "$value" ] && value="50"
         [ "60Hz" = "$value" ] && value="60"
         ;;
+      .motionDetect.visualize)
+        [ "true" = "$value" ] && yaml-cli -s ".osd.enabled" "true" -i $temp_yaml
       .system.webAdmin)
         [ "true" = "$value" ] && value="enabled"
         [ "false" = "$value" ] && value="disabled"

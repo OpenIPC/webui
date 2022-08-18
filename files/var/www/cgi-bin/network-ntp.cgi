@@ -11,7 +11,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in
     reset)
       cp /rom/etc/ntp.conf /etc/ntp.conf
-      redirect_back "success" "Configuration reset to firware defaults."
+      redirect_back "success" "Configuration reset to firmware defaults."
       ;;
     sync)
       /usr/sbin/ntpd -n -q -N

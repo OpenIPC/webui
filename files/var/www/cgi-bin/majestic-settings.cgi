@@ -42,6 +42,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
       .motionDetect.visualize)
         [ "true" = "$value" ] && yaml-cli -s ".osd.enabled" "true" -i $temp_yaml
         ;;
+      .osd.enabled)
+        [ "false" = "$value" ] && yaml-cli -s ".motionDetect.visualize" "false" -i $temp_yaml
+        ;;
       .system.webAdmin)
         [ "true" = "$value" ] && value="enabled"
         [ "false" = "$value" ] && value="disabled"

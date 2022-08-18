@@ -50,7 +50,7 @@ fi
 <%in p/header.cgi %>
 
 <form action="<%= $SCRIPT_NAME %>" method="post">
-  <% field_switch "ftp_enabled" "Enable FTP Storage" %>
+  <% field_switch "ftp_enabled" "Enable sending to FTP server" %>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
     <div class="col">
       <% field_text "ftp_host" "FTP host" %>

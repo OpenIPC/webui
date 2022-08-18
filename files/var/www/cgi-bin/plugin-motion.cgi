@@ -44,9 +44,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     if [ "true" = "$motion_enabled" ]; then
       :>$tmp_file
       echo "#!/bin/sh" >>$tmp_file
-      echo "thrashold=${motion_sensitivity}" >>$tmp_file
+      echo "threshold=${motion_sensitivity}" >>$tmp_file
       echo "logread -f | grep \"Motion detected in \d* regions\" | while read BEER; do" >>$tmp_file
-      echo "  [ \"\$(echo \$BEER | cut -d' ' -f4)\" -lt \"\$thrashold\" ] && exit;" >>$tmp_file
+      echo "  [ \"\$(echo \$BEER | cut -d' ' -f4)\" -lt \"\$threshold\" ] && exit;" >>$tmp_file
       echo "  snapshot4cron.sh -f" >>$tmp_file
       echo "  [ $? -ne 0 ] && echo \"Cannot get a snapshot\" && exit 2" >>$tmp_file
       [ "true" = "$motion_send2email"    ] && echo "  send2email.sh"    >>$tmp_file

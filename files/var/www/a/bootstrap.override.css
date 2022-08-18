@@ -132,6 +132,11 @@ p.range span.show-value {
     cursor: pointer;
 }
 
+.nav-link.active {
+    background: var(--bs-blue);
+    color: #ffffff;
+}
+
 .tab-pane {
     padding: 1rem 0;
 }

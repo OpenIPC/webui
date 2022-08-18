@@ -75,18 +75,34 @@ fi
 %>
 <%in p/header.cgi %>
 
-<h3 class="mb-3"><%= $title %></h3>
+<ul class="nav bg-light small mb-4">
+<%
+mj=$(echo "$mj" | sed "s/ /_/g")
+for _line in $mj; do
+  _parameter=${_line%%|*};
+  _param_name=${_parameter#.};
+  _param_domain=${_param_name%.*}
+  if [ "$_parameter_domain_old" != "$_param_domain" ]; then
+    # hide certain domains if not supported
+    [ -n "$(eval echo "\$mj_hide_${_param_domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+    [ -n "$(eval echo "\$mj_show_${_param_domain}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${_param_domain}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
+    _parameter_domain_old="$_param_domain"
+    _css="class=\"nav-link\""; [ "$_param_domain" = "$only" ] && _css="class=\"nav-link active\" aria-current=\"true\""
+    echo "<li class=\"nav-item\"><a ${_css} href=\"majestic-settings.cgi?tab=${_param_domain}\">$(eval echo \$tT_mj_${_param_domain})</a></li>"
+  fi
+done
+unset _css; unset _param_domain; unset _line; unset _param_name; unset _parameter_domain_old; unset _parameter;
+%>
+</ul>
 
 <form action="<%= $SCRIPT_NAME %>" method="post">
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
     <div class="col">
+      <h3><%= $title %></h3>
 <%
 config=""
 _mj2="$(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only")"
-_mid="$(( $(echo "$_mj2" | wc -l) / 2 ))"
-_cnt=0
 for line in $_mj2; do
-  _cnt=$(( $_cnt + 1 ))
                                     # line: .isp.exposure|Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
   yaml_param_name=${line%%|*}       # => .isp.exposure
   _param_name=${yaml_param_name#.}  # => isp.exposure
@@ -142,11 +158,6 @@ for line in $_mj2; do
     string)   field_text     "$form_field_name" "$label_text" "$hint";;
     *) echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>";;
   esac
-
-  if [ "$_cnt" -gt "$_mid" ]; then
-    echo "</div><div class=\"col\">"
-    _cnt=0
-  fi
 done
 %>
     </div>

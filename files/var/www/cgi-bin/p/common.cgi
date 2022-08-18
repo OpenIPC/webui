@@ -638,15 +638,16 @@ update_caminfo() {
     _default_iface=$(echo "$_default_route" | awk '{print $5}')
     network_macaddr=$(cat /sys/class/net/${_default_iface}/address)
     network_gateway=$(echo "$_default_route" | awk '{print $3}')
+    network_netmask=$(ifconfig $_default_iface | grep "Mask:" | cut -d: -f4)
   else
     network_macaddr=$(fw_printenv -n ethaddr)
     network_gateway=$(fw_printenv -n gatewayip)
+    network_netmask=''
   fi; unset _default_route; unset _default_iface
 
   network_hostname=$(hostname -s)
   network_interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | tr '\n' ' ' | sed 's/ $//' )
   network_address=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
-  network_netmask=$(ifconfig eth0 | grep "inet " | cut -d: -f4)
 
   overlay_root=$(mount | grep upperdir= | sed -r 's/^.*upperdir=([a-z\/]+).+$/\1/')
 

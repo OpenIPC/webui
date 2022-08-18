@@ -55,9 +55,12 @@ fi
       <% ex "cat $config_file" %>
       <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
     </div>
-    <div class="col">
+  </div>
+  <% button_submit %>
+</form>
+
 <% if [ -z "$telegram_token" ]; then %>
-<div class="alert alert-info">
+<div class="alert alert-info mt-4">
   <h5>To create a channel for your Telegram bot:</h5>
   <ol>
     <li>Start a chat with <a href=\"https://t.me/BotFather\">@BotFather</a></li>
@@ -69,9 +72,5 @@ fi
   </ol>
 </div>
 <% fi %>
-    </div>
-  </div>
-  <% button_submit %>
-</form>
 
 <%in p/footer.cgi %>

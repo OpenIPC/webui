@@ -82,9 +82,9 @@ fi
       <% ex "cat $config_file" %>
       <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
     </div>
-    <% button_submit %>
-  </form>
-</div>
+  </div>
+  <% button_submit %>
+</form>
 
 <script>
 $('#mqtt_use_ssl').addEventListener('change', evt => {

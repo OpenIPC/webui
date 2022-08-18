@@ -401,8 +401,9 @@ Server: $SERVER_SOFTWARE
 }
 
 html_title() {
-  [ -n "$1" ] && echo -n "$1 - "
-  echo -n "OpenIPC"
+  [ -n "$page_title" ] && echo -n "$page_title"
+  [ -n "$title" ] && echo -n ": $title"
+  echo -n " - OpenIPC"
 }
 
 # label "name" "classes" "extras" "units"

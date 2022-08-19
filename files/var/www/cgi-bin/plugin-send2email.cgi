@@ -4,7 +4,7 @@
 plugin="email"
 plugin_name="Send to email"
 page_title="Send to email"
-params="enabled from_name from_address to_name to_address subject body smtp_host smtp_port smtp_username smtp_password smtp_use_ssl socks5_enabled"
+params="enabled attach_snapshot from_name from_address to_name to_address subject body smtp_host smtp_port smtp_username smtp_password smtp_use_ssl socks5_enabled"
 
 tmp_file=/tmp/${plugin}.conf
 
@@ -47,6 +47,7 @@ else
   include $config_file
 
   # Default values
+  [ -z "$attach_snapshot" ] && attach_snapshot="true"
   [ -z "$email_smtp_port" ] && email_smtp_port="25"
   [ -z "$email_from_name" ] && email_from_name="Camera ${network_hostname}"
   [ -z "$email_to_name" ] && email_to_name="Camera admin"
@@ -73,6 +74,7 @@ fi
       <% field_text "email_to_address" "Recipient's address" %>
       <% field_text "email_subject" "Email subject" %>
       <% field_textarea "email_body" "Email text" "Line breaks will be replaced with whitespace." %>
+      <% field_switch "attach_snapshot" "Attach snaphot" %>
       <% # field_switch "email_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
     </div>
     <div class="col">

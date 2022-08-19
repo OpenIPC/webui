@@ -66,7 +66,7 @@ command="${command} --mail-from ${email_from_address}"
 command="${command} --mail-rcpt ${email_to_address}"
 command="${command} --user '${email_smtp_login}:${email_smtp_password}'"
 
-if [ "$#" -eq 0 ]; then
+if [ "true" = "$email_attach_snapshot" ]; then
   snapshot4cron.sh
   [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
   snapshot=/tmp/snapshot4cron.jpg

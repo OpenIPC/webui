@@ -1,19 +1,10 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
-<%in _mj.cgi %>
 <%
 page_title="Majestic settings"
-
 mj=$(echo "$mj" | sed "s/ /_/g")
-
 only="$GET_tab"; [ -z "$only" ] && only="system"
-
-if [ "all" = "$only" ]; then
-  only=""
-  title="All settings"
-else
-  eval title="\$tT_mj_${only}"
-fi
+eval title="\$tT_mj_${only}"
 
 # hide certain domains if not supported
 if [ -n "$(eval echo "\$mj_hide_${only}" | sed -n "/\b${soc_family}\b/p")" ]; then
@@ -48,6 +39,12 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         [ "50Hz" = "$value" ] && value="50"
         [ "60Hz" = "$value" ] && value="60"
         ;;
+      .motionDetect.visualize)
+        [ "true" = "$value" ] && yaml-cli -s ".osd.enabled" "true" -i $temp_yaml
+        ;;
+      .osd.enabled)
+        [ "false" = "$value" ] && yaml-cli -s ".motionDetect.visualize" "false" -i $temp_yaml
+        ;;
       .system.webAdmin)
         [ "true" = "$value" ] && value="enabled"
         [ "false" = "$value" ] && value="disabled"
@@ -81,13 +78,34 @@ fi
 %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
-  <div class="col">
-    <form action="<%= $SCRIPT_NAME %>" method="post">
+<ul class="nav bg-light small mb-4">
+<%
+mj=$(echo "$mj" | sed "s/ /_/g")
+for _line in $mj; do
+  _parameter=${_line%%|*};
+  _param_name=${_parameter#.};
+  _param_domain=${_param_name%.*}
+  if [ "$_parameter_domain_old" != "$_param_domain" ]; then
+    # hide certain domains if not supported
+    [ -n "$(eval echo "\$mj_hide_${_param_domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+    [ -n "$(eval echo "\$mj_show_${_param_domain}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${_param_domain}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
+    _parameter_domain_old="$_param_domain"
+    _css="class=\"nav-link\""; [ "$_param_domain" = "$only" ] && _css="class=\"nav-link active\" aria-current=\"true\""
+    echo "<li class=\"nav-item\"><a ${_css} href=\"majestic-settings.cgi?tab=${_param_domain}\">$(eval echo \$tT_mj_${_param_domain})</a></li>"
+  fi
+done
+unset _css; unset _param_domain; unset _line; unset _param_name; unset _parameter_domain_old; unset _parameter;
+%>
+</ul>
+
+<form action="<%= $SCRIPT_NAME %>" method="post">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+    <div class="col">
+      <h3><%= $title %></h3>
 <%
 config=""
-olddomain=""
-for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
+_mj2="$(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only")"
+for line in $_mj2; do
                                     # line: .isp.exposure|Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
   yaml_param_name=${line%%|*}       # => .isp.exposure
   _param_name=${yaml_param_name#.}  # => isp.exposure
@@ -95,15 +113,17 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
   _param_name=${_param_name//-/_}   # => isp_exposure
   domain=${_param_name%%_*}         # => isp
 
-  # show parameter only if it is not in a stop-list or we are in a debug mode
-  if [ "0$debug" -lt "1" ]; then
-    # hide certain domains if blacklisted
-    [ -n "$(eval echo "\$mj_hide_${domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
-    # hide certain parameters if blacklisted
-    [ -n "$(eval echo "\$mj_hide_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
-    # show certain parameters only if whitelisted
-    [ -n "$(eval echo "\$mj_show_${_param_name}")" ] && [ -z "$(eval echo "\$mj_show_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
-  fi
+  # hide certain domains if blacklisted
+  [ -n "$(eval echo "\$mj_hide_${domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+  # hide certain parameters if blacklisted
+  [ -n "$(eval echo "\$mj_hide_${_param_name}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
+  [ -n "$(eval echo "\$mj_hide_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+  # show certain domains only if whitelisted
+  [ -n "$(eval echo "\$mj_show_${domain}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${domain}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
+  # show certain parameters only if whitelisted
+  [ -n "$(eval echo "\$mj_show_${_param_name}")" ] && [ -z "$(eval echo "\$mj_show_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+  # show certain parameters only in debug mode
+  [ -n "$(echo "$mj_hide_unless_debug" | sed -n "/\b${_param_name}\b/p")" ] && [ "0$debug" -lt "1" ] && continue
 
   form_field_name=mj_${_param_name} # => mj_isp_exposure
   line=${line#*|}                   # line: Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
@@ -122,12 +142,6 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
   hint=${hint//_/ }                 # => From 1 to 500000.
 
   value="$(yaml-cli -g "$yaml_param_name")"
-
-  if [ "$olddomain" != "$domain" ]; then
-    [ -n "$olddomain" ] && echo "</fieldset>"
-    echo "<fieldset><legend>${domain}</legend>"
-    olddomain="$domain"
-  fi
 
   # assign yaml_param_name's value to a variable with yaml_param_name's form_field_name for form fields values
   eval "$form_field_name=\"$(yaml-cli -g "$yaml_param_name")\""
@@ -148,42 +162,16 @@ for line in $(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only"); do
     *) echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>";;
   esac
 done
-echo "</fieldset>"
-button_submit
-%>
-    </form>
-  </div>
-  <div class="col">
-    <h3>Related settings</h3>
-    <pre><% echo -e "$config" %></pre>
-    <p><a href="info-majestic.cgi">See majestic.yaml</a></p>
-    <pre><% majestic_diff %></pre>
-    <% button_mj_reset %>
-  </div>
-  <div class="col">
-    <h3>Majestic config sections</h3>
-    <div class="list-group list-group-flush" id="mj-tabs">
-<%
-for _line in $mj; do
-  _parameter=${_line%%|*};
-  _param_name=${_parameter#.};
-  _param_domain=${_param_name%.*}
-  if [ "$_parameter_domain_old" != "$_param_domain" ]; then
-    # hide certain domains if not supported
-    [ -n "$(eval echo "\$mj_hide_${_param_domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
-
-    _parameter_domain_old="$_param_domain"
-    _css="class=\"list-group-item\""; [ "$_param_domain" = "$only" ] && _css="class=\"list-group-item active\" aria-current=\"true\""
-    echo "<a ${_css} href=\"?tab=${_param_domain}\">$(eval echo \$tT_mj_${_param_domain})</a>"
-  fi
-done
-unset _css; unset _param_domain; unset _line; unset _param_name; unset _parameter_domain_old; unset _parameter;
-
-echo "<a class=\"list-group-item list-group-item-danger\" href=\"?tab=all\">Show Everything (damn slow!)</a>"
 %>
     </div>
+    <div class="col">
+      <h3>Related settings</h3>
+      <pre><% echo -e "$config" %></pre>
+      <p><a href="info-majestic.cgi">See majestic.yaml</a></p>
+    </div>
   </div>
-</div>
+  <% button_submit %>
+</form>
 
 <script>
   let MD5 = function(d){return V(Y(X(d),8*d.length))};
@@ -211,6 +199,7 @@ echo "<a class=\"list-group-item list-group-item-danger\" href=\"?tab=all\">Show
     return h;
   }
 
+<% if [ -d /etc/sensors/ ]; then %>
   if ($("#mj_isp_sensorConfig")) {
     const inp = $("#mj_isp_sensorConfig");
     const sel = document.createElement("select");
@@ -226,6 +215,7 @@ echo "<a class=\"list-group-item list-group-item-danger\" href=\"?tab=all\">Show
     <% done %>
     inp.replaceWith(sel);
   }
+<% fi %>
 
   $("#mj_netip_enabled")?.addEventListener("change", (ev) => {
     $("#mj_netip_user").required = ev.target.checked;

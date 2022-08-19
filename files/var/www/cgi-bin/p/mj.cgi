@@ -1,4 +1,3 @@
-<%
 # line format: parameter|label|units|type|o,p,t,i,o,n,s|placeholder|hint
 # line format: parameter|type
 mj_retired="
@@ -51,10 +50,10 @@ mj="
 .osd.posY|Vertical position of OSD|px|number|-2000,2000,1|-100|
 .osd.privacyMasks|Privacy masks|px|string||0x0x234x640,2124x0x468x1300|Coordinates of masked areas separated by commas.
 .nightMode.enabled|Enable night mode||boolean|true,false|false|
-.nightMode.irSensorPin|GPIO pin of signal from IR sensor||number|1,100,1|62|
+.nightMode.irSensorPin|GPIO pin of signal from IR sensor||number|0,100,1|62|
 .nightMode.irSensorPinInvert|IR sensor signal is inverted||boolean|true,false|false|
-.nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|1,100,1|1|
-.nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|1,100,1|2|
+.nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|0,100,1|1|
+.nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|0,100,1|2|
 .nightMode.dncDelay|Delay before toggling Day/Night mode||range|1,60,1|20|
 .nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|1,100,1|65|
 .nightMode.nightAPI|Use night mode API||boolean|true,false|false|
@@ -122,11 +121,12 @@ mj="
 "
 
 # hide these settings unless in debug mode
-mj_params_debug=".isp.aGain .isp.dGain .isp.ispGain"
+mj_hide_unless_debug="isp_aGain isp_dGain isp_ispGain"
 
 # conditional settings limiters
 mj_show_audio_voiceEqualizer="gk7205v200 hi3516cv300 hi3516cv500 hi3516ev300 hi3519v101"
+mj_show_mjpeg_vendor="hisilicon"
+mj_hide_isp_sensorConfig_vendor="ingenic"
 mj_hide_video0_codec="hi3516cv200 hi3516cv100"
 mj_hide_video1_codec="hi3516cv200 hi3516cv100"
 mj_hide_motionDetect="hi3516cv100 hi3516av100"
-%>

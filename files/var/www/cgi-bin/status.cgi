@@ -30,7 +30,7 @@
       <dt>Hostname</dt>
       <dd><%= $network_hostname %></dd>
       <dt>WAN MAC</dt>
-      <dd><%= $network_wan_mac %></dd>
+      <dd><%= $network_macaddr %></dd>
     </dl>
   </div>
 

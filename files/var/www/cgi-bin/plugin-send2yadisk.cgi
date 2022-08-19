@@ -49,22 +49,17 @@ fi
     <div class="col">
       <% field_text "yadisk_username" "Yandex Disk username" %>
       <% field_password "yadisk_password" "Yandex Disk password" "Create a dedicated password for application (WebDAV)." %>
+    </div>
+    <div class="col">
       <% field_text "yadisk_path" "Yandex Disk path" %>
       <% field_switch "yadisk_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
-      <% button_submit %>
     </div>
-  </form>
-  <div class="col">
-    <% ex "cat $config_file" %>
+    <div class="col">
+      <% ex "cat $config_file" %>
+      <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
+    </div>
   </div>
-  <div class="col">
-    <% preview %>
-    <% if [ "true" = "$yadisk_enabled" ]; then %>
-      <p><a href="send2yadisk.cgi" class="btn btn-primary" id="send-to-yadisk">Send to Yandex Disk</a></p>
-    <% fi %>
-  </div>
-</div>
-
-<% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
+  <% button_submit %>
+</form>
 
 <%in p/footer.cgi %>

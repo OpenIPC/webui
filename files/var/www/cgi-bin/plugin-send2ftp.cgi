@@ -50,30 +50,25 @@ fi
 <%in p/header.cgi %>
 
 <form action="<%= $SCRIPT_NAME %>" method="post">
-  <% field_switch "ftp_enabled" "Enable FTP Storage" %>
+  <% field_switch "ftp_enabled" "Enable sending to FTP server" %>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
     <div class="col">
       <% field_text "ftp_host" "FTP host" %>
       <% field_text "ftp_port" "FTP port" %>
       <% field_text "ftp_username" "FTP username" %>
       <% field_password "ftp_password" "FTP password" %>
+    </div>
+    <div class="col">
       <% field_text "ftp_path" "FTP path" "relative to FTP root directory" %>
       <% field_text "ftp_template" "File template" "Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format." %>
       <% field_switch "ftp_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
-      <% button_submit %>
     </div>
-  </form>
-  <div class="col">
-    <% ex "cat $config_file" %>
+    <div class="col">
+      <% ex "cat $config_file" %>
+      <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
+    </div>
   </div>
-  <div class="col">
-    <% preview %>
-    <% if [ "true" = "$ftp_enabled" ]; then %>
-      <p><a href="send2ftp.cgi" class="btn btn-primary" id="send-to-ftp">Send to FTP Storage</a></p>
-    <% fi %>
-  </div>
-</div>
-
-<% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
+  <% button_submit %>
+</form>
 
 <%in p/footer.cgi %>

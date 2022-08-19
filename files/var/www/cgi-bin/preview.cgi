@@ -13,13 +13,14 @@ size_h=${size#*x}
   <div class="col-md-8 col-xl-9 col-xxl-9 position-relative mb-3">
     <ul class="nav nav-tabs" role="tablist">
       <% tab_lap "jpeg" "JPEG" "active" %>
-      <% tab_lap "mjpeg" "MJPEG" %>
+      <% [ "hisilicon" = "$soc_vendor" ] && tab_lap "mjpeg" "MJPEG" %>
       <% tab_lap "video" "Video" %>
     </ul>
     <div class="tab-content p-2" id="tab-content">
       <div id="jpeg-tab-pane" role="tabpanel" class="tab-pane fade active show" aria-labelledby="jpeg-tab" tabindex="0">
         <% preview 1 %>
       </div>
+    <% if [ "hisilicon" = "$soc_vendor" ]; then %>
       <div id="mjpeg-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="mjpeg-tab" tabindex="0">
         <div class="ratio ratio-16x9">
           <% if [ "true" = "$(yaml-cli -g .jpeg.enabled)" ]; then %>
@@ -37,6 +38,7 @@ size_h=${size#*x}
           <% fi %>
         </div>
       </div>
+    <% fi %>
       <div id="video-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="video-tab" tabindex="0">
         <div class="ratio ratio-16x9">
           <video id="preview-video" poster="http://<%= $network_address %>/image.jpg" autoplay>
@@ -59,27 +61,33 @@ size_h=${size#*x}
         </div>
       </div>
       <div class="input-group">
-        <button class="form-control btn btn-primary text-start" type="button" id="send-to-email">Send to email</button>
+        <button class="form-control btn btn-primary text-start" type="button" data-sendto="email">Send to email</button>
         <div class="input-group-text">
           <a href="plugin-send2email.cgi" title="Email settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
       <div class="input-group">
-        <button class="form-control btn btn-primary text-start" type="button" id="send-to-ftp">Send to FTP</button>
+        <button class="form-control btn btn-primary text-start" type="button" data-sendto="ftp">Send to FTP</button>
         <div class="input-group-text">
           <a href="plugin-send2ftp.cgi" title="FTP Storage settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
       <div class="input-group">
-        <button class="form-control btn btn-primary text-start" type="button" id="send-to-telegram">Send to Telegram</button>
+        <button class="form-control btn btn-primary text-start" type="button" data-sendto="telegram">Send to Telegram</button>
         <div class="input-group-text">
           <a href="plugin-send2telegram.cgi" title="Telegram bot settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
       <div class="input-group">
-        <button class="form-control btn btn-primary text-start" type="button" id="send-to-yadisk">Send to Yandex Disk</button>
+        <button class="form-control btn btn-primary text-start" type="button" data-sendto="yadisk">Send to Yandex Disk</button>
         <div class="input-group-text">
           <a href="plugin-send2yadisk.cgi" title="Yandex Disk bot settings"><img src="/a/gear.svg" alt="Gear"></a>
+        </div>
+      </div>
+      <div class="input-group">
+        <button class="form-control btn btn-primary text-start" type="button" data-sendto="openwall">Send to Open Wall</button>
+        <div class="input-group-text">
+          <a href="plugin-send2openwall.cgi" title="Open Wall settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
     </div>
@@ -92,10 +100,10 @@ size_h=${size#*x}
 <script>
 const network_address = "<%= $network_address %>";
 
-<% [ "true" != "$email_enabled"    ] && echo "\$('#send-to-email').disabled = true;" %>
-<% [ "true" != "$ftp_enabled"      ] && echo "\$('#send-to-ftp').disabled = true;" %>
-<% [ "true" != "$telegram_enabled" ] && echo "\$('#send-to-telegram').disabled = true;" %>
-<% [ "true" != "$yadisk_enabled"   ] && echo "\$('#send-to-yadisk').disabled = true;" %>
+<% [ "true" != "$email_enabled"    ] && echo "\$('button[data-sendto=email]').disabled = true;" %>
+<% [ "true" != "$ftp_enabled"      ] && echo "\$('button[data-sendto=ftp]').disabled = true;" %>
+<% [ "true" != "$telegram_enabled" ] && echo "\$('button[data-sendto=telegram]').disabled = true;" %>
+<% [ "true" != "$yadisk_enabled"   ] && echo "\$('button[data-sendto=yadisk]').disabled = true;" %>
 
 function reqListener(data) {
   console.log(data.responseText);
@@ -126,37 +134,14 @@ $("#toggle-night-mode")?.addEventListener("click", event => {
   xhr.send("mode=toggle");
 });
 
-$("#send-to-email")?.addEventListener("click", event => {
+$$("button[data-sendto]").forEach(el => el.addEventListener("click", event => {
     event.preventDefault();
     if (!confirm("Are you sure?")) return false;
+    const tgt = event.target.dataset["sendto"];
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/cgi-bin/send2email.cgi");
+    xhr.open("GET", "/cgi-bin/send.cgi?to=" + tgt);
     xhr.send();
-})
-
-$("#send-to-ftp")?.addEventListener("click", event => {
-    event.preventDefault();
-    if (!confirm("Are you sure?")) return false;
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/cgi-bin/send2ftp.cgi");
-    xhr.send();
-})
-
-$("#send-to-telegram")?.addEventListener("click", event => {
-    event.preventDefault();
-    if (!confirm("Are you sure?")) return false;
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/cgi-bin/send2telegram.cgi");
-    xhr.send();
-});
-
-$("#send-to-yadisk")?.addEventListener("click", event => {
-    event.preventDefault();
-    if (!confirm("Are you sure?")) return false;
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/cgi-bin/send2yadisk.cgi");
-    xhr.send();
-});
+}))
 
 $("#speed")?.addEventListener("click", event => {
   event.preventDefault();
@@ -169,17 +154,21 @@ $$('button[data-bs-toggle=tab]').forEach(el => el.addEventListener('shown.bs.tab
     $('#preview-jpeg').addEventListener('load', updatePreview);
     updatePreview();
   }
+<% if [ "hisilicon" = "$soc_vendor" ]; then %>
   if (event.target.id == "#mjpeg-tab") {
     $('#preview-mjpeg').src = "http://<%= $network_address %>/mjpeg";
   }
+<% fi %>
 
   if (event.relatedTarget) {
     if (event.relatedTarget.id == "#jpeg-tab") {
       $('#preview-jpeg').removeEventListener('load', updatePreview);
     }
+<% if [ "hisilicon" = "$soc_vendor" ]; then %>
     if (event.relatedTarget.id == "#mjpeg-tab") {
       $('#preview-mjpeg').src="http://<%= $network_address %>/image.jpg";
     }
+<% fi %>
   }
 }));
 </script>

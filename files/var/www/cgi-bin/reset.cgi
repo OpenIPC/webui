@@ -7,7 +7,7 @@
   <div class="col">
     <div class="alert alert-danger">
       <h4>Reboot camera</h4>
-      <p>Reboot camera to apply new settings. That will also delete all data on partitions mounted into system memory, like /tmp and such.</p>
+      <p>Reboot camera to apply new settings. That will also delete all data on partitions mounted into system memory, e.g. /tmp.</p>
       <% button_reboot %>
     </div>
   </div>

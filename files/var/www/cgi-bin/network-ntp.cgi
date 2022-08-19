@@ -11,7 +11,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in
     reset)
       cp /rom/etc/ntp.conf /etc/ntp.conf
-      redirect_back "success" "Configuration reset to firware defaults."
+      redirect_back "success" "Configuration reset to firmware defaults."
       ;;
     sync)
       /usr/sbin/ntpd -n -q -N
@@ -38,10 +38,10 @@ fi
 
 <%in p/header.cgi %>
 
-<div class="row row-cols-1 row-cols-lg-3 g-4 mb-4">
-  <div class="col">
-    <form action="<%= $SCRIPT_NAME %>" method="post">
-      <% field_hidden "action" "update" %>
+<form action="<%= $SCRIPT_NAME %>" method="post">
+  <% field_hidden "action" "update" %>
+  <div class="row row-cols-1 row-cols-lg-3 g-4 mb-4">
+    <div class="col">
 <%
 for _i in 0 1 2 3; do
   _x=$(expr $_i + 1)
@@ -49,25 +49,26 @@ for _i in 0 1 2 3; do
   field_text "ntp_server_${_i}" "NTP Server $(( _i + 1 ))"
 done; unset _i; unset _x
 %>
-      <% button_submit %>
-    </form>
+    </div>
+    <div class="col">
+      <% ex "cat $config_file" %>
+    </div>
+    <div class="col">
+      <p>Camera time: <% date +"%H:%M %Z" %></p>
+      <form action="<%= $SCRIPT_NAME %>" method="post">
+        <% field_hidden "action" "sync" %>
+        <% button_submit "Synchronize camera time" "primary" %>
+      </form>
+    </div>
   </div>
-  <div class="col">
-    <% ex "cat $config_file" %>
-    <% if [ "$(diff -q -- "/rom${config_file}" "$config_file")" ]; then %>
-    <form action="<%= $SCRIPT_NAME %>" method="post">
-      <% field_hidden "action" "reset" %>
-      <% button_submit "Restore firmware defaults" "danger" %>
-    </form>
-    <% fi %>
-  </div>
-  <div class="col">
-    <p>Camera time: <% date +"%H:%M %Z" %></p>
-    <form action="<%= $SCRIPT_NAME %>" method="post">
-      <% field_hidden "action" "sync" %>
-      <% button_submit "Synchronize camera time" "primary" %>
-    </form>
-  </div>
-</div>
+  <% button_submit %>
+</form>
+
+<% if [ "$(diff -q -- "/rom${config_file}" "$config_file")" ]; then %>
+  <form action="<%= $SCRIPT_NAME %>" method="post" class="mt-4">
+    <% field_hidden "action" "reset" %>
+    <% button_submit "Restore firmware defaults" "danger" %>
+  </form>
+<% fi %>
 
 <%in p/footer.cgi %>

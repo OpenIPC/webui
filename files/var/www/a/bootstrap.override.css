@@ -85,6 +85,7 @@ dl.list dd {
     font-size: 1.3rem;
     margin-bottom: 1.5rem;
 }
+
 .container {
     display: block;
 }
@@ -129,6 +130,11 @@ p.range span.show-value {
 
 .nav-link {
     cursor: pointer;
+}
+
+.nav-link.active {
+    background: var(--bs-blue);
+    color: #ffffff;
 }
 
 .tab-pane {

@@ -32,7 +32,7 @@ fi
       <p>Use the following credentials to set up remote access via active virtual tunnel:</p>
       <dl class="mb-0">
         <dt>Tunnel ID</dt>
-        <dd><%= ${network_wan_mac//:/} | tr a-z A-Z %></dd>
+        <dd><%= ${network_macaddr//:/} | tr a-z A-Z %></dd>
         <dt>Password</dt>
         <dd><% grep password $conf_file | xargs | cut -d' ' -f2 | sed 's/;$//' %>
       </dl>

@@ -43,9 +43,25 @@ fi
 %>
 <%in p/header.cgi %>
 
+<form action="<%= $SCRIPT_NAME %>" method="post">
+  <% field_switch "telegram_enabled" "Enable sending to Telegram" %>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+    <div class="col">
+      <% field_text "telegram_token" "Token" "Your Telegram Bot authentication token." %>
+      <% field_text "telegram_channel" "Chat ID" "Numeric ID of the channel you want the bot to post images to." %>
+      <% field_switch "telegram_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
+    </div>
+    <div class="col">
+      <% ex "cat $config_file" %>
+      <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
+    </div>
+  </div>
+  <% button_submit %>
+</form>
+
 <% if [ -z "$telegram_token" ]; then %>
-<div class="alert alert-info">
-  <h4>To create a new channel for your Telegram bot:</h4>
+<div class="alert alert-info mt-4">
+  <h5>To create a channel for your Telegram bot:</h5>
   <ol>
     <li>Start a chat with <a href=\"https://t.me/BotFather\">@BotFather</a></li>
     <li>Enter <code>/start</code> to start a session.</li>
@@ -56,28 +72,5 @@ fi
   </ol>
 </div>
 <% fi %>
-
-<form action="<%= $SCRIPT_NAME %>" method="post">
-  <% field_switch "telegram_enabled" "Enable sending to Telegram" %>
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
-    <div class="col">
-      <% field_text "telegram_token" "Token" "Your Telegram Bot authentication token." %>
-      <% field_text "telegram_channel" "Chat ID" "Numeric ID of the channel you want the bot to post images to." %>
-      <% field_switch "telegram_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
-      <% button_submit %>
-    </div>
-  </form>
-  <div class="col">
-    <% ex "cat $config_file" %>
-  </div>
-  <div class="col">
-    <% preview %>
-    <% if [ "true" = "$telegram_enabled" ]; then %>
-      <p><a href="send2telegram.cgi" class="btn btn-primary" id="send-to-telegram">Send to Telegram</a></p>
-    <% fi %>
-  </div>
-</div>
-
-<% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
 
 <%in p/footer.cgi %>

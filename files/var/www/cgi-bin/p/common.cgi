@@ -61,6 +61,10 @@ time_http() {
   fi
 }
 
+button_download() {
+  echo "<a href=\"dl2.cgi?log=${1}\" class=\"btn btn-primary\">Download log</a>"
+}
+
 button_mj_backup() {
   echo "<form action=\"majestic-config-actions.cgi\" method=\"post\">" \
     "<input type=\"hidden\" name=\"action\" value=\"backup\">"
@@ -397,8 +401,9 @@ Server: $SERVER_SOFTWARE
 }
 
 html_title() {
-  [ -n "$1" ] && echo -n "$1 - "
-  echo -n "OpenIPC"
+  [ -n "$page_title" ] && echo -n "$page_title"
+  [ -n "$title" ] && echo -n ": $title"
+  echo -n " - OpenIPC"
 }
 
 # label "name" "classes" "extras" "units"
@@ -553,7 +558,7 @@ sanitize() {
 }
 
 generate_signature() {
-  echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash, ${fw_version}-${fw_variant}, ${network_hostname}, ${network_wan_mac}" >$signature_file
+  echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash, ${fw_version}-${fw_variant}, ${network_hostname}, ${network_macaddr}" >$signature_file
 }
 
 signature() {
@@ -600,6 +605,7 @@ update_caminfo() {
   sensor_ini=$(ipcinfo --long-sensor)
   soc=$(ipcinfo --chip-name)
   soc_family=$(ipcinfo --family)
+  soc_vendor=$(ipcinfo --vendor)
 
   # ipcinfo reports to stderr
   if [ "Temperature cannot be retrieved" = "$(ipcinfo --temp 2>&1)" ]; then
@@ -630,16 +636,18 @@ update_caminfo() {
   _default_route="$(ip r | grep ^default)"
   if [ -n "$_default_route" ]; then
     _default_iface=$(echo "$_default_route" | awk '{print $5}')
-    network_wan_mac=$(cat /sys/class/net/${_default_iface}/address)
+    network_macaddr=$(cat /sys/class/net/${_default_iface}/address)
     network_gateway=$(echo "$_default_route" | awk '{print $3}')
+    network_netmask=$(ifconfig $_default_iface | grep "Mask:" | cut -d: -f4)
+  else
+    network_macaddr=$(fw_printenv -n ethaddr)
+    network_gateway=$(fw_printenv -n gatewayip)
+    network_netmask=''
   fi; unset _default_route; unset _default_iface
 
   network_hostname=$(hostname -s)
   network_interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | tr '\n' ' ' | sed 's/ $//' )
   network_address=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
-  # FIXME: multiple interfaces give multiple addresses
-  network_macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/ //g" | uniq | tail -1)
-  network_netmask=$(ifconfig eth0 | grep "inet " | cut -d: -f4)
 
   overlay_root=$(mount | grep upperdir= | sed -r 's/^.*upperdir=([a-z\/]+).+$/\1/')
 
@@ -664,12 +672,12 @@ network_hostname=\"$network_hostname\"
 network_interfaces=\"$network_interfaces\"
 network_macaddr=\"$network_macaddr\"
 network_netmask=\"$network_netmask\"
-network_wan_mac=\"$network_wan_mac\"
 overlay_root=\"$overlay_root\"
 mj_version=\"$mj_version\"
 soc=\"$soc\"
 soc_family=\"$soc_family\"
 soc_has_temp=\"$soc_has_temp\"
+soc_vendor=\"$soc_vendor\"
 sensor=\"$sensor\"
 sensor_ini=\"$sensor_ini\"
 tz_data=\"$tz_data\"
@@ -737,6 +745,7 @@ pagename=$(basename "$SCRIPT_NAME")
 pagename="${pagename%%.*}"
 
 include p/locale_en.sh
+include p/mj.cgi
 include /etc/webui/socks5.conf
 include /etc/webui/telegram.conf
 include /etc/webui/yadisk.conf

@@ -5,6 +5,7 @@ attempt=0
 LIMIT_ATTEMPTS=5
 SECONDS_TO_EXPIRE=120
 LOG_FILE=/tmp/snapshot4cron.log
+LOCK_FILE=/tmp/snapshot4cron.lock
 
 PID=$$
 
@@ -25,6 +26,7 @@ get_snapshot() {
   attempt=$(( $attempt + 1 ))
   if [ "$attempt" -ge "$LIMIT_ATTEMPTS" ]; then
     log "Cannot get a snapshot. Maximum amount of retries reached."
+    rm "$LOCK_FILE"
     exit 1
   fi
 
@@ -45,6 +47,13 @@ while getopts fh flag; do
   esac
 done
 
+if [ -f "$LOCK_FILE" ] && [ "true" != "$force" ]; then
+  log "Another process is running. Exiting."
+  exit 1
+fi
+
+touch "$LOCK_FILE"
+
 log "$0 started."
 
 if [ "true" = "$force" ]; then
@@ -61,5 +70,7 @@ else
 fi
 
 log "$0 finished."
+
+rm "$LOCK_FILE"
 
 exit 0

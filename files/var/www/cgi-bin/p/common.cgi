@@ -201,7 +201,7 @@ field_number() {
   echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}\" value=\"${_v}\">"
   # NB! no name on range, since we don't want its data submitted
   echo "<input type=\"number\" id=\"${_n}-range\" class=\"form-control text-end\"" \
-      " value=\"${_vr}\" min=\"${_mn}\" max=\"${_mx}\" step=\"${_st}\" value=\"${_v}\">" \
+      " value=\"${_vr}\" min=\"${_mn}\" max=\"${_mx}\" step=\"${_st}\">" \
     "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"

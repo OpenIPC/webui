@@ -22,7 +22,7 @@ fw_version=$(grep "OPENIPC_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)
 network_hostname=$(hostname -s)
 network_macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/ //g" | uniq | tail -1)
 sensor=$(ipcinfo --short-sensor)
-soc=$(ipcinfo --chip-name)
+soc=$(ipcinfo --chip-id)
 soc_temperature=$(ipcinfo --temp)
 uptime=$(uptime | sed -r 's/^.+ up ([^,]+), .+$/\1/')
 

@@ -187,7 +187,7 @@ field_number() {
   _v=$(t_value "$_n")
 
   _vr=$_v
-  [ -z "$_vr" -o "$_ab" = "$_vr" ] && _vr=$(( ( $_mn + $_mx ) / 2 ))
+  [ -n "$_ab" ] && [ "$_ab" = "$_v" ] && _vr=$(( ( $_mn + $_mx ) / 2 ))
 
   echo "<p class=\"number\">" \
     "<label class=\"form-label\" for=\"${_n}\">${_l}</label>" \

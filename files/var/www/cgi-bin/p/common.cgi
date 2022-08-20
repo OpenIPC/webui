@@ -170,28 +170,42 @@ field_hidden() {
 
 # field_number "name" "label" "range" "hint"
 field_number() {
+  _n=$1
+
   _l=$2
   [ -z "$_l" ] && _l="$(t_label "$1")"
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
 
-  # min, max, step, button
-  _r=$3
-  _f=$(echo "$_r" | cut -d, -f1)
-  _t=$(echo "$_r" | cut -d, -f2)
-  _s=$(echo "$_r" | cut -d, -f3)
-  _b=$(echo "$_r" | cut -d, -f4)
+  _r=$3 # min,max,step,button
+  _mn=$(echo "$_r" | cut -d, -f1)
+  _mx=$(echo "$_r" | cut -d, -f2)
+  _st=$(echo "$_r" | cut -d, -f3)
+  _ab=$(echo "$_r" | cut -d, -f4)
 
   _h=$4
 
-  _v=$(t_value "$1")
+  _v=$(t_value "$_n")
+
+  _vr=$_v
+  [ -z "$_vr" -o "$_ab" = "$_vr" ] && _vr=$(( ( $_mn + $_mx ) / 2 ))
 
   echo "<p class=\"number\">" \
-    "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
-    "<input type=\"number\" name=\"${1}\" id=\"${1}\" class=\"form-control text-end\"" \
-      " value=\"${_v}\" min=\"${_f}\" max=\"${_t}\" step=\"${_s}\" value=\"${_v}\">"
+    "<label class=\"form-label\" for=\"${_n}\">${_l}</label>" \
+    "<span class=\"input-group\">"
+  # NB! no name on checkbox, since we don't want its data submitted
+  [ -n "$_ab" ] && echo "<label class=\"input-group-text\" for=\"${_n}-auto\">${_ab}" \
+    "<input type=\"checkbox\" class=\"form-check-input auto-value ms-1\" id=\"${_n}-auto\"" \
+      " data-for=\"${_n}\" data-value=\"${_vr}\" $(t_checked "$_ab" "$_v")>" \
+    "</label>"
+  # Input that holds the submitting value.
+  echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}\" value=\"${_v}\">"
+  # NB! no name on range, since we don't want its data submitted
+  echo "<input type=\"number\" id=\"${_n}-range\" class=\"form-control text-end\"" \
+      " value=\"${_vr}\" min=\"${_mn}\" max=\"${_mx}\" step=\"${_st}\" value=\"${_v}\">" \
+    "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
-  unset _b; unset _f; unset _h; unset _l; unset _r; unset _s; unset _t; unset _v
+  unset _ab; unset _h; unset _l; unset _mn; unset _mx; unset _n; unset _r; unset _st; unset _v
 }
 
 # field_password "name" "label" "hint"

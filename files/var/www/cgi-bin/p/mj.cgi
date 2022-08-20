@@ -28,7 +28,7 @@ mj="
 .isp.slowShutter|Slow shutter||select|disabled,low,medium,high|low|Automatic frame rate reduction mode.
 .isp.antiFlicker|Anti-flicker||select|disabled,50,60|disabled|Usually, the utility frequency in your grid line.
 .isp.blkCnt|Block count||number|1,32,1|4|Use 4 for small memory systems, 10+ for performant SoCs.
-.isp.exposure|Sensor exposure time|&micro;s|range|1,200,1,auto|auto|From 1 to 200.
+.isp.exposure|Sensor exposure time|&micro;s|number|1,500000,1,auto|auto|From 1 to 500,000.
 .isp.aGain|Sensor analog gain||number|1,10000,1|1|
 .isp.dGain|Sensor digital gain||number|1,10000,1|1|
 .isp.ispGain|ISP gain||number|1,10000,1|1|
@@ -121,7 +121,7 @@ mj="
 "
 
 # hide these settings unless in debug mode
-mj_hide_unless_debug="isp_aGain isp_dGain isp_ispGain"
+mj_hide_unless_debug="isp_aGain isp_dGain isp_ispGain isp_exposure"
 
 # conditional settings limiters
 mj_show_audio_voiceEqualizer="gk7205v200 hi3516cv300 hi3516cv500 hi3516ev300 hi3519v101"

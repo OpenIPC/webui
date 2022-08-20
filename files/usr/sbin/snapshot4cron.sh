@@ -48,7 +48,8 @@ while getopts fh flag; do
 done
 
 if [ -f "$LOCK_FILE" ] && [ "true" != "$force" ]; then
-  log "Another process is running. Exiting."
+  log "Another process is running. Exiting after 3 seconds."
+  sleep 3
   exit 1
 fi
 

@@ -39,7 +39,7 @@ log "done"
 bundle_name=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/[: ]//g" | uniq)-$(date +"%Y%m%d-%H%M%S").tgz
 
 # FIXME: can be read from /tmp/sysinfo.txt
-soc=$(ipcinfo --chip-id)
+soc=$(ipcinfo --chip-name)
 family=$(ipcinfo --family)
 vendor=$(ipcinfo --vendor)
 sensor=$(ipcinfo --long-sensor)

@@ -4,7 +4,7 @@ snapshot="/tmp/snapshot4cron.jpg"
 attempt=0
 LIMIT_ATTEMPTS=5
 SECONDS_TO_EXPIRE=120
-LOG_FILE=/tmp/webui/snapshot4cron.log
+LOG_FILE=/tmp/snapshot4cron.log
 
 PID=$$
 

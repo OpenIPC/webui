@@ -14,6 +14,11 @@ log() {
   echo "$1"
 }
 
+log_and_run() {
+  log "$1"
+  log "$(eval "$1" 2>&1)"
+}
+
 show_help() {
   echo "Usage: $0 [-f ] [-h]
   -f   Saving a new snapshot, no matter what.
@@ -30,7 +35,8 @@ get_snapshot() {
     exit 1
   fi
 
-  curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
+
+  log_and_run "curl --silent --verbose --fail --url http://127.0.0.1/image.jpg?t=$(date +"%s") --output ${snapshot}"
   if [ $? -eq 0 ]; then
     log "Snapshot saved to ${snapshot} at ${attempt} attempt."
     return

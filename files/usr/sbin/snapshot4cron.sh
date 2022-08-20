@@ -4,6 +4,14 @@ snapshot="/tmp/snapshot4cron.jpg"
 attempt=0
 LIMIT_ATTEMPTS=5
 SECONDS_TO_EXPIRE=120
+LOG_FILE=/tmp/webui/snapshot4cron.log
+
+PID=$$
+
+log() {
+  echo "$(date +%s) [${PID}] ${1}" >>$LOG_FILE
+  echo "$1"
+}
 
 show_help() {
   echo "Usage: $0 [-f ] [-h]
@@ -16,17 +24,17 @@ show_help() {
 get_snapshot() {
   attempt=$(( $attempt + 1 ))
   if [ "$attempt" -ge "$LIMIT_ATTEMPTS" ]; then
-    echo "Cannot get a snapshot. Maximum amount of retries reached."
+    log "Cannot get a snapshot. Maximum amount of retries reached."
     exit 1
   fi
 
   curl "http://127.0.0.1/image.jpg?t=$(date +"%s")" --output "$snapshot" --silent
   if [ $? -eq 0 ]; then
-    echo "Snapshot saved to ${snapshot} at ${attempt} attempt."
+    log "Snapshot saved to ${snapshot} at ${attempt} attempt."
     return
   fi
 
-  echo "Cannot get a snapshot. Attempt ${attempt}."
+  log "Cannot get a snapshot. Attempt ${attempt}."
   get_snapshot
 }
 
@@ -37,15 +45,21 @@ while getopts fh flag; do
   esac
 done
 
+log "$0 started."
+
 if [ "true" = "$force" ]; then
-  echo "Forced to comply."
+  log "Forced to comply."
   get_snapshot
 elif [ ! -f "$snapshot" ]; then
-  echo "Snapshot not found."
+  log "Snapshot not found."
   get_snapshot
 elif [ "$(date -r "$snapshot" +%s)" -le "$(( $(date +%s) - $SECONDS_TO_EXPIRE ))" ]; then
-  echo "Snapshot is expired."
+  log "Snapshot is expired."
   get_snapshot
 else
-  echo "Snapshot is up to date."
+  log "Snapshot is up to date."
 fi
+
+log "$0 finished."
+
+exit 0

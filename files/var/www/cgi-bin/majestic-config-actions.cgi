@@ -34,7 +34,7 @@ Pragma: no-cache
       rm $patch_file
       ;;
     reset)
-      cp -f $config_file_fw $config_file
+      /usr/sbin/majesticreset.sh
       redirect_back
       ;;
     restore)

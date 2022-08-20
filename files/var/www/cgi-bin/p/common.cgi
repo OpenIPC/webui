@@ -197,10 +197,7 @@ field_number() {
     "<input type=\"checkbox\" class=\"form-check-input auto-value ms-1\" id=\"${_n}-auto\"" \
       " data-for=\"${_n}\" data-value=\"${_vr}\" $(t_checked "$_ab" "$_v")>" \
     "</label>"
-  # Input that holds the submitting value.
-  echo "<input type=\"hidden\" name=\"${_n}\" id=\"${_n}\" value=\"${_v}\">"
-  # NB! no name on range, since we don't want its data submitted
-  echo "<input type=\"number\" id=\"${_n}-range\" class=\"form-control text-end\"" \
+  echo "<input type=\"number\" id=\"${_n}\" name=\"${_n}\" class=\"form-control text-end\"" \
       " value=\"${_vr}\" min=\"${_mn}\" max=\"${_mx}\" step=\"${_st}\">" \
     "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"

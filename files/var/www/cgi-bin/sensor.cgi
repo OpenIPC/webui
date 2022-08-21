@@ -40,11 +40,11 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     case "$type" in
     driver)
       mv "$file_path" "/usr/lib/sensors/${file_name}"
-      redirect_to "sensor-upload.cgi" "success" "Sensor driver uploaded."
+      redirect_to $SCRIPT_NAME "success" "Sensor driver uploaded."
       ;;
     config)
       mv "$file_path" "/etc/sensors/${file_name}"
-      redirect_to "sensor-upload.cgi" "success" "Sensor config uploaded."
+      redirect_to $SCRIPT_NAME "success" "Sensor config uploaded."
       ;;
     esac
   fi
@@ -61,7 +61,7 @@ fi
   </div>
   <div class="col">
     <h3>Upload sensor driver</h3>
-    <form action="sensor-upload.cgi" method="post" enctype="multipart/form-data">
+    <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">
       <% field_file "sensor_driver_file" "Sensor driver file" %>
       <% button_submit "Upload file" %>
     </form>
@@ -72,7 +72,7 @@ fi
   </div>
   <div class="col">
     <h3>Upload sensor config</h3>
-    <form action="sensor-upload.cgi" method="post" enctype="multipart/form-data">
+    <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">
       <% field_file "sensor_config_file" "Sensor config file" %>
       <% button_submit "Upload file" %>
     </form>

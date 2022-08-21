@@ -26,7 +26,7 @@
       <dt>Version</dt>
       <dd><%= "${fw_version}-${fw_variant} ${$fw_build}" %></dd>
       <dt>Majestic</dt>
-      <dd><%= /usr/bin/majestic -v %></dd>
+      <dd><%= $mj_version %></dd>
       <dt>Hostname</dt>
       <dd><%= $network_hostname %></dd>
       <dt>WAN MAC</dt>

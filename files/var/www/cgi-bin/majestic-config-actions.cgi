@@ -34,7 +34,7 @@ Pragma: no-cache
       rm $patch_file
       ;;
     reset)
-      /usr/sbin/majesticreset.sh
+      /usr/sbin/sysreset.sh -m
       redirect_back
       ;;
     restore)

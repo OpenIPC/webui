@@ -61,7 +61,7 @@ if [ -z "$telegram_message" ]; then
   fi
 fi
 
-command="curl --silent" # --insecure
+command="curl" # --silent --insecure
 [ "1" = "$verbose" ] && command="${command} --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout}"

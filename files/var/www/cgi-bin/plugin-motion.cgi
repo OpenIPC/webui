@@ -48,7 +48,7 @@ THRESHOLD=${motion_sensitivity}
 SECONDS_TO_EXPIRE=10
 STOP_FILE=/tmp/motion.stop
 LOG_FILE=/tmp/motion.log
-logread -f | grep \"Motion detected in \d* regions\" | while read BEER; do
+logread -f | grep \"Motion detected in \d* regions\" | sed -E \"s/.*(Motion detected in \d* regions).*/\\1/\" | while read BEER; do
   echo \"\$BEER\" >> \$LOG_FILE
   if [ \"\$(echo \$BEER | cut -d' ' -f4)\" -lt \"\$THRESHOLD\" ]; then
     echo \"Low activity. Skipping.\" >> \$LOG_FILE

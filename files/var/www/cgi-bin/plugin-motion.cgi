@@ -50,8 +50,8 @@ STOP_FILE=/tmp/motion.stop
 LOG_FILE=/tmp/motion.log
 logread -f | grep \"Motion detected in \d* regions\" | while read BEER; do
   echo \"\$BEER\" >> \$LOG_FILE
-  [ \"\$(echo \$BEER | cut -d' ' -f4)\" -lt \"\$THRESHOLD\" ] && continue;
-  [ \"\$(date -r \"\$STOP_FILE\" +%s)\" -ge \"\$(( \$(date +%s) - \$SECONDS_TO_EXPIRE ))\" ] && exit
+  [ \"\$(echo \$BEER | cut -d' ' -f4)\" -lt \"\$THRESHOLD\" ] && continue
+  [ \"\$(date -r \"\$STOP_FILE\" +%s)\" -ge \"\$(( \$(date +%s) - \$SECONDS_TO_EXPIRE ))\" ] && continue
   touch \$STOP_FILE
   echo \"Reporting event\" >> \$LOG_FILE
   snapshot4cron.sh -f

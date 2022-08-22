@@ -36,11 +36,8 @@ get_snapshot() {
     exit 1
   fi
 
-  command="curl --silent --fail"
-  [ "1" = "$verbose" ] && command="${command} --verbose"
-  command="${command} --url http://127.0.0.1/image.jpg?t=$(date +"%s")"
-  command="${command} --output ${snapshot}"
-  log_and_run "$command"
+  # do not wrap in log_and_run because we need $?
+  curl --silent --fail --url http://127.0.0.1/image.jpg?t=$(date +"%s") --output ${snapshot} >>$LOG_FILE
   if [ $? -eq 0 ]; then
     log "Snapshot saved to ${snapshot} at ${attempt} attempt."
     return

@@ -71,7 +71,11 @@ command="${command} --user '${email_smtp_login}:${email_smtp_password}'"
 
 if [ "true" = "$email_attach_snapshot" ]; then
   snapshot4cron.sh
-  # [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+  exitcode=$?
+  if [ $exitcode -ne 0 ]; then
+    echo "Cannot get a snapshot. Exit code: $exitcode"
+    exit 2
+  fi
   snapshot=/tmp/snapshot4cron.jpg
   [ ! -f "$snapshot" ] && echo "Cannot find a snapshot" && exit 3
 

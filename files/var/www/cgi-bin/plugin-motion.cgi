@@ -4,7 +4,7 @@
 plugin="motion"
 plugin_name="Motion guard"
 page_title="Motion guard"
-params="enabled sensitivity send2email send2ftp send2telegram send2yadisk"
+params="enabled sensitivity send2email send2ftp send2telegram send2yadisk throttle"
 
 [ -n "$(echo "$mj_hide_motionDetect" | sed -n "/\b${soc_family}\b/p")" ] && redirect_to "/" "danger" "Motion detection is not supported on your camera."
 
@@ -38,51 +38,29 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     done; unset _p
     mv $tmp_file $config_file
 
-    update_caminfo
-
-    # create service file
     if [ "true" = "$motion_enabled" ]; then
-      :>$tmp_file
-      echo "#!/bin/sh
-THRESHOLD=${motion_sensitivity}
-SECONDS_TO_EXPIRE=10
-STOP_FILE=/tmp/motion.stop
-logread -f | grep \"Motion detected in \d* regions\" | sed -E \"s/.*(Motion detected in \d* regions).*/\\1/\" | while read BEER; do
-  [ \"\$(echo \$BEER | cut -d' ' -f4)\" -lt \"\$THRESHOLD\" ] && continue
-  [ \"\$(date -r \"\$STOP_FILE\" +%s)\" -ge \"\$(( \$(date +%s) - \$SECONDS_TO_EXPIRE ))\" ] && continue
-  touch \$STOP_FILE
-  snapshot4cron.sh -f
-  [ \$? -ne 0 ] && echo \"Cannot get a snapshot\" && exit 2" >>$tmp_file
-      [ "true" = "$motion_send2email"    ] && echo "  send2email.sh"    >>$tmp_file
-      [ "true" = "$motion_send2ftp"      ] && echo "  send2ftp.sh"      >>$tmp_file
-      [ "true" = "$motion_send2telegram" ] && echo "  send2telegram.sh" >>$tmp_file
-      [ "true" = "$motion_send2yadisk"   ] && echo "  send2yadisk.sh"   >>$tmp_file
-      echo "done &" >>$tmp_file
-      mv $tmp_file $service_file
-      chmod +x $service_file
-      touch /tmp/motionguard-restart.txt
-      redirect_to "$SCRIPT_NAME"
+      if [ -z "$(eval echo "DEBUG TRACE" | sed -n "/\b$(yaml-cli -g .system.logLevel)\b/p")" ]; then
+        # make required changes to majestic.yaml
+        _t=$(mktemp)
+        cp -f /tmp/majestic.yaml $_t
+        yaml-cli -i $_t -s .system.logLevel DEBUG
+        yaml-cli -i $_t -s .motionDetect.visualize true
+        yaml-cli -i $_t -s .motionDetect.debug true
+        mv -f $_t /tmp/majestic.yaml
+        unset _t
+      fi
     fi
 
-    # remove service file
-    if [ "false" = "$motion_enabled" ]; then
-      [ -f $service_file ] && rm $service_file
-      touch /tmp/motionguard-restart.txt
-      redirect_to "$SCRIPT_NAME"
-    fi
+    update_caminfo
+    touch /tmp/motionguard-restart.txt
+    redirect_to "$SCRIPT_NAME"
   fi
 else
   include $config_file
 
   # Default values
-  [ -z "$motion_sensitivity" ] && motion_sensitivity=3
-  if [ -f "$service_file" ]; then
-    motion_enabled="true"
-    [ -n "$(grep send2email.sh $service_file)"    ] && motion_send2email="true"
-    [ -n "$(grep send2ftp.sh $service_file)"      ] && motion_send2ftp="true"
-    [ -n "$(grep send2telegram.sh $service_file)" ] && motion_send2telegram="true"
-    [ -n "$(grep send2yadisk.sh $service_file)"   ] && motion_send2yadisk="true"
-  fi
+  [ -z "$motion_sensitivity" ] && motion_sensitivity=45
+  [ -z "$motion_throttle"    ] && motion_throttle=10
 fi
 %>
 <%in p/header.cgi %>
@@ -91,7 +69,8 @@ fi
   <% field_switch "motion_enabled" "Enable motion guard" %>
   <div class="row g-4 mb-4">
     <div class="col col-lg-4">
-      <% field_range "motion_sensitivity" "Sensitivity" "1,5,1" "1 - minimal sensitivity, 5 - maximum sensitivity" %>
+      <% field_range "motion_sensitivity" "Sensitivity" "1,50,1" "1 - minimal sensitivity, 10 - maximum sensitivity" %>
+      <% field_range "motion_throttle" "Delay between notifications, sec." "1,30,1" %>
       <% field_checkbox "motion_send2email" "Send to email" "<a href=\"plugin-send2email.cgi\">Configure sending to email</a>" %>
       <% field_checkbox "motion_send2ftp" "Upload to FTP" "<a href=\"plugin-send2ftp.cgi\">Configure uploading to FTP</a>" %>
       <% field_checkbox "motion_send2telegram" "Send to Telegram" "<a href=\"plugin-send2telegram.cgi\">Configure sending to Telegram</a>" %>

@@ -50,13 +50,13 @@ done
 
 if [ -z "$ftp_file" ]; then
   snapshot4cron.sh
-  [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+  # [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
   snapshot=/tmp/snapshot4cron.jpg
   [ ! -f "$snapshot" ] && echo "Cannot find a snapshot" && exit 3
   ftp_file=$snapshot
 fi
 
-command="curl --silent" # --insecure
+command="curl"
 [ "1" = "$verbose" ] && command="${command} --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout}"

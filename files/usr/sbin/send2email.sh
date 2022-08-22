@@ -53,7 +53,7 @@ done
 #[ -z "$email_to_name"   ] && email_to_name="OpenIPC Camera Admin"
 #[ -z "$email_subject"   ] && email_subject="Snapshot from OpenIPC Camera"
 
-command="curl --silent" # --insecure
+command="curl --silent"
 [ "1" = "$verbose" ] && command="${command} --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout}"
@@ -71,7 +71,7 @@ command="${command} --user '${email_smtp_login}:${email_smtp_password}'"
 
 if [ "true" = "$email_attach_snapshot" ]; then
   snapshot4cron.sh
-  [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+  # [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
   snapshot=/tmp/snapshot4cron.jpg
   [ ! -f "$snapshot" ] && echo "Cannot find a snapshot" && exit 3
 

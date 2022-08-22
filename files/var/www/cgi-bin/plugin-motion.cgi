@@ -43,12 +43,19 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     # create service file
     if [ "true" = "$motion_enabled" ]; then
       :>$tmp_file
-      echo "#!/bin/sh" >>$tmp_file
-      echo "threshold=${motion_sensitivity}" >>$tmp_file
-      echo "logread -f | grep \"Motion detected in \d* regions\" | while read BEER; do" >>$tmp_file
-      echo "  [ \"\$(echo \$BEER | cut -d' ' -f4)\" -lt \"\$threshold\" ] && exit;" >>$tmp_file
-      echo "  snapshot4cron.sh -f" >>$tmp_file
-      echo "  [ $? -ne 0 ] && echo \"Cannot get a snapshot\" && exit 2" >>$tmp_file
+      echo "#!/bin/sh
+THRESHOLD=${motion_sensitivity}
+SECONDS_TO_EXPIRE=10
+STOP_FILE=/tmp/motion.stop
+LOG_FILE=/tmp/motion.log
+logread -f | grep \"Motion detected in \d* regions\" | while read BEER; do
+  echo \"\$BEER\" >> \$LOG_FILE
+  [ \"\$(echo \$BEER | cut -d' ' -f4)\" -lt \"\$THRESHOLD\" ] && continue;
+  [ \"\$(date -r \"\$STOP_FILE\" +%s)\" -ge \"\$(( \$(date +%s) - \$SECONDS_TO_EXPIRE ))\" ] && exit
+  touch \$STOP_FILE
+  echo \"Reporting event\" >> \$LOG_FILE
+  snapshot4cron.sh -f
+  [ \$? -ne 0 ] && echo \"Cannot get a snapshot\" && exit 2" >>$tmp_file
       [ "true" = "$motion_send2email"    ] && echo "  send2email.sh"    >>$tmp_file
       [ "true" = "$motion_send2ftp"      ] && echo "  send2ftp.sh"      >>$tmp_file
       [ "true" = "$motion_send2telegram" ] && echo "  send2telegram.sh" >>$tmp_file

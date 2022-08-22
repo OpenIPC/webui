@@ -56,9 +56,15 @@ while getopts fhv flag; do
 done
 
 if [ -f "$LOCK_FILE" ] && [ "true" != "$force" ]; then
-  log "Another process is running. Exiting after 3 seconds."
-  sleep 3
-  exit 1
+  log "Another process is running."
+  _a=0
+  while [ ! -f "$snapshot" ]; do
+    echo "Waiting for a snapshot."
+    _a=$(( $_a + 1 ))
+    [ "$_a" -ge "5" ] && log "Maximum waiting time reached." && exit 2
+    sleep 1
+  done
+  exit 0
 fi
 
 touch "$LOCK_FILE"

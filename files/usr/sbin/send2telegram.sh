@@ -9,12 +9,13 @@ mkdir -p $(dirname $log_file)
 :>$log_file
 
 show_help() {
-  echo "Usage: $0 [-t token] [-c channel] [-m message] [-p photo] [-s] [-h]
+  echo "Usage: $0 [-t token] [-c channel] [-m message] [-p photo] [-s] [-b] [-v] [-h]
   -t token    Telegram bot token. See https://t.me/botfather if you need one.
   -c channel  Telegram channel ID. See https://gist.github.com/mraaroncruz/e76d19f7d61d59419002db54030ebe35
   -m message  Message text.
   -p photo    Path to photo file.
   -s          Disable notification.
+  -v          Verbose output.
   -h          Show this help.
 "
   exit 0
@@ -27,13 +28,14 @@ show_help() {
 telegram_disable_notification=false
 
 # override config values with command line arguments
-while getopts c:m:p:st:h flag; do
+while getopts c:m:p:st:vh flag; do
   case ${flag} in
   c) telegram_channel=${OPTARG} ;;
   m) telegram_message=${OPTARG} ;;
   p) telegram_photo=${OPTARG} ;;
   s) telegram_disable_notification=true ;;
   t) telegram_token=${OPTARG} ;;
+  v) verbose=1 ;;
   h) show_help ;;
   esac
 done
@@ -59,7 +61,8 @@ if [ -z "$telegram_message" ]; then
   fi
 fi
 
-command="curl --verbose --silent" # --insecure
+command="curl --silent" # --insecure
+[ "1" = "$verbose" ] && command="${command} --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout}"
 
@@ -85,6 +88,7 @@ command="${command} -F 'disable_notification=${telegram_disable_notification}'"
 
 echo "$command" >>$log_file
 eval "$command" >>$log_file 2>&1
-cat $log_file
+
+[ "1" = "$verbose" ] && cat $log_file
 
 exit 0

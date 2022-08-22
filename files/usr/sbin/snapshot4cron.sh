@@ -11,7 +11,7 @@ PID=$$
 
 log() {
   echo "$(date +%s) [${PID}] ${1}" >>$LOG_FILE
-  echo "$1"
+  [ "1" = "$verbose" ] && echo "$1"
 }
 
 log_and_run() {
@@ -20,8 +20,9 @@ log_and_run() {
 }
 
 show_help() {
-  echo "Usage: $0 [-f ] [-h]
+  echo "Usage: $0 [-f ] [-v] [-h]
   -f   Saving a new snapshot, no matter what.
+  -v   Verbose output.
   -h   Show this help.
 "
   exit 0
@@ -35,8 +36,11 @@ get_snapshot() {
     exit 1
   fi
 
-
-  log_and_run "curl --silent --verbose --fail --url http://127.0.0.1/image.jpg?t=$(date +"%s") --output ${snapshot}"
+  command="curl --silent --fail"
+  [ "1" = "$verbose" ] && command="${command} --verbose"
+  command="${command} --url http://127.0.0.1/image.jpg?t=$(date +"%s")"
+  command="${command} --output ${snapshot}"
+  log_and_run "$command"
   if [ $? -eq 0 ]; then
     log "Snapshot saved to ${snapshot} at ${attempt} attempt."
     return
@@ -46,10 +50,11 @@ get_snapshot() {
   get_snapshot
 }
 
-while getopts fh flag; do
+while getopts fhv flag; do
   case ${flag} in
   f) force=true ;;
   h) show_help ;;
+  v) verbose=1 ;;
   esac
 done
 

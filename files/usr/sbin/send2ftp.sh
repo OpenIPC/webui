@@ -9,13 +9,14 @@ mkdir -p $(dirname $log_file)
 :>$log_file
 
 show_help() {
-  echo "Usage: $0 [-h host] [-p port] [-u username] [-P password] [-d path] [-f file] [-h]
+  echo "Usage: $0 [-h host] [-p port] [-u username] [-P password] [-d path] [-f file] [-v] [-h]
   -s host     FTP server FQDN or IP address.
   -p port     FTP server port.
   -d path     Directory on server, relative to FTP root.
   -f file     File to upload.
   -u username FTP username.
   -P password FTP password.
+  -v          Verbose output.
   -h          Show this help.
 "
   exit 0
@@ -25,7 +26,7 @@ show_help() {
 [ -f "$config_file" ] && source $config_file
 
 # override config values with command line arguments
-while getopts d:f:p:P:s:u:h flag; do
+while getopts d:f:p:P:s:u:vh flag; do
   case ${flag} in
   d) ftp_path=${OPTARG} ;;
   f) ftp_file=${OPTARG} ;;
@@ -33,6 +34,7 @@ while getopts d:f:p:P:s:u:h flag; do
   P) ftp_password=${OPTARG} ;;
   s) ftp_host=${OPTARG} ;;
   u) ftp_username=${OPTARG} ;;
+  v) verbose=1 ;;
   h) show_help ;;
   esac
 done
@@ -54,7 +56,8 @@ if [ -z "$ftp_file" ]; then
   ftp_file=$snapshot
 fi
 
-command="curl --verbose --silent" # --insecure
+command="curl --silent" # --insecure
+[ "1" = "$verbose" ] && command="${command} --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout}"
 
@@ -77,6 +80,7 @@ command="${command} --ftp-create-dirs"
 
 echo "$command" >>$log_file
 eval "$command" >>$log_file 2>&1
-cat $log_file
+
+[ "1" = "$verbose" ] && cat $log_file
 
 exit 0

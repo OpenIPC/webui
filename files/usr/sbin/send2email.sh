@@ -9,11 +9,12 @@ mkdir -p $(dirname $log_file)
 :>$log_file
 
 show_help() {
-  echo "Usage: $0 [-f address] [-t address] [-s subject] [-b body] [-h]
+  echo "Usage: $0 [-f address] [-t address] [-s subject] [-b body] [-v] [-h]
   -f address  Sender's email address
   -t address  Recipient's email address
   -s subject  Subject line.
   -b body     Letter body.
+  -v          Verbose output.
   -h          Show this help.
 "
   exit 0
@@ -23,12 +24,13 @@ show_help() {
 [ -f "$config_file" ] && source $config_file
 
 # override config values with command line arguments
-while getopts f:t:s:b:h flag; do
+while getopts f:t:s:b:vh flag; do
   case ${flag} in
   b) email_body=${OPTARG} ;;
   f) email_from_address=${OPTARG} ;;
   s) email_subject=${OPTARG} ;;
   t) email_to_address=${OPTARG} ;;
+  v) verbose=1 ;;
   h) show_help ;;
   esac
 done
@@ -51,7 +53,8 @@ done
 #[ -z "$email_to_name"   ] && email_to_name="OpenIPC Camera Admin"
 #[ -z "$email_subject"   ] && email_subject="Snapshot from OpenIPC Camera"
 
-command="curl --verbose --silent" # --insecure
+command="curl --silent" # --insecure
+[ "1" = "$verbose" ] && command="${command} --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout}"
 
@@ -95,7 +98,8 @@ fi
 
 echo "$command" >>$log_file
 eval "$command" >>$log_file 2>&1
-cat $log_file
+
+[ "1" = "$verbose" ] && cat $log_file
 
 [ -f ${email_file} ] && rm -f ${email_file}
 

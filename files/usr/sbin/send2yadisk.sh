@@ -9,11 +9,12 @@ mkdir -p $(dirname $log_file)
 :>$log_file
 
 show_help() {
-  echo "Usage: $0 [-u username] [-P password] [-h]
+  echo "Usage: $0 [-u username] [-P password] [-v] [-h]
   -d path     Directory on server.
   -f file     File to upload.
   -u username Yandex Disk username.
   -P password Yandex Disk username.
+  -v          Verbose output.
   -h          Show this help.
 "
   exit 0
@@ -23,19 +24,19 @@ show_help() {
 [ -f "$config_file" ] && source $config_file
 
 # override config values with command line arguments
-while getopts d:f:P:u:h flag; do
+while getopts d:f:P:u:vh flag; do
   case ${flag} in
   d) yadisk_path=${OPTARG} ;;
   f) yadisk_file=${OPTARG} ;;
   P) yadisk_password=${OPTARG} ;;
   u) yadisk_username=${OPTARG} ;;
+  v) verbose=1 ;;
   h) show_help ;;
   esac
 done
 
 [ "false" = "$yadisk_enabled" ] &&
   echo "Sending to Yandex Disk is disabled." && exit 10
-
 
 if [ -z "$yadisk_file" ]; then
   snapshot4cron.sh
@@ -51,7 +52,8 @@ fi
 [ -z "$yadisk_password" ] &&
   echo "Yandex Disk password not found" && exit 12
 
-command="curl --verbose" # --silent --insecure
+command="curl" # --silent --insecure
+[ "1" = "$verbose" ] && command="${command} --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout}"
 
@@ -90,6 +92,7 @@ command="${command} --upload-file ${snapshot}"
 
 echo "$command" >>$log_file
 eval "$command" >>$log_file 2>&1
-cat $log_file
+
+[ "1" = "$verbose" ] && cat $log_file
 
 exit 0

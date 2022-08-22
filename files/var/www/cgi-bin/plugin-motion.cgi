@@ -47,19 +47,10 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 THRESHOLD=${motion_sensitivity}
 SECONDS_TO_EXPIRE=10
 STOP_FILE=/tmp/motion.stop
-LOG_FILE=/tmp/motion.log
 logread -f | grep \"Motion detected in \d* regions\" | sed -E \"s/.*(Motion detected in \d* regions).*/\\1/\" | while read BEER; do
-  echo \"\$BEER\" >> \$LOG_FILE
-  if [ \"\$(echo \$BEER | cut -d' ' -f4)\" -lt \"\$THRESHOLD\" ]; then
-    echo \"Low activity. Skipping.\" >> \$LOG_FILE
-    continue
-  fi
-  if [ \"\$(date -r \"\$STOP_FILE\" +%s)\" -ge \"\$(( \$(date +%s) - \$SECONDS_TO_EXPIRE ))\" ]; then
-    echo \"Still stalling...\" >> \$LOG_FILE
-    continue
-  fi
+  [ \"\$(echo \$BEER | cut -d' ' -f4)\" -lt \"\$THRESHOLD\" ] && continue
+  [ \"\$(date -r \"\$STOP_FILE\" +%s)\" -ge \"\$(( \$(date +%s) - \$SECONDS_TO_EXPIRE ))\" ] && continue
   touch \$STOP_FILE
-  echo \"Reporting event.\" >> \$LOG_FILE
   snapshot4cron.sh -f
   [ \$? -ne 0 ] && echo \"Cannot get a snapshot\" && exit 2" >>$tmp_file
       [ "true" = "$motion_send2email"    ] && echo "  send2email.sh"    >>$tmp_file

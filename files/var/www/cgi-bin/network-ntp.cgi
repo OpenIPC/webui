@@ -38,10 +38,10 @@ fi
 
 <%in p/header.cgi %>
 
-<form action="<%= $SCRIPT_NAME %>" method="post">
-  <% field_hidden "action" "update" %>
-  <div class="row row-cols-1 row-cols-lg-3 g-4 mb-4">
-    <div class="col">
+<div class="row row-cols-1 row-cols-lg-3 g-4 mb-4">
+  <div class="col">
+    <form action="<%= $SCRIPT_NAME %>" method="post">
+      <% field_hidden "action" "update" %>
 <%
 for _i in 0 1 2 3; do
   _x=$(expr $_i + 1)
@@ -49,20 +49,20 @@ for _i in 0 1 2 3; do
   field_text "ntp_server_${_i}" "NTP Server $(( _i + 1 ))"
 done; unset _i; unset _x
 %>
-    </div>
-    <div class="col">
-      <% ex "cat $config_file" %>
-    </div>
-    <div class="col">
-      <p>Camera time: <% date +"%H:%M %Z" %></p>
-      <form action="<%= $SCRIPT_NAME %>" method="post">
-        <% field_hidden "action" "sync" %>
-        <% button_submit "Synchronize camera time" "primary" %>
-      </form>
-    </div>
+      <% button_submit %>
+    </form>
   </div>
-  <% button_submit %>
-</form>
+  <div class="col">
+    <% ex "cat $config_file" %>
+  </div>
+  <div class="col">
+    <p>Camera time: <% date +"%H:%M %Z" %></p>
+    <form action="<%= $SCRIPT_NAME %>" method="post">
+      <% field_hidden "action" "sync" %>
+      <% button_submit "Synchronize camera time" "primary" %>
+    </form>
+  </div>
+</div>
 
 <% if [ "$(diff -q -- "/rom${config_file}" "$config_file")" ]; then %>
   <form action="<%= $SCRIPT_NAME %>" method="post" class="mt-4">

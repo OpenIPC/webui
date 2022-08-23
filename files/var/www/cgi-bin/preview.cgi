@@ -24,7 +24,9 @@ size_h=${size#*x}
       <div id="mjpeg-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="mjpeg-tab" tabindex="0">
         <div class="ratio ratio-16x9">
           <% if [ "true" = "$(yaml-cli -g .jpeg.enabled)" ]; then %>
-            <img src="http://<%= $network_address %>/image.jpg" class="d-block img-fluid bg-light" id="preview-mjpeg" height="<%= $size_h %>" width="<%= $size_w %>" alt="MJPEG Preview. If you don't see it, it's not supported by your browser, or MJPEG steam does not work.">
+            <img src="http://<%= $network_address %>/image.jpg" id="preview-mjpeg" height="<%= $size_h %>" width="<%= $size_w %>"
+              class="img-fluid h-100 w-auto position-absolute top-50 start-50 translate-middle"
+              alt="MJPEG Preview. If you don't see it, it's not supported by your browser, or MJPEG steam does not work.">
           <% else %>
             <p class="alert alert-warning"><a href="majestic-settings.cgi?tab=jpeg">Enable JPEG support</a> to see the preview.</p>
           <% fi %>

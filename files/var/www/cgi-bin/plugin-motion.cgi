@@ -69,7 +69,7 @@ fi
   <% field_switch "motion_enabled" "Enable motion guard" %>
   <div class="row g-4 mb-4">
     <div class="col col-lg-4">
-      <% field_range "motion_sensitivity" "Sensitivity" "1,50,1" "1 - minimal sensitivity, 10 - maximum sensitivity" %>
+      <% field_range "motion_sensitivity" "Sensitivity" "1,50,1" "1 - minimal sensitivity, 50 - maximum sensitivity" %>
       <% field_range "motion_throttle" "Delay between notifications, sec." "1,30,1" %>
       <% field_checkbox "motion_send2email" "Send to email" "<a href=\"plugin-send2email.cgi\">Configure sending to email</a>" %>
       <% field_checkbox "motion_send2ftp" "Upload to FTP" "<a href=\"plugin-send2ftp.cgi\">Configure uploading to FTP</a>" %>

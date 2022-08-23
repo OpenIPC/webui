@@ -66,7 +66,7 @@ unzip_dir="/tmp/microbe-web-${branch}"
 [ -d "$unzip_dir" ] && rm -rf $unzip_dir
 
 cmd="unzip -o -d /tmp $tmp_file"
-[ "1" = "$verbose" ] && cmd="${cmd} -q"
+[ "1" != "$verbose" ] && cmd="${cmd} -q"
 cmd="${cmd} -x microbe-web-dev/README.md microbe-web-dev/LICENSE microbe-web-dev/.git* microbe-web-dev/dev/* microbe-web-dev/docs/*"
 log_and_run "$cmd"
 upd_dir="${unzip_dir}/files"

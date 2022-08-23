@@ -78,7 +78,7 @@ fi
 %>
 <%in p/header.cgi %>
 
-<ul class="nav bg-light small mb-4 d-none d-lg-block">
+<ul class="nav bg-light small mb-4 d-none d-lg-flex">
 <%
 mj=$(echo "$mj" | sed "s/ /_/g")
 for _line in $mj; do

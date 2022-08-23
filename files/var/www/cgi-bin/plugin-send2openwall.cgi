@@ -69,10 +69,8 @@ fi
     </form>
   </div>
   <div class="col">
-    <% ex "grep send2openwall /etc/crontabs/root" %>
-  </div>
-  <div class="col">
     <% ex "cat $config_file" %>
+    <% ex "grep send2openwall /etc/crontabs/root" %>
     <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
   </div>
 </div>

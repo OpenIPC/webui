@@ -24,7 +24,9 @@
     <h5>Firmware</h5>
     <dl class="small list">
       <dt>Version</dt>
-      <dd><%= "${fw_version}-${fw_variant} ${fw_build}" %></dd>
+      <dd><%= "${fw_version}-${fw_variant}" %></dd>
+      <dt>Build</dt>
+      <dd><%= $fw_build %></dd>
       <dt>Majestic</dt>
       <dd><%= $mj_version %></dd>
       <dt>Hostname</dt>

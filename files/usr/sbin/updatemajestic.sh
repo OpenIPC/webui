@@ -1,8 +1,49 @@
 #!/bin/sh
 
+echo_c() {
+  # 31 red, 32 green, 33 yellow, 34 blue, 35 magenta, 36 cyan, 37 white, 38 grey
+  [ -z "$HASERLVER" ] && t="\e[1;$1m$2\e[0m" || t="$2"
+  echo -e "$t"
+}
+
+log_and_run() {
+  echo_c 36 "$1"
+  eval "$1"
+}
+
+clean_quit() {
+  [ -f "$mj_meta_file" ] && rm $mj_meta_file
+  exit $1
+}
+
+print_usage() {
+  echo "Usage: $0 [-v] [-f] [-h]
+  -f           Install even if same version.
+  -v           Verbose output.
+  -h           Show this help.
+"
+  exit 0
+}
+
+# default
+curl_opts="--silent --insecure --location --fail" # --write-out %{http_code}
+
+# override config values with command line arguments
+while getopts b:fvh flag; do
+  case ${flag} in
+  b) branch=${OPTARG} ;;
+  f) enforce=1 ;;
+  v) verbose=1
+    curl_opts="${curl_opts} --verbose"
+    v_opts="-v"
+    ;;
+  h) print_usage ;;
+  esac
+done
+
 check_flash_memory_size() {
   if [ $(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd) -lt 16 ]; then
-    echo "Flash memory size is less than 16MB. Aborting."
+    echo_c 31 "Flash memory is smaller than 16MB. Aborting."
     exit 1
   fi
 }
@@ -30,26 +71,34 @@ get_system_info() {
   [ -f "$mj_bin_file_ol" ] && mj_filesize_ol=$(ls -s $mj_bin_file_ol | xargs | cut -d' ' -f1)
 
   # majestic online
-  mj_meta_file=/tmp/mj_meta.txt
+  #mj_meta_file=/tmp/mj_meta.txt
+  mj_meta_file=$(mktemp)
   mj_meta_url=${mj_url//.bz2/.meta}
 
-  echo "Retrieving update info from ${mj_url} ..."
-  if [ "200" != $(curl --silent --url $mj_meta_url -f -w %{http_code} -o /dev/null) ]; then
-    echo "Cannot retrieve ${mj_meta_url} file. Aborting."
-    exit 2
+  echo_c 37 "Retrieving update info"
+  echo_c 38 "from ${mj_meta_url}"
+  log_and_run "curl $curl_opts --url $mj_meta_url --output $mj_meta_file"
+  if [ $? -ne 0 ]; then
+    echo_c 31 "Cannot retrieve ${mj_meta_url} file. Aborting."
+    clean_quit 2
   fi
 
-  curl --silent --url $mj_meta_url -o $mj_meta_file
+  echo_c 37 "\nComparing versions"
   mj_version_new=$(sed -n 1p $mj_meta_file)
-
-  echo "Installed Majestic: $mj_version"
-  echo "Available Majestic: $mj_version_new"
-
+  echo_c 38 "Installed: $mj_version\nAvailable: $mj_version_new\n"
   if [ "$mj_version_new" = "$mj_version" ]; then
-    echo "Same version. No update available."
-    exit 3
+    echo_c 32 "Update is the same version!"
+    if [ "1" = "$enforce" ]; then
+      echo_c 33 "Enforced re-installation."
+    else
+      echo_c 37 "Nothing to update. Quitting..."
+      clean_quit 3
+    fi
   fi
+  echo
+}
 
+check_space() {
   # NB! size in bytes, but since blocks are 1024 bytes each, we are safe here for now.
   # Rounding up by priming, since $(()) sucks at floats.
   mj_filesize_new=$(( ($(sed -n 2p $mj_meta_file) + 1024) / 1024 ))
@@ -58,30 +107,47 @@ get_system_info() {
   # NB! sizes are in allocated blocks.
   free_space=$(df | grep /overlay | xargs | cut -d' ' -f4)
   available_space=$(( ${free_space:=0} + ${mj_filesize_ol:=0} - 1 ))
-}
 
-check_space() {
   if [ "$mj_filesize_new" -gt "$available_space" ]; then
-    echo "Not enough space to update Majestic!"
-    echo "Update requires ${mj_filesize_new}K, but only ${available_space}K is available."
+    echo_c 31 "Not enough space to update Majestic!"
+    echo_c 37 "Update requires ${mj_filesize_new}K, but only ${available_space}K is available."
     if [ "$mj_filesize_ol" -ge "1" ]; then
-      echo "(${free_space}K of unallocated space plus ${mj_filesize_ol:=0}K Majestic in overlay)"
+      echo_c 37 "(${free_space}K of unallocated space plus ${mj_filesize_ol:=0}K Majestic in overlay)"
     fi
-    exit 4
+    clean_quit 4
   fi
 }
 
 update_majectic() {
-  echo "Updating Majestic ..."
+  echo_c 37 "Updating Majestic"
+  echo_c 38 "from ${mj_url}"
+
+  echo_c 35 "Killing Majestic process"
+  log_and_run "killall majestic"
+  sleep 2
+
   # remove Majestic from overlay
-  [ -f "$mj_bin_file_ol" ] && rm $mj_bin_file_ol && mount -oremount /
-  # install new version
-  curl --silent --insecure --location -o - --url $mj_url | bunzip2 | tar -x ./majestic -C /usr/bin/
+  if [ -f "$mj_bin_file_ol" ]; then
+    echo_c 37 "Deleting existing Majestic from overlay"
+    log_and_run "rm $mj_bin_file_ol && mount -o remount /"
+  fi
+
+  # retrieve new version
+  log_and_run "curl $curl_opts --url $mj_url --output - | bunzip2 | tar x $v_opts ./majestic -C /tmp/"
   if [ $? -ne 0 ]; then
-    echo "Cannot retrieve update from server."
-    exit 5
+    echo_c 31 "Cannot retrieve update from server."
+    clean_quit 5
+  fi
+
+  # install new version
+  log_and_run "mv /tmp/majestic $mj_bin_file"
+  if [ $? -ne 0 ]; then
+    echo_c 31 "Cannot replace $mj_bin_file."
+    clean_quit 6
   fi
 }
+
+echo_c 37 "Majestic Updater\n"
 
 check_flash_memory_size
 
@@ -89,6 +155,7 @@ get_system_info
 check_space
 update_majectic
 
-echo "Done. Majestic $($mj_bin_file -v) installed in overlay."
-echo "Unconditional reboot"
+echo_c 37 "Done."
+echo_c 32 "Majestic $($mj_bin_file -v) installed in overlay.\n"
+echo_c 37 "Unconditional reboot"
 reboot

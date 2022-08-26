@@ -9,9 +9,10 @@ mkdir -p $(dirname $log_file)
 :>$log_file
 
 show_help() {
-  echo "Usage: $0 [-t topic] [-m message] [-h]
+  echo "Usage: $0 [-t topic] [-m message] [-v] [-h]
   -t topic    MQTT topic
   -m message  Message playload
+  -v          Verbose output.
   -h          Show this help.
 "
   exit 0
@@ -21,10 +22,11 @@ show_help() {
 [ -f "$config_file" ] && source $config_file
 
 # override config values with command line arguments
-while getopts m:t:h flag; do
+while getopts m:t:vh flag; do
   case ${flag} in
   m) mqtt_message=${OPTARG} ;;
   t) mqtt_topic=${OPTARG} ;;
+  v) verbose=1 ;;
   h) show_help ;;
   esac
 done
@@ -70,6 +72,7 @@ fi
 
 echo "$command" >>$log_file
 eval "$command" >>$log_file 2>&1
-cat $log_file
+
+[ "1" = "$verbose" ] && cat $log_file
 
 exit 0

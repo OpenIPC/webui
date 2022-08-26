@@ -27,6 +27,8 @@
       <dd><%= "${fw_version}-${fw_variant}" %></dd>
       <dt>Build</dt>
       <dd><%= $fw_build %></dd>
+      <dt>Majestic</dt>
+      <dd><%= $mj_version %></dd>
       <dt>Hostname</dt>
       <dd><%= $network_hostname %></dd>
       <dt>WAN MAC</dt>

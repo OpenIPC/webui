@@ -9,11 +9,12 @@ mkdir -p $(dirname $log_file)
 :>$log_file
 
 show_help() {
-  echo "Usage: $0 [-f address] [-t address] [-s subject] [-b body] [-h]
+  echo "Usage: $0 [-f address] [-t address] [-s subject] [-b body] [-v] [-h]
   -f address  Sender's email address
   -t address  Recipient's email address
   -s subject  Subject line.
   -b body     Letter body.
+  -v          Verbose output.
   -h          Show this help.
 "
   exit 0
@@ -23,12 +24,13 @@ show_help() {
 [ -f "$config_file" ] && source $config_file
 
 # override config values with command line arguments
-while getopts f:t:s:b:h flag; do
+while getopts f:t:s:b:vh flag; do
   case ${flag} in
   b) email_body=${OPTARG} ;;
   f) email_from_address=${OPTARG} ;;
   s) email_subject=${OPTARG} ;;
   t) email_to_address=${OPTARG} ;;
+  v) verbose=1 ;;
   h) show_help ;;
   esac
 done
@@ -51,7 +53,8 @@ done
 #[ -z "$email_to_name"   ] && email_to_name="OpenIPC Camera Admin"
 #[ -z "$email_subject"   ] && email_subject="Snapshot from OpenIPC Camera"
 
-command="curl --verbose --silent" # --insecure
+command="curl --silent"
+[ "1" = "$verbose" ] && command="${command} --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout}"
 
@@ -66,9 +69,13 @@ command="${command} --mail-from ${email_from_address}"
 command="${command} --mail-rcpt ${email_to_address}"
 command="${command} --user '${email_smtp_login}:${email_smtp_password}'"
 
-if [ "$#" -eq 0 ]; then
+if [ "true" = "$email_attach_snapshot" ]; then
   snapshot4cron.sh
-  [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+  exitcode=$?
+  if [ $exitcode -ne 0 ]; then
+    echo "Cannot get a snapshot. Exit code: $exitcode"
+    exit 2
+  fi
   snapshot=/tmp/snapshot4cron.jpg
   [ ! -f "$snapshot" ] && echo "Cannot find a snapshot" && exit 3
 
@@ -95,7 +102,8 @@ fi
 
 echo "$command" >>$log_file
 eval "$command" >>$log_file 2>&1
-cat $log_file
+
+[ "1" = "$verbose" ] && cat $log_file
 
 [ -f ${email_file} ] && rm -f ${email_file}
 

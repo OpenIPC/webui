@@ -4,7 +4,7 @@
 plugin="email"
 plugin_name="Send to email"
 page_title="Send to email"
-params="enabled from_name from_address to_name to_address subject body smtp_host smtp_port smtp_username smtp_password smtp_use_ssl socks5_enabled"
+params="enabled attach_snapshot from_name from_address to_name to_address subject body smtp_host smtp_port smtp_username smtp_password smtp_use_ssl socks5_enabled"
 
 tmp_file=/tmp/${plugin}.conf
 
@@ -47,6 +47,7 @@ else
   include $config_file
 
   # Default values
+  [ -z "$email_attach_snapshot" ] && email_attach_snapshot="true"
   [ -z "$email_smtp_port" ] && email_smtp_port="25"
   [ -z "$email_from_name" ] && email_from_name="Camera ${network_hostname}"
   [ -z "$email_to_name" ] && email_to_name="Camera admin"
@@ -55,33 +56,31 @@ fi
 %>
 <%in p/header.cgi %>
 
-<form action="<%= $SCRIPT_NAME %>" method="post">
-  <% field_switch "email_enabled" "Enable sending to email" %>
-
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
-    <div class="col">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+  <div class="col">
+    <form action="<%= $SCRIPT_NAME %>" method="post">
+      <% field_switch "email_enabled" "Enable sending to email" %>
       <% field_text "email_smtp_host" "SMTP host" %>
       <% field_text "email_smtp_port" "SMTP port" %>
       <% field_switch "email_smtp_use_ssl" "Use TLS/SSL" %>
       <% field_text "email_smtp_username" "SMTP username" %>
       <% field_password "email_smtp_password" "SMTP password" %>
-    </div>
-    <div class="col">
       <% field_text "email_from_name" "Sender's name" %>
       <% field_text "email_from_address" "Sender's address" "Use an email address where bounce reports can be sent to." %>
       <% field_text "email_to_name" "Recipient's name" %>
       <% field_text "email_to_address" "Recipient's address" %>
       <% field_text "email_subject" "Email subject" %>
       <% field_textarea "email_body" "Email text" "Line breaks will be replaced with whitespace." %>
+      <% field_switch "email_attach_snapshot" "Attach snapshot" %>
       <% # field_switch "email_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
-    </div>
-    <div class="col">
-      <% ex "cat $config_file" %>
-      <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
-    </div>
+      <% button_submit %>
+    </form>
   </div>
-  <% button_submit %>
-</form>
+  <div class="col">
+    <% ex "cat $config_file" %>
+    <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
+  </div>
+</div>
 
 <script>
 $('#email_body').style.height = "6rem";

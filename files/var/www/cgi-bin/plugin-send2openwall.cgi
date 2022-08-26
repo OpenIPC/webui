@@ -59,22 +59,20 @@ fi
  firmware version, and camera uptime to do this.</p>
 </div>
 
-<form action="<%= $SCRIPT_NAME %>" method="post">
-  <% field_switch "openwall_enabled" "Enable sending to OpenWall" %>
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
-    <div class="col">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+  <div class="col">
+    <form action="<%= $SCRIPT_NAME %>" method="post">
+      <% field_switch "openwall_enabled" "Enable sending to OpenWall" %>
       <% field_select "openwall_interval" "Interval, minutes" "15,30,60" "Time between submissions. 15 minutes or longer." %>
       <% field_switch "openwall_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
-    </div>
-    <div class="col">
-      <% ex "grep send2openwall /etc/crontabs/root" %>
-    </div>
-    <div class="col">
-      <% ex "cat $config_file" %>
-      <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
-    </div>
+      <% button_submit %>
+    </form>
   </div>
-  <% button_submit %>
-</form>
+  <div class="col">
+    <% ex "cat $config_file" %>
+    <% ex "grep send2openwall /etc/crontabs/root" %>
+    <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
+  </div>
+</div>
 
 <%in p/footer.cgi %>

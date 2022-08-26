@@ -43,21 +43,21 @@ fi
 %>
 <%in p/header.cgi %>
 
-<form action="<%= $SCRIPT_NAME %>" method="post">
-  <% field_switch "telegram_enabled" "Enable sending to Telegram" %>
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
-    <div class="col">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+  <div class="col">
+    <form action="<%= $SCRIPT_NAME %>" method="post">
+      <% field_switch "telegram_enabled" "Enable sending to Telegram" %>
       <% field_text "telegram_token" "Token" "Your Telegram Bot authentication token." %>
       <% field_text "telegram_channel" "Chat ID" "Numeric ID of the channel you want the bot to post images to." %>
       <% field_switch "telegram_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
-    </div>
-    <div class="col">
-      <% ex "cat $config_file" %>
-      <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
-    </div>
+      <% button_submit %>
+    </form>
   </div>
-  <% button_submit %>
-</form>
+  <div class="col">
+    <% ex "cat $config_file" %>
+    <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
+  </div>
+</div>
 
 <% if [ -z "$telegram_token" ]; then %>
 <div class="alert alert-info mt-4">

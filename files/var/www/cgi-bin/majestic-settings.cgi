@@ -78,7 +78,7 @@ fi
 %>
 <%in p/header.cgi %>
 
-<ul class="nav bg-light small mb-4">
+<ul class="nav bg-light small mb-4 d-none d-lg-flex">
 <%
 mj=$(echo "$mj" | sed "s/ /_/g")
 for _line in $mj; do
@@ -98,10 +98,10 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
 %>
 </ul>
 
-<form action="<%= $SCRIPT_NAME %>" method="post">
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
-    <div class="col">
-      <h3><%= $title %></h3>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+  <div class="col">
+    <h3><%= $title %></h3>
+    <form action="<%= $SCRIPT_NAME %>" method="post">
 <%
 config=""
 _mj2="$(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only")"
@@ -163,15 +163,15 @@ for line in $_mj2; do
   esac
 done
 %>
-    </div>
-    <div class="col">
-      <h3>Related settings</h3>
-      <pre><% echo -e "$config" %></pre>
-      <p><a href="info-majestic.cgi">See majestic.yaml</a></p>
-    </div>
+      <% button_submit %>
+    </form>
   </div>
-  <% button_submit %>
-</form>
+  <div class="col">
+    <h3>Related settings</h3>
+    <pre><% echo -e "$config" %></pre>
+    <p><a href="info-majestic.cgi">See majestic.yaml</a></p>
+  </div>
+</div>
 
 <script>
   let MD5 = function(d){return V(Y(X(d),8*d.length))};

@@ -12,7 +12,7 @@ mkdir -p $(dirname $log_file)
   echo "Sending to OpenIPC Wall is disabled." && exit 10
 
 snapshot4cron.sh
-[ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+# [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
 snapshot=/tmp/snapshot4cron.jpg
 [ ! -f "$snapshot" ] && echo "Cannot find a snapshot" && exit 3
 
@@ -32,7 +32,8 @@ uptime=$(uptime | sed -r 's/^.+ up ([^,]+), .+$/\1/')
 [ -z "$network_macaddr" ] &&
   echo "MAC address not found" && exit 12
 
-command="curl --verbose" # --silent --insecure
+command="curl"
+[ "1" = "$verbose" ] && command="${command} --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout}"
 
@@ -56,6 +57,7 @@ command="${command} -F 'file=@${snapshot}'"
 
 echo "$command" >>$log_file
 eval "$command" >>$log_file 2>&1
-cat $log_file
+
+[ "1" = "$verbose" ] && cat $log_file
 
 exit 0

@@ -77,10 +77,10 @@ fi
 %>
 <%in p/header.cgi %>
 
-<form action="<%= $SCRIPT_NAME %>" method="post">
-  <% field_hidden "action" "update" %>
-  <div class="row g-4">
-    <div class="col col-md-6 col-lg-4 mb-4">
+<div class="row g-4">
+  <div class="col col-md-6 col-lg-4 mb-4">
+    <form action="<%= $SCRIPT_NAME %>" method="post">
+      <% field_hidden "action" "update" %>
       <% field_text "network_hostname" "Hostname" "Make hostname unique using MAC address information: ${network_macaddr//:/-}" %>
       <% field_switch "network_dhcp" "Use DHCP" %>
       <% field_text "network_address" "IP Address" %>
@@ -88,19 +88,19 @@ fi
       <% field_text "network_gateway" "Gateway" %>
       <% field_text "network_dns_1" "DNS 1" %>
       <% field_text "network_dns_2" "DNS 2" %>
-    </div>
-    <div class="col col-md-6 col-lg-8">
-      <% ex "cat /etc/hostname" %>
-      <% ex "cat /etc/hosts" %>
-      <% ex "cat /etc/network/interfaces" %>
-      <% ex "ip address" %>
-      <% ex "ip route list" %>
-      <% [ -f /etc/resolv.conf ] && ex "cat /etc/resolv.conf" %>
-      <% ex "netstat -tulpan" %>
-    </div>
+      <% button_submit %>
+    </form>
   </div>
-  <% button_submit %>
-</form>
+  <div class="col col-md-6 col-lg-8">
+    <% ex "cat /etc/hostname" %>
+    <% ex "cat /etc/hosts" %>
+    <% ex "cat /etc/network/interfaces" %>
+    <% ex "ip address" %>
+    <% ex "ip route list" %>
+    <% [ -f /etc/resolv.conf ] && ex "cat /etc/resolv.conf" %>
+    <% ex "netstat -tulpan" %>
+  </div>
+</div>
 
 <script>
   function toggleDhcp() {

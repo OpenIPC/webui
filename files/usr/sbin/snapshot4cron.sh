@@ -29,6 +29,8 @@ show_help() {
 }
 
 get_snapshot() {
+	touch "$LOCK_FILE"
+
   attempt=$(( $attempt + 1 ))
   if [ "$attempt" -gt "$LIMIT_ATTEMPTS" ]; then
     log "Maximum amount of retries reached."
@@ -64,7 +66,6 @@ if [ -f "$LOCK_FILE" ] && [ "true" != "$force" ]; then
   done
   exit 0
 fi
-touch "$LOCK_FILE"
 
 if [ "true" = "$force" ]; then
   log "Forced to comply."

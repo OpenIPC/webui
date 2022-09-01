@@ -442,6 +442,9 @@ link_to() {
 load_plugins() {
   for _i in $(ls -1 plugin-*); do
     _p="$(sed -r -n '/^plugin=/s/plugin="(.*)"/\1/p' $_i)"
+    # hide plugin if not supported
+    [ "$_p" = "mqtt" ] && [ ! -f /usr/bin/mosquitto_pub ] && continue
+
     _n="$(sed -r -n '/^plugin_name=/s/plugin_name="(.*)"/\1/p' $_i)"
     eval _e=\$${_p}_enabled
     [ "true" = "$_e" ] && _css=" on"

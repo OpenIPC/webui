@@ -50,10 +50,12 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         mv -f $_t /tmp/majestic.yaml
         unset _t
       fi
+      # touch /tmp/motionguard-restart.txt
     fi
 
+    /etc/init.d/S92motion restart
+
     update_caminfo
-    touch /tmp/motionguard-restart.txt
     redirect_to "$SCRIPT_NAME"
   fi
 else

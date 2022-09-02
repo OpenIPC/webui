@@ -20,7 +20,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
     # prepare for passwordless login
     [ ! -d "/root/.ssh" ] && mkdir /root/.ssh
-    [ ! -f "/root/.ssh/authorized_keys" ] &&
+    [ -f "/etc/dropbear/authorized_keys" ] && [ ! -f "/root/.ssh/authorized_keys" ] &&
       cp /etc/dropbear/authorized_keys /root/.ssh/authorized_keys
 
     redirect_to "/" "success" "Password updated."

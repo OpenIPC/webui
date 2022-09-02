@@ -19,7 +19,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     update_caminfo
 
     # prepare for passwordless login
-    [ ! -d "/root/.ssh"] && mkdir /root/.ssh
+    [ ! -d "/root/.ssh" ] && mkdir /root/.ssh
     [ ! -f "/root/.ssh/authorized_keys" ] &&
       cp /etc/dropbear/authorized_keys /root/.ssh/authorized_keys
 

@@ -51,9 +51,10 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         unset _t
       fi
       # touch /tmp/motionguard-restart.txt
+      /etc/init.d/S92motion restart
+    else
+      /etc/init.d/S92motion stop
     fi
-
-    /etc/init.d/S92motion restart
 
     update_caminfo
     redirect_to "$SCRIPT_NAME"

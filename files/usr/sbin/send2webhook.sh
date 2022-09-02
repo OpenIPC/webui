@@ -39,7 +39,7 @@ done
 command="curl"
 [ "1" = "$verbose" ] && command="${command} --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
-command="${command} --max-time ${curl_timeout}"
+command="${command} --max-time ${curl_timeout} -X POST"
 
 # SOCK5 proxy, if needed
 if [ "true" = "$webhook_socks5_enabled" ]; then

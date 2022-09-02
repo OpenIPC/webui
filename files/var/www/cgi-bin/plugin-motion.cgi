@@ -4,7 +4,7 @@
 plugin="motion"
 plugin_name="Motion guard"
 page_title="Motion guard"
-params="enabled sensitivity send2email send2ftp send2telegram send2yadisk throttle"
+params="enabled sensitivity send2email send2ftp send2telegram send2webhook send2yadisk throttle"
 
 [ -n "$(echo "$mj_hide_motionDetect" | sed -n "/\b${soc_family}\b/p")" ] && redirect_to "/" "danger" "Motion detection is not supported on your camera."
 
@@ -26,6 +26,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     [ "false" = "$motion_send2email" ] && \
     [ "false" = "$motion_send2ftp" ] && \
     [ "false" = "$motion_send2telegram" ] && \
+    [ "false" = "$motion_send2webhook" ] && \
     [ "false" = "$motion_send2yadisk" ] && \
     flash_append "danger" "You need to select at least one method of notification" && error=1
   fi
@@ -74,6 +75,7 @@ fi
       <% field_checkbox "motion_send2email" "Send to email" "<a href=\"plugin-send2email.cgi\">Configure sending to email</a>" %>
       <% field_checkbox "motion_send2ftp" "Upload to FTP" "<a href=\"plugin-send2ftp.cgi\">Configure uploading to FTP</a>" %>
       <% field_checkbox "motion_send2telegram" "Send to Telegram" "<a href=\"plugin-send2telegram.cgi\">Configure sending to Telegram</a>" %>
+      <% field_checkbox "motion_send2webhook" "Send to webhook" "<a href=\"plugin-send2webhook.cgi\">Configure sending to a webhook</a>" %>
       <% field_checkbox "motion_send2yadisk" "Upload to Yandex Disk" "<a href=\"plugin-send2yadisk.cgi\">Configure sending to Yandex Disk</a>" %>
       <% button_submit %>
     </form>
@@ -88,6 +90,7 @@ fi
 <% [ "true" != "$email_enabled"    ] && echo "\$('#motion_send2email').disabled = true;" %>
 <% [ "true" != "$ftp_enabled"      ] && echo "\$('#motion_send2ftp').disabled = true;" %>
 <% [ "true" != "$telegram_enabled" ] && echo "\$('#motion_send2telegram').disabled = true;" %>
+<% [ "true" != "$webhook_enabled" ] && echo "\$('#motion_send2webhook').disabled = true;" %>
 <% [ "true" != "$yadisk_enabled"   ] && echo "\$('#motion_send2yadisk').disabled = true;" %>
 </script>
 

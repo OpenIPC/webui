@@ -612,7 +612,7 @@ update_caminfo() {
   :>$_tmpfile
   # add all web-related config files
   # do not include ntp
-  for _f in admin email ftp motion socks5 telegram yadisk; do
+  for _f in admin email ftp motion socks5 telegram webhook yadisk; do
     [ -f "${ui_config_dir}/${_f}.conf" ] && cat "${ui_config_dir}/${_f}.conf" >>$_tmpfile
   done; unset _f
 
@@ -765,6 +765,7 @@ include p/locale_en.sh
 include p/mj.cgi
 include /etc/webui/socks5.conf
 include /etc/webui/telegram.conf
+include /etc/webui/webhook.conf
 include /etc/webui/yadisk.conf
 
 # reload_locale

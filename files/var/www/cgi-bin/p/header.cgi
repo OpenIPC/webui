@@ -18,7 +18,7 @@ Pragma: no-cache
 </head>
 
 <body id="page-<%= $pagename %>" class="<%= $fw_variant %><% [ "$debug" -ge "1" ] && echo -n " debug" %>">
-  <nav class="navbar navbar-dark navbar-expand-lg sticky-top">
+  <nav class="navbar navbar-dark navbar-expand-lg">
     <div class="container">
       <a class="navbar-brand" href="status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg">
        <span class="x-small"><%= $fw_variant %></span></a>

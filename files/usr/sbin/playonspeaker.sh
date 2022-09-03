@@ -34,10 +34,12 @@ done
   echo "Playing on speaker is disabled." && exit 10
 
 # validate mandatory values
-[ -z "$speaker_file" ] &&
-  echo "Speaker file not found" && exit 11
 [ -z "$speaker_url" ] &&
-  echo "Speaker URL not found" && exit 12
+  echo "Speaker URL is not set" && exit 11
+[ -z "$speaker_file" ] &&
+  echo "Speaker file is not set" && exit 12
+[ ! -f "$speaker_file" ] &&
+  echo "Speaker file not found" && exit 13
 
 command="curl"
 [ "1" = "$verbose" ] && command="${command} --verbose"

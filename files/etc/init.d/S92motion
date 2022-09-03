@@ -1,36 +1,41 @@
 #!/bin/sh
-# from microbe-web package.
 
-UNSUPPORTED="hi3516cv100 hi3516av100"
-[ -n "$(echo $UNSUPPORTED | sed -n "/\b$(ipcinfo --family)\b/p")" ] &&
-  echo "Motion detection is not supported on your camera!" && exit 1
+MOTION_ARGS=""
+MOTION_PID_FILE=/var/run/motiondetection.pid
 
-# read config file
-_c="/etc/webui/motion.conf"
-[ ! -f "$_c" ] && echo "Config file $_c not found!" && exit 2
-source $_c
-unset _c
+start() {
+  printf "Starting motion detection: "
+  umask 077
+  start-stop-daemon -S -q -p $MOTION_PID_FILE \
+    --exec /usr/sbin/motiondetection.sh -- $MOTION_ARGS
+  [ $? = 0 ] && echo "OK" || echo "FAIL"
+}
 
-[ "true" != "$motion_enabled" ] &&
-  echo "Motion detection is disabled in config!" && exit 3
+stop() {
+  printf "Stopping motion detection: "
+  start-stop-daemon -K -q -p $MOTION_PID_FILE
+  [ $? = 0 ] && echo "OK" || echo "FAIL"
+}
 
-STOP_FILE=/tmp/motion.stop
-TEMPLATE="Motion detected in \d* regions"
-logread -f | grep "$TEMPLATE" | sed -E "s/.*($TEMPLATE).*/\\1/" | while read LINE; do
-  [ "$(echo $LINE | cut -d' ' -f4)" -lt "$(( 51 - $motion_sensitivity ))" ] && continue
+restart() {
+  stop
+  start
+}
 
-  # throttle execution
-  [ -f "$STOP_FILE" ] && [ "$(date -r "$STOP_FILE" +%s)" -ge "$(( $(date +%s) - $motion_throttle ))" ] && continue
-  touch "$STOP_FILE"
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart | reload)
+    restart
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+    ;;
+esac
 
-  # get a fresh snapshot
-  snapshot4cron.sh -f
-  [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
-
-  # send alerts
-  [ "true" = "$motion_send2email"    ] && send2email.sh
-  [ "true" = "$motion_send2ftp"      ] && send2ftp.sh
-  [ "true" = "$motion_send2telegram" ] && send2telegram.sh
-  [ "true" = "$motion_send2webhook"  ] && send2webhook.sh
-  [ "true" = "$motion_send2yadisk"   ] && send2yadisk.sh
-done &
+exit $?

@@ -117,7 +117,7 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
     </div>
   </nav>
 
-  <main>
+  <main class="pb-4">
     <div class="container">
       <p class="text-end x-small"><%= $(signature) %></p>
 

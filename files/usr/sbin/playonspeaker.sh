@@ -1,5 +1,9 @@
 #!/bin/sh
 
+SUPPORTED="goke hisilicon"
+[ -z "$(echo $SUPPORTED | sed -n "/\b$(ipcinfo --family)\b/p")" ] &&
+  echo "Playing on speaker is not supported on your camera!" && exit 1
+
 plugin="speaker"
 config_file="/etc/webui/${plugin}.conf"
 curl_timeout=100

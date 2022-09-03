@@ -134,6 +134,12 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
 </div>
 <% fi; fi %>
 
+<% if [ "true" = "$speaker_enabled" ] && [ "true" != "$(yaml-cli -g .audio.enabled)" ]; then %>
+<div class="alert alert-danger">
+<p class="mb-0">You need to enable audio in <a href="majestic-settings.cgi?tab=audio">Majestic settings.</a></p>
+</div>
+<% fi %>
+
 <% if [ "$(cat /etc/TZ)" != "$TZ" ]; then %>
 <div class="alert alert-danger">
 <p>$TZ variable in system environment needs updating!</p>

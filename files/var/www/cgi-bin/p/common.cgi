@@ -612,7 +612,7 @@ update_caminfo() {
   :>$_tmpfile
   # add all web-related config files
   # do not include ntp
-  for _f in admin email ftp motion socks5 telegram webhook yadisk; do
+  for _f in admin email ftp motion socks5 speaker telegram webhook yadisk; do
     [ -f "${ui_config_dir}/${_f}.conf" ] && cat "${ui_config_dir}/${_f}.conf" >>$_tmpfile
   done; unset _f
 
@@ -670,10 +670,10 @@ update_caminfo() {
 
   # Default timezone is GMT
   tz_data=$(cat /etc/TZ)
-  tz_name=$(cat /etc/tzname)
+  tz_name=$(cat /etc/timezone)
   if [ -z "$tz_data" ] || [ -z "$tz_name" ]; then
     tz_data="GMT0"; echo "$tz_data" >/etc/TZ
-    tz_name="Etc/GMT"; echo "$tz_name" >/etc/tzname
+    tz_name="Etc/GMT"; echo "$tz_name" >/etc/timezone
   fi
 
   echo "flash_size=\"$flash_size\"

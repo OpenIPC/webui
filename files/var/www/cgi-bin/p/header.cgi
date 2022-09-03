@@ -106,9 +106,9 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
           <li class="nav-item"><a class="nav-link" href="preview.cgi">Preview</a></li>
           <li class="nav-item dropdown">
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownHelp" role="button">Help</a>
-            <ul aria-labelledby="dropdownHelp" class="dropdown-menu">
+            <ul aria-labelledby="dropdownHelp" class="dropdown-menu dropdown-menu-lg-end">
               <li><a class="dropdown-item" href="https://openipc.org/">About OpenIPC</a></li>
-              <li><a class="dropdown-item" href="endpoints.cgi">Endpoints</a></li>
+              <li><a class="dropdown-item" href="https://openipc.org/majestic-endpoints">Majestic Endpoints</a></li>
               <li><a class="dropdown-item" href="https://openipc.org/wiki/">OpenIPC Wiki</a></li>
             </ul>
           </li>

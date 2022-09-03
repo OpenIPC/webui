@@ -118,7 +118,7 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
   </nav>
 
   <main class="pb-4">
-    <div class="container">
+    <div class="container" style="min-height: 90vh">
       <p class="text-end x-small"><%= $(signature) %></p>
 
 <% if [ -z "$network_gateway" ]; then %>

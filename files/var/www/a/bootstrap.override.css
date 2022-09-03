@@ -18,10 +18,6 @@ body.debug .col {border: solid 1px #f3f4fc;}
     --bs-blue: #4c60d8;
 }
 
-body {
-    margin-bottom: 5rem;
-}
-
 body > main > .container > h2 {
     font-weight: 700;
     color: var(--bs-blue);
@@ -220,3 +216,6 @@ pre#output { background: #111; color: #89a; }
 .ansi-107 { background-color: rgb(255, 255, 255); }
 
 body.lite .ult { display: none; }
+
+.ui-expert { display: none; }
+body.expert .ui-expert { display: initial; }

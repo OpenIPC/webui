@@ -25,7 +25,7 @@ show_help() {
 [ -f "$config_file" ] && source $config_file
 
 # override config values with command line arguments
-while getopts u:vh flag; do
+while getopts f:u:vh flag; do
   case ${flag} in
   f) speaker_file=${OPTARG} ;;
   u) speaker_url=${OPTARG} ;;
@@ -41,9 +41,9 @@ done
 [ -z "$speaker_url" ] &&
   echo "Speaker URL is not set" && exit 11
 [ -z "$speaker_file" ] &&
-  echo "Speaker file is not set" && exit 12
+  echo "Audio file is not set" && exit 12
 [ ! -f "$speaker_file" ] &&
-  echo "Speaker file not found" && exit 13
+  echo "Audio file not found" && exit 13
 
 command="curl"
 [ "1" = "$verbose" ] && command="${command} --verbose"

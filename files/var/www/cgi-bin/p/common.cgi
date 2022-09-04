@@ -648,23 +648,24 @@ update_caminfo() {
     network_dns_1=$(cat /etc/resolv.conf | grep nameserver | sed -n 1p | cut -d' ' -f2)
     network_dns_2=$(cat /etc/resolv.conf | grep nameserver | sed -n 2p | cut -d' ' -f2)
   fi
-
-  # if gateway is not set then no default route nor wan mac present
-  _default_route="$(ip r | grep ^default)"
-  if [ -n "$_default_route" ]; then
-    _default_iface=$(echo "$_default_route" | awk '{print $5}')
-    network_macaddr=$(cat /sys/class/net/${_default_iface}/address)
-    network_gateway=$(echo "$_default_route" | awk '{print $3}')
-    network_netmask=$(ifconfig $_default_iface | grep "Mask:" | cut -d: -f4)
-  else
-    network_macaddr=$(fw_printenv -n ethaddr)
-    network_gateway=$(fw_printenv -n gatewayip)
-    network_netmask=''
-  fi; unset _default_route; unset _default_iface
-
   network_hostname=$(hostname -s)
-  network_interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | tr '\n' ' ' | sed 's/ $//' )
-  network_address=$(printenv | grep HTTP_HOST | cut -d= -f2 | cut -d: -f1)
+  network_interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | tr '\n' ' ' | sed 's/ $//' | sed -E 's/\blo\b//')
+
+  # if no default interface then no gateway nor wan mac present
+  network_default_interface=$(ip r | sed -nE '/default/s/.+dev (\w+).+?/\1/p' | head -n 1)
+  if [ -n "$network_default_interface" ]; then
+    network_gateway=$(ip r | sed -nE "/default/s/.+ via ([0-9\.]+).+?/\1/p")
+  else
+    network_default_interface=$(ip r | sed -nE 's/.+dev (\w+).+?/\1/p' | head -n 1)
+    network_gateway='' # $(fw_printenv -n gatewayip) # FIXME: Why do we need one?
+    # network_macaddr=$(fw_printenv -n ethaddr)   # FIXME: Why do we need one?
+    #network_address=$(fw_printenv -n ipaddr)    # FIXME: Maybe $(hostname -i) which will return 127.0.1.1?
+    # network_netmask=$(fw_printenv -n netmask)
+  fi
+  network_macaddr=$(cat /sys/class/net/${network_default_interface}/address)
+  network_address=$(ip r | sed -nE "/${network_default_interface}/s/.+src ([0-9\.]+).+?/\1/p")
+     network_cidr=$(ip r | sed -nE "/${network_default_interface}/s/^[0-9\.]+(\/[0-9]+).+?/\1/p")
+  network_netmask=$(ifconfig $network_default_interface | grep "Mask:" | cut -d: -f4) # FIXME: Maybe convert from $network_cidr?
 
   overlay_root=$(mount | grep upperdir= | sed -r 's/^.*upperdir=([a-z\/]+).+$/\1/')
 
@@ -681,6 +682,8 @@ fw_version=\"$fw_version\"
 fw_variant=\"$fw_variant\"
 fw_build=\"$fw_build\"
 network_address=\"$network_address\"
+network_cidr=\"$network_cidr\"
+network_default_interface=\"$network_default_interface\"
 network_dhcp=\"$network_dhcp\"
 network_dns_1=\"$network_dns_1\"
 network_dns_2=\"$network_dns_2\"

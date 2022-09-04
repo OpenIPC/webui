@@ -1,21 +1,15 @@
 #!/bin/sh
 
-SNAPSHOT="/tmp/snapshot4cron.jpg"
-SECONDS_TO_EXPIRE=120
-LOG_FILE=/tmp/snapshot4cron.log
-LOCK_FILE=/tmp/snapshot4cron.lock
-LIMIT_ATTEMPTS=5
-attempt=0
-
-PID=$$
-
 log() {
-  echo "$(date +%s) [${PID}] ${1}" >>$LOG_FILE
-  [ "1" != "$quiet" ] && echo "$1"
+  _txt="$(date +%s) [${PID}] ${1}"
+  echo "$_txt" >>$LOG_FILE
+  [ "1" != "$quiet" ] && echo "$_txt"
+  unset _txt
 }
 
 clean_quit() {
-  rm "$LOCK_FILE"
+  [ -f "$LOCK_FILE" ] && rm "$LOCK_FILE"
+  log "Exiting"
   exit $1
 }
 
@@ -29,23 +23,36 @@ show_help() {
 }
 
 get_snapshot() {
-	touch "$LOCK_FILE"
+  log "Trying to save a snapshot."
+  LIMIT_ATTEMPTS=$(( $LIMIT_ATTEMPTS - 1 ))
 
-  attempt=$(( $attempt + 1 ))
-  if [ "$attempt" -gt "$LIMIT_ATTEMPTS" ]; then
-    log "Maximum amount of retries reached."
-    clean_quit 1
-  fi
-
-  log "Attempt ${attempt}."
   if curl --silent --fail --url http://127.0.0.1/image.jpg?t=$(date +"%s") --output ${SNAPSHOT} >>$LOG_FILE; then
-    log "Snapshot saved to ${SNAPSHOT} at ${attempt} attempt."
+    log "Snapshot saved to ${SNAPSHOT}."
     clean_quit 0
   fi
 
-  log "Cannot get a snapshot."
-  get_snapshot
+  if [ "$LIMIT_ATTEMPTS" -le "0" ]; then
+    log "Maximum amount of retries reached."
+    clean_quit 2
+  else
+    log "${LIMIT_ATTEMPTS} attempts left."
+    sleep 1
+    get_snapshot
+  fi
 }
+
+LOG_FILE=/tmp/snapshot4cron.log
+LOCK_FILE=/var/run/snapshot4cron.pid
+SNAPSHOT="/tmp/snapshot4cron.jpg"
+SECONDS_TO_EXPIRE=120
+PID=$$
+LIMIT_ATTEMPTS=5
+
+if [ -f "$LOCK_FILE" ] && ps | grep "^\s*\b$(cat "$LOCK_FILE")\b" >/dev/null; then
+  log "Another instance running."
+  clean_quit 1
+fi
+printf "$PID" >$LOCK_FILE
 
 while getopts fhv flag; do
   case ${flag} in
@@ -55,20 +62,8 @@ while getopts fhv flag; do
   esac
 done
 
-if [ -f "$LOCK_FILE" ] && [ "true" != "$force" ]; then
-  log "Another process is running."
-  _a=0
-  while [ ! -f "$SNAPSHOT" ]; do
-    echo "Waiting for a snapshot."
-    _a=$(( $_a + 1 ))
-    [ "$_a" -ge "5" ] && log "Maximum waiting time reached." && exit 2
-    sleep 1
-  done
-  exit 0
-fi
-
 if [ "true" = "$force" ]; then
-  log "Forced to comply."
+  log "Enforsed run."
   get_snapshot
 elif [ ! -f "$SNAPSHOT" ]; then
   log "Snapshot not found."
@@ -78,5 +73,5 @@ elif [ "$(date -r "$SNAPSHOT" +%s)" -le "$(( $(date +%s) - $SECONDS_TO_EXPIRE ))
   get_snapshot
 else
   log "Snapshot is up to date."
-  exit 0
+  clean_quit 0
 fi

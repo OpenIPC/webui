@@ -43,7 +43,7 @@ done
 [ -z "$speaker_file" ] &&
   echo "Audio file is not set" && exit 12
 [ ! -f "$speaker_file" ] &&
-  echo "Audio file not found" && exit 13
+  echo "Audio file ${speaker_file} not found" && exit 13
 
 command="curl"
 [ "1" = "$verbose" ] && command="${command} --verbose"

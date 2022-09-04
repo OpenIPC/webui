@@ -35,15 +35,18 @@ while getopts f:u:vh flag; do
 done
 
 [ "false" = "$speaker_enabled" ] &&
-  echo "Playing on speaker is disabled." && exit 10
+  echo "Playing on speaker is disabled in config ${config_file}." && exit 10
+
+[ "false" = "$(yaml-cli -g .audio.enabled)" ] &&
+  echo "Playing on speaker is disabled in Majestic." && exit 11
 
 # validate mandatory values
 [ -z "$speaker_url" ] &&
-  echo "Speaker URL is not set" && exit 11
+  echo "Speaker URL is not set" && exit 12
 [ -z "$speaker_file" ] &&
-  echo "Audio file is not set" && exit 12
+  echo "Audio file is not set" && exit 13
 [ ! -f "$speaker_file" ] &&
-  echo "Audio file ${speaker_file} not found" && exit 13
+  echo "Audio file ${speaker_file} not found" && exit 14
 
 command="curl"
 [ "1" = "$verbose" ] && command="${command} --verbose"

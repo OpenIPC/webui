@@ -1,7 +1,7 @@
 #!/bin/sh
 
 SUPPORTED="goke hisilicon"
-[ -z "$(echo $SUPPORTED | sed -n "/\b$(ipcinfo --family)\b/p")" ] &&
+[ -z "$(echo $SUPPORTED | sed -n "/\b$(ipcinfo --vendor)\b/p")" ] &&
   echo "Playing on speaker is not supported on your camera!" && exit 1
 
 plugin="speaker"

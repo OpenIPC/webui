@@ -1,16 +1,11 @@
 #!/bin/sh
 
+plugin="speaker"
+source /usr/sbin/plugins-common
+
 SUPPORTED="goke hisilicon"
 [ -z "$(echo $SUPPORTED | sed -n "/\b$(ipcinfo --vendor)\b/p")" ] &&
-  echo "Playing on speaker is not supported on your camera!" && exit 1
-
-plugin="speaker"
-config_file="/etc/webui/${plugin}.conf"
-curl_timeout=100
-
-log_file=/tmp/webui/${plugin}.log
-mkdir -p $(dirname $log_file)
-:>$log_file
+  log "Playing on speaker is not supported on your camera!" && exit 1
 
 show_help() {
   echo "Usage: $0 [-u url] [-f file] [-v] [-h]
@@ -21,8 +16,6 @@ show_help() {
 "
   exit 0
 }
-# read variables from config
-[ -f "$config_file" ] && source $config_file
 
 # override config values with command line arguments
 while getopts f:u:vh flag; do
@@ -35,21 +28,20 @@ while getopts f:u:vh flag; do
 done
 
 [ "false" = "$speaker_enabled" ] &&
-  echo "Playing on speaker is disabled in config ${config_file}." && exit 10
+  log "Playing on speaker is disabled in config ${config_file}." && exit 10
 
 [ "false" = "$(yaml-cli -g .audio.enabled)" ] &&
-  echo "Playing on speaker is disabled in Majestic." && exit 11
+  log "Playing on speaker is disabled in Majestic." && exit 11
 
 # validate mandatory values
 [ -z "$speaker_url" ] &&
-  echo "Speaker URL is not set" && exit 12
+  log "Speaker URL is not set" && exit 12
 [ -z "$speaker_file" ] &&
-  echo "Audio file is not set" && exit 13
+  log "Audio file is not set" && exit 13
 [ ! -f "$speaker_file" ] &&
-  echo "Audio file ${speaker_file} not found" && exit 14
+  log "Audio file ${speaker_file} not found" && exit 14
 
-command="curl"
-[ "1" = "$verbose" ] && command="${command} --verbose"
+command="curl --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout} -X POST"
 
@@ -63,9 +55,9 @@ fi
 command="${command} -T ${speaker_file}"
 command="${command} --url ${speaker_url}"
 
-echo "$command" >>$log_file
-eval "$command" >>$log_file 2>&1
+log "$command"
+eval "$command" >>$LOG_FILE 2>&1
 
-[ "1" = "$verbose" ] && cat $log_file
+[ "1" = "$verbose" ] && cat $LOG_FILE
 
 exit 0

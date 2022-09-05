@@ -1,12 +1,7 @@
 #!/bin/sh
 
 plugin="webhook"
-config_file="/etc/webui/${plugin}.conf"
-curl_timeout=100
-
-log_file=/tmp/webui/${plugin}.log
-mkdir -p $(dirname $log_file)
-:>$log_file
+source /usr/sbin/plugins-common
 
 show_help() {
   echo "Usage: $0 [-u url] [-v] [-h]
@@ -16,9 +11,6 @@ show_help() {
 "
   exit 0
 }
-
-# read variables from config
-[ -f "$config_file" ] && source $config_file
 
 # override config values with command line arguments
 while getopts u:vh flag; do
@@ -30,14 +22,13 @@ while getopts u:vh flag; do
 done
 
 [ "false" = "$webhook_enabled" ] &&
-  echo "Sending to webhook is disabled." && exit 10
+  log "Sending to webhook is disabled." && exit 10
 
 # validate mandatory values
 [ -z "$webhook_url" ] &&
-  echo "Webhook URL not found" && exit 11
+  log "Webhook URL not found" && exit 11
 
-command="curl"
-[ "1" = "$verbose" ] && command="${command} --verbose"
+command="curl --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout} -X POST"
 
@@ -50,9 +41,9 @@ fi
 
 command="${command} --url ${webhook_url}"
 
-echo "$command" >>$log_file
-eval "$command" >>$log_file 2>&1
+log "$command"
+eval "$command" >>$LOG_FILE 2>&1
 
-[ "1" = "$verbose" ] && cat $log_file
+[ "1" = "$verbose" ] && cat $LOG_FILE
 
 exit 0

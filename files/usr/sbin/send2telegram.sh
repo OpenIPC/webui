@@ -1,12 +1,7 @@
 #!/bin/sh
 
 plugin="telegram"
-config_file="/etc/webui/${plugin}.conf"
-curl_timeout=100
-
-log_file=/tmp/webui/${plugin}.log
-mkdir -p $(dirname $log_file)
-:>$log_file
+source /usr/sbin/plugins-common
 
 show_help() {
   echo "Usage: $0 [-t token] [-c channel] [-m message] [-p photo] [-s] [-b] [-v] [-h]
@@ -20,9 +15,6 @@ show_help() {
 "
   exit 0
 }
-
-# read variables from config
-[ -f "$config_file" ] && source $config_file
 
 # default values
 telegram_disable_notification=false
@@ -41,13 +33,13 @@ while getopts c:m:p:st:vh flag; do
 done
 
 [ "false" = "$telegram_enabled" ] &&
-  echo "Sending to Telegram is disabled." && exit 10
+  log "Sending to Telegram is disabled." && exit 10
 
 # validate mandatory values
 [ -z "$telegram_token" ] &&
-  echo "Telegram token not found" && exit 11
+  log "Telegram token not found" && exit 11
 [ -z "$telegram_channel" ] &&
-  echo "Telegram channel not found" && exit 12
+  log "Telegram channel not found" && exit 12
 
 if [ -z "$telegram_message" ]; then
   telegram_message="$(hostname -s), $(date +"%F %T")"
@@ -56,13 +48,13 @@ if [ -z "$telegram_message" ]; then
     snapshot4cron.sh
     # [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
     snapshot=/tmp/snapshot4cron.jpg
-    [ ! -f "$snapshot" ] && echo "Cannot find a snapshot" && exit 3
+    [ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
+
     telegram_photo=$snapshot
   fi
 fi
 
-command="curl"
-[ "1" = "$verbose" ] && command="${command} --verbose"
+command="curl --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout}"
 
@@ -86,9 +78,9 @@ command="${command} -H 'Content-Type: multipart/form-data'"
 command="${command} -F 'chat_id=${telegram_channel}'"
 command="${command} -F 'disable_notification=${telegram_disable_notification}'"
 
-echo "$command" >>$log_file
-eval "$command" >>$log_file 2>&1
+log "$command"
+eval "$command" >>$LOG_FILE 2>&1
 
-[ "1" = "$verbose" ] && cat $log_file
+[ "1" = "$verbose" ] && cat $LOG_FILE
 
 exit 0

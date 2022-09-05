@@ -1,12 +1,7 @@
 #!/bin/sh
 
 plugin="email"
-config_file="/etc/webui/${plugin}.conf"
-curl_timeout=100
-
-log_file=/tmp/webui/${plugin}.log
-mkdir -p $(dirname $log_file)
-:>$log_file
+source /usr/sbin/plugins-common
 
 show_help() {
   echo "Usage: $0 [-f address] [-t address] [-s subject] [-b body] [-v] [-h]
@@ -19,9 +14,6 @@ show_help() {
 "
   exit 0
 }
-
-# read variables from config
-[ -f "$config_file" ] && source $config_file
 
 # override config values with command line arguments
 while getopts f:t:s:b:vh flag; do
@@ -36,25 +28,24 @@ while getopts f:t:s:b:vh flag; do
 done
 
 [ "false" = "$email_enabled" ] &&
-  echo "Sending to email is disabled." && exit 10
+  log "Sending to email is disabled." && exit 10
 
 # validate mandatory values
 [ -z "$email_smtp_host" ] &&
-  echo "SMTP host not found in config" && exit 11
+  log "SMTP host not found in config" && exit 11
 [ -z "$email_smtp_port" ] &&
-  echo "SMTP port not found in config" && exit 12
+  log "SMTP port not found in config" && exit 12
 [ -z "$email_from_address" ] &&
-  echo "Sender's email address not found" && exit 13
+  log "Sender's email address not found" && exit 13
 [ -z "$email_to_address" ] &&
-  echo "Recipient's email address not found" && exit 14
+  log "Recipient's email address not found" && exit 14
 
 # assign default values if not set
 #[ -z "$email_from_name" ] && email_from_name="OpenIPC Camera"
 #[ -z "$email_to_name"   ] && email_to_name="OpenIPC Camera Admin"
 #[ -z "$email_subject"   ] && email_subject="Snapshot from OpenIPC Camera"
 
-command="curl --silent"
-[ "1" = "$verbose" ] && command="${command} --verbose"
+command="curl --silent --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout}"
 
@@ -73,11 +64,11 @@ if [ "true" = "$email_attach_snapshot" ]; then
   snapshot4cron.sh
   exitcode=$?
   if [ $exitcode -ne 0 ]; then
-    echo "Cannot get a snapshot. Exit code: $exitcode"
+    log "Cannot get a snapshot. Exit code: $exitcode"
     exit 2
   fi
   snapshot=/tmp/snapshot4cron.jpg
-  [ ! -f "$snapshot" ] && echo "Cannot find a snapshot" && exit 3
+  [ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
 
   email_body="$(date -R)"
   command="${command} -H 'Subject: ${email_subject}'"
@@ -100,10 +91,10 @@ else
   command="${command} --upload-file ${email_file}"
 fi
 
-echo "$command" >>$log_file
-eval "$command" >>$log_file 2>&1
+log "$command"
+eval "$command" >>$LOG_FILE 2>&1
 
-[ "1" = "$verbose" ] && cat $log_file
+[ "1" = "$verbose" ] && cat $LOG_FILE
 
 [ -f ${email_file} ] && rm -f ${email_file}
 

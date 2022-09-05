@@ -1,12 +1,7 @@
 #!/bin/sh
 
 plugin="yadisk"
-config_file="/etc/webui/${plugin}.conf"
-curl_timeout=100
-
-log_file=/tmp/webui/${plugin}.log
-mkdir -p $(dirname $log_file)
-:>$log_file
+source /usr/sbin/plugins-common
 
 show_help() {
   echo "Usage: $0 [-u username] [-P password] [-v] [-h]
@@ -19,9 +14,6 @@ show_help() {
 "
   exit 0
 }
-
-# read variables from config
-[ -f "$config_file" ] && source $config_file
 
 # override config values with command line arguments
 while getopts d:f:P:u:vh flag; do
@@ -36,24 +28,24 @@ while getopts d:f:P:u:vh flag; do
 done
 
 [ "false" = "$yadisk_enabled" ] &&
-  echo "Sending to Yandex Disk is disabled." && exit 10
+  log "Sending to Yandex Disk is disabled." && exit 10
 
 if [ -z "$yadisk_file" ]; then
   snapshot4cron.sh
   # [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
   snapshot=/tmp/snapshot4cron.jpg
-  [ ! -f "$snapshot" ] && echo "Cannot find a snapshot" && exit 3
+  [ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
+
   yadisk_file=$snapshot
 fi
 
 # validate mandatory values
 [ -z "$yadisk_username" ] &&
-  echo "Yandex Disk username not found" && exit 11
+  log "Yandex Disk username not found" && exit 11
 [ -z "$yadisk_password" ] &&
-  echo "Yandex Disk password not found" && exit 12
+  log "Yandex Disk password not found" && exit 12
 
-command="curl"
-[ "1" = "$verbose" ] && command="${command} --verbose"
+command="curl --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout}"
 
@@ -78,8 +70,8 @@ while [ -n "$subdirs" ]; do
   if [ -n "$subdir" ]; then
     suburl="${suburl}/${subdir}"
     _command="${command} --request MKCOL ${url}/${_url}/ " # disposable subcommand
-    echo "$_command" >>$log_file
-    eval "$_command" >>$log_file 2>&1
+    log "$_command"
+    eval "$_command" >>$LOG_FILE 2>&1
   fi
   subdirs="${subdirs#*/}"
 done; unset _command
@@ -90,9 +82,9 @@ command="${command} --url ${url}"
 command="${command} --request PUT"
 command="${command} --upload-file ${snapshot}"
 
-echo "$command" >>$log_file
-eval "$command" >>$log_file 2>&1
+log "$command"
+eval "$command" >>$LOG_FILE 2>&1
 
-[ "1" = "$verbose" ] && cat $log_file
+[ "1" = "$verbose" ] && cat $LOG_FILE
 
 exit 0

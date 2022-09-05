@@ -53,7 +53,7 @@ fi
   </div>
   <div class="col">
     <% ex "cat $config_file" %>
-    <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
+    <% [ -f "/tmp/webui.log" ] && link_to "Download log file" "dl.cgi" %>
   </div>
 </div>
 

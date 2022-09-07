@@ -55,6 +55,7 @@ elif [ ! -f "$SNAPSHOT" ]; then
   get_snapshot
 elif [ "$(date -r "$SNAPSHOT" +%s)" -le "$(( $(date +%s) - $SECONDS_TO_EXPIRE ))" ]; then
   log "Snapshot is expired."
+  rm $SNAPSHOT
   get_snapshot
 else
   log "Snapshot is up to date."

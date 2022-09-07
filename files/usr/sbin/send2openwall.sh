@@ -36,6 +36,7 @@ done
 
 snapshot4cron.sh
 # [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+
 snapshot=/tmp/snapshot4cron.jpg
 [ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
 

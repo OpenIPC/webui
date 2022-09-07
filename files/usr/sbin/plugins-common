@@ -1,4 +1,9 @@
 log() {
+  # poor man's logrotate
+  if [ -f "$LOG_FILE" ] && [ "$(wc -c $filepath | cut -d' ' -f1)" -gt $LOG_SIZE_LIMIT ]; then
+    mv $LOG_FILE $LOG_FILE.1
+  fi
+
   _txt="$(date +"%F %T") [${PID}:${plugin}] ${1}"
   echo "$_txt" >>$LOG_FILE
   [ "1" != "$quiet" ] && echo "$_txt"
@@ -26,6 +31,7 @@ if [ -z "$plugin" ]; then
 fi
 
 LOG_FILE=/tmp/webui.log
+LOG_SIZE_LIMIT=50000
 LOCK_FILE=/var/run/${plugin}.pid
 CONFIG_FILE="/etc/webui/${plugin}.conf"
 curl_timeout=100

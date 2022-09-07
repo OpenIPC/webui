@@ -48,7 +48,7 @@ while getopts fhv flag; do
 done
 
 if [ "true" = "$force" ]; then
-  log "Enforsed run."
+  log "Enforced run."
   get_snapshot
 elif [ ! -f "$SNAPSHOT" ]; then
   log "Snapshot not found."

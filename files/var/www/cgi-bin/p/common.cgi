@@ -444,6 +444,7 @@ load_plugins() {
     _p="$(sed -r -n '/^plugin=/s/plugin="(.*)"/\1/p' $_i)"
     # hide plugin if not supported
     [ "$_p" = "mqtt" ] && [ ! -f /usr/bin/mosquitto_pub ] && continue
+    [ "$_p" = "zerotier" ] && [ ! -f /usr/sbin/zerotier-cli ] && continue
 
     _n="$(sed -r -n '/^plugin_name=/s/plugin_name="(.*)"/\1/p' $_i)"
     eval _e=\$${_p}_enabled

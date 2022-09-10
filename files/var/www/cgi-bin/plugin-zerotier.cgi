@@ -6,6 +6,8 @@ plugin_name="ZeroTier"
 page_title="ZeroTier"
 params="enabled nwid"
 
+[ ! -f /usr/sbin/zerotier-cli ] && redirect_to "/" "danger" "ZerotierOne client is not a part of your firmware."
+
 tmp_file=/tmp/${plugin}.conf
 
 config_file="${ui_config_dir}/${plugin}.conf"

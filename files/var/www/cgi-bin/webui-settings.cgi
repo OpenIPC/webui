@@ -17,6 +17,10 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     sed -i s/:admin:.*/:admin:${new_password}/ /etc/httpd.conf
     echo "root:${new_password}" | chpasswd
     update_caminfo
+
+    # prepare for passwordless login
+    [ ! -d "/root/.ssh" ] && ln -s /etc/dropbear /root/.ssh
+
     redirect_to "/" "success" "Password updated."
     ;;
 

@@ -1,10 +1,10 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
 <%
-plugin="yadisk"
-plugin_name="Send to Yandex Disk"
-page_title="Send to Yandex Disk"
-params="enabled username password path socks5_enabled"
+plugin="webhook"
+plugin_name="Send to Webhook"
+page_title="Send to Webhook"
+params="enabled url socks5_enabled"
 
 tmp_file=/tmp/${plugin}.conf
 
@@ -19,9 +19,8 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   done; unset _p
 
   ### Validation
-  if [ "true" = "$email_enabled" ]; then
-    [ -z "$yadisk_username" ] && flash_append "danger" "Yandex Disk username cannot be empty." && error=11
-    [ -z "$yadisk_password" ] && flash_append "danger" "Yandex Disk password cannot be empty." && error=12
+  if [ "true" = "$webhook_enabled" ]; then
+    [ -z "$webhook_url"   ] && flash_append "danger" "Webhook URL cannot be empty." && error=11
   fi
 
   if [ -z "$error" ]; then
@@ -46,11 +45,9 @@ fi
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
   <div class="col">
     <form action="<%= $SCRIPT_NAME %>" method="post">
-      <% field_switch "yadisk_enabled" "Enable Yandex Disk bot" %>
-      <% field_text "yadisk_username" "Yandex Disk username" %>
-      <% field_password "yadisk_password" "Yandex Disk password" "Create a dedicated password for application (WebDAV)." %>
-      <% field_text "yadisk_path" "Yandex Disk path" %>
-      <% field_switch "yadisk_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
+      <% field_switch "webhook_enabled" "Enable sending to webhook" %>
+      <% field_text "webhook_url" "Webhook URL" %>
+      <% field_switch "webhook_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
       <% button_submit %>
     </form>
   </div>

@@ -18,7 +18,7 @@ Pragma: no-cache
 </head>
 
 <body id="page-<%= $pagename %>" class="<%= $fw_variant %><% [ "$debug" -ge "1" ] && echo -n " debug" %>">
-  <nav class="navbar navbar-dark navbar-expand-lg sticky-top">
+  <nav class="navbar navbar-dark navbar-expand-lg">
     <div class="container">
       <a class="navbar-brand" href="status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg">
        <span class="x-small"><%= $fw_variant %></span></a>
@@ -106,9 +106,9 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
           <li class="nav-item"><a class="nav-link" href="preview.cgi">Preview</a></li>
           <li class="nav-item dropdown">
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownHelp" role="button">Help</a>
-            <ul aria-labelledby="dropdownHelp" class="dropdown-menu">
+            <ul aria-labelledby="dropdownHelp" class="dropdown-menu dropdown-menu-lg-end">
               <li><a class="dropdown-item" href="https://openipc.org/">About OpenIPC</a></li>
-              <li><a class="dropdown-item" href="endpoints.cgi">Endpoints</a></li>
+              <li><a class="dropdown-item" href="https://openipc.org/majestic-endpoints">Majestic Endpoints</a></li>
               <li><a class="dropdown-item" href="https://openipc.org/wiki/">OpenIPC Wiki</a></li>
             </ul>
           </li>
@@ -117,8 +117,8 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
     </div>
   </nav>
 
-  <main>
-    <div class="container">
+  <main class="pb-4">
+    <div class="container" style="min-height: 90vh">
       <p class="text-end x-small"><%= $(signature) %></p>
 
 <% if [ -z "$network_gateway" ]; then %>
@@ -133,6 +133,12 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
 <p class="mb-0">You want to use SOCKS5 proxy but it is not configured! Please <a href="network-socks5.cgi">configure the proxy</a>.</p>
 </div>
 <% fi; fi %>
+
+<% if [ "true" = "$speaker_enabled" ] && [ "true" != "$(yaml-cli -g .audio.enabled)" ]; then %>
+<div class="alert alert-danger">
+<p class="mb-0">You need to enable audio in <a href="majestic-settings.cgi?tab=audio">Majestic settings.</a></p>
+</div>
+<% fi %>
 
 <% if [ "$(cat /etc/TZ)" != "$TZ" ]; then %>
 <div class="alert alert-danger">

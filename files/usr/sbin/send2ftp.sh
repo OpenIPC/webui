@@ -1,12 +1,7 @@
 #!/bin/sh
 
 plugin="ftp"
-config_file="/etc/webui/${plugin}.conf"
-curl_timeout=100
-
-log_file=/tmp/webui/${plugin}.log
-mkdir -p $(dirname $log_file)
-:>$log_file
+source /usr/sbin/plugins-common
 
 show_help() {
   echo "Usage: $0 [-h host] [-p port] [-u username] [-P password] [-d path] [-f file] [-v] [-h]
@@ -21,9 +16,6 @@ show_help() {
 "
   exit 0
 }
-
-# read variables from config
-[ -f "$config_file" ] && source $config_file
 
 # override config values with command line arguments
 while getopts d:f:p:P:s:u:vh flag; do
@@ -40,24 +32,24 @@ while getopts d:f:p:P:s:u:vh flag; do
 done
 
 [ "false" = "$ftp_enabled" ] &&
-  echo "Sending to FTP is disabled." && exit 10
+  log "Sending to FTP is disabled." && exit 10
 
 # validate mandatory values
 [ -z "$ftp_host" ] &&
-  echo "FTP host not found" && exit 11
+  log "FTP host not found" && exit 11
 [ -z "$ftp_port" ] &&
-  echo "FTP port not found" && exit 12
+  log "FTP port not found" && exit 12
 
 if [ -z "$ftp_file" ]; then
   snapshot4cron.sh
   # [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
   snapshot=/tmp/snapshot4cron.jpg
-  [ ! -f "$snapshot" ] && echo "Cannot find a snapshot" && exit 3
+  [ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
+
   ftp_file=$snapshot
 fi
 
-command="curl"
-[ "1" = "$verbose" ] && command="${command} --verbose"
+command="curl --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout}"
 
@@ -78,9 +70,9 @@ command="${command}/$(date +"$ftp_template")"
 command="${command} --upload-file ${ftp_file}"
 command="${command} --ftp-create-dirs"
 
-echo "$command" >>$log_file
-eval "$command" >>$log_file 2>&1
+log "$command"
+eval "$command" >>$LOG_FILE 2>&1
 
-[ "1" = "$verbose" ] && cat $log_file
+[ "1" = "$verbose" ] && cat $LOG_FILE
 
 exit 0

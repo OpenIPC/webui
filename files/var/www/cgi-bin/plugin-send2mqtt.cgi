@@ -6,6 +6,8 @@ plugin_name="MQTT client"
 page_title="MQTT client"
 params="enabled host port client_id username password topic message use_ssl"
 
+[ ! -f /usr/bin/mosquitto_pub ] && redirect_to "/" "danger" "MQTT client is not a part of your firmware."
+
 tmp_file=/tmp/${plugin}.conf
 
 config_file="${ui_config_dir}/${plugin}.conf"
@@ -80,7 +82,7 @@ fi
   </div>
   <div class="col">
     <% ex "cat $config_file" %>
-    <% [ -f "/tmp/webui/${plugin}.log" ] && link_to "Download log file" "dl.cgi?file=${plugin}.log" %>
+    <% [ -f "/tmp/webui.log" ] && link_to "Download log file" "dl.cgi" %>
   </div>
 </div>
 

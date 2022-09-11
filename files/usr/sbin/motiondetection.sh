@@ -1,0 +1,36 @@
+#!/bin/sh
+
+UNSUPPORTED="hi3516cv100 hi3516av100"
+[ -n "$(echo $UNSUPPORTED | sed -n "/\b$(ipcinfo --family)\b/p")" ] &&
+  echo "Motion detection is not supported on your camera!" && exit 1
+
+# read config file
+_c="/etc/webui/motion.conf"
+[ ! -f "$_c" ] && echo "Config file $_c not found!" && exit 2
+source $_c
+unset _c
+
+[ "true" != "$motion_enabled" ] &&
+  echo "Motion detection is disabled in config!" && exit 3
+
+STOP_FILE=/tmp/motion.stop
+TEMPLATE="Motion detected in \d* regions"
+
+logread -f | grep "$TEMPLATE" | sed -E "s/.*($TEMPLATE).*/\\1/" | while read LINE; do
+  [ "$(echo $LINE | cut -d' ' -f4)" -lt "$((51 - $motion_sensitivity))" ] && continue
+
+  # throttle execution
+  [ -f "$STOP_FILE" ] && [ "$(date -r "$STOP_FILE" +%s)" -ge "$(($(date +%s) - $motion_throttle))" ] && continue
+  touch "$STOP_FILE"
+
+  # get a fresh snapshot
+  snapshot4cron.sh -f
+  [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+
+  # send alerts
+  [ "true" = "$motion_send2email" ] && send2email.sh
+  [ "true" = "$motion_send2ftp" ] && send2ftp.sh
+  [ "true" = "$motion_send2telegram" ] && send2telegram.sh
+  [ "true" = "$motion_send2webhook" ] && send2webhook.sh
+  [ "true" = "$motion_send2yadisk" ] && send2yadisk.sh
+done &

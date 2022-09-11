@@ -1,12 +1,7 @@
 #!/bin/sh
 
 plugin="mqtt"
-config_file="/etc/webui/${plugin}.conf"
-curl_timeout=100
-
-log_file=/tmp/webui/${plugin}.log
-mkdir -p $(dirname $log_file)
-:>$log_file
+source /usr/sbin/plugins-common
 
 show_help() {
   echo "Usage: $0 [-t topic] [-m message] [-v] [-h]
@@ -17,9 +12,6 @@ show_help() {
 "
   exit 0
 }
-
-# read variables from config
-[ -f "$config_file" ] && source $config_file
 
 # override config values with command line arguments
 while getopts m:t:vh flag; do
@@ -32,17 +24,17 @@ while getopts m:t:vh flag; do
 done
 
 [ "false" = "$mqtt_enabled" ] &&
-  echo "Sending to MQTT broker is disabled." && exit 10
+  log "Sending to MQTT broker is disabled." && exit 10
 
 # validate mandatory values
 [ -z "$mqtt_host" ] &&
-  echo "MQTT broker host not found in config" && exit 11
+  log "MQTT broker host not found in config" && exit 11
 [ -z "$mqtt_port" ] &&
-  echo "MQTT broker port not found in config" && exit 12
+  log "MQTT broker port not found in config" && exit 12
 [ -z "$mqtt_topic" ] &&
-  echo "MQTT topic not found" && exit 13
+  log "MQTT topic not found" && exit 13
 [ -z "$mqtt_message" ] &&
-  echo "MQTT message template not found" && exit 14
+  log "MQTT message template not found" && exit 14
 
 # assign default values if not set
 [ -z "$mqtt_client_id" ] &&
@@ -70,9 +62,9 @@ if [ "true" = "$mqtt_socks5_enabled" ]; then
   command="${command} --proxy socks5h://${socks5_login}:${socks5_password}@${socks5_host}:${socks5_port}"
 fi
 
-echo "$command" >>$log_file
-eval "$command" >>$log_file 2>&1
+log "$command"
+eval "$command" >>$LOG_FILE 2>&1
 
-[ "1" = "$verbose" ] && cat $log_file
+[ "1" = "$verbose" ] && cat $LOG_FILE
 
 exit 0

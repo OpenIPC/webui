@@ -126,6 +126,7 @@ mj_hide_unless_debug="isp_aGain isp_dGain isp_ispGain isp_exposure"
 # conditional settings limiters
 mj_show_audio_voiceEqualizer="gk7205v200 hi3516cv300 hi3516cv500 hi3516ev300 hi3519v101"
 mj_show_mjpeg_vendor="hisilicon"
+mj_show_isp_slowShutter_vendor="hisilicon"
 mj_hide_isp_sensorConfig_vendor="ingenic"
 mj_hide_video0_codec="hi3516cv200 hi3516cv100"
 mj_hide_video1_codec="hi3516cv200 hi3516cv100"

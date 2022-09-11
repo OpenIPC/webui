@@ -86,8 +86,9 @@ for _line in $mj; do
   _param_name=${_parameter#.};
   _param_domain=${_param_name%.*}
   if [ "$_parameter_domain_old" != "$_param_domain" ]; then
-    # hide certain domains if not supported
+    # hide certain domains for certain familier
     [ -n "$(eval echo "\$mj_hide_${_param_domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+    # show certain domains only for certain vendors
     [ -n "$(eval echo "\$mj_show_${_param_domain}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${_param_domain}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
     _parameter_domain_old="$_param_domain"
     _css="class=\"nav-link\""; [ "$_param_domain" = "$only" ] && _css="class=\"nav-link active\" aria-current=\"true\""
@@ -122,6 +123,7 @@ for line in $_mj2; do
   [ -n "$(eval echo "\$mj_show_${domain}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${domain}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
   # show certain parameters only if whitelisted
   [ -n "$(eval echo "\$mj_show_${_param_name}")" ] && [ -z "$(eval echo "\$mj_show_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+  [ -n "$(eval echo "\$mj_show_${_param_name}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${_param_name}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
   # show certain parameters only in debug mode
   [ -n "$(echo "$mj_hide_unless_debug" | sed -n "/\b${_param_name}\b/p")" ] && [ "0$debug" -lt "1" ] && continue
 

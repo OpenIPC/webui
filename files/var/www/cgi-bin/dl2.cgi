@@ -11,6 +11,9 @@ case "$filename" in
   logread)
     logread >$filepath
     ;;
+  netstat)
+    netstat -a >$filepath
+    ;;
   *)
     echo "Unknown file."
     exit 1

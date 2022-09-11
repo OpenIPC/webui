@@ -123,7 +123,6 @@ fi
     <% ex "ip address" %>
     <% ex "ip route list" %>
     <% [ -f /etc/resolv.conf ] && ex "cat /etc/resolv.conf" %>
-    <% ex "netstat -tulpan" %>
   </div>
 </div>
 

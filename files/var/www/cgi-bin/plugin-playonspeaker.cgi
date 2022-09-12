@@ -4,7 +4,7 @@
 plugin="speaker"
 plugin_name="Play on speaker"
 page_title="Play on speaker"
-params="enabled url file socks5_enabled"
+params="enabled url file"
 # volume srate codec outputEnabled speakerPin speakerPinInvert
 
 tmp_file=/tmp/${plugin}.conf
@@ -52,7 +52,6 @@ fi
       <% field_switch "speaker_enabled" "Enable playing on speaker" %>
       <% field_text "speaker_url" "URL" %>
       <% field_text "speaker_file" "Audio file" "a-law PCM 8000 bps" %>
-      <% field_switch "speaker_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
       <% button_submit %>
     </form>
   </div>

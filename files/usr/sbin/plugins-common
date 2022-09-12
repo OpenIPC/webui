@@ -11,6 +11,7 @@ log() {
 }
 
 quit_clean() {
+  log "Remove lock file."
   [ -f "$LOCK_FILE" ] && rm "$LOCK_FILE"
   log "Exiting"
   exit $1
@@ -18,10 +19,12 @@ quit_clean() {
 
 singleton() {
   if [ -f "$LOCK_FILE" ] && ps | grep "^\s*\b$(cat "$LOCK_FILE")\b" >/dev/null; then
-    log "Another instance running."
-    quit_clean 1
+    log "Checked lock file $LOCK_FILE. Another instance running with PID $(cat "$LOCK_FILE")."
+    log "Exiting"
+    exit 1
   fi
   printf "$PID" >$LOCK_FILE
+  log "Create lock file $LOCK_FILE."
 }
 
 if [ -z "$plugin" ]; then

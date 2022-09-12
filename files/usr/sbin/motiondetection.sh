@@ -1,17 +1,15 @@
 #!/bin/sh
 
+plugin="motion"
+source /usr/sbin/plugins-common
+singleton
+
 UNSUPPORTED="hi3516cv100 hi3516av100"
 [ -n "$(echo $UNSUPPORTED | sed -n "/\b$(ipcinfo --family)\b/p")" ] &&
-  echo "Motion detection is not supported on your camera!" && exit 1
-
-# read config file
-_c="/etc/webui/motion.conf"
-[ ! -f "$_c" ] && echo "Config file $_c not found!" && exit 2
-source $_c
-unset _c
+  echo "Motion detection is not supported on your camera!" && quit_clean 1
 
 [ "true" != "$motion_enabled" ] &&
-  echo "Motion detection is disabled in config!" && exit 3
+  echo "Motion detection is disabled in config!" && quit_clean 3
 
 STOP_FILE=/tmp/motion.stop
 TEMPLATE="Motion detected in \d* regions"
@@ -25,7 +23,7 @@ logread -f | grep "$TEMPLATE" | sed -E "s/.*($TEMPLATE).*/\\1/" | while read LIN
 
   # get a fresh snapshot
   snapshot4cron.sh -f
-  [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+  [ $? -ne 0 ] && echo "Cannot get a snapshot" && quit_clean 2
 
   # send alerts
   [ "true" = "$motion_send2email" ] && send2email.sh

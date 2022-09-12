@@ -50,12 +50,12 @@ mj="
 .osd.posY|Vertical position of OSD|px|number|-2000,2000,1|-100|
 .osd.privacyMasks|Privacy masks|px|string||0x0x234x640,2124x0x468x1300|Coordinates of masked areas separated by commas.
 .nightMode.enabled|Enable night mode||boolean|true,false|false|
-.nightMode.irSensorPin|GPIO pin of signal from IR sensor||number|0,100,1|62|
+.nightMode.irSensorPin|GPIO pin of signal from IR sensor||number|0,255,1|62|
 .nightMode.irSensorPinInvert|IR sensor signal is inverted||boolean|true,false|false|
-.nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|0,100,1|1|
-.nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|0,100,1|2|
+.nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|0,255,1|1|
+.nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|0,255,1|2|
 .nightMode.dncDelay|Delay before toggling Day/Night mode||range|1,60,1|20|
-.nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|1,100,1|65|
+.nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|1,255,1|65|
 .nightMode.nightAPI|Use night mode API||boolean|true,false|false|
 .nightMode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1,1000,1|300|
 .records.enabled|Enable saving records||boolean|true,false|false|
@@ -95,7 +95,7 @@ mj="
 .audio.device|Audio card||string||hw:2|
 .audio.outputEnabled|Enable audio output||boolean|true,false|false|
 .audio.voiceEqualizer|Audio equalizer||select|disabled,common,music,noisy|disabled|
-.audio.speakerPin|GPIO pin of audio speaker||number|1,100,1|32|
+.audio.speakerPin|GPIO pin of audio speaker||number|1,255,1|32|
 .audio.speakerPinInvert|Audio speaker signal is inverted||boolean|true,false|false|
 .rtsp.enabled|Enable output||boolean|true,false|true|
 .rtsp.port|Port for RTSP protocol||number|1,65535,1|554|rtsp://${network_address}:[port]/stream={0,1}

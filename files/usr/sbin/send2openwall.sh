@@ -34,10 +34,14 @@ done
 [ "false" = "$openwall_enabled" ] &&
   log "Sending to OpenIPC Wall is disabled." && exit 10
 
-snapshot4cron.sh
-# [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
-
-snapshot=/tmp/snapshot4cron.jpg
+if [ "true" = "$openwall_use_heif" ] && [ "h265" = "$(yaml-cli .g .video0.codec)" ]; then
+  snapshot=/tmp/snapshot4cron.heif
+  curl --silent --fail --url http://127.0.0.1/image.heif?t=$(date +"%s") --output ${snapshot}
+else
+  snapshot4cron.sh
+  # [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+  snapshot=/tmp/snapshot4cron.jpg
+fi
 [ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
 
 # validate mandatory values

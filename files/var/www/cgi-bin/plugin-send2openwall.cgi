@@ -76,7 +76,7 @@ fi
   </div>
 </div>
 
-<% if [ "h265" != "$(yaml-cli .g .video0.codec)" ]; then %>
+<% if [ "h265" != "$(yaml-cli -g .video0.codec)" ]; then %>
 <script>
 $('#openwall_use_heif').checked = false;
 $('#openwall_use_heif').disabled = true;

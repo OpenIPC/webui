@@ -34,7 +34,7 @@ done
 [ "false" = "$openwall_enabled" ] &&
   log "Sending to OpenIPC Wall is disabled." && exit 10
 
-if [ "true" = "$openwall_use_heif" ] && [ "h265" = "$(yaml-cli .g .video0.codec)" ]; then
+if [ "true" = "$openwall_use_heif" ] && [ "h265" = "$(yaml-cli -g .video0.codec)" ]; then
   snapshot=/tmp/snapshot4cron.heif
   curl --silent --fail --url http://127.0.0.1/image.heif?t=$(date +"%s") --output ${snapshot}
 else

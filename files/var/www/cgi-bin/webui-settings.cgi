@@ -77,6 +77,7 @@ fi
       <% button_submit %>
     </form>
   </div>
+<!--
   <div class="col">
     <h3>Locale</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">
@@ -86,8 +87,6 @@ fi
       <% button_submit %>
     </form>
   </div>
-
-<% if [ "$debug" -ge "1" ]; then %>
   <div class="col">
     <h3>Configuration</h3>
     <%
@@ -97,7 +96,7 @@ fi
     #ex "ls /var/www/lang/"
     %>
   </div>
-<% fi %>
+-->
 </div>
 
 <%in p/footer.cgi %>

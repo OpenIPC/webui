@@ -121,9 +121,11 @@ e() {
 
 ex() {
   # NB! $() forks process and stalls output.
+  echo "<div class=\"${2}\">"
   echo "<h5># ${1}</h5><pre class=\"small\">"
   eval "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g"
   echo "</pre>"
+  echo "</div>"
 }
 
 # field_checkbox "name" "label" "hint"
@@ -215,7 +217,7 @@ field_password() {
 
   _v=$(t_value "$1")
 
-  echo "<p class=\"password\">" \
+  echo "<p class=\"password\" id=\"${1}_wrap\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<span class=\"input-group\">" \
     "<input type=\"password\" id=\"${1}\" name=\"${1}\" class=\"form-control\" value=\"${_v}\" placeholder=\"K3wLHaZk3R!\">" \
@@ -249,7 +251,7 @@ field_range() {
   _vr=$_v
   [ -z "$_vr" -o "$_ab" = "$_vr" ] && _vr=$(( ( $_mn + $_mx ) / 2 ))
 
-  echo "<p class=\"range\">" \
+  echo "<p class=\"range\" id=\"${_n}_wrap\">" \
     "<label class=\"form-label\" for=\"${_n}\">${_l}</label>" \
     "<span class=\"input-group\">"
   # NB! no name on checkbox, since we don't want its data submitted
@@ -282,7 +284,7 @@ field_select() {
 
   _u=$5
 
-  echo "<p class=\"select\">" \
+  echo "<p class=\"select\" id=\"${1}_wrap\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<select class=\"form-select\" id=\"${1}\" name=\"${1}\">"
   [ -z "$(t_value "$1")" ] && echo "<option value=\"\">Select from available options</option>"
@@ -339,7 +341,7 @@ field_text() {
   _v="$(t_value "$1")"
 
   #  placeholder="FQDN or IP address"
-  echo "<p class=\"string\">" \
+  echo "<p class=\"string\" id=\"${1}_wrap\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<input type=\"text\" id=\"${1}\" name=\"${1}\" class=\"form-control\" value=\"${_v}\">"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
@@ -357,7 +359,7 @@ field_textarea() {
 
   _v=$(t_value "$1")
 
-  echo "<p class=\"textarea\">" \
+  echo "<p class=\"textarea\" id=\"${1}_wrap\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<textarea id=\"${1}\" name=\"${1}\" class=\"form-control\">${_v}</textarea>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"

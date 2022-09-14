@@ -43,8 +43,8 @@ PID=$$
 log "Plugin ${plugin} initialized."
 
 if [ -f "$CONFIG_FILE" ]; then
-  log "Reading coniguration from ${CONFIG_FILE}."
+  log "Reading configuration from ${CONFIG_FILE}."
   source $CONFIG_FILE
 else
-  log "Coniguration file ${CONFIG_FILE} not found."
+  log "Configuration file ${CONFIG_FILE} not found."
 fi

@@ -9,6 +9,7 @@ show_help() {
   -c channel  Telegram channel ID. See https://gist.github.com/mraaroncruz/e76d19f7d61d59419002db54030ebe35
   -m message  Message text.
   -p photo    Path to photo file.
+    -a          Send as attachment.
   -s          Disable notification.
   -v          Verbose output.
   -h          Show this help.
@@ -20,8 +21,9 @@ show_help() {
 telegram_disable_notification=false
 
 # override config values with command line arguments
-while getopts c:m:p:st:vh flag; do
+while getopts ac:m:p:st:vh flag; do
   case ${flag} in
+  a) telegram_as_attachment="true" ;;
   c) telegram_channel=${OPTARG} ;;
   m) telegram_message=${OPTARG} ;;
   p) telegram_photo=${OPTARG} ;;
@@ -67,13 +69,19 @@ fi
 
 command="${command} --url https://api.telegram.org/bot${telegram_token}/"
 if [ -n "$telegram_photo" ]; then
-  command="${command}sendPhoto"
-  command="${command} -F 'photo=@${telegram_photo}'"
+  if [ "true" = "$telegram_as_attachment" ]; then
+    command="${command}sendDocument"
+    command="${command} -F 'document=@${telegram_photo}'"
+  else
+    command="${command}sendPhoto"
+    command="${command} -F 'photo=@${telegram_photo}'"
+  fi
   command="${command} -F 'caption=${telegram_message}'"
 else
   command="${command}sendMessage"
   command="${command} -F 'text=${telegram_message}'"
 fi
+
 command="${command} -H 'Content-Type: multipart/form-data'"
 command="${command} -F 'chat_id=${telegram_channel}'"
 command="${command} -F 'disable_notification=${telegram_disable_notification}'"

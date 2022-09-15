@@ -4,7 +4,7 @@
 plugin="telegram"
 plugin_name="Send to Telegram"
 page_title="Send to Telegram"
-params="enabled token as_attachment channel socks5_enabled"
+params="enabled token as_attachment as_photo channel socks5_enabled"
 
 tmp_file=/tmp/${plugin}.conf
 
@@ -49,6 +49,7 @@ fi
       <% field_switch "telegram_enabled" "Enable sending to Telegram" %>
       <% field_text "telegram_token" "Token" "Your Telegram Bot authentication token." %>
       <% field_text "telegram_channel" "Chat ID" "Numeric ID of the channel you want the bot to post images to." %>
+      <% field_switch "telegram_as_photo" "Send as photo." %>
       <% field_switch "telegram_as_attachment" "Send as attachment." %>
       <% field_switch "telegram_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
       <% button_submit %>

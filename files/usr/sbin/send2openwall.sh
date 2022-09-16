@@ -4,7 +4,8 @@ plugin="openwall"
 source /usr/sbin/plugins-common
 
 show_help() {
-  echo "Usage: $0 [-v] [-h]
+  echo "Usage: $0 [-v] [-h] [-f]
+  -f          Force send.
   -v          Verbose output.
   -h          Show this help.
 "
@@ -24,14 +25,15 @@ soc_temperature=$(ipcinfo --temp)
 uptime=$(uptime | sed -r 's/^.+ up ([^,]+), .+$/\1/')
 
 # override config values with command line arguments
-while getopts vh flag; do
+while getopts fvh flag; do
   case ${flag} in
+  f) force=1 ;;
   v) verbose=1 ;;
   h) show_help ;;
   esac
 done
 
-[ "false" = "$openwall_enabled" ] &&
+[ "false" = "$openwall_enabled" ] && [ $force -ne 1 ] &&
   log "Sending to OpenIPC Wall is disabled." && exit 10
 
 if [ "true" = "$openwall_use_heif" ] && [ "h265" = "$(yaml-cli -g .video0.codec)" ]; then

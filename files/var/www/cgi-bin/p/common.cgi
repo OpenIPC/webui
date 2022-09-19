@@ -485,13 +485,13 @@ preview() {
   [ -n "$1" ] && refresh_rate=$1
   if [ "true" = "$(yaml-cli -g .jpeg.enabled)" ]; then
     echo "<div class=\"ratio ratio-16x9 mb-3\">" \
-      "<img src=\"http://${network_address}/image.jpg\" alt=\"Image: preview\" " \
+      "<img src=\"http://${network_address}/image.jpg?width=1280&height=720&qfactor=50\" alt=\"Image: preview\" " \
       "class=\"img-fluid mb-3 h-100 w-auto position-absolute top-50 start-50 translate-middle\" " \
       "id=\"preview-jpeg\"></div>"
   else
     echo "<p class=\"alert alert-warning\"><a href=\"majestic-settings.cgi?tab=jpeg\">Enable JPEG support</a> to see the preview.</p>"
   fi
-  echo "<script>async function updatePreview() { await sleep(${refresh_rate} * 1000); \$('#preview-jpeg').src = 'http://${network_address}/image.jpg?t=' + Date.now(); } \$('#preview-jpeg').addEventListener('load', updatePreview); updatePreview();</script>"
+  echo "<script>async function updatePreview() { await sleep(${refresh_rate} * 1000); \$('#preview-jpeg').src = 'http://${network_address}/image.jpg?width=1280&height=720&qfactor=50&t=' + Date.now(); } \$('#preview-jpeg').addEventListener('load', updatePreview); updatePreview();</script>"
 }
 
 progressbar() {

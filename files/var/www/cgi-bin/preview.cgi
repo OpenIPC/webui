@@ -14,7 +14,6 @@ size_h=${size#*x}
     <ul class="nav nav-tabs" role="tablist">
       <% tab_lap "jpeg" "JPEG" "active" %>
       <% [ "hisilicon" = "$soc_vendor" ] && tab_lap "mjpeg" "MJPEG" %>
-      <% tab_lap "video" "Video" %>
     </ul>
     <div class="tab-content p-2" id="tab-content">
       <div id="jpeg-tab-pane" role="tabpanel" class="tab-pane fade active show" aria-labelledby="jpeg-tab" tabindex="0">
@@ -41,14 +40,6 @@ size_h=${size#*x}
         </div>
       </div>
     <% fi %>
-      <div id="video-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="video-tab" tabindex="0">
-        <div class="ratio ratio-16x9">
-          <video id="preview-video" preload="metadata" poster="/a/SMPTE_Color_Bars_16x9.svg">
-            <source src="http://<%= $network_address %>/video.mp4" type="video/mp4">
-            Your browser does not support HTML5 video.
-          </video>
-        </div>
-      </div>
     </div>
   </div>
   <div class="col-md-4 col-xl-3 col-xxl-3 pt-5">
@@ -163,9 +154,6 @@ $$('button[data-bs-toggle=tab]').forEach(el => el.addEventListener('shown.bs.tab
     $('#preview-jpeg').addEventListener('load', updatePreview);
     updatePreview();
   }
-  if (event.target.id == "#video-tab") {
-    $('#preview-video').play();
-  }
 <% if [ "hisilicon" = "$soc_vendor" ]; then %>
   if (event.target.id == "#mjpeg-tab") {
     $('#preview-mjpeg').src = "http://<%= $network_address %>/mjpeg";
@@ -175,9 +163,6 @@ $$('button[data-bs-toggle=tab]').forEach(el => el.addEventListener('shown.bs.tab
   if (event.relatedTarget) {
     if (event.relatedTarget.id == "#jpeg-tab") {
       $('#preview-jpeg').removeEventListener('load', updatePreview);
-    }
-    if (event.relatedTarget.id == "#video-tab") {
-      $('#preview-video').pause();
     }
 <% if [ "hisilicon" = "$soc_vendor" ]; then %>
     if (event.relatedTarget.id == "#mjpeg-tab") {

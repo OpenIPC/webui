@@ -16,14 +16,20 @@ show_help() {
 flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
 fw_variant=$(grep "BUILD_OPTION" /etc/os-release | cut -d= -f2 | tr -d /\"/); [ -z "$fw_variant" ] && fw_variant="lite"
 fw_version=$(grep "OPENIPC_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)
+
 network_hostname=$(hostname -s)
-network_macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/ //g" | uniq | tail -1)
+network_default_interface=$(ip r | sed -nE '/default/s/.+dev (\w+).+?/\1/p' | head -n 1)
+if [ -z "$network_default_interface" ]; then
+  network_default_interface=$(ip r | sed -nE 's/.+dev (\w+).+?/\1/p' | head -n 1)
+fi
+network_macaddr=$(cat /sys/class/net/${network_default_interface}/address)
+
 sensor=$(ipcinfo --short-sensor)
 : ${sensor:=$(fw_printenv sensor | cut -d= -f2- | cut -d_ -f1)}
 #sensor_config=$(yaml-cli -g .isp.sensorConfig)
-streamer=$(ipcinfo --streamer)
 soc=$(ipcinfo --chip-name)
 soc_temperature=$(ipcinfo --temp)
+streamer=$(ipcinfo --streamer)
 uptime=$(uptime | sed -r 's/^.+ up ([^,]+), .+$/\1/')
 
 # override config values with command line arguments
@@ -72,9 +78,9 @@ command="${command} -F 'flash_size=${flash_size}'"
 command="${command} -F 'hostname=${network_hostname}'"
 command="${command} -F 'sensor=${sensor}'"
 # command="${command} -F 'sensor_config=${sensor_config}'"
-command="${command} -F 'streamer=${streamer}'"
 command="${command} -F 'soc=${soc}'"
 command="${command} -F 'soc_temperature=${soc_temperature}'"
+command="${command} -F 'streamer=${streamer}'"
 command="${command} -F 'uptime=${uptime}'"
 command="${command} -F 'file=@${snapshot}'"
 

@@ -25,11 +25,12 @@ fi
 network_macaddr=$(cat /sys/class/net/${network_default_interface}/address)
 
 sensor=$(ipcinfo --short-sensor)
-: ${sensor:=$(fw_printenv sensor | cut -d= -f2- | cut -d_ -f1)}
+[ -z "$sensor" ] && sensor=$(fw_printenv -n sensor | cut -d_ -f1)
+
 #sensor_config=$(yaml-cli -g .isp.sensorConfig)
 soc=$(ipcinfo --chip-name)
 soc_temperature=$(ipcinfo --temp)
-streamer=$(ipcinfo --streamer)
+streamer=$(basename $(ipcinfo --streamer))
 uptime=$(uptime | sed -r 's/^.+ up ([^,]+), .+$/\1/')
 
 # override config values with command line arguments

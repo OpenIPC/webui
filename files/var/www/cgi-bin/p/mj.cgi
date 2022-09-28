@@ -46,7 +46,7 @@ mj="
 .osd.enabled|Enable On-Screen Display (OSD)||boolean|true,false|false|
 .osd.font|Path to font file used in OSD||string||/usr/share/fonts/truetype/UbuntuMono-Regular.ttf|
 .osd.template|OSD template||string||%a %e %B %Y %H:%M:%S %Z|Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format.
-.osd.corner|OSC preset position||select|tl:Top Left,tr:Top Right,bl:Bottom Left,br:Bottom Right|br|
+.osd.corner|OSD preset position||select|tl:Top Left,tr:Top Right,bl:Bottom Left,br:Bottom Right|br|
 .osd.posX|Horizontal position of OSD|px|number|-2000,2000,2|-100|
 .osd.posY|Vertical position of OSD|px|number|-2000,2000,2|-100|
 .osd.privacyMasks|Privacy masks|px|string||0x0x234x640,2124x0x468x1300|Coordinates of masked areas separated by commas.

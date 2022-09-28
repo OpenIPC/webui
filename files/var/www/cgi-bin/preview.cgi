@@ -11,38 +11,9 @@ size_h=${size#*x}
 
 <div class="row preview">
   <div class="col-md-8 col-xl-9 col-xxl-9 position-relative mb-3">
-    <ul class="nav nav-tabs" role="tablist">
-      <% tab_lap "jpeg" "JPEG" "active" %>
-      <% [ "hisilicon" = "$soc_vendor" ] && tab_lap "mjpeg" "MJPEG" %>
-    </ul>
-    <div class="tab-content p-2" id="tab-content">
-      <div id="jpeg-tab-pane" role="tabpanel" class="tab-pane fade active show" aria-labelledby="jpeg-tab" tabindex="0">
-        <% preview 1 %>
-      </div>
-    <% if [ "hisilicon" = "$soc_vendor" ]; then %>
-      <div id="mjpeg-tab-pane" role="tabpanel" class="tab-pane fade" aria-labelledby="mjpeg-tab" tabindex="0">
-        <div class="ratio ratio-16x9">
-          <% if [ "true" = "$(yaml-cli -g .jpeg.enabled)" ]; then %>
-            <img src="/a/SMPTE_Color_Bars_16x9.svg" id="preview-mjpeg" height="<%= $size_h %>" width="<%= $size_w %>"
-              class="img-fluid h-100 w-auto position-absolute top-50 start-50 translate-middle"
-              alt="MJPEG Preview. If you don't see it, it's not supported by your browser, or MJPEG steam does not work.">
-          <% else %>
-            <p class="alert alert-warning"><a href="majestic-settings.cgi?tab=jpeg">Enable JPEG support</a> to see the preview.</p>
-          <% fi %>
-          <% if [ "true" = "$(yaml-cli -g .audio.enabled)" ]; then %>
-            <audio autoplay controls class="d-block img-fluid">
-              <source src="http://<%= $network_address %>/audio.opus" type="audio/ogg; codecs=opus">
-              <source src="http://<%= $network_address %>/audio.m4a" type="audio/aac">
-              <source src="http://<%= $network_address %>/audio.mp3" type="audio/mpeg">
-              Your browser does not support HTML5 audio.
-            </audio>
-          <% fi %>
-        </div>
-      </div>
-    <% fi %>
-    </div>
+    <% preview 1 %>
   </div>
-  <div class="col-md-4 col-xl-3 col-xxl-3 pt-5">
+  <div class="col-md-4 col-xl-3 col-xxl-3">
     <div class="d-grid gap-2 mb-3">
       <div class="input-group">
         <div class="input-group-text">
@@ -148,29 +119,6 @@ $("#speed")?.addEventListener("click", event => {
   event.target.src = (event.target.src.split("/").pop() == "speed-slow.svg") ? "/a/speed-fast.svg" : "/a/speed-slow.svg";
   // sendToApi("/speed/toggle");
 });
-
-$$('button[data-bs-toggle=tab]').forEach(el => el.addEventListener('shown.bs.tab', event => {
-  if (event.target.id == "#jpeg-tab") {
-    $('#preview-jpeg').addEventListener('load', updatePreview);
-    updatePreview();
-  }
-<% if [ "hisilicon" = "$soc_vendor" ]; then %>
-  if (event.target.id == "#mjpeg-tab") {
-    $('#preview-mjpeg').src = "http://<%= $network_address %>/mjpeg";
-  }
-<% fi %>
-
-  if (event.relatedTarget) {
-    if (event.relatedTarget.id == "#jpeg-tab") {
-      $('#preview-jpeg').removeEventListener('load', updatePreview);
-    }
-<% if [ "hisilicon" = "$soc_vendor" ]; then %>
-    if (event.relatedTarget.id == "#mjpeg-tab") {
-      $('#preview-mjpeg').src="/a/SMPTE_Color_Bars_16x9.svg";
-    }
-<% fi %>
-  }
-}));
 </script>
 
 <%in p/footer.cgi %>

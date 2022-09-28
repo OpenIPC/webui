@@ -484,19 +484,47 @@ preview() {
   refresh_rate=10
   [ -n "$1" ] && refresh_rate=$1
   if [ "true" = "$(yaml-cli -g .jpeg.enabled)" ]; then
-    echo "<div class=\"ratio ratio-16x9 mb-3\">" \
-      "<img src=\"/a/SMPTE_Color_Bars_16x9.svg\" alt=\"Image: preview\" " \
-      "class=\"img-fluid mb-3 h-100 w-auto position-absolute top-50 start-50 translate-middle\" " \
-      "id=\"preview-jpeg\"></div>"
+    echo "<canvas id=\"preview\" style=\"background:gray url(/a/SMPTE_Color_Bars_16x9.svg);width:100%;height:auto;\"></canvas>"
   else
     echo "<p class=\"alert alert-warning\"><a href=\"majestic-settings.cgi?tab=jpeg\">Enable JPEG support</a> to see the preview.</p>"
   fi
-  echo "<script>async function calculatePreviewSize(){let img=\$('#preview-jpeg');await sleep(${refresh_rate}*1000);" \
-    "img.src=pimg;let ratio=img.naturalWidth/img.naturalHeight;pw=img.width;pw-=pw%16;ph=pw/ratio;ph-=ph%16;}" \
-    "async function updatePreview(){await sleep(${refresh_rate}*1000);" \
-    "\$('#preview-jpeg').src=pimg+'?width='+pw+'&height='+ph+'&qfactor=50&t='+Date.now();}" \
-    "\$('#preview-jpeg').addEventListener('load', updatePreview);let pw,ph;const pimg='http://${network_address}/image.jpg';" \
-    "calculatePreviewSize();updatePreview();</script>"
+  echo "<script>
+async function calculatePreviewSize() {
+  await sleep(${refresh_rate} * 1000);
+  const i = new Image();
+  i.src = pimg;
+  i.onload = function() {
+    ratio = i.naturalWidth / i.naturalHeight;
+    console.log('Ratio', ratio);
+
+    pw = canvas.clientWidth; pw -= pw % 16;
+    ph = pw / ratio; ph -= ph % 16;
+    console.log('pw x ph', pw, ph);
+
+    canvas.width = pw;
+    canvas.height = ph;
+  }
+}
+
+async function updatePreview() {
+  await sleep(${refresh_rate} * 1000);
+  jpg.src = pimg + '?width=' + pw + '&height=' + ph + '&qfactor=50&t=' + Date.now();
+  jpg.onload = function() {
+    ctx.drawImage(jpg, 0, 0, jpg.width, jpg.height, 0, 0, pw, ph);
+  }
+}
+
+const pimg='http://${network_address}/image.jpg';
+const jpg = new Image();
+jpg.addEventListener('load', updatePreview);
+
+const canvas = \$('#preview');
+const ctx = canvas.getContext('2d');
+let pw, ph, ratio;
+calculatePreviewSize();
+updatePreview();
+</script>
+"
 }
 
 progressbar() {

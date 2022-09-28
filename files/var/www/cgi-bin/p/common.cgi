@@ -508,7 +508,11 @@ async function calculatePreviewSize() {
 
 async function updatePreview() {
   await sleep(${refresh_rate} * 1000);
-  jpg.src = pimg + '?width=' + pw + '&height=' + ph + '&qfactor=50&t=' + Date.now();
+  if (typeof(pw) != 'undefined' && typeof(ph) != 'undefined') {
+    jpg.src = pimg + '?width=' + pw + '&height=' + ph + '&qfactor=50&t=' + Date.now();
+  } else {
+    jpg.src = pimg + '?qfactor=50&t=' + Date.now();
+  }
   jpg.onload = function() {
     ctx.drawImage(jpg, 0, 0, jpg.width, jpg.height, 0, 0, pw, ph);
   }

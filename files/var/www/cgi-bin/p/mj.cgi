@@ -99,7 +99,7 @@ mj="
 .audio.speakerPin|GPIO pin of audio speaker||number|1,255,1|32|
 .audio.speakerPinInvert|Audio speaker signal is inverted||boolean|true,false|false|
 .rtsp.enabled|Enable output||boolean|true,false|true|
-.rtsp.port|Port for RTSP protocol||number|1,65535,1|554|rtsp://${network_address}:[port]/stream={0,1}
+.rtsp.port|Port for RTSP protocol||number|1,65535,1|554|rtsp://user:pass@${network_address}:[port]/stream={0,1}
 .hls.enabled|Enable HTTP Live Streaming (HLS)||boolean|true,false|true|
 .youtube.enabled|Enable Youtube support||boolean|true,false|false|
 .youtube.key|Youtube API key||string||xxxx-xxxx-xxxx-xxxx-xxxx|

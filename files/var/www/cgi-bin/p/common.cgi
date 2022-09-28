@@ -585,7 +585,7 @@ report_command_error() {
 
 report_command_info() {
   echo "<h4># ${1}</h4>"
-  report_log "$2"
+  echo "<pre class=\"small\">${2}</pre>"
 }
 
 # row_ "class"

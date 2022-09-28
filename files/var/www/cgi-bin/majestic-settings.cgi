@@ -25,7 +25,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     key=".$(echo $form_field_name | cut -d= -f1 | sed 's/_/./g')"
 
     # do not include helping fields into config
-    [ "$key" = ".netip.password.plain" ] && continue
+    if [ "$key" = ".netip.password.plain" ] || [ "$key" = ".osd.corner" ]; then
+      continue
+    fi
 
     value="$(echo $form_field_name | cut -d= -f2)"
 
@@ -218,6 +220,28 @@ done
     inp.replaceWith(sel);
   }
 <% fi %>
+
+  $("#mj_osd_corner")?.addEventListener("change", (ev) => {
+    const padding = 16;
+    switch (ev.target.value) {
+      case "bl":
+        $("#mj_osd_posX").value = padding;
+        $("#mj_osd_posY").value = -(padding);
+        break;
+      case "br":
+        $("#mj_osd_posX").value = -(padding);
+        $("#mj_osd_posY").value = -(padding);
+        break;
+      case "tl":
+        $("#mj_osd_posX").value = padding;
+        $("#mj_osd_posY").value = padding;
+        break;
+      case "tr":
+        $("#mj_osd_posX").value = -(padding);
+        $("#mj_osd_posY").value = padding;
+        break;
+    }
+  })
 
   $("#mj_netip_enabled")?.addEventListener("change", (ev) => {
     $("#mj_netip_user").required = ev.target.checked;

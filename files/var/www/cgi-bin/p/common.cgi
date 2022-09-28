@@ -289,8 +289,8 @@ field_select() {
     "<select class=\"form-select\" id=\"${1}\" name=\"${1}\">"
   [ -z "$(t_value "$1")" ] && echo "<option value=\"\">Select from available options</option>"
   for o in $_o; do
-    _v="${o%|*}"
-    _n="${o#*|}"
+    _v="${o%:*}"
+    _n="${o#*:}"
     [ "$1" != "mj_isp_sensorConfig" ] && _n=${_n//_/ }
     echo -n "<option value=\"${_v}\""
     [ "$(t_value "$1")" = "$_v" ] && echo -n " selected"

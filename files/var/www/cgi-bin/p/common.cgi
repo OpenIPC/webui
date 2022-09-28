@@ -505,7 +505,6 @@ function calculatePreviewSize() {
 }
 
 async function updatePreview() {
-  log('Updating preview image');
   if (typeof(pw) != 'undefined' && typeof(ph) != 'undefined') {
     jpg.src = pimg + '?width=' + pw + '&height=' + ph + '&qfactor=50&t=' + Date.now();
   } else {

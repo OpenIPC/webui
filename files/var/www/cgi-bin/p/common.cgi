@@ -484,7 +484,7 @@ preview() {
   refresh_rate=10
   [ -n "$1" ] && refresh_rate=$1
   if [ "true" = "$(yaml-cli -g .jpeg.enabled)" ]; then
-    echo "<canvas id=\"preview\" style=\"background:gray url(/a/SMPTE_Color_Bars_16x9.svg);background-size:contain;width:100%;height:auto;\"></canvas>"
+    echo "<canvas id=\"preview\" style=\"background:gray url(/a/SMPTE_Color_Bars_16x9.svg);background-size:cover;width:100%;height:auto;\"></canvas>"
   else
     echo "<p class=\"alert alert-warning\"><a href=\"majestic-settings.cgi?tab=jpeg\">Enable JPEG support</a> to see the preview.</p>"
   fi

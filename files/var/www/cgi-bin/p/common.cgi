@@ -489,44 +489,69 @@ preview() {
     echo "<p class=\"alert alert-warning\"><a href=\"majestic-settings.cgi?tab=jpeg\">Enable JPEG support</a> to see the preview.</p>"
   fi
   echo "<script>
-async function calculatePreviewSize() {
-  await sleep(${refresh_rate} * 1000);
+function log(payload) {
+  if (debug == 1)
+    console.log(payload);
+}
+
+function calculatePreviewSize() {
+  log('Calculating preview size');
+
+  log('Getting fullsize image');
   const i = new Image();
   i.src = pimg;
   i.onload = function() {
+    log('Image natural width: '+i.naturalWidth);
+    log('Image natural height: '+i.naturalHeight);
+
     ratio = i.naturalWidth / i.naturalHeight;
-    console.log('Ratio', ratio);
+    log('Image ratio: '+ratio);
 
-    pw = canvas.clientWidth; pw -= pw % 16;
-    ph = pw / ratio; ph -= ph % 16;
-    console.log('pw x ph', pw, ph);
+    pw = canvas.clientWidth
+    log('Canvas available width: '+canvas.clientWidth);
 
+    pw -= pw % 16
+    log('Canvas normalized width: '+pw);
+
+    ph = pw / ratio
+    ph -= ph % 16
+    log('Canvas normalized height: '+ph);
+
+    log('Resizing canvas');
     canvas.width = pw;
     canvas.height = ph;
+
+    updatePreview();
   }
 }
 
 async function updatePreview() {
-  await sleep(${refresh_rate} * 1000);
+  log('Updating preview image');
   if (typeof(pw) != 'undefined' && typeof(ph) != 'undefined') {
+    log('Requesting resized image');
     jpg.src = pimg + '?width=' + pw + '&height=' + ph + '&qfactor=50&t=' + Date.now();
   } else {
+    log('Requesting filsize image');
     jpg.src = pimg + '?qfactor=50&t=' + Date.now();
   }
   jpg.onload = function() {
+    log('Place image on canvas, fit into '+pw+'x'+ph);
     ctx.drawImage(jpg, 0, 0, jpg.width, jpg.height, 0, 0, pw, ph);
   }
 }
 
+const debug = 1;
 const pimg='http://${network_address}/image.jpg';
 const jpg = new Image();
-jpg.addEventListener('load', updatePreview);
+jpg.addEventListener('load', async function() {
+  await sleep(${refresh_rate} * 1000);
+  updatePreview();
+});
 
 const canvas = \$('#preview');
 const ctx = canvas.getContext('2d');
 let pw, ph, ratio;
 calculatePreviewSize();
-updatePreview();
 </script>
 "
 }

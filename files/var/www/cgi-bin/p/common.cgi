@@ -654,8 +654,13 @@ update_caminfo() {
 
   # Hardware
   flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
-  sensor=$(ipcinfo --short-sensor)
+
   sensor_ini=$(ipcinfo --long-sensor)
+  [ -z "$sensor_ini" ] && sensor_ini=$(fw_printenv -n sensor)
+
+  sensor=$(ipcinfo --short-sensor)
+  [ -z "$sensor" ] && sensor=$(echo $sensor_ini | cut -d_ -f1)
+
   soc=$(ipcinfo --chip-name)
   soc_family=$(ipcinfo --family)
   soc_vendor=$(ipcinfo --vendor)

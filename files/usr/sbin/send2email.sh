@@ -58,7 +58,7 @@ command="${command}${email_smtp_host}:${email_smtp_port}"
 
 command="${command} --mail-from ${email_from_address}"
 command="${command} --mail-rcpt ${email_to_address}"
-command="${command} --user '${email_smtp_login}:${email_smtp_password}'"
+command="${command} --user '${email_smtp_username}:${email_smtp_password}'"
 
 if [ "true" = "$email_attach_snapshot" ]; then
   snapshot4cron.sh

@@ -9,6 +9,8 @@ show_help() {
   -c channel  Telegram channel ID. See https://gist.github.com/mraaroncruz/e76d19f7d61d59419002db54030ebe35
   -m message  Message text.
   -p photo    Path to photo file.
+    -i          Send inline.
+    -a          Send as attachment.
   -s          Disable notification.
   -v          Verbose output.
   -h          Show this help.
@@ -20,9 +22,11 @@ show_help() {
 telegram_disable_notification=false
 
 # override config values with command line arguments
-while getopts c:m:p:st:vh flag; do
+while getopts ac:im:p:st:vh flag; do
   case ${flag} in
+  a) telegram_as_attachment="true" ;;
   c) telegram_channel=${OPTARG} ;;
+  i) telegram_as_photo="true" ;;
   m) telegram_message=${OPTARG} ;;
   p) telegram_photo=${OPTARG} ;;
   s) telegram_disable_notification=true ;;
@@ -65,21 +69,36 @@ if [ "true" = "$telegram_socks5_enabled" ]; then
   command="${command} --proxy-user ${socks5_login}:${socks5_password}"
 fi
 
-command="${command} --url https://api.telegram.org/bot${telegram_token}/"
-if [ -n "$telegram_photo" ]; then
-  command="${command}sendPhoto"
-  command="${command} -F 'photo=@${telegram_photo}'"
-  command="${command} -F 'caption=${telegram_message}'"
-else
-  command="${command}sendMessage"
-  command="${command} -F 'text=${telegram_message}'"
-fi
 command="${command} -H 'Content-Type: multipart/form-data'"
 command="${command} -F 'chat_id=${telegram_channel}'"
 command="${command} -F 'disable_notification=${telegram_disable_notification}'"
+command="${command} --url https://api.telegram.org/bot${telegram_token}/"
 
-log "$command"
-eval "$command" >>$LOG_FILE 2>&1
+if [ -n "$telegram_photo" ]; then
+  if [ "true" = "$telegram_as_attachment" ]; then
+    command1="$command"
+    command1="${command1}sendDocument"
+    command1="${command1} -F 'document=@${telegram_photo}'"
+    command1="${command1} -F 'caption=${telegram_message}'"
+    log "$command1"
+    eval "$command1" >>$LOG_FILE 2>&1
+  fi
+
+  if [ "true" = "$telegram_as_photo" ]; then
+    command2="$command"
+    command2="${command2}sendPhoto"
+    command2="${command2} -F 'photo=@${telegram_photo}'"
+    command2="${command2} -F 'caption=${telegram_message}'"
+    log "$command2"
+    eval "$command2" >>$LOG_FILE 2>&1
+  fi
+else
+  command3="$command"
+  command3="${command3}sendMessage"
+  command3="${command3} -F 'text=${telegram_message}'"
+  log "$command3"
+  eval "$command3" >>$LOG_FILE 2>&1
+fi
 
 [ "1" = "$verbose" ] && cat $LOG_FILE
 

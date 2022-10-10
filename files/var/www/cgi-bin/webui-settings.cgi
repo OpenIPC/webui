@@ -73,10 +73,10 @@ fi
         <input type="text" id="ui_username" name="ui_username" value="admin" class="form-control" autocomplete="username" disabled>
       </p>
       <% field_password "ui_password" "Password" %>
-      <% # field_password "webui_password_confirmation" "Confirm Password" %>
       <% button_submit %>
     </form>
   </div>
+<!--
   <div class="col">
     <h3>Locale</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">
@@ -86,8 +86,6 @@ fi
       <% button_submit %>
     </form>
   </div>
-
-<% if [ "$debug" -ge "1" ]; then %>
   <div class="col">
     <h3>Configuration</h3>
     <%
@@ -97,7 +95,7 @@ fi
     #ex "ls /var/www/lang/"
     %>
   </div>
-<% fi %>
+-->
 </div>
 
 <%in p/footer.cgi %>

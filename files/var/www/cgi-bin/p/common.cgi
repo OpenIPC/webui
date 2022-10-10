@@ -121,9 +121,11 @@ e() {
 
 ex() {
   # NB! $() forks process and stalls output.
+  echo "<div class=\"${2}\">"
   echo "<h5># ${1}</h5><pre class=\"small\">"
   eval "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g"
   echo "</pre>"
+  echo "</div>"
 }
 
 # field_checkbox "name" "label" "hint"
@@ -215,7 +217,7 @@ field_password() {
 
   _v=$(t_value "$1")
 
-  echo "<p class=\"password\">" \
+  echo "<p class=\"password\" id=\"${1}_wrap\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<span class=\"input-group\">" \
     "<input type=\"password\" id=\"${1}\" name=\"${1}\" class=\"form-control\" value=\"${_v}\" placeholder=\"K3wLHaZk3R!\">" \
@@ -249,7 +251,7 @@ field_range() {
   _vr=$_v
   [ -z "$_vr" -o "$_ab" = "$_vr" ] && _vr=$(( ( $_mn + $_mx ) / 2 ))
 
-  echo "<p class=\"range\">" \
+  echo "<p class=\"range\" id=\"${_n}_wrap\">" \
     "<label class=\"form-label\" for=\"${_n}\">${_l}</label>" \
     "<span class=\"input-group\">"
   # NB! no name on checkbox, since we don't want its data submitted
@@ -282,13 +284,13 @@ field_select() {
 
   _u=$5
 
-  echo "<p class=\"select\">" \
+  echo "<p class=\"select\" id=\"${1}_wrap\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<select class=\"form-select\" id=\"${1}\" name=\"${1}\">"
   [ -z "$(t_value "$1")" ] && echo "<option value=\"\">Select from available options</option>"
   for o in $_o; do
-    _v="${o%|*}"
-    _n="${o#*|}"
+    _v="${o%:*}"
+    _n="${o#*:}"
     [ "$1" != "mj_isp_sensorConfig" ] && _n=${_n//_/ }
     echo -n "<option value=\"${_v}\""
     [ "$(t_value "$1")" = "$_v" ] && echo -n " selected"
@@ -339,7 +341,7 @@ field_text() {
   _v="$(t_value "$1")"
 
   #  placeholder="FQDN or IP address"
-  echo "<p class=\"string\">" \
+  echo "<p class=\"string\" id=\"${1}_wrap\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<input type=\"text\" id=\"${1}\" name=\"${1}\" class=\"form-control\" value=\"${_v}\">"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
@@ -357,7 +359,7 @@ field_textarea() {
 
   _v=$(t_value "$1")
 
-  echo "<p class=\"textarea\">" \
+  echo "<p class=\"textarea\" id=\"${1}_wrap\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<textarea id=\"${1}\" name=\"${1}\" class=\"form-control\">${_v}</textarea>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
@@ -482,14 +484,51 @@ preview() {
   refresh_rate=10
   [ -n "$1" ] && refresh_rate=$1
   if [ "true" = "$(yaml-cli -g .jpeg.enabled)" ]; then
-    echo "<div class=\"ratio ratio-16x9 mb-3\">" \
-      "<img src=\"http://${network_address}/image.jpg\" alt=\"Image: preview\" " \
-      "class=\"img-fluid mb-3 h-100 w-auto position-absolute top-50 start-50 translate-middle\" " \
-      "id=\"preview-jpeg\"></div>"
+    echo "<canvas id=\"preview\" style=\"background:gray url(/a/SMPTE_Color_Bars_16x9.svg);background-size:cover;width:100%;height:auto;\"></canvas>"
   else
     echo "<p class=\"alert alert-warning\"><a href=\"majestic-settings.cgi?tab=jpeg\">Enable JPEG support</a> to see the preview.</p>"
   fi
-  echo "<script>async function updatePreview() { await sleep(${refresh_rate} * 1000); \$('#preview-jpeg').src = 'http://${network_address}/image.jpg?t=' + Date.now(); } \$('#preview-jpeg').addEventListener('load', updatePreview); updatePreview();</script>"
+  echo "<script>
+function calculatePreviewSize() {
+  const i = new Image();
+  i.src = pimg;
+  i.onload = function() {
+    ratio = i.naturalWidth / i.naturalHeight;
+    pw = canvas.clientWidth
+    pw -= pw % 16
+    ph = pw / ratio
+    ph -= ph % 16
+    canvas.width = pw;
+    canvas.height = ph;
+    updatePreview();
+  }
+}
+
+async function updatePreview() {
+  if (typeof(pw) != 'undefined' && typeof(ph) != 'undefined') {
+    jpg.src = pimg + '?width=' + pw + '&height=' + ph + '&qfactor=50&t=' + Date.now();
+  } else {
+    jpg.src = pimg + '?qfactor=50&t=' + Date.now();
+  }
+  jpg.onload = function() {
+    ctx.drawImage(jpg, 0, 0, jpg.width, jpg.height, 0, 0, pw, ph);
+    canvas.style.background = null;
+  }
+}
+
+const pimg='http://${network_address}/image.jpg';
+const jpg = new Image();
+jpg.addEventListener('load', async function() {
+  await sleep(${refresh_rate} * 1000);
+  updatePreview();
+});
+
+const canvas = \$('#preview');
+const ctx = canvas.getContext('2d');
+let pw, ph, ratio;
+calculatePreviewSize();
+</script>
+"
 }
 
 progressbar() {
@@ -550,7 +589,7 @@ report_command_error() {
 
 report_command_info() {
   echo "<h4># ${1}</h4>"
-  report_log "$2"
+  echo "<pre class=\"small\">${2}</pre>"
 }
 
 # row_ "class"
@@ -619,8 +658,13 @@ update_caminfo() {
 
   # Hardware
   flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
-  sensor=$(ipcinfo --short-sensor)
+
   sensor_ini=$(ipcinfo --long-sensor)
+  [ -z "$sensor_ini" ] && sensor_ini=$(fw_printenv -n sensor)
+
+  sensor=$(ipcinfo --short-sensor)
+  [ -z "$sensor" ] && sensor=$(echo $sensor_ini | cut -d_ -f1)
+
   soc=$(ipcinfo --chip-name)
   soc_family=$(ipcinfo --family)
   soc_vendor=$(ipcinfo --vendor)
@@ -768,6 +812,7 @@ pagename="${pagename%%.*}"
 include p/locale_en.sh
 include p/mj.cgi
 include /etc/webui/socks5.conf
+include /etc/webui/speaker.conf
 include /etc/webui/telegram.conf
 include /etc/webui/webhook.conf
 include /etc/webui/yadisk.conf

@@ -4,7 +4,8 @@ plugin="openwall"
 source /usr/sbin/plugins-common
 
 show_help() {
-  echo "Usage: $0 [-v] [-h]
+  echo "Usage: $0 [-v] [-h] [-f]
+  -f          Force send.
   -v          Verbose output.
   -h          Show this help.
 "
@@ -15,29 +16,43 @@ show_help() {
 flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
 fw_variant=$(grep "BUILD_OPTION" /etc/os-release | cut -d= -f2 | tr -d /\"/); [ -z "$fw_variant" ] && fw_variant="lite"
 fw_version=$(grep "OPENIPC_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)
+
 network_hostname=$(hostname -s)
-network_macaddr=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/ //g" | uniq | tail -1)
+network_default_interface=$(ip r | sed -nE '/default/s/.+dev (\w+).+?/\1/p' | head -n 1)
+if [ -z "$network_default_interface" ]; then
+  network_default_interface=$(ip r | sed -nE 's/.+dev (\w+).+?/\1/p' | head -n 1)
+fi
+network_macaddr=$(cat /sys/class/net/${network_default_interface}/address)
+
 sensor=$(ipcinfo --short-sensor)
+[ -z "$sensor" ] && sensor=$(fw_printenv -n sensor | cut -d_ -f1)
+
 #sensor_config=$(yaml-cli -g .isp.sensorConfig)
 soc=$(ipcinfo --chip-name)
 soc_temperature=$(ipcinfo --temp)
+streamer=$(basename $(ipcinfo --streamer))
 uptime=$(uptime | sed -r 's/^.+ up ([^,]+), .+$/\1/')
 
 # override config values with command line arguments
-while getopts vh flag; do
+while getopts fvh flag; do
   case ${flag} in
+  f) force=1 ;;
   v) verbose=1 ;;
   h) show_help ;;
   esac
 done
 
-[ "false" = "$openwall_enabled" ] &&
+[ "false" = "$openwall_enabled" ] && [ $force -ne 1 ] &&
   log "Sending to OpenIPC Wall is disabled." && exit 10
 
-snapshot4cron.sh
-# [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
-
-snapshot=/tmp/snapshot4cron.jpg
+if [ "true" = "$openwall_use_heif" ] && [ "h265" = "$(yaml-cli -g .video0.codec)" ]; then
+  snapshot=/tmp/snapshot4cron.heif
+  curl --silent --fail --url http://127.0.0.1/image.heif?t=$(date +"%s") --output ${snapshot}
+else
+  snapshot4cron.sh
+  # [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+  snapshot=/tmp/snapshot4cron.jpg
+fi
 [ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
 
 # validate mandatory values
@@ -66,6 +81,7 @@ command="${command} -F 'sensor=${sensor}'"
 # command="${command} -F 'sensor_config=${sensor_config}'"
 command="${command} -F 'soc=${soc}'"
 command="${command} -F 'soc_temperature=${soc_temperature}'"
+command="${command} -F 'streamer=${streamer}'"
 command="${command} -F 'uptime=${uptime}'"
 command="${command} -F 'file=@${snapshot}'"
 

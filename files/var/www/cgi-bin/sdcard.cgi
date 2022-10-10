@@ -62,12 +62,10 @@ else
     fi
 %>
 <a class="btn btn-primary" href="/">Go home</a>
-<%
-  else
-    _c="df -h|sed -n 1p/${card_partition////\\\/}/p"
-    _o="$($_c)"
-    report_command_info "$_c" "$_o"
-%>
+<% else %>
+<h4># df -h | sed -n "1p/<%= ${card_partition////\\\/} %>/p"</h4>
+<pre class="small"><% df -h | sed -n "1p/${card_partition////\\\/}/p" %></pre>
+
 <div class="alert alert-danger">
   <h4>ATTENTION! Formatting will destroy all data on the SD Card.</h4>
   <p>Make sure you have a backup copy if you are going to use the data in the future.</p>

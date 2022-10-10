@@ -4,7 +4,7 @@
 plugin="openwall"
 plugin_name="Send to OpenWall"
 page_title="Send to OpenWall"
-params="enabled interval socks5_enabled"
+params="enabled interval use_heif socks5_enabled"
 
 tmp_file=/tmp/${plugin}.conf
 
@@ -64,6 +64,7 @@ fi
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_switch "openwall_enabled" "Enable sending to OpenWall" %>
       <% field_select "openwall_interval" "Interval, minutes" "15,30,60" "Time between submissions. 15 minutes or longer." %>
+      <% field_switch "openwall_use_heif" "Use HEIF format." "Requires H.265 codec on Video0" %>
       <% field_switch "openwall_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
       <% button_submit %>
     </form>
@@ -74,5 +75,12 @@ fi
     <% [ -f "/tmp/webui.log" ] && link_to "Download log file" "dl.cgi" %>
   </div>
 </div>
+
+<% if [ "h265" != "$(yaml-cli -g .video0.codec)" ]; then %>
+<script>
+$('#openwall_use_heif').checked = false;
+$('#openwall_use_heif').disabled = true;
+</script>
+<% fi %>
 
 <%in p/footer.cgi %>

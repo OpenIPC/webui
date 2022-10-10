@@ -4,7 +4,7 @@
 plugin="mqtt"
 plugin_name="MQTT client"
 page_title="MQTT client"
-params="enabled host port client_id username password topic message use_ssl"
+params="enabled host port client_id username password topic message send_snap snap_topic use_ssl"
 
 [ ! -f /usr/bin/mosquitto_pub ] && redirect_to "/" "danger" "MQTT client is not a part of your firmware."
 
@@ -30,14 +30,21 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     [ -z "$mqtt_message"   ] && flash_append "danger" "MQTT message cannot be empty." && error=16
   fi
 
-  [ "${mqtt_topic:0:1}" = "/" ] && \
+  if [ "${mqtt_topic:0:1}" = "/" ] || [ "${mqtt_snap_topic:0:1}" = "/" ]; then
     flash_append "danger" "MQTT topic should not start with a slash." && error=17
+  fi
 
-  [ "$mqtt_topic" != "${mqtt_topic// /}" ] && \
+  if [ "$mqtt_topic" != "${mqtt_topic// /}" ] || [ "$mqtt_snap_topic" != "${mqtt_snap_topic// /}" ]; then
     flash_append "danger" "MQTT topic should not contain spaces." && error=18
+  fi
 
-  [ -n "$(echo $mqtt_topic | sed -r -n /[^\x00-\xFF/]/p)" ] && \
+  if [ -n "$(echo $mqtt_topic | sed -r -n /[^\x00-\xFF/]/p)" ] || [ -n "$(echo $mqtt_snap_topic | sed -r -n /[^\x00-\xFF/]/p)" ]; then
     flash_append "danger" "MQTT topic should not include non-ASCII characters." && error=19
+  fi
+
+  if [ "true" = "$mqtt_send_snap" ] && [ -z "$mqtt_snap_topic" ]; then
+    flash_append "danger" "MQTT topic for snapshot should not be empty." && error=20
+  fi
 
   if [ -z "$error" ]; then
     # create temp config file
@@ -76,6 +83,8 @@ fi
       <% field_password "mqtt_password" "MQTT broker password" %>
       <% field_text "mqtt_topic" "MQTT topic" %>
       <% field_text "mqtt_message" "MQTT message" "Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format." %>
+      <% field_switch "mqtt_send_snap" "Send a snapshot" %>
+      <% field_text "mqtt_snap_topic" "MQTT topic to send the snapshot to" %>
       <% field_switch "mqtt_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
       <% button_submit %>
     </form>

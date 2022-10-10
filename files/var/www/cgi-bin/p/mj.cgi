@@ -46,16 +46,17 @@ mj="
 .osd.enabled|Enable On-Screen Display (OSD)||boolean|true,false|false|
 .osd.font|Path to font file used in OSD||string||/usr/share/fonts/truetype/UbuntuMono-Regular.ttf|
 .osd.template|OSD template||string||%a %e %B %Y %H:%M:%S %Z|Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format.
-.osd.posX|Horizontal position of OSD|px|number|-2000,2000,1|-100|
-.osd.posY|Vertical position of OSD|px|number|-2000,2000,1|-100|
+.osd.corner|OSD preset position||select|tl:Top Left,tr:Top Right,bl:Bottom Left,br:Bottom Right|br|
+.osd.posX|Horizontal position of OSD|px|number|-2000,2000,2|-100|
+.osd.posY|Vertical position of OSD|px|number|-2000,2000,2|-100|
 .osd.privacyMasks|Privacy masks|px|string||0x0x234x640,2124x0x468x1300|Coordinates of masked areas separated by commas.
 .nightMode.enabled|Enable night mode||boolean|true,false|false|
-.nightMode.irSensorPin|GPIO pin of signal from IR sensor||number|0,100,1|62|
+.nightMode.irSensorPin|GPIO pin of signal from IR sensor||number|0,255,1|62|
 .nightMode.irSensorPinInvert|IR sensor signal is inverted||boolean|true,false|false|
-.nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|0,100,1|1|
-.nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|0,100,1|2|
+.nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|0,255,1|1|
+.nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|0,255,1|2|
 .nightMode.dncDelay|Delay before toggling Day/Night mode||range|1,60,1|20|
-.nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|1,100,1|65|
+.nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|1,255,1|65|
 .nightMode.nightAPI|Use night mode API||boolean|true,false|false|
 .nightMode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1,1000,1|300|
 .records.enabled|Enable saving records||boolean|true,false|false|
@@ -95,10 +96,10 @@ mj="
 .audio.device|Audio card||string||hw:2|
 .audio.outputEnabled|Enable audio output||boolean|true,false|false|
 .audio.voiceEqualizer|Audio equalizer||select|disabled,common,music,noisy|disabled|
-.audio.speakerPin|GPIO pin of audio speaker||number|1,100,1|32|
+.audio.speakerPin|GPIO pin of audio speaker||number|1,255,1|32|
 .audio.speakerPinInvert|Audio speaker signal is inverted||boolean|true,false|false|
 .rtsp.enabled|Enable output||boolean|true,false|true|
-.rtsp.port|Port for RTSP protocol||number|1,65535,1|554|rtsp://${network_address}:[port]/stream={0,1}
+.rtsp.port|Port for RTSP protocol||number|1,65535,1|554|rtsp://user:pass@${network_address}:[port]/stream={0,1}
 .hls.enabled|Enable HTTP Live Streaming (HLS)||boolean|true,false|true|
 .youtube.enabled|Enable Youtube support||boolean|true,false|false|
 .youtube.key|Youtube API key||string||xxxx-xxxx-xxxx-xxxx-xxxx|
@@ -126,6 +127,7 @@ mj_hide_unless_debug="isp_aGain isp_dGain isp_ispGain isp_exposure"
 # conditional settings limiters
 mj_show_audio_voiceEqualizer="gk7205v200 hi3516cv300 hi3516cv500 hi3516ev300 hi3519v101"
 mj_show_mjpeg_vendor="hisilicon"
+mj_show_isp_slowShutter_vendor="hisilicon"
 mj_hide_isp_sensorConfig_vendor="ingenic"
 mj_hide_video0_codec="hi3516cv200 hi3516cv100"
 mj_hide_video1_codec="hi3516cv200 hi3516cv100"

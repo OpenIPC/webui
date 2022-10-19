@@ -46,7 +46,7 @@ done
   log "Telegram channel not found" && exit 12
 
 if [ -z "$telegram_message" ]; then
-  telegram_message="$(hostname -s), $(date +"%F %T")"
+  telegram_message="$(echo "$telegram_caption" | sed "s/%hostname/$(hostname -s)/;s/%datetime/$(date +"%F %T")/;s/%soctemp/$(ipcinfo --temp)/")"
 
   if [ -z "$telegram_photo" ]; then
     snapshot4cron.sh

@@ -4,7 +4,7 @@
 plugin="motion"
 plugin_name="Motion guard"
 page_title="Motion guard"
-params="enabled sensitivity send2email send2ftp send2telegram send2webhook send2yadisk playonspeaker throttle"
+params="enabled sensitivity send2email send2ftp send2telegram send2webhook send2yadisk playonspeaker send2mqtt throttle"
 
 [ -n "$(echo "$mj_hide_motionDetect" | sed -n "/\b${soc_family}\b/p")" ] && redirect_to "/" "danger" "Motion detection is not supported on your camera."
 
@@ -29,6 +29,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     [ "false" = "$motion_send2webhook" ] && \
     [ "false" = "$motion_send2yadisk" ] && \
     [ "false" = "$motion_playonspeaker" ] && \
+    [ "false" = "$motion_send2mqtt" ] && \
     flash_append "danger" "You need to select at least one method of notification" && error=1
   fi
 
@@ -82,6 +83,7 @@ fi
       <% field_checkbox "motion_send2webhook" "Send to webhook" "<a href=\"plugin-send2webhook.cgi\">Configure sending to a webhook</a>" %>
       <% field_checkbox "motion_send2yadisk" "Upload to Yandex Disk" "<a href=\"plugin-send2yadisk.cgi\">Configure sending to Yandex Disk</a>" %>
       <% field_checkbox "motion_playonspeaker" "Play sound file on speaker" "<a href=\"plugin-playonspeaker.cgi\">Configure playing on speaker</a>" %>
+      <% field_checkbox "motion_send2mqtt" "Send to MQTT" "<a href=\"plugin-send2mqtt.cgi\">Configure sending to MQTT</a>" %>
       <% button_submit %>
     </form>
   </div>
@@ -98,6 +100,7 @@ fi
 <% [ "true" != "$webhook_enabled"  ] && echo "\$('#motion_send2webhook').disabled = true;" %>
 <% [ "true" != "$yadisk_enabled"   ] && echo "\$('#motion_send2yadisk').disabled = true;" %>
 <% [ "true" != "$speaker_enabled"  ] && echo "\$('#motion_playonspeaker').disabled = true;" %>
+<% [ "true" != "$mqtt_enabled"  ] && echo "\$('#motion_send2mqtt').disabled = true;" %>
 </script>
 
 <%in p/footer.cgi %>

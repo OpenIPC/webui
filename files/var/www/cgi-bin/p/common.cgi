@@ -816,6 +816,7 @@ include /etc/webui/speaker.conf
 include /etc/webui/telegram.conf
 include /etc/webui/webhook.conf
 include /etc/webui/yadisk.conf
+include /etc/webui/mqtt.conf
 
 # reload_locale
 check_password

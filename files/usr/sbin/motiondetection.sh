@@ -32,4 +32,5 @@ logread -f | grep "$TEMPLATE" | sed -E "s/.*($TEMPLATE).*/\\1/" | while read LIN
   [ "true" = "$motion_send2webhook" ] && send2webhook.sh
   [ "true" = "$motion_send2yadisk" ] && send2yadisk.sh
   [ "true" = "$motion_playonspeaker" ] && playonspeaker.sh
+  [ "true" = "$motion_send2mqtt" ] && send2mqtt.sh
 done &

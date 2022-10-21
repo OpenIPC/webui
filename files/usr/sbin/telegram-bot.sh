@@ -81,8 +81,10 @@ do
 							curl -s -X POST -H "Charset: UTF-8" $api/sendMessage -d chat_id=$telegram_channel -d "reply_markup=${keyboard}" -d "text=Please insert command:" >/dev/null 2>&1
 							;;
 						("/reboot")
-                            reboot -f
-                            ;;
+						        informex_reboot="WTF ?"
+							reply_to_msg $msg_id $origin "\${informex_reboot}"
+                                                        #reboot -f
+                                                        ;;
 						("/relay")
 							echo "[ $DATE ] Run /relay command !" | logger -t "telegram_bot" -p daemon.info
 							informex_relay=$("tg_relay.sh")

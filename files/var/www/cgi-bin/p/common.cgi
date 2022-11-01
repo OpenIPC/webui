@@ -611,6 +611,18 @@ sanitize() {
   _n=$1
   # strip trailing whitespace
   eval $_n=$(echo \$${_n})
+  # escape doublequotes
+  eval $_n=$(echo \${$_n//\\\"/\\\\\\\"})
+  # escape varialbles
+  eval $_n=$(echo \${$_n//\$/\\\\\$})
+  unset _n
+}
+
+sanitize4web() {
+  _n=$1
+  # convert html entities
+  eval $_n=$(echo \${$_n//\\\"/\&quot\;})
+  eval $_n=$(echo \${$_n//\$/\\\$})
   unset _n
 }
 

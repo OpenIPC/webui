@@ -1,30 +1,50 @@
+echo_c() {
+  # 31 red, 32 green, 33 yellow, 34 blue, 35 magenta, 36 cyan, 37 white, 38 grey
+  [ -z "$HASERLVER" ] && _text="\e[1;$1m$2\e[0m" || _text="$2"
+  echo -e "$_text"
+  unset _text
+}
+
 log() {
   # poor man's logrotate
   if [ -f "$LOG_FILE" ] && [ "$(wc -c $LOG_FILE | cut -d' ' -f1)" -gt $LOG_SIZE_LIMIT ]; then
+    log "Rotate log file ${LOG_FILE}."
     mv "$LOG_FILE" "${LOG_FILE}.1"
   fi
-
   _txt="$(date +"%F %T") [${PID}:${plugin}] ${1}"
+  _color="$2"; [ -z "$_color" ] && _color=38
   echo "$_txt" >>$LOG_FILE
-  [ "1" != "$quiet" ] && echo "$_txt"
+  [ "1" != "$quiet" ] && echo_c "$_color" "$_txt"
   unset _txt
+  unset _color
+}
+
+run() {
+  echo "RESULT: $(eval "$1")"
+}
+
+log_and_run() {
+  log "$1" 34
+  run "$1"
 }
 
 quit_clean() {
-  log "Remove lock file."
-  [ -f "$LOCK_FILE" ] && rm "$LOCK_FILE"
-  log "Exiting"
+  if [ -f "$LOCK_FILE" ]; then
+    log "Remove lock file ${LOCK_FILE}."
+    rm "$LOCK_FILE"
+  fi
+  log "Exit [$1]."
   exit $1
 }
 
 singleton() {
+  log "Check lock file ${LOCK_FILE}."
   if [ -f "$LOCK_FILE" ] && ps | grep "^\s*\b$(cat "$LOCK_FILE")\b" >/dev/null; then
-    log "Checked lock file $LOCK_FILE. Another instance running with PID $(cat "$LOCK_FILE")."
-    log "Exiting"
-    exit 1
+    log "Another instance running with PID $(cat "$LOCK_FILE")."
+    quit_clean 1
   fi
-  printf "$PID" >$LOCK_FILE
-  log "Create lock file $LOCK_FILE."
+  printf "$PID\n" >$LOCK_FILE
+  log "Create lock file ${LOCK_FILE}."
 }
 
 if [ -z "$plugin" ]; then
@@ -35,7 +55,7 @@ fi
 
 LOG_FILE=/tmp/webui.log
 LOG_SIZE_LIMIT=50000
-LOCK_FILE=/var/run/${plugin}.pid
+LOCK_FILE=/var/run/${plugin}-singleton.pid
 CONFIG_FILE="/etc/webui/${plugin}.conf"
 curl_timeout=100
 PID=$$
@@ -44,7 +64,7 @@ log "Plugin ${plugin} initialized."
 
 if [ -f "$CONFIG_FILE" ]; then
   log "Reading configuration from ${CONFIG_FILE}."
-  source $CONFIG_FILE
+  source "$CONFIG_FILE"
 else
   log "Configuration file ${CONFIG_FILE} not found."
 fi

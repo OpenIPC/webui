@@ -63,7 +63,7 @@ fi
 command="${command} --url ftp://"
 [ -n "$ftp_username" ] && [ -n "$ftp_password" ] &&
   command="${command}${ftp_username}:${ftp_password}"
-command="${command}@${ftp_host}"
+command="${command}@${ftp_host}:${ftp_port}"
 [ -n "$ftp_path" ] &&
   command="${command}/${ftp_path// /%20}"
 command="${command}/$(date +"$ftp_template")"

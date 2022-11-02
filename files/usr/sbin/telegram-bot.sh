@@ -10,6 +10,9 @@ fi
 source /usr/sbin/plugins-common
 singleton
 
+[ "true" != "$telegrambot_enabled" ] &&
+  log "Telegram Bot is not enabled in config." && exit 10
+
 data_file="/tmp/${plugin}.json"
 offset_file="/tmp/${plugin}_offset"
 offset_file_backup="/etc/webui/${plugin}_offset"

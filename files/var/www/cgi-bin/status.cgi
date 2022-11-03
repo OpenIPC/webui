@@ -36,7 +36,7 @@
 
   <div class="col">
     <h3>Date & Time</h3>
-    <% ex "/bin/date" %>
+    <pre><%= $tz_name %><br><% /bin/date %></pre>
     <div class="d-grid d-xxl-flex gap-2 mx-auto">
       <a href="timezone.cgi" class="btn btn-primary">Change timezone</a>
       <a href="network-ntp.cgi" class="btn btn-primary">Set up time synchronization</a>

@@ -51,11 +51,21 @@ dump_data() {
 }
 
 save_offset() {
-  [ -f "$offset_file" ] && cp "$offset_file" "$offset_file_backup"
+  if [ -f "$offset_file" ]; then
+    log "Save offset file to permanent storage."
+    cp "$offset_file" "$offset_file_backup"
+  else
+    log "Offset file ${offset_file} not found."
+  fi
 }
 
 restore_offset() {
-  [ -f "$offset_file_backup" ] && cp "$offset_file_backup" "$offset_file"
+  if [ -f "$offset_file_backup" ]; then
+    log "Restore offset file from permanent storage."
+    cp "$offset_file_backup" "$offset_file"
+  else
+    log "Offset file backup not found in permanent storage."
+  fi
 }
 
 #### Telegram API

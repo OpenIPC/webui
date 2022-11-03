@@ -44,7 +44,7 @@
   </div>
 </div>
 
-<div class="row g-4 mb-4">
+<div class="row g-4 mb-4 ui-expert">
   <div class="col ">
     <h3>Resources</h3>
     <% ex "/usr/bin/uptime" %>

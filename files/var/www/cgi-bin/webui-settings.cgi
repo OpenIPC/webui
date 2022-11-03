@@ -73,6 +73,7 @@ fi
         <input type="text" id="ui_username" name="ui_username" value="admin" class="form-control" autocomplete="username" disabled>
       </p>
       <% field_password "ui_password" "Password" %>
+      <% field_select "webui_level" "Level" "user,expert" %>
       <% button_submit %>
     </form>
   </div>

@@ -700,7 +700,7 @@ update_caminfo() {
   ui_password_fw=$(grep admin /rom/etc/httpd.conf|cut -d: -f3)
 
   # Network
-  network_dhcp="false"; [ "$(cat /etc/network/interfaces | grep "eth0 inet" | grep dhcp)" ] && network_dhcp="true"
+  network_dhcp="false"
   if [ -f /etc/resolv.conf ]; then
     network_dns_1=$(cat /etc/resolv.conf | grep nameserver | sed -n 1p | cut -d' ' -f2)
     network_dns_2=$(cat /etc/resolv.conf | grep nameserver | sed -n 2p | cut -d' ' -f2)
@@ -711,6 +711,7 @@ update_caminfo() {
   # if no default interface then no gateway nor wan mac present
   network_default_interface=$(ip r | sed -nE '/default/s/.+dev (\w+).+?/\1/p' | head -n 1)
   if [ -n "$network_default_interface" ]; then
+    [ "$(cat /etc/network/interfaces.d/${network_default_interface} | grep inet | grep dhcp)" ] && network_dhcp="true"
     network_gateway=$(ip r | sed -nE "/default/s/.+ via ([0-9\.]+).+?/\1/p")
   else
     network_default_interface=$(ip r | sed -nE 's/.+dev (\w+).+?/\1/p' | head -n 1)
@@ -720,7 +721,7 @@ update_caminfo() {
     # network_netmask=$(fw_printenv -n netmask)
   fi
   network_macaddr=$(cat /sys/class/net/${network_default_interface}/address)
-  network_address=$(ip r | sed -nE "/${network_default_interface}/s/.+src ([0-9\.]+).+?/\1/p")
+  network_address=$(ip r | sed -nE "/${network_default_interface}/s/.+src ([0-9\.]+).+?/\1/p" | uniq)
      network_cidr=$(ip r | sed -nE "/${network_default_interface}/s/^[0-9\.]+(\/[0-9]+).+?/\1/p")
   network_netmask=$(ifconfig $network_default_interface | grep "Mask:" | cut -d: -f4) # FIXME: Maybe convert from $network_cidr?
 

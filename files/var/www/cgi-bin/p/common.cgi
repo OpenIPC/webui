@@ -1,5 +1,7 @@
 #!/usr/bin/haserl
 <%
+IFS_ORIG=$IFS
+
 # tag "tag" "text" "css" "extras"
 tag() {
   _t="$1"; _n="$2"; _c="$3"; _x="$4"

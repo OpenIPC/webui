@@ -72,7 +72,7 @@ fi
   <div class="col">
     <% ex "cat $config_file" %>
     <% ex "grep send2openwall /etc/crontabs/root" %>
-    <% [ -f "/tmp/webui.log" ] && link_to "Download log file" "dl.cgi" %>
+    <% [ -f "/tmp/webui.log" ] && link_to "Download log file" "dl-log.cgi" %>
   </div>
 </div>
 

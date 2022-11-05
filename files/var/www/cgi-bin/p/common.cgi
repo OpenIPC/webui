@@ -629,7 +629,7 @@ sanitize4web() {
 }
 
 generate_signature() {
-  echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash, ${fw_version}-${fw_variant}, ${network_hostname}, ${network_macaddr}" >$signature_file
+  echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB ${flash_type} flash, ${fw_version}-${fw_variant}, ${network_hostname}, ${network_macaddr}" >$signature_file
 }
 
 signature() {
@@ -671,6 +671,8 @@ update_caminfo() {
   done; unset _f
 
   # Hardware
+  flash_type="nor"
+  [ -n "$(fw_printenv bootcmd | grep nand)" ] && flash_type="nand"
   flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
 
   sensor_ini=$(ipcinfo --long-sensor)
@@ -738,6 +740,7 @@ update_caminfo() {
   fi
 
   echo "flash_size=\"$flash_size\"
+flash_type=\"$flash_type\"
 fw_version=\"$fw_version\"
 fw_variant=\"$fw_variant\"
 fw_build=\"$fw_build\"

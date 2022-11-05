@@ -23,9 +23,7 @@ while getopts b:fvh flag; do
   case ${flag} in
   b) branch=${OPTARG} ;;
   f) enforce=1 ;;
-  v) verbose=1
-    v_opts="-v"
-    ;;
+  v) verbose=1; v_opts="-v" ;;
   h) print_usage ;;
   esac
 done

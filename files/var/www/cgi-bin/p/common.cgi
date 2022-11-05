@@ -720,9 +720,9 @@ update_caminfo() {
     network_gateway=$(ip r | sed -nE "/default/s/.+ via ([0-9\.]+).+?/\1/p")
   else
     network_default_interface=$(ip r | sed -nE 's/.+dev (\w+).+?/\1/p' | head -n 1)
-    network_gateway='' # $(fw_printenv -n gatewayip) # FIXME: Why do we need one?
-    # network_macaddr=$(fw_printenv -n ethaddr)   # FIXME: Why do we need one?
-    #network_address=$(fw_printenv -n ipaddr)    # FIXME: Maybe $(hostname -i) which will return 127.0.1.1?
+    network_gateway='' # $(fw_printenv -n gatewayip) # FIXME: Why do we need this?
+    # network_macaddr=$(fw_printenv -n ethaddr)      # FIXME: Why do we need this?
+    # network_address=$(fw_printenv -n ipaddr)       # FIXME: Maybe use $(hostname -i) that would return 127.0.1.1?
     # network_netmask=$(fw_printenv -n netmask)
   fi
   network_macaddr=$(cat /sys/class/net/${network_default_interface}/address)

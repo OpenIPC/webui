@@ -46,7 +46,7 @@ fi
 %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+<div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
   <div class="col">
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_switch "telegram_enabled" "Enable sending to Telegram" %>

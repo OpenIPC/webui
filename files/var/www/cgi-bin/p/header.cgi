@@ -94,6 +94,7 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
             <ul aria-labelledby="dropdownTools" class="dropdown-menu">
               <li><a class="dropdown-item" href="tools.cgi">Ping & Traceroute</a></li>
               <li><a class="dropdown-item" href="console.cgi">Web Console</a></li>
+              <li><a class="dropdown-item" href="file-manager.cgi">File Manager</a></li>
               <li><a class="dropdown-item" href="ssh-keys.cgi">SSH Key</a></li>
               <li><a class="dropdown-item" href="sdcard.cgi">SD Card</a></li>
             </ul>

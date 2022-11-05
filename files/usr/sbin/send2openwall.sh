@@ -1,7 +1,7 @@
 #!/bin/sh
 
 plugin="openwall"
-source /usr/sbin/plugins-common
+source /usr/sbin/common-plugins
 
 show_help() {
   echo "Usage: $0 [-v] [-h] [-f]

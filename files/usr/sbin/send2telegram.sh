@@ -1,7 +1,7 @@
 #!/bin/sh
 
 plugin="telegram"
-source /usr/sbin/plugins-common
+source /usr/sbin/common-plugins
 
 show_help() {
   echo "Usage: $0 [-t token] [-c channel] [-m message] [-p photo] [-s] [-b] [-v] [-h]

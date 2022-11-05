@@ -1,7 +1,7 @@
 #!/bin/sh
 
 plugin="ftp"
-source /usr/sbin/plugins-common
+source /usr/sbin/common-plugins
 
 show_help() {
   echo "Usage: $0 [-h host] [-p port] [-u username] [-P password] [-d path] [-f file] [-v] [-h]

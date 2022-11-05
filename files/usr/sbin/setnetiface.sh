@@ -1,7 +1,7 @@
 #!/bin/sh
 
 plugin="network"
-source /usr/sbin/plugins-common
+source /usr/sbin/common-plugins
 
 # $(date) $network_mode $network_interface $network_address
 TEMPLATE_COMMON="# created at %s

@@ -1,8 +1,15 @@
+PID=$$
+LOCK_FILE=/var/run/process-${PID}.pid
+LOG_FILE=/tmp/webui.log
+LOG_SIZE_LIMIT=50000
+
+curl_timeout=100
+
 echo_c() {
+  local t
   # 31 red, 32 green, 33 yellow, 34 blue, 35 magenta, 36 cyan, 37 white, 38 grey
-  [ -z "$HASERLVER" ] && _text="\e[1;$1m$2\e[0m" || _text="$2"
-  echo -e "$_text"
-  unset _text
+  [ -z "$HASERLVER" ] && t="\e[1;$1m$2\e[0m" || t="$2"
+  echo -e "$t"
 }
 
 log() {
@@ -21,10 +28,6 @@ log() {
   unset _color
 }
 
-run() {
-  echo "RESULT: $(eval "$1")"
-}
-
 log_and_run() {
   log "$1" 34
   run "$1"
@@ -39,6 +42,11 @@ quit_clean() {
   exit $1
 }
 
+run() {
+  local r=$(eval "$1" >>$LOG_FILE 2>&1)
+  echo "RESULT: ${r}"
+}
+
 singleton() {
   log "Check lock file ${LOCK_FILE}."
   if [ -f "$LOCK_FILE" ] && ps | grep "^\s*\b$(cat "$LOCK_FILE")\b" >/dev/null; then
@@ -48,25 +56,3 @@ singleton() {
   printf "$PID\n" >$LOCK_FILE
   log "Create lock file ${LOCK_FILE}."
 }
-
-if [ -z "$plugin" ]; then
-  log "ERROR: No plugin name found."
-  log "This file should not be called directly!"
-  quit_clean 2
-fi
-
-LOG_FILE=/tmp/webui.log
-LOG_SIZE_LIMIT=50000
-LOCK_FILE=/var/run/${plugin}-singleton.pid
-CONFIG_FILE="/etc/webui/${plugin}.conf"
-curl_timeout=100
-PID=$$
-
-log "Plugin ${plugin} initialized."
-
-if [ -f "$CONFIG_FILE" ]; then
-  log "Reading configuration from ${CONFIG_FILE}."
-  source "$CONFIG_FILE"
-else
-  log "Configuration file ${CONFIG_FILE} not found."
-fi

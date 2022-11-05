@@ -7,7 +7,7 @@ if [ -z "$(command -v jsonfilter)" ]; then
   exit 99
 fi
 
-source /usr/sbin/plugins-common
+source /usr/sbin/common-plugins
 singleton
 
 [ "true" != "$telegrambot_enabled" ] &&

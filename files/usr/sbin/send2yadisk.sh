@@ -1,7 +1,7 @@
 #!/bin/sh
 
 plugin="yadisk"
-source /usr/sbin/plugins-common
+source /usr/sbin/common-plugins
 
 show_help() {
   echo "Usage: $0 [-u username] [-P password] [-v] [-h]

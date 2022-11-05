@@ -1,7 +1,7 @@
 #!/bin/sh
 
 plugin="email"
-source /usr/sbin/plugins-common
+source /usr/sbin/common-plugins
 
 show_help() {
   echo "Usage: $0 [-f address] [-t address] [-s subject] [-b body] [-v] [-h]

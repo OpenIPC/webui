@@ -1,7 +1,7 @@
 #!/bin/sh
 
 plugin="motion"
-source /usr/sbin/plugins-common
+source /usr/sbin/common-plugins
 singleton
 
 UNSUPPORTED="hi3516cv100 hi3516av100"

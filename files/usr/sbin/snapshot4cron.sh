@@ -1,7 +1,7 @@
 #!/bin/sh
 
 plugin="snapshot"
-source /usr/sbin/plugins-common
+source /usr/sbin/common-plugins
 singleton
 
 SNAPSHOT="/tmp/snapshot4cron.jpg"

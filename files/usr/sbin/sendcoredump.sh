@@ -111,5 +111,5 @@ fi
 [ "1" = "$verbose" ] && cat $LOG_FILE
 
 log "All done. Rebooting..."
-
+umount -a -t nfs -l
 reboot -f

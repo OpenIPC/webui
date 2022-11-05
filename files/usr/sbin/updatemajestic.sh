@@ -149,4 +149,5 @@ update_majectic
 echo_c 37 "Done."
 echo_c 32 "Majestic $($mj_bin_file -v) installed in overlay.\n"
 echo_c 37 "Unconditional reboot"
-reboot
+umount -a -t nfs -l
+reboot -f

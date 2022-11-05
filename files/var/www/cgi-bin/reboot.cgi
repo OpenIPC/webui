@@ -10,4 +10,5 @@ Status: 302 Moved Temporarily
 "
 
 sleep 5
-reboot
+umount -a -t nfs -l
+reboot -f

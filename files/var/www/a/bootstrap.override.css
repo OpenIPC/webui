@@ -219,4 +219,10 @@ pre#output { background: #111; color: #89a; }
 body.lite .ult { display: none; }
 
 .ui-expert { display: none; }
+
 body.expert .ui-expert { display: initial; }
+
+.plugin-enabled {
+    border-left: 5px solid green;
+    margin-left: -5px;
+}

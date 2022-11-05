@@ -453,7 +453,7 @@ load_plugins() {
 
     _n="$(sed -r -n '/^plugin_name=/s/plugin_name="(.*)"/\1/p' $_i)"
     eval _e=\$${_p}_enabled
-    [ "true" = "$_e" ] && _css=" on"
+    [ "true" = "$_e" ] && _css=" plugin-enabled"
     echo "<li><a class=\"dropdown-item${_css}\" href=\"${_i}\">${_n}</a></li>"
     unset _e; unset _n; unset _p; unset _css
   done; unset _i

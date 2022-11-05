@@ -51,7 +51,7 @@ fi
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_switch "speaker_enabled" "Enable playing on speaker" %>
       <% field_text "speaker_url" "URL" %>
-      <% field_text "speaker_file" "Audio file" "a-law PCM 8000 bps" %>
+      <% field_text "speaker_file" "Audio file" "<a href=\"https://github.com/OpenIPC/wiki/blob/master/en/majestic-streamer.md#how-to-create-an-audio-file-to-play-on-cameras-speaker-over-network\">a-law PCM 8000 bps</a>" %>
       <% button_submit %>
     </form>
   </div>

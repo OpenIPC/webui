@@ -741,12 +741,11 @@ update_caminfo() {
   fi
 
   _vars="flash_size flash_type fw_version fw_variant fw_build
-network_address network_cidr network_default_interface network_dhcp network_dns_1 network_dns_2
-network_gateway network_hostname network_interfaces network_macaddr network_netmask overlay_root mj_version
-soc soc_family soc_has_temp soc_vendor sensor sensor_ini tz_data tz_name ui_password ui_password_fw ui_version"
-  for _v in $_vars; do
-    eval "echo ${v}=\\\"\$${v}\\\">>${_tmpfile}"
-  done
+network_address network_cidr network_default_interface network_dhcp network_dns_1
+network_dns_2 network_gateway network_hostname network_interfaces network_macaddr network_netmask
+overlay_root mj_version soc soc_family soc_has_temp soc_vendor sensor sensor_ini tz_data tz_name
+ui_password ui_password_fw ui_version"
+  for _v in $_vars; do eval "echo ${_v}=\\\"\$${_v}\\\">>${_tmpfile}"; done
   unset _v; unset _vars
   # sort content alphabetically
   sort <$_tmpfile | sed /^$/d >$sysinfo_file && rm $_tmpfile && unset _tmpfile

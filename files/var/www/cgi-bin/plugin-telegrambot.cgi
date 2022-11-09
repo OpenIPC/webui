@@ -75,9 +75,18 @@ fi
         <p class="hint mb-3">Use $chat_id variable for the active chat ID.</p>
         <% for i in 0 1 2 3 4 5 6 7 8 9; do %>
         <div class="row g-1 mb-3 mb-lg-1">
-          <div class="col-4 col-lg-2"><input type="text" id="telegrambot_command_<%= $i %>" name="telegrambot_command_<%= $i %>" class="form-control" placeholder="Bot Command" value="<%= $(t_value "telegrambot_command_$i") %>"></div>
-          <div class="col-8 col-lg-3"><input type="text" id="telegrambot_description_<%= $i %>" name="telegrambot_description_<%= $i %>" class="form-control" placeholder="Command Description" value="<%= $(t_value "telegrambot_description_$i") %>"></div>
-          <div class="col-lg-7"><input type="text" id="telegrambot_script_<%= $i %>" name="telegrambot_script_<%= $i %>" class="form-control" placeholder="Linux Command" value="<%= $(t_value "telegrambot_script_$i") %>"></div>
+          <div class="col-4 col-lg-2">
+            <input type="text" id="telegrambot_command_<%= $i %>" name="telegrambot_command_<%= $i %>"
+              class="form-control" placeholder="Bot Command" value="<%= $(t_value "telegrambot_command_$i") %>">
+            </div>
+          <div class="col-8 col-lg-3">
+            <input type="text" id="telegrambot_description_<%= $i %>" name="telegrambot_description_<%= $i %>"
+              class="form-control" placeholder="Command Description" value="<%= $(t_value "telegrambot_description_$i") %>">
+            </div>
+          <div class="col-lg-7">
+            <input type="text" id="telegrambot_script_<%= $i %>" name="telegrambot_script_<%= $i %>"
+              class="form-control" placeholder="Linux Command" value="<%= $(t_value "telegrambot_script_$i") %>">
+          </div>
         </div>
         <% done %>
       </div>
@@ -122,6 +131,9 @@ const default_commands = [
   {command:'help',script:'echo "Try https://t.me/openipc"',description:'Request help'},
   {command:'info',script:'cat /etc/os-release',description:'Information about system'},
   {command:'snap',script:'snapshot4cron.sh && send2telegram.sh -c $chat_id -p /tmp/snapshot4cron.jpg -i',description:'Take a snapshot'},
+  {command:'stop',script:'/etc/init.d/S93telegrambot stop',description:'Stop the bot'},
+  {command:'wall',script:'send2openwall.sh && send2telegram.sh -c $chat_id -m "Sent to OpenWall"',description:'Send snapshot to OpenWall'},
+  {command:'yadisk',script:'send2yadisk.sh && send2telegram.sh -c $chat_id -m "Sent to Yandex Disk"',description:'Send snapshot to Yandex Disk'},
 ]
 function resetBotCommands() {
   $$('.bot-commands input[type=text]').forEach(e => e.value = '');

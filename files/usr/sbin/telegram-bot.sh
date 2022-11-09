@@ -11,7 +11,8 @@ source /usr/sbin/common-plugins
 singleton
 
 [ "true" != "$telegrambot_enabled" ] &&
-  log "Telegram Bot is not enabled in config." && exit 10
+  log "Telegram Bot is not enabled in ${CONFIG_FILE}." &&
+  quit_clean 10
 
 data_file="/tmp/${plugin}.json"
 offset_file="/tmp/${plugin}_offset"
@@ -184,11 +185,6 @@ tgb_readfromapi() {
 }
 
 ### Logics
-
-if [ "false" = "$telegrambot_enabled" ]; then
-  log "Telegram Bot is disabled in ${config_file}."
-  quit_clean
-fi
 
 restore_offset
 

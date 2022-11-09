@@ -47,20 +47,17 @@ alert() {
   echo "<div class=\"alert alert-${2}\" ${3}>${1}</div>"
 }
 
+# time_gmt "format" "date"
+time_gmt() {
+  TZ=GMT0 date +"$1" --date="${2}"
+}
+
 time_epoch() {
-  if [ -n "$1" ]; then
-    TZ=GMT0 date +%s --date="${1}"
-  else
-    TZ=GMT0 date +%s
-  fi
+  time_gmt "%s" "$1"
 }
 
 time_http() {
-  if [ -n "$1" ]; then
-    TZ=GMT0 date +"%a, %d %b %Y %T %Z" --date="${1}"
-  else
-    TZ=GMT0 date +"%a, %d %b %Y %T %Z"
-  fi
+  time_gmt "%a, %d %b %Y %T %Z" "$1"
 }
 
 button_download() {

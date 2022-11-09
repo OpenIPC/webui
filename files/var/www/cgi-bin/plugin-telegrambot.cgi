@@ -134,6 +134,7 @@ const default_commands = [
   {command:'stop',script:'/etc/init.d/S93telegrambot stop',description:'Stop the bot'},
   {command:'wall',script:'send2openwall.sh && send2telegram.sh -c $chat_id -m "Sent to OpenWall"',description:'Send snapshot to OpenWall'},
   {command:'yadisk',script:'send2yadisk.sh && send2telegram.sh -c $chat_id -m "Sent to Yandex Disk"',description:'Send snapshot to Yandex Disk'},
+  {command:'restart',script:'/etc/init.d/S93telegrambot restart',description:'Restart the bot'},
 ]
 function resetBotCommands() {
   $$('.bot-commands input[type=text]').forEach(e => e.value = '');

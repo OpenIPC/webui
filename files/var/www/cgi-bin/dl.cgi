@@ -2,12 +2,19 @@
 <%in p/common.cgi %>
 <%
 file=$GET_file
-[ ! -f "$file" ] && redirect_back "danger" "File ${file} not found"
+if [ "/tmp/webui.log" = "$file" ]; then
+  fname="webui-$(date +%s).log"
+  mime="text/plain"
+else
+  fname=$(basename $file)
+  mime="application/octet-stream"
+fi
+check_file_exist $file
 echo "HTTP/1.0 200 OK
 Date: $(time_http)
 Server: $SERVER_SOFTWARE
-Content-type: application/octet-stream
-Content-Disposition: attachment; filename=$(basename $file)
+Content-type: ${mime}
+Content-Disposition: attachment; filename=${fname}
 Content-Length: $(wc -c $file | cut -d' ' -f1)
 Cache-Control: no-store
 Pragma: no-cache

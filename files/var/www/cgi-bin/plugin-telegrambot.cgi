@@ -98,7 +98,7 @@ fi
 
 <div class="ui-expert">
   <% ex "cat $config_file" %>
-  <% [ -f "/tmp/webui.log" ] && link_to "Download log file" "dl-log.cgi" %>
+  <% button_webui_log %>
 </div>
 
 <div class="modal fade" id="helpModal" tabindex="-1">

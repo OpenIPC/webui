@@ -108,6 +108,16 @@ button_submit() {
   unset _c; unset _t; unset _x
 }
 
+button_webui_log() {
+  [ -f "/tmp/webui.log" ] &&
+    link_to "Download log file" "dl.cgi?file=/tmp/webui.log"
+}
+
+check_file_exist() {
+  [ ! -f "$1" ] &&
+    redirect_back "danger" "File ${1} not found"
+}
+
 check_password() {
   _safepage="/cgi-bin/webui-settings.cgi"
   [ "0${debug}" -ge "1" ] && return

@@ -80,7 +80,7 @@ api_call() {
 ### Bot actions
 
 get_me() {
-  api_call "getMe" "{\"timeout\":30}" "--output ${data_file}"
+  api_call "getMe" "{\"timeout\":5}" "--output ${data_file}"
   ME="@$(jsonfilter -i $data_file -e "$.result.username")"
   log "Starting Telegram Bot ${ME}." 35
 }
@@ -156,7 +156,7 @@ get_updates() {
   # - chat_member
   # - chat_join_request
 
-  data="{\"offset\":\"${offset}\",\"timeout\":30,\"allowed_updates\":[\"message\",\"channel_post\"]}"
+  data="{\"offset\":\"${offset}\",\"timeout\":5,\"allowed_updates\":[\"message\",\"channel_post\"]}"
   api_call "getUpdates" "$data" "--output ${data_file}"
   unset data
   unset offset

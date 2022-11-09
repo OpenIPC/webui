@@ -106,7 +106,8 @@ mj="
 .motionDetect.enabled|Enable motion detection||boolean|true,false|false|
 .motionDetect.visualize|Visualize motion detection||boolean|true,false|true|
 .motionDetect.debug|Enable debugging||boolean|true,false|true|
-.motionDetect.constraints|Regions of Interest (ROI) for motion detection.|px|string||0x0x1296x760|
+.motionDetect.roi|Regions of Interest (ROI) for motion detection.|px|string||0x0x1296x760|
+.motionDetect.skipIn|Regions excluded from ROI.|px|string||20x20x200x300,510x330x40x15|
 .ipeye.enabled|Enable IPEYE support||boolean|true,false|false|
 .netip.enabled|Enable NETIP protocol support||boolean|true,false|false|
 .netip.user|NETIP user||string||admin|

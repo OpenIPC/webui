@@ -10,7 +10,7 @@ reboot="true"
 c="${c} -b $POST_web_version"
 %>
 <%in p/header.cgi %>
-<h3 class="alert alert-warning">DO NOT CLOSE, REFRESH, OR NAVIGATE FROM THIS PAGE UNTIL THE PROCESS IS FINISHED!</h3>
+<h3 class="alert alert-warning">DO NOT CLOSE, REFRESH, OR NAVIGATE AWAY FROM THIS PAGE UNTIL THE PROCESS IS FINISHED!</h3>
 <h5># <%= $c %></h5>
 <pre id="output" data-cmd="<%= $c %>" data-reboot="<%= $reboot %>"></pre>
 <%in p/footer.cgi %>

@@ -817,6 +817,7 @@ include /etc/webui/socks5.conf
 include /etc/webui/speaker.conf
 include /etc/webui/telegram.conf
 include /etc/webui/webhook.conf
+include /etc/webui/webui.conf
 include /etc/webui/yadisk.conf
 
 # reload_locale

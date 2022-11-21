@@ -238,8 +238,7 @@ pre#output { background: #111; color: #89a; }
 
 body.lite .ult { display: none; }
 
-.ui-expert { display: none; }
-
+body.user .ui-expert { display: none; }
 body.expert .ui-expert { display: initial; }
 
 .plugin-enabled {

@@ -680,8 +680,7 @@ update_caminfo() {
   done; unset _f
 
   # Hardware
-  flash_type="nor"
-  [ -n "$(fw_printenv bootcmd | grep nand)" ] && flash_type="nand"
+  flash_type=$(ipcinfo --flash-type)
   flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
 
   sensor_ini=$(ipcinfo --long-sensor)

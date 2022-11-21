@@ -136,7 +136,6 @@ fi
     ex "cat $config_file"
     %>
   </div>
--->
 </div>
 
 <%in p/footer.cgi %>

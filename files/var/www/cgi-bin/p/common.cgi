@@ -526,7 +526,8 @@ async function updatePreview() {
   }
 }
 
-const pimg = document.location.protocol + '//' + document.location.hostname + (document.location.port ? ':' + document.location.port : '')  + '/image.jpg';
+const l = document.location;
+const pimg = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '')  + '/image.jpg';
 const jpg = new Image();
 jpg.addEventListener('load', async function() {
   await sleep(${refresh_rate} * 1000);

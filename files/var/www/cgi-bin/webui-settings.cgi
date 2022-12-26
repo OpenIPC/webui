@@ -1,6 +1,15 @@
 #!/usr/bin/haserl --upload-limit=100 --upload-dir=/tmp
 <%in p/common.cgi %>
 <%
+plugin="webui"
+plugin_name="User interface settings"
+page_title="Web Interface Settings"
+
+tmp_file=/tmp/${plugin}.conf
+
+config_file="${ui_config_dir}/${plugin}.conf"
+[ ! -f "$config_file" ] && touch $config_file
+
 locale_file=/etc/webui/locale
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
@@ -22,6 +31,28 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     [ ! -d "/root/.ssh" ] && ln -s /etc/dropbear /root/.ssh
 
     redirect_to "/" "success" "Password updated."
+    ;;
+
+  interface)
+    params="level"
+    for _p in $params; do
+      eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
+      sanitize "${plugin}_${_p}"
+    done; unset _p
+
+    [ -z "$webui_level" ] && webui_level="user"
+
+    if [ -z "$error" ]; then
+      # create temp config file
+      :>$tmp_file
+      for _p in $params; do
+        echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
+      done; unset _p
+      mv $tmp_file $config_file
+
+      update_caminfo
+      redirect_back "success" "${plugin_name} config updated."
+    fi
     ;;
 
   locale)
@@ -76,6 +107,14 @@ fi
       <% button_submit %>
     </form>
   </div>
+  <div class="col">
+    <h3>Interface Details</h3>
+    <form action="<%= $SCRIPT_NAME %>" method="post">
+      <% field_hidden "action" "interface" %>
+      <% field_select "webui_level" "Level" "user,expert" %>
+      <% button_submit %>
+    </form>
+  </div>
 <!--
   <div class="col">
     <h3>Locale</h3>
@@ -86,6 +125,7 @@ fi
       <% button_submit %>
     </form>
   </div>
+-->
   <div class="col">
     <h3>Configuration</h3>
     <%
@@ -93,9 +133,9 @@ fi
     #ex "echo \$locale"
     #ex "cat $locale_file"
     #ex "ls /var/www/lang/"
+    ex "cat $config_file"
     %>
   </div>
--->
 </div>
 
 <%in p/footer.cgi %>

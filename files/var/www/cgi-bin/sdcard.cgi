@@ -17,6 +17,7 @@ else
   mount_point="${card_partition//dev/mnt}"
   error=""
   _o=""
+
   if [ -n "$POST_doFormatCard" ]; then
 %>
 <div class="alert alert-danger">
@@ -63,9 +64,30 @@ else
 %>
 <a class="btn btn-primary" href="/">Go home</a>
 <% else %>
-<h4># df -h | sed -n "1p/<%= ${card_partition////\\\/} %>/p"</h4>
-<pre class="small"><% df -h | sed -n "1p/${card_partition////\\\/}/p" %></pre>
+<h4>SD card partitions</h4>
+<%
+partitions=$(df -h | grep 'dev/mmc')
+echo "<pre class=\"small\">${partitions}</pre>"
 
+if [ -n "$partitions" ]; then
+%>
+<h4>Browse files on these partitions</h4>
+<div class="mb-4">
+<%
+IFS=$'\n'
+for i in $partitions; do
+#  _mount="${i##* }"
+  _mount=$(echo $i | awk '{print $6}')
+ echo "<a href=\"file-manager.cgi?cd=${_mount}\" class=\"btn btn-primary\">${_mount}</a>"
+ unset _mount
+done
+IFS=$IFS_ORIG
+unset _partitions
+%>
+</div>
+<% fi %>
+
+<h4>Format SD card</h4>
 <div class="alert alert-danger">
   <h4>ATTENTION! Formatting will destroy all data on the SD Card.</h4>
   <p>Make sure you have a backup copy if you are going to use the data in the future.</p>

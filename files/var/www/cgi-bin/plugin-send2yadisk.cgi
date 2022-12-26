@@ -48,7 +48,7 @@ fi
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_switch "yadisk_enabled" "Enable Yandex Disk bot" %>
       <% field_text "yadisk_username" "Yandex Disk username" %>
-      <% field_password "yadisk_password" "Yandex Disk password" "Create a dedicated password for application (WebDAV)." %>
+      <% field_password "yadisk_password" "Yandex Disk password" "A dedicated password for application. <a href=\"https://yandex.com/support/id/authorization/app-passwords.html\">Create it here</a>." %>
       <% field_text "yadisk_path" "Yandex Disk path" %>
       <% field_switch "yadisk_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
       <% button_submit %>
@@ -56,7 +56,7 @@ fi
   </div>
   <div class="col">
     <% ex "cat $config_file" %>
-    <% [ -f "/tmp/webui.log" ] && link_to "Download log file" "dl.cgi" %>
+    <% button_webui_log %>
   </div>
 </div>
 

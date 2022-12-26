@@ -1,5 +1,7 @@
 #!/usr/bin/haserl
 <%
+IFS_ORIG=$IFS
+
 # tag "tag" "text" "css" "extras"
 tag() {
   _t="$1"; _n="$2"; _c="$3"; _x="$4"
@@ -45,20 +47,17 @@ alert() {
   echo "<div class=\"alert alert-${2}\" ${3}>${1}</div>"
 }
 
+# time_gmt "format" "date"
+time_gmt() {
+  TZ=GMT0 date +"$1" --date="${2}"
+}
+
 time_epoch() {
-  if [ -n "$1" ]; then
-    TZ=GMT0 date +%s --date="${1}"
-  else
-    TZ=GMT0 date +%s
-  fi
+  time_gmt "%s" "$1"
 }
 
 time_http() {
-  if [ -n "$1" ]; then
-    TZ=GMT0 date +"%a, %d %b %Y %T %Z" --date="${1}"
-  else
-    TZ=GMT0 date +"%a, %d %b %Y %T %Z"
-  fi
+  time_gmt "%a, %d %b %Y %T %Z" "$1"
 }
 
 button_download() {
@@ -104,6 +103,16 @@ button_submit() {
   _x="$3"; [ -z "$_x" ] && _x=" ${_x}"
   echo "<div class=\"mt-2\"><input type=\"submit\" class=\"btn btn-${_c}\"${_x} value=\"${_t}\"></div>"
   unset _c; unset _t; unset _x
+}
+
+button_webui_log() {
+  [ -f "/tmp/webui.log" ] &&
+    link_to "Download log file" "dl.cgi?file=/tmp/webui.log"
+}
+
+check_file_exist() {
+  [ ! -f "$1" ] &&
+    redirect_back "danger" "File ${1} not found"
 }
 
 check_password() {
@@ -446,11 +455,12 @@ load_plugins() {
     _p="$(sed -r -n '/^plugin=/s/plugin="(.*)"/\1/p' $_i)"
     # hide plugin if not supported
     [ "$_p" = "mqtt" ] && [ ! -f /usr/bin/mosquitto_pub ] && continue
+    [ "$_p" = "telegrambot" ] && [ ! -f /usr/bin/jsonfilter ] && continue
     [ "$_p" = "zerotier" ] && [ ! -f /usr/sbin/zerotier-cli ] && continue
 
     _n="$(sed -r -n '/^plugin_name=/s/plugin_name="(.*)"/\1/p' $_i)"
     eval _e=\$${_p}_enabled
-    [ "true" = "$_e" ] && _css=" on"
+    [ "true" = "$_e" ] && _css=" plugin-enabled"
     echo "<li><a class=\"dropdown-item${_css}\" href=\"${_i}\">${_n}</a></li>"
     unset _e; unset _n; unset _p; unset _css
   done; unset _i
@@ -516,7 +526,8 @@ async function updatePreview() {
   }
 }
 
-const pimg='http://${network_address}/image.jpg';
+const l = document.location;
+const pimg = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '')  + '/image.jpg';
 const jpg = new Image();
 jpg.addEventListener('load', async function() {
   await sleep(${refresh_rate} * 1000);
@@ -611,11 +622,23 @@ sanitize() {
   _n=$1
   # strip trailing whitespace
   eval $_n=$(echo \$${_n})
+  # escape doublequotes
+  eval $_n=$(echo \${$_n//\\\"/\\\\\\\"})
+  # escape varialbles
+  eval $_n=$(echo \${$_n//\$/\\\\\$})
+  unset _n
+}
+
+sanitize4web() {
+  _n=$1
+  # convert html entities
+  eval $_n=$(echo \${$_n//\\\"/\&quot\;})
+  eval $_n=$(echo \${$_n//\$/\\\$})
   unset _n
 }
 
 generate_signature() {
-  echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB Flash, ${fw_version}-${fw_variant}, ${network_hostname}, ${network_macaddr}" >$signature_file
+  echo "${soc} (${soc_family} family), $sensor, ${flash_size} MB ${flash_type} flash, ${fw_version}-${fw_variant}, ${network_hostname}, ${network_macaddr}" >$signature_file
 }
 
 signature() {
@@ -657,6 +680,8 @@ update_caminfo() {
   done; unset _f
 
   # Hardware
+  flash_type=$(ipcinfo --flash-type)
+
   flash_size=$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)
 
   sensor_ini=$(ipcinfo --long-sensor)
@@ -666,6 +691,8 @@ update_caminfo() {
   [ -z "$sensor" ] && sensor=$(echo $sensor_ini | cut -d_ -f1)
 
   soc=$(ipcinfo --chip-name)
+  [ -z "$soc" ] && soc=$(fw_printenv -n soc)
+
   soc_family=$(ipcinfo --family)
   soc_vendor=$(ipcinfo --vendor)
 
@@ -688,27 +715,28 @@ update_caminfo() {
   ui_password_fw=$(grep admin /rom/etc/httpd.conf|cut -d: -f3)
 
   # Network
-  network_dhcp="false"; [ "$(cat /etc/network/interfaces | grep "eth0 inet" | grep dhcp)" ] && network_dhcp="true"
+  network_dhcp="false"
   if [ -f /etc/resolv.conf ]; then
     network_dns_1=$(cat /etc/resolv.conf | grep nameserver | sed -n 1p | cut -d' ' -f2)
     network_dns_2=$(cat /etc/resolv.conf | grep nameserver | sed -n 2p | cut -d' ' -f2)
   fi
   network_hostname=$(hostname -s)
-  network_interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | tr '\n' ' ' | sed 's/ $//' | sed -E 's/\blo\b//')
+  network_interfaces=$(/sbin/ifconfig | grep '^\w' | awk {'print $1'} | tr '\n' ' ' | sed 's/ $//' | sed -E 's/\blo\b\s?//')
 
   # if no default interface then no gateway nor wan mac present
   network_default_interface=$(ip r | sed -nE '/default/s/.+dev (\w+).+?/\1/p' | head -n 1)
   if [ -n "$network_default_interface" ]; then
+    [ "$(cat /etc/network/interfaces.d/${network_default_interface} | grep inet | grep dhcp)" ] && network_dhcp="true"
     network_gateway=$(ip r | sed -nE "/default/s/.+ via ([0-9\.]+).+?/\1/p")
   else
     network_default_interface=$(ip r | sed -nE 's/.+dev (\w+).+?/\1/p' | head -n 1)
-    network_gateway='' # $(fw_printenv -n gatewayip) # FIXME: Why do we need one?
-    # network_macaddr=$(fw_printenv -n ethaddr)   # FIXME: Why do we need one?
-    #network_address=$(fw_printenv -n ipaddr)    # FIXME: Maybe $(hostname -i) which will return 127.0.1.1?
+    network_gateway='' # $(fw_printenv -n gatewayip) # FIXME: Why do we need this?
+    # network_macaddr=$(fw_printenv -n ethaddr)      # FIXME: Why do we need this?
+    # network_address=$(fw_printenv -n ipaddr)       # FIXME: Maybe use $(hostname -i) that would return 127.0.1.1?
     # network_netmask=$(fw_printenv -n netmask)
   fi
   network_macaddr=$(cat /sys/class/net/${network_default_interface}/address)
-  network_address=$(ip r | sed -nE "/${network_default_interface}/s/.+src ([0-9\.]+).+?/\1/p")
+  network_address=$(ip r | sed -nE "/${network_default_interface}/s/.+src ([0-9\.]+).+?/\1/p" | uniq)
      network_cidr=$(ip r | sed -nE "/${network_default_interface}/s/^[0-9\.]+(\/[0-9]+).+?/\1/p")
   network_netmask=$(ifconfig $network_default_interface | grep "Mask:" | cut -d: -f4) # FIXME: Maybe convert from $network_cidr?
 
@@ -722,36 +750,13 @@ update_caminfo() {
     tz_name="Etc/GMT"; echo "$tz_name" >/etc/timezone
   fi
 
-  echo "flash_size=\"$flash_size\"
-fw_version=\"$fw_version\"
-fw_variant=\"$fw_variant\"
-fw_build=\"$fw_build\"
-network_address=\"$network_address\"
-network_cidr=\"$network_cidr\"
-network_default_interface=\"$network_default_interface\"
-network_dhcp=\"$network_dhcp\"
-network_dns_1=\"$network_dns_1\"
-network_dns_2=\"$network_dns_2\"
-network_gateway=\"$network_gateway\"
-network_hostname=\"$network_hostname\"
-network_interfaces=\"$network_interfaces\"
-network_macaddr=\"$network_macaddr\"
-network_netmask=\"$network_netmask\"
-overlay_root=\"$overlay_root\"
-mj_version=\"$mj_version\"
-soc=\"$soc\"
-soc_family=\"$soc_family\"
-soc_has_temp=\"$soc_has_temp\"
-soc_vendor=\"$soc_vendor\"
-sensor=\"$sensor\"
-sensor_ini=\"$sensor_ini\"
-tz_data=\"$tz_data\"
-tz_name=\"$tz_name\"
-ui_password=\"$ui_password\"
-ui_password_fw=\"$ui_password_fw\"
-ui_version=\"$ui_version\"
-" >>$_tmpfile
-
+  _vars="flash_size flash_type fw_version fw_variant fw_build
+network_address network_cidr network_default_interface network_dhcp network_dns_1
+network_dns_2 network_gateway network_hostname network_interfaces network_macaddr network_netmask
+overlay_root mj_version soc soc_family soc_has_temp soc_vendor sensor sensor_ini tz_data tz_name
+ui_password ui_password_fw ui_version"
+  for _v in $_vars; do eval "echo ${_v}=\\\"\$${_v}\\\">>${_tmpfile}"; done
+  unset _v; unset _vars
   # sort content alphabetically
   sort <$_tmpfile | sed /^$/d >$sysinfo_file && rm $_tmpfile && unset _tmpfile
 
@@ -815,6 +820,7 @@ include /etc/webui/socks5.conf
 include /etc/webui/speaker.conf
 include /etc/webui/telegram.conf
 include /etc/webui/webhook.conf
+include /etc/webui/webui.conf
 include /etc/webui/yadisk.conf
 
 # reload_locale

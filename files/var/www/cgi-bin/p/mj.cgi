@@ -106,7 +106,8 @@ mj="
 .motionDetect.enabled|Enable motion detection||boolean|true,false|false|
 .motionDetect.visualize|Visualize motion detection||boolean|true,false|true|
 .motionDetect.debug|Enable debugging||boolean|true,false|true|
-.motionDetect.constraints|Regions of Interest (ROI) for motion detection.|px|string||0x0x1296x760|
+.motionDetect.roi|Regions of Interest (ROI) for motion detection.|px|string||0x0x1296x760|
+.motionDetect.skipIn|Regions excluded from ROI.|px|string||20x20x200x300,510x330x40x15|
 .ipeye.enabled|Enable IPEYE support||boolean|true,false|false|
 .netip.enabled|Enable NETIP protocol support||boolean|true,false|false|
 .netip.user|NETIP user||string||admin|
@@ -126,8 +127,8 @@ mj_hide_unless_debug="isp_aGain isp_dGain isp_ispGain isp_exposure"
 
 # conditional settings limiters
 mj_show_audio_voiceEqualizer="gk7205v200 hi3516cv300 hi3516cv500 hi3516ev300 hi3519v101"
-mj_show_mjpeg_vendor="hisilicon"
-mj_show_isp_slowShutter_vendor="hisilicon"
+mj_show_mjpeg_vendor="goke hisilicon"
+mj_show_isp_slowShutter_vendor="goke hisilicon"
 mj_hide_isp_sensorConfig_vendor="ingenic"
 mj_hide_video0_codec="hi3516cv200 hi3516cv100"
 mj_hide_video1_codec="hi3516cv200 hi3516cv100"

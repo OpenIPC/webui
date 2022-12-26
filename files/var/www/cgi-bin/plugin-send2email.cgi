@@ -78,7 +78,7 @@ fi
   </div>
   <div class="col">
     <% ex "cat $config_file" %>
-    <% [ -f "/tmp/webui.log" ] && link_to "Download log file" "dl.cgi" %>
+    <% button_webui_log %>
   </div>
 </div>
 

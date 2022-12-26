@@ -1,15 +1,6 @@
 #!/bin/sh
 
-echo_c() {
-  # 31 red, 32 green, 33 yellow, 34 blue, 35 magenta, 36 cyan, 37 white, 38 grey
-  [ -z "$HASERLVER" ] && t="\e[1;$1m$2\e[0m" || t="$2"
-  echo -e "$t"
-}
-
-log_and_run() {
-  echo_c 36 "$1"
-  eval "$1"
-}
+source /usr/sbin/common
 
 clean_quit() {
   echo_c 37 "$2" >&2
@@ -32,9 +23,7 @@ while getopts b:fvh flag; do
   case ${flag} in
   b) branch=${OPTARG} ;;
   f) enforce=1 ;;
-  v) verbose=1
-    v_opts="-v"
-    ;;
+  v) verbose=1; v_opts="-v" ;;
   h) print_usage ;;
   esac
 done

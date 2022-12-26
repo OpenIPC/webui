@@ -1,15 +1,6 @@
 #!/bin/sh
 
-echo_c() {
-  # 31 red, 32 green, 33 yellow, 34 blue, 35 magenta, 36 cyan, 37 white, 38 grey
-  [ -z "$HASERLVER" ] && t="\e[1;$1m$2\e[0m" || t="$2"
-  echo -e "$t"
-}
-
-log_and_run() {
-  echo_c 36 "$1"
-  eval "$1"
-}
+source /usr/sbin/common
 
 clean_quit() {
   [ -f "$mj_meta_file" ] && rm $mj_meta_file
@@ -158,4 +149,5 @@ update_majectic
 echo_c 37 "Done."
 echo_c 32 "Majestic $($mj_bin_file -v) installed in overlay.\n"
 echo_c 37 "Unconditional reboot"
-reboot
+umount -a -t nfs -l
+reboot -f

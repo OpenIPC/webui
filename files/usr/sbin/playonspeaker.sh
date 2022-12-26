@@ -1,7 +1,7 @@
 #!/bin/sh
 
 plugin="speaker"
-source /usr/sbin/plugins-common
+source /usr/sbin/common-plugins
 
 SUPPORTED="goke hisilicon"
 [ -z "$(echo $SUPPORTED | sed -n "/\b$(ipcinfo --vendor)\b/p")" ] &&

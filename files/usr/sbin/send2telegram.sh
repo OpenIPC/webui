@@ -1,7 +1,7 @@
 #!/bin/sh
 
 plugin="telegram"
-source /usr/sbin/plugins-common
+source /usr/sbin/common-plugins
 
 show_help() {
   echo "Usage: $0 [-t token] [-c channel] [-m message] [-p photo] [-s] [-b] [-v] [-h]
@@ -46,7 +46,7 @@ done
   log "Telegram channel not found" && exit 12
 
 if [ -z "$telegram_message" ]; then
-  telegram_message="$(hostname -s), $(date +"%F %T")"
+  telegram_message="$(echo "$telegram_caption" | sed "s/%hostname/$(hostname -s)/;s/%datetime/$(date +"%F %T")/;s/%soctemp/$(ipcinfo --temp)/")"
 
   if [ -z "$telegram_photo" ]; then
     snapshot4cron.sh

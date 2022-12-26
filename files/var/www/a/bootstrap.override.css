@@ -7,10 +7,30 @@
 @media (min-width: 992px) and (max-width: 1199.98px) {body.debug:before{content:"lg"}}
 @media (min-width: 1200px) and (max-width: 1399.98px) {body.debug:before{content:"xl"}}
 @media (min-width: 1400px) {body.debug:before{content:"xxl"}}
-body.debug:before {color:#4c60d811;display:block;font-size:10rem;font-variant:all-small-caps;font-weight:700;line-height:1;position:fixed;right:3rem;top:3rem;z-index:-1}
-body.debug .col {border: solid 1px #f3f4fc;}
-.offcanvas {--bs-offcanvas-width: 30vw; min-width: 25rem;}
-#debug-button { position: fixed; bottom: 1rem; left: 1rem; }
+
+body.debug:before {
+    color:#4c60d811;
+    display:block;
+    font-size:10rem;
+    font-variant:all-small-caps;
+    font-weight:700;
+    line-height:1;
+    position:fixed;
+    right:3rem;
+    top:3rem;
+    z-index:-1;
+}
+
+.offcanvas {
+    --bs-offcanvas-width: 30vw;
+    min-width: 25rem;
+}
+
+#debug-button {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+}
 /* debugging end */
 
 :root {
@@ -218,5 +238,10 @@ pre#output { background: #111; color: #89a; }
 
 body.lite .ult { display: none; }
 
-.ui-expert { display: none; }
+body.user .ui-expert { display: none; }
 body.expert .ui-expert { display: initial; }
+
+.plugin-enabled {
+    border-left: 5px solid green;
+    margin-left: -5px;
+}

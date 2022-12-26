@@ -1,7 +1,7 @@
 #!/bin/sh
 
 plugin="ftp"
-source /usr/sbin/plugins-common
+source /usr/sbin/common-plugins
 
 show_help() {
   echo "Usage: $0 [-h host] [-p port] [-u username] [-P password] [-d path] [-f file] [-v] [-h]
@@ -63,7 +63,7 @@ fi
 command="${command} --url ftp://"
 [ -n "$ftp_username" ] && [ -n "$ftp_password" ] &&
   command="${command}${ftp_username}:${ftp_password}"
-command="${command}@${ftp_host}"
+command="${command}@${ftp_host}:${ftp_port}"
 [ -n "$ftp_path" ] &&
   command="${command}/${ftp_path// /%20}"
 command="${command}/$(date +"$ftp_template")"

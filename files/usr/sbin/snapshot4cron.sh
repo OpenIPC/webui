@@ -1,7 +1,7 @@
 #!/bin/sh
 
 plugin="snapshot"
-source /usr/sbin/plugins-common
+source /usr/sbin/common-plugins
 singleton
 
 SNAPSHOT="/tmp/snapshot4cron.jpg"
@@ -9,7 +9,7 @@ SECONDS_TO_EXPIRE=120
 LIMIT_ATTEMPTS=5
 
 show_help() {
-  echo "Usage: $0 [-f ] [-v] [-h]
+  echo "Usage: $0 [-f ] [-q] [-h]
   -f   Saving a new snapshot, no matter what.
   -q   Quiet output.
   -h   Show this help.
@@ -39,7 +39,7 @@ get_snapshot() {
 }
 
 verbose=1
-while getopts fhv flag; do
+while getopts fhq flag; do
   case ${flag} in
   f) force=true ;;
   h) show_help ;;

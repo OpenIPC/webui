@@ -1,7 +1,7 @@
 #!/bin/sh
 
 plugin="webhook"
-source /usr/sbin/plugins-common
+source /usr/sbin/common-plugins
 
 show_help() {
   echo "Usage: $0 [-u url] [-v] [-h]

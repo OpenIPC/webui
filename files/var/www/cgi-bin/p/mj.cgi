@@ -66,7 +66,7 @@ mj="
 .video0.codec|Video0 codec||select|h264,h265|h264|
 .video0.size|Video resolution|px|string|1920x1080,1280x720,704x576|1920x1080|
 .video0.fps|Video frame rate|fps|number|1,60,1|25|
-.video0.bitrate|Video bitrate|kbps|number|1,4096,1|4096|
+.video0.bitrate|Video bitrate|kbps|number|1,68000,1|4096|
 .video0.gopSize|Send I-frames each 1 second||number|0.1,20,0.1|1|
 .video0.gopMode|Group of Pictures (GOP) mode||select|normal,dual,smart|normal|
 .video0.rcMode|RC mode||select|avbr,cbr,vbr|avbr|
@@ -76,7 +76,7 @@ mj="
 .video1.codec|Video1 codec||select|h264,h265|h264|
 .video1.size|Video1 resolution|px|string|1920x1080,1280x720,704x576|704x576|
 .video1.fps|Video1 frame rate|fps|number|1,60,1|15|
-.video1.bitrate|Video1 bitrate|kbps|number|1,4096,1|2048|
+.video1.bitrate|Video1 bitrate|kbps|number|1,68000,1|2048|
 .video1.gopSize|Send I-frame each 1 second||number|1,20,1|1|
 .video1.gopMode|GOP mode||select|normal,dual,smart|normal|
 .video1.rcMode|RC mode||select|avbr|avbr|

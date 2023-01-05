@@ -688,12 +688,20 @@ update_caminfo() {
   [ -z "$sensor_ini" ] && sensor_ini=$(fw_printenv -n sensor)
 
   sensor=$(ipcinfo --short-sensor)
-  [ -z "$sensor" ] && sensor=$(echo $sensor_ini | cut -d_ -f1)
+  if [ -z "$sensor" ]; then
+    sensor=$(echo $sensor_ini | cut -d_ -f1)
+  fi
 
   soc=$(ipcinfo --chip-name)
-  [ -z "$soc" ] && soc=$(fw_printenv -n soc)
+  if [ -z "$soc" ] || [ "unknown" = "$soc" ]; then
+    soc=$(fw_printenv -n soc)
+  fi
 
   soc_family=$(ipcinfo --family)
+  if [ "unknown" = "$soc_family" ] && [ "t20" = "$soc" ]; then
+    soc_family="t21"
+  fi
+
   soc_vendor=$(ipcinfo --vendor)
 
   # ipcinfo reports to stderr

@@ -123,7 +123,7 @@ mj="
 "
 
 # hide these settings unless in debug mode
-mj_hide_unless_debug="isp_aGain isp_dGain isp_ispGain isp_exposure"
+mj_hide_unless_debug="audio_device isp_aGain isp_dGain isp_ispGain isp_exposure"
 
 # conditional settings limiters
 mj_show_audio_voiceEqualizer="gk7205v200 hi3516cv300 hi3516cv500 hi3516ev300 hi3519v101"

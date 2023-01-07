@@ -824,6 +824,7 @@ pagename="${pagename%%.*}"
 
 include p/locale_en.sh
 include p/mj.cgi
+include /etc/webui/mqtt.conf
 include /etc/webui/socks5.conf
 include /etc/webui/speaker.conf
 include /etc/webui/telegram.conf

@@ -28,6 +28,7 @@ logread -f | grep "$TEMPLATE" | sed -E "s/.*($TEMPLATE).*/\\1/" | while read LIN
   # send alerts
   [ "true" = "$motion_send2email" ] && send2email.sh
   [ "true" = "$motion_send2ftp" ] && send2ftp.sh
+  [ "true" = "$motion_send2mqtt" ] && send2mqtt.sh
   [ "true" = "$motion_send2telegram" ] && send2telegram.sh
   [ "true" = "$motion_send2webhook" ] && send2webhook.sh
   [ "true" = "$motion_send2yadisk" ] && send2yadisk.sh

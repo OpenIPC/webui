@@ -55,6 +55,8 @@ save_offset() {
   if [ -f "$offset_file" ]; then
     log "Save offset file to permanent storage."
     cp "$offset_file" "$offset_file_backup"
+    sync
+    sleep 1
   else
     log "Offset file ${offset_file} not found."
   fi

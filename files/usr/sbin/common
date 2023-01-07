@@ -6,8 +6,8 @@ LOG_SIZE_LIMIT=50000
 curl_timeout=100
 
 echo_c() {
-  local t
   # 31 red, 32 green, 33 yellow, 34 blue, 35 magenta, 36 cyan, 37 white, 38 grey
+  local t
   [ -z "$HASERLVER" ] && t="\e[1;$1m$2\e[0m" || t="$2"
   echo -e "$t"
 }
@@ -16,16 +16,11 @@ log() {
   # poor man's logrotate
   if [ -f "$LOG_FILE" ] && [ "$(wc -c $LOG_FILE | cut -d' ' -f1)" -gt $LOG_SIZE_LIMIT ]; then
     # redundant, but calling log() from within log() is wrong!
-    echo "Rotate log file ${LOG_FILE}." >>$LOG_FILE
-    [ "1" != "$quiet" ] && echo_c "$_color" "$_txt"
+    echo "$(date +"%F %T") [${PID}:${plugin}] Rotate log file" >>$LOG_FILE
     mv "$LOG_FILE" "${LOG_FILE}.1"
+    echo "$(date +"%F %T") [${PID}:${plugin}] Log file rotated." >>$LOG_FILE
   fi
-  _txt="$(date +"%F %T") [${PID}:${plugin}] ${1}"
-  _color="$2"; [ -z "$_color" ] && _color=38
-  echo "$_txt" >>$LOG_FILE
-  [ "1" != "$quiet" ] && echo_c "$_color" "$_txt"
-  unset _txt
-  unset _color
+  echo "$(date +"%F %T") [${PID}:${plugin}] ${1}" >>$LOG_FILE
 }
 
 log_and_run() {

@@ -10,7 +10,9 @@ config_file="/etc/${plugin}.conf"
 if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in
     reset)
-      cp /rom/etc/ntp.conf /etc/ntp.conf
+      # OverlayFS workaround
+      #cp /rom/etc/ntp.conf /etc/ntp.conf
+      cat /rom/etc/ntp.conf > /etc/ntp.conf
       redirect_back "success" "Configuration reset to firmware defaults."
       ;;
     sync)

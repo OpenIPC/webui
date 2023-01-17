@@ -46,7 +46,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
       if [ -z "$(eval echo "DEBUG TRACE" | sed -n "/\b$(yaml-cli -g .system.logLevel)\b/p")" ]; then
         # make required changes to majestic.yaml
         _t=$(mktemp)
-        cp -f /tmp/majestic.yaml $_t
+        #overlayFS workaround
+        #cp -f /tmp/majestic.yaml $_t
+        cat /tmp/majestic.yaml > $_t
         yaml-cli -i $_t -s .system.logLevel DEBUG
         yaml-cli -i $_t -s .motionDetect.visualize true
         yaml-cli -i $_t -s .motionDetect.debug true

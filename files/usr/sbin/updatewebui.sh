@@ -66,7 +66,9 @@ for upd_file in $(find $upd_dir -type f -or -type l); do
   # echo "Overlay file ${ovl_file}"
   if [ ! -f "$ovl_file" ] || [ "$(diff -q $ovl_file $upd_file)" ]; then
     [ ! -d "${ovl_file%/*}" ] && mkdir -p $(dirname $ovl_file)
-    cp $v_opts -f $upd_file $ovl_file
+    # overlayFS workaround
+    # cp $v_opts -f $upd_file $ovl_file
+    cat $upd_file  > $ovl_file
   fi
 done
 

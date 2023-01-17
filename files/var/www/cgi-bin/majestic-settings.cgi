@@ -67,7 +67,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   IFS=$OIFS
 
   # update config if differs
-  [ -n "$(diff -q $temp_yaml $mj_conf)" ] && cp -f $temp_yaml $mj_conf
+  # overlayFS workaround
+  #[ -n "$(diff -q $temp_yaml $mj_conf)" ] && cp -f $temp_yaml $mj_conf
+  [ -n "$(diff -q $temp_yaml $mj_conf)" ] && cat $temp_yaml > $mj_conf
 
   # clean up
   rm $temp_yaml

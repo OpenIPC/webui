@@ -43,6 +43,12 @@ size_h=${size#*x}
         </div>
       </div>
       <div class="input-group">
+        <button class="form-control btn btn-primary text-start" type="button" data-sendto="mqtt">Send to MQTT</button>
+        <div class="input-group-text">
+          <a href="plugin-send2mqtt.cgi" title="MQTT settings"><img src="/a/gear.svg" alt="Gear"></a>
+        </div>
+      </div>
+      <div class="input-group">
         <button class="form-control btn btn-primary text-start" type="button" data-sendto="webhook">Send to webhook</button>
         <div class="input-group-text">
           <a href="plugin-send2webhook.cgi" title="Webhook settings"><img src="/a/gear.svg" alt="Gear"></a>
@@ -72,6 +78,7 @@ const network_address = "<%= $network_address %>";
 
 <% [ "true" != "$email_enabled"    ] && echo "\$('button[data-sendto=email]').disabled = true;" %>
 <% [ "true" != "$ftp_enabled"      ] && echo "\$('button[data-sendto=ftp]').disabled = true;" %>
+<% [ "true" != "$mqtt_enabled"     ] && echo "\$('button[data-sendto=mqtt]').disabled = true;" %>
 <% [ "true" != "$webhook_enabled"  ] && echo "\$('button[data-sendto=webhook]').disabled = true;" %>
 <% [ "true" != "$telegram_enabled" ] && echo "\$('button[data-sendto=telegram]').disabled = true;" %>
 <% [ "true" != "$yadisk_enabled"   ] && echo "\$('button[data-sendto=yadisk]').disabled = true;" %>

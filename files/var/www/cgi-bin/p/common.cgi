@@ -49,7 +49,11 @@ alert() {
 
 # time_gmt "format" "date"
 time_gmt() {
-  TZ=GMT0 date +"$1" --date="${2}"
+  if [ -n "$2" ]; then
+    TZ=GMT0 date +"$1" --date="${2}"
+  else
+    TZ=GMT0 date +"$1"
+  fi
 }
 
 time_epoch() {

@@ -26,7 +26,7 @@ win-win strategy for both parties, that would contribute to the stability your
 business, and help core developers to work on the project full-time.
 
 If you have any specific questions concerning our project, feel free to
-[contact us](mailto:flyrouter@gmail.com).
+[contact us](mailto:dev@openipc.org).
 
 ### Participating and Contribution
 

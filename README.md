@@ -14,8 +14,7 @@ Please note that this will also assign the same password to user _root_!
 
 OpenIPC offers two levels of support.
 
-- Free support through the community via [chat][telegram] and
-  [mailing lists][maillist].
+- Free support through the community via [chat][telegram].
 - Paid commercial support directly from the team of developers.
 
 Please consider subscribing for paid commercial support if you intend to use our
@@ -62,6 +61,5 @@ Thank you.
 [iso639]: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 [wiki]: https://github.com/OpenIPC/firmware/wiki/microbe-web
 [telegram]: https://openipc.org/#telegram-chat-groups
-[maillist]: https://github.com/OpenIPC/firmware/discussions
 [oc]: https://opencollective.com/openipc/contribute/backer-14335/checkout
 [pp]: https://www.paypal.com/donate/?hosted_button_id=C6F7UJLA58MBS

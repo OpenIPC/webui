@@ -49,7 +49,11 @@ alert() {
 
 # time_gmt "format" "date"
 time_gmt() {
-  TZ=GMT0 date +"$1" --date="${2}"
+  if [ -n "$2" ]; then
+    TZ=GMT0 date +"$1" --date="${2}"
+  else
+    TZ=GMT0 date +"$1"
+  fi
 }
 
 time_epoch() {
@@ -763,7 +767,7 @@ network_address network_cidr network_default_interface network_dhcp network_dns_
 network_dns_2 network_gateway network_hostname network_interfaces network_macaddr network_netmask
 overlay_root mj_version soc soc_family soc_has_temp soc_vendor sensor sensor_ini tz_data tz_name
 ui_password ui_password_fw ui_version"
-  for _v in $_vars; do eval "echo ${_v}=\\\"\$${_v}\\\">>${_tmpfile}"; done
+  for _v in $_vars; do eval "echo ${_v}=\'\$${_v}\'>>${_tmpfile}"; done
   unset _v; unset _vars
   # sort content alphabetically
   sort <$_tmpfile | sed /^$/d >$sysinfo_file && rm $_tmpfile && unset _tmpfile

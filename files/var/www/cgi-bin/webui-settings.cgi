@@ -23,7 +23,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
     [ -n "$error" ] && redirect_to $SCRIPT_NAME "danger" "$error"
 
-    sed -i s/:admin:.*/:admin:${new_password}/ /etc/httpd.conf
+    sed -i "s/:admin:.*/:admin:${new_password//&/\\\&}/" /etc/httpd.conf
     echo "root:${new_password}" | chpasswd
     update_caminfo
 

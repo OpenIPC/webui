@@ -3,3 +3,5 @@
 src/*
 .env
 _Deparsed_XSubs.pm
+files/var/www/a/SMPTE_Color_Bars.svg
+files/var/www/a/SMPTE_Color_Bars_16x9.svg

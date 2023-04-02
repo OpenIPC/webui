@@ -96,7 +96,7 @@ fi
     <% ex "cat /etc/hosts" %>
     <% ex "cat /etc/network/interfaces" %>
   <% for i in $(ls -1 /etc/network/interfaces.d/); do %>
-    <% ex "cat /etc/network/interfaces.d/$i" %>
+    <% ls /sys/class/net | grep -q $i && ex "cat /etc/network/interfaces.d/$i" %>
   <% done %>
     <% ex "ip address" %>
     <% ex "ip route list" %>

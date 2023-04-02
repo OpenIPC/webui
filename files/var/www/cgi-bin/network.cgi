@@ -40,6 +40,8 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         if [ "wlan0" = "$network_default_interface" ]; then
           command="${command} -s $network_wifi_ssid"
           command="${command} -p $network_wifi_password"
+          command="${command} -k $network_wifi_modules"
+          command="${command} -t wifi"
         fi
 
         if [ "dhcp" != "$network_mode" ]; then

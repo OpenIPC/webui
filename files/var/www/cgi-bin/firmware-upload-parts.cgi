@@ -28,7 +28,7 @@ esac
 
 [ -z "$file_name"  ] && error="No file found! Did you forget to upload?"
 [ ! -r "$file" ] && error="Cannot read uploded file!"
-[ "$(wc -c $file | awk '{print $1}')" -gt "$maxsize" ] && error="Uploded file is too large! $(wc -c $file | awk '{print $1}') > ${maxsize}."
+[ "$(stat -c%s $file)" -gt "$maxsize" ] && error="Uploded file is too large! $(stat -c%s $file) > ${maxsize}."
 [ "$magicnum" -ne "$(xxd -p -l 4 $file)" ] && error="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 4 $file) != $magicnum"
 [ "$sysupgrade_date" -lt "$new_sysupgrade_date" ] && error="This feature requires the latest sysupgrade tool. Please upgrade firmware first."
 

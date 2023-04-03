@@ -44,7 +44,7 @@ else
   elif [ -n "$editor_file" ]; then
     if [ "b" = "$( (cat -v "$editor_file" | grep -q "\^@") && echo "b" )" ]; then
       flash_save "danger" "Not a text file!"
-    elif [ "$(wc -c $editor_file | awk '{print $1}')" -gt "102400" ]; then
+    elif [ "$(stat -c%s $editor_file)" -gt "102400" ]; then
       flash_save "danger" "Uploded file is too large!"
     else
       editor_text="$(cat $editor_file | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g")"

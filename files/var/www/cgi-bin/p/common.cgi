@@ -155,7 +155,6 @@ field_checkbox() {
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary d-block mb-2\">${_h}</span>"
   echo "</p>"
-  unset _h; unset _l; unset _v
 }
 
 # field_file "name" "label" "hint"
@@ -205,7 +204,6 @@ field_number() {
     "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
-  unset _ab; unset _h; unset _l; unset _mn; unset _mx; unset _n; unset _r; unset _st; unset _v
 }
 
 # field_password "name" "label" "hint"
@@ -596,7 +594,6 @@ sanitize4web() {
   # convert html entities
   eval $_n=$(echo \${$_n//\\\"/\&quot\;})
   eval $_n=$(echo \${$_n//\$/\\\$})
-  unset _n
 }
 
 generate_signature() {

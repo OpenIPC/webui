@@ -40,6 +40,8 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         if [ "wlan0" = "$network_default_interface" ]; then
           command="${command} -s $network_wifi_ssid"
           command="${command} -p $network_wifi_password"
+          command="${command} -k $network_wifi_modules"
+          command="${command} -t wifi"
         fi
 
         if [ "dhcp" != "$network_mode" ]; then
@@ -96,7 +98,7 @@ fi
     <% ex "cat /etc/hosts" %>
     <% ex "cat /etc/network/interfaces" %>
   <% for i in $(ls -1 /etc/network/interfaces.d/); do %>
-    <% ex "cat /etc/network/interfaces.d/$i" %>
+    <% ls /sys/class/net | grep -q $i && ex "cat /etc/network/interfaces.d/$i" %>
   <% done %>
     <% ex "ip address" %>
     <% ex "ip route list" %>

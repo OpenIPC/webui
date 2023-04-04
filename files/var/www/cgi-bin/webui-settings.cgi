@@ -34,7 +34,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     ;;
 
   interface)
-    params="level"
+    params="level theme"
     for _p in $params; do
       eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
       sanitize "${plugin}_${_p}"
@@ -112,6 +112,7 @@ fi
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_hidden "action" "interface" %>
       <% field_select "webui_level" "Level" "user,expert" %>
+      <% field_select "webui_theme" "Theme" "light,dark" %>
       <% button_submit %>
     </form>
   </div>

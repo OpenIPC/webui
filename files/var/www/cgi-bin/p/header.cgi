@@ -6,7 +6,7 @@ Cache-Control: no-store
 Pragma: no-cache
 
 <!DOCTYPE html>
-<html lang="<%= $locale %>">
+<html lang="<%= ${locale:=en} %>" data-bs-theme="<%= ${webui_theme:=light} %>">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -18,14 +18,13 @@ Pragma: no-cache
 </head>
 
 <body id="page-<%= $pagename %>" class="<%= $fw_variant %> <%= ${webui_level:-user} %><% [ "$debug" -ge "1" ] && echo -n " debug" %>">
-  <nav class="navbar navbar-dark navbar-expand-lg">
+  <nav class="navbar navbar-expand-lg bg-body-primary">
     <div class="container">
-      <a class="navbar-brand" href="status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg">
-       <span class="x-small"><%= $fw_variant %></span></a>
+      <a class="navbar-brand" href="status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg"><span class="x-small"><%= $fw_variant %></span></a>
       <% if [ -n "$soc_temp" ]; then %>
         <span id="soc-temp" class="text-primary bg-white rounded small" title="<%= $tSoCTemp %>"><%= $soc_temp %>°C</span>
       <% fi %>
-      <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">

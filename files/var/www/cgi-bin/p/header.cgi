@@ -18,9 +18,10 @@ Pragma: no-cache
 </head>
 
 <body id="page-<%= $pagename %>" class="<%= $fw_variant %> <%= ${webui_level:-user} %><% [ "$debug" -ge "1" ] && echo -n " debug" %>">
-  <nav class="navbar navbar-expand-lg bg-body-primary">
+  <nav class="navbar navbar-expand-lg bg-primary">
     <div class="container">
-      <a class="navbar-brand" href="status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg"><span class="x-small"><%= $fw_variant %></span></a>
+      <a class="navbar-brand" href="status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg">
+        <span class="x-small"><%= $fw_variant %></span></a>
       <% if [ -n "$soc_temp" ]; then %>
         <span id="soc-temp" class="text-primary bg-white rounded small" title="<%= $tSoCTemp %>"><%= $soc_temp %>°C</span>
       <% fi %>
@@ -120,7 +121,7 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
 
   <main class="pb-4">
     <div class="container" style="min-height: 90vh">
-      <p class="text-end x-small"><%= $(signature) %></p>
+      <p class="text-end x-small mt-1"><%= $(signature) %></p>
 
 <% if [ -z "$network_gateway" ]; then %>
 <div class="alert alert-warning">

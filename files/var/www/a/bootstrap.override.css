@@ -36,23 +36,14 @@ body.debug:before {
 :root {
     --bs-body-font-family: "IBM Plex Sans", sans-serif;
     --bs-font-monospace: "IBM Plex Mono", monospace;
-    --bs-blue: #4c60d8;
+    --bs-blue: rgb(76, 96, 216);
+    --bs-primary-rgb: 76,96,216;
 }
 
 body > main > .container > h2 {
     font-weight: 700;
     color: var(--bs-blue);
     margin: 1rem 0 1.5rem;
-}
-
-body > nav.navbar,
-body > header {
-    background: var(--bs-blue);
-    color: #ffffff;
-}
-
-body > nav.navbar a.nav-link {
-    color: #ffffff;
 }
 
 h6 {

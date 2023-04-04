@@ -37,7 +37,16 @@ body.debug:before {
     --bs-body-font-family: "IBM Plex Sans", sans-serif;
     --bs-font-monospace: "IBM Plex Mono", monospace;
     --bs-blue: rgb(76, 96, 216);
-    --bs-primary-rgb: 76,96,216;
+}
+
+[data-bs-theme=light] {
+    --bs-tertiary-bg-rgb: 76, 96, 216;
+}
+[data-bs-theme=light] .navbar-nav {
+    --bs-nav-link-color: white;
+}
+[data-bs-theme=light] .nav-link {
+    color: var(--bs-nav-link-color);
 }
 
 body > main > .container > h2 {

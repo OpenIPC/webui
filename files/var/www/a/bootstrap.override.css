@@ -51,6 +51,10 @@ body > header {
     color: #ffffff;
 }
 
+body > nav.navbar a.nav-link {
+    color: #ffffff;
+}
+
 h6 {
     font-weight: 700;
 }

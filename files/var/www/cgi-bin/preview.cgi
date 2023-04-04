@@ -12,7 +12,7 @@ size_h=${size#*x}
 <div class="row preview">
   <div class="col-md-8 col-xl-9 col-xxl-9 position-relative mb-3">
     <% preview 1 %>
-    <p class="text-muted">The preview image above refreshes once per second and may appear choppy.
+    <p class="text-body-secondary">The preview image above refreshes once per second and may appear choppy.
     To see a smooth video from the camera use one of the <a href="https://openipc.org/majestic-endpoints" target="_blank">video endpoints</a>.
   </div>
   <div class="col-md-4 col-xl-3 col-xxl-3">

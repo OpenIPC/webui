@@ -49,7 +49,7 @@ mj="
 .osd.corner|OSD preset position||select|tl:Top Left,tr:Top Right,bl:Bottom Left,br:Bottom Right|br|
 .osd.posX|Horizontal position of OSD|px|number|-2000,2000,2|-100|
 .osd.posY|Vertical position of OSD|px|number|-2000,2000,2|-100|
-.osd.privacyMasks|Privacy masks|px|string||0x0x234x640,2124x0x468x1300|Coordinates of masked areas separated by commas.
+.osd.privacyMasks|Privacy masks|px|string||0x0x234x640,2124x0x468x1300|Coordinates of masked areas separated by commas. Ex: 200x200x434x840,500x500x700x690
 .nightMode.enabled|Enable night mode||boolean|true,false|false|
 .nightMode.irSensorPin|GPIO pin of signal from IR sensor||number|0,255,1|62|
 .nightMode.irSensorPinInvert|IR sensor signal is inverted||boolean|true,false|false|

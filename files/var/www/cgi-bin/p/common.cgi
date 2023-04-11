@@ -308,17 +308,17 @@ field_switch() {
   echo "</p>"
 }
 
-# field_text "name" "label" "hint"
+# field_text "name" "label" "hint" "placeholder"
 field_text() {
   local _l=$2
   [ -z "$_l" ] && _l="$(t_label "$1")"
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">$1</span>"
   local _v="$(t_value "$1")"
   local _h="$3"
-  #  placeholder="FQDN or IP address"
+  local _p="$4"
   echo "<p class=\"string\" id=\"${1}_wrap\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
-    "<input type=\"text\" id=\"${1}\" name=\"${1}\" class=\"form-control\" value=\"${_v}\">"
+    "<input type=\"text\" id=\"${1}\" name=\"${1}\" class=\"form-control\" value=\"${_v}\" placeholder=\"${_p}\">"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
 }

@@ -86,6 +86,7 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
 %>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="info-majestic.cgi">Majestic YAML</a></li>
+              <li><a class="dropdown-item" href="majestic-endpoints.cgi">Majestic Endpoints</a></li>
               <li><a class="dropdown-item" href="majestic-config-actions.cgi">Majestic Maintenance</a></li>
             </ul>
           </li>

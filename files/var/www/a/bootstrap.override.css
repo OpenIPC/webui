@@ -135,6 +135,10 @@ dl.list dd {
     display: block;
 }
 
+.cp2cb {
+    cursor: pointer;
+}
+
 .dropdown-item {
     font-size: 0.9rem;
 }

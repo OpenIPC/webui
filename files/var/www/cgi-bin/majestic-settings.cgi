@@ -162,7 +162,7 @@ for line in $_mj2; do
     password) field_password "$form_field_name" "$label_text" "$hint";;
     range)    field_range    "$form_field_name" "$label_text" "$options" "$hint";;
     select)   field_select   "$form_field_name" "$label_text" "$options" "$hint";;
-    string)   field_text     "$form_field_name" "$label_text" "$hint";;
+    string)   field_text     "$form_field_name" "$label_text" "$hint" "$placeholder";;
     *) echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>";;
   esac
 done

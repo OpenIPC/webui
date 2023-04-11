@@ -173,7 +173,11 @@ done
   <div class="col">
     <h3>Related settings</h3>
     <pre><% echo -e "$config" %></pre>
-    <p><a href="info-majestic.cgi">See majestic.yaml</a></p>
+  </div>
+  <div class="col">
+    <h3>Quick Links</h3>
+    <p><a href="info-majestic.cgi">Majestic Config File (majestic.yaml)</a></p>
+    <p><a href="majestic-endpoints.cgi">Majestic Endpoints</a></p>
   </div>
 </div>
 

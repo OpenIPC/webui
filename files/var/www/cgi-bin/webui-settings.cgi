@@ -15,7 +15,7 @@ locale_file=/etc/webui/locale
 if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in
   access)
-    new_password="$POST_ui_password"
+    new_password="$POST_ui_password_new"
     [ -z "$new_password" ] && error="Password cannot be empty!"
     [ "$ui_password_fw" = "$new_password" ] && error="You cannot use default password!"
     [ -n "$(echo "$new_password" | grep " ")" ] && error="Password cannot have spaces!"
@@ -23,12 +23,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
     [ -n "$error" ] && redirect_to $SCRIPT_NAME "danger" "$error"
 
-    sed -i "s/:admin:.*/:admin:${new_password//&/\\\&}/" /etc/httpd.conf
+    sed -i "s/:admin:.*/:admin:$(mkpasswd $new_password)/" /etc/httpd.conf
     echo "root:${new_password}" | chpasswd
     update_caminfo
-
-    # prepare for passwordless login
-    [ ! -d "/root/.ssh" ] && ln -s /etc/dropbear /root/.ssh
 
     redirect_to "/" "success" "Password updated."
     ;;
@@ -103,7 +100,7 @@ fi
         <label for="ui_username" class="form-label">Username</label>
         <input type="text" id="ui_username" name="ui_username" value="admin" class="form-control" autocomplete="username" disabled>
       </p>
-      <% field_password "ui_password" "Password" %>
+      <% field_password "ui_password_new" "Password" %>
       <% button_submit %>
     </form>
   </div>

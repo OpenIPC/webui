@@ -44,6 +44,8 @@ body.debug:before {
     --bs-secondary: rgb(76, 96, 216);
     --bs-tertiary-bg-rgb: 76, 96, 216;
 }
+
+.navbar-nav,
 [data-bs-theme=light] .navbar-nav {
     --bs-nav-link-color: white;
 }

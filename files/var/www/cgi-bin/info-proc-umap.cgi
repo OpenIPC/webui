@@ -11,7 +11,6 @@ page_title="Information from /proc/umap"
 %>
 <%in p/header.cgi %>
 <p><%
-# ipctool i2cdump 0x78 0x0 0x3ff
 for f in $files; do
   css="btn btn-sm btn-primary"
   [ "$f" = "$file" ] && css="${css} active"

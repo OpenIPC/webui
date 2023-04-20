@@ -14,7 +14,7 @@ page_title="Information from /proc/umap"
 for f in $files; do
   css="btn btn-sm btn-primary"
   [ "$f" = "$file" ] && css="${css} active"
-  echo "<a class=\"${css}\" href=\"info-proc-umap.cgi?file=${f}\">${f}</a>"
+  echo "<a class=\"${css}\" href=\"${SCRIPT_NAME}?file=${f}\">${f}</a>"
 done
 %>
 </p>

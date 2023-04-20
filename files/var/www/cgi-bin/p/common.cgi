@@ -793,6 +793,8 @@ include /etc/webui/webui.conf
 include /etc/webui/yadisk.conf
 
 # reload_locale
-check_password
+
+# FIXME: mandatory password change disabled for testing purposes
+# check_password
 get_soc_temp
 %>

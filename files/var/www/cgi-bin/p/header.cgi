@@ -39,6 +39,7 @@ Pragma: no-cache
               <li><a class="dropdown-item" href="info-httpd.cgi">HTTPd environment</a></li>
               <li><a class="dropdown-item" href="info-modules.cgi">Modules</a></li>
               <li><a class="dropdown-item" href="info-proc-umap.cgi">Information from /proc/umap</a></li>
+              <li><a class="dropdown-item" href="info-ipctool.cgi">IPC Tool</a></li>
               <li><a class="dropdown-item" href="info-netstat.cgi">Network stats</a></li>
               <li><a class="dropdown-item" href="info-log.cgi">Log read</a></li>
               <li><a class="dropdown-item" href="info-overlay.cgi">Overlay partition</a></li>

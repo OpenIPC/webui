@@ -95,6 +95,8 @@ mj="
 .audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,aac,pcm,alaw,ulaw|opus|
 .audio.device|Audio card||string||hw:2|
 .audio.outputEnabled|Enable audio output||boolean|true,false|false|
+.audio.outputGain|Output gain||range|0,31,1|15|
+.audio.outputVolume|Speaker volume|%|range|0,100,1|50|
 .audio.voiceEqualizer|Audio equalizer||select|disabled,common,music,noisy|disabled|
 .audio.speakerPin|GPIO pin of audio speaker||number|1,255,1|32|
 .audio.speakerPinInvert|Audio speaker signal is inverted||boolean|true,false|false|

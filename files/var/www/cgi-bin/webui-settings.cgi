@@ -17,7 +17,6 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   access)
     new_password="$POST_ui_password_new"
     [ -z "$new_password" ] && error="Password cannot be empty!"
-    [ "$ui_password_fw" = "$new_password" ] && error="You cannot use default password!"
     [ -n "$(echo "$new_password" | grep " ")" ] && error="Password cannot have spaces!"
     [ "5" -ge "${#new_password}" ] && error="Password cannot be shorter than 6 characters!"
 

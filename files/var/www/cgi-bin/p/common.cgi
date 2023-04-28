@@ -123,7 +123,7 @@ check_password() {
   _safepage="/cgi-bin/webui-settings.cgi"
   [ "0${debug}" -ge "1" ] && return
   [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "${_safepage}" ] && return
-  if [ -z "$ui_password" ] || [ "$ui_password_fw" = "$ui_password" ]; then
+  if [ ! -f /etc/shadow- ] || [ -z $(grep root /etc/shadow- | cut -d: -f2) ]; then
     redirect_to "${_safepage}" "danger" "You must set your own secure password!"
   fi
 }
@@ -678,8 +678,7 @@ update_caminfo() {
 
   # WebUI version
   ui_version="bundled"; [ -f /var/www/.version ] && ui_version=$(cat /var/www/.version)
-  ui_password=$(grep admin /etc/httpd.conf|cut -d: -f3)
-  ui_password_fw=$(grep admin /rom/etc/httpd.conf|cut -d: -f3)
+  ui_password=$(grep root /etc/shadow|cut -d: -f2)
 
   # Network
   network_dhcp="false"
@@ -721,7 +720,7 @@ update_caminfo() {
 network_address network_cidr network_default_interface network_dhcp network_dns_1
 network_dns_2 network_gateway network_hostname network_interfaces network_macaddr network_netmask
 overlay_root mj_version soc soc_family soc_has_temp soc_vendor sensor sensor_ini tz_data tz_name
-ui_password ui_password_fw ui_version"
+ui_password ui_version"
   local v
   for _v in $_vars; do
     eval "echo ${_v}=\'\$${_v}\'>>${_tmpfile}"
@@ -795,6 +794,6 @@ include /etc/webui/yadisk.conf
 # reload_locale
 
 # FIXME: mandatory password change disabled for testing purposes
-# check_password
+check_password
 get_soc_temp
 %>

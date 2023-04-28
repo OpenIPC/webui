@@ -89,14 +89,6 @@ function reqListener(data) {
   console.log(data.responseText);
 }
 
-function sendToApi(endpoint) {
-  const xhr = new XMLHttpRequest();
-  xhr.addEventListener("load", reqListener);
-  xhr.open("GET", "http://" + network_address + endpoint);
-  xhr.setRequestHeader("Authorization", "Basic " + btoa("admin:"));
-  xhr.send();
-}
-
 $$("a[id^=pan-],a[id^=zoom-]").forEach(el => {
   el.addEventListener("click", event => {
     event.preventDefault();
@@ -107,7 +99,6 @@ $$("a[id^=pan-],a[id^=zoom-]").forEach(el => {
 $("#toggle-night-mode")?.addEventListener("click", event => {
   event.preventDefault();
   $('#night-mode-status').src = ($('#night-mode-status').src.split("/").pop() == "light-on.svg") ? "/a/light-off.svg" : "/a/light-on.svg";
-  // sendToApi("/night/toggle");
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "/cgi-bin/night.cgi");
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -126,7 +117,6 @@ $$("button[data-sendto]").forEach(el => el.addEventListener("click", event => {
 $("#speed")?.addEventListener("click", event => {
   event.preventDefault();
   event.target.src = (event.target.src.split("/").pop() == "speed-slow.svg") ? "/a/speed-fast.svg" : "/a/speed-slow.svg";
-  // sendToApi("/speed/toggle");
 });
 </script>
 

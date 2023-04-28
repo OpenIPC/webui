@@ -11,7 +11,7 @@ if [ -n "$network_gateway" ]; then
    t31*) url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t31-line-nor.tgz" ;;
       *) url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.${soc}-${flash_type}-${fw_variant}.tgz" ;;
   esac
-  fw_date=$(date -D "%a, %d %b %Y %T GMT" +"2.2.%m.%d" --date "$(curl -ILs "$url" | grep Last-Modified | cut -d' ' -f2-)")
+  fw_date=$(date -D "%a, %d %b %Y %T GMT" +"2.3.%m.%d" --date "$(curl -ILs "$url" | grep Last-Modified | cut -d' ' -f2-)")
 else
   fw_date="<span class=\"text-danger\">- no access to GitHub -</span>"
 fi

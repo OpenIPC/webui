@@ -16,14 +16,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in
   access)
     new_password="$POST_ui_password_new"
-    [ -z "$new_password" ] && error="Password cannot be empty!"
-    [ -n "$(echo "$new_password" | grep " ")" ] && error="Password cannot have spaces!"
-    [ "5" -ge "${#new_password}" ] && error="Password cannot be shorter than 6 characters!"
-
-    [ -n "$error" ] && redirect_to $SCRIPT_NAME "danger" "$error"
-
-# FIXME: Web UI password change disabled for testing purposes
-#    sed -i "s/:root:.*/:root:$(mkpasswd $new_password)/" /etc/httpd.conf
+    [ -z "$new_password" ] && redirect_to $SCRIPT_NAME "danger" "Password cannot be empty!"
 
     echo "root:${new_password}" | chpasswd
     update_caminfo

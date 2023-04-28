@@ -11,9 +11,9 @@ Pragma: no-cache
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title><% html_title %></title>
-<link rel="stylesheet" href="/a/bootstrap.css">
+<link rel="stylesheet" href="/a/bootstrap.min.css">
 <link rel="stylesheet" href="/a/bootstrap.override.css">
-<script src="/a/bootstrap.js"></script>
+<script src="/a/bootstrap.bundle.min.js"></script>
 <script src="/a/main.js"></script>
 </head>
 

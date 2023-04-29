@@ -62,6 +62,8 @@ mj="
 .records.enabled|Enable saving records||boolean|true,false|false|
 .records.path|Template for saving video records||string||/mnt/mmc/%Y/%m/%d/%H.mp4|Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format.
 .records.maxUsage|Limit of available space usage|%|range|1,100,1|95|
+.records.timelapseInterval|Timelapse capture interval|sec|number|1,65355,1|5|in seconds
+.records.timelapseFrameRate|Timelapse output file framerate|fps|number|1,100,1|2|in frames per second
 .video0.enabled|Enable Video0||boolean|true,false|true|
 .video0.codec|Video0 codec||select|h264,h265|h264|
 .video0.size|Video resolution|px|string|1920x1080,1280x720,704x576|1920x1080|

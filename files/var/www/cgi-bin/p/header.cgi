@@ -52,8 +52,7 @@ Pragma: no-cache
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownSettings" role="button">Settings</a>
             <ul aria-labelledby="dropdownSettings" class="dropdown-menu">
               <li><a class="dropdown-item" href="network.cgi">Network</a></li>
-              <li><a class="dropdown-item" href="timezone.cgi">Timezone</a></li>
-              <li><a class="dropdown-item" href="network-ntp.cgi">Time Synchronization</a></li>
+              <li><a class="dropdown-item" href="time-config.cgi">Time</a></li>
               <li><a class="dropdown-item" href="network-socks5.cgi">SOCKS5 Proxy</a></li>
               <li><a class="dropdown-item" href="webui-settings.cgi">Web Interface</a></li>
               <li><a class="dropdown-item" href="admin.cgi">Admin Profile</a></li>

@@ -16,6 +16,23 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
 }
 
+function heartbeat() {
+    fetch('/cgi-bin/j/heartbeat.cgi')
+         .then((response) => response.json())
+         .then((json) => {
+            if (json.soc_temp !== '') {
+                $('#soc-temp').textContent = json.soc_temp;
+                $('#soc-temp').classList.add(['text-primary','bg-white','rounded','small']);
+                $('#soc-temp').title = 'SoC temperature ' + json.soc_temp;
+            }
+            if (json.time_now !== '') {
+                d = new Date(json.time_now * 1000);
+                $('#time-now').textContent = d.toLocaleString() + ' ' + json.timezone;
+            }
+         })
+         .then(setTimeout(heartbeat, 1000));
+}
+
 (function () {
     function initAll() {
         // serve auto value on range form fields
@@ -133,6 +150,9 @@ function sleep(ms) {
             }
             run()
         }
+
+        //setInterval(heartbeat, 1000);
+        heartbeat();
     }
 
     window.addEventListener('load', initAll);

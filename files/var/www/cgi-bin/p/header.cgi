@@ -20,11 +20,7 @@ Pragma: no-cache
 <body id="page-<%= $pagename %>" class="<%= $fw_variant %> <%= ${webui_level:-user} %><% [ "$debug" -ge "1" ] && echo -n " debug" %>">
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
-      <a class="navbar-brand" href="status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg">
-        <span class="x-small"><%= $fw_variant %></span></a>
-      <% if [ -n "$soc_temp" ]; then %>
-        <span id="soc-temp" class="text-primary bg-white rounded small" title="<%= $tSoCTemp %>"><%= $soc_temp %>°C</span>
-      <% fi %>
+      <a class="navbar-brand" href="status.cgi"><img alt="Image: OpenIPC logo" height="32" src="/a/logo.svg"><span class="x-small ms-1"><%= $fw_variant %></span></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -123,8 +119,15 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
 
   <main class="pb-4">
     <div class="container" style="min-height: 90vh">
-      <p class="text-end x-small mt-1"><%= $(signature) %></p>
-
+      <div class="row mt-1 x-small">
+        <div class="col-md-8 mb-2">
+          <%= $(signature) %>
+        </div>
+        <div class="col-md-4 mb-2 text-end">
+          <div id="time-now"></div>
+          <div id="soc-temp"></div>
+        </div>
+      </div>
 <% if [ -z "$network_gateway" ]; then %>
 <div class="alert alert-warning">
 <p class="mb-0">No Internet connection. Please <a href="network.cgi">check your network settings</a>.</p>

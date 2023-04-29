@@ -487,7 +487,7 @@ async function updatePreview() {
 }
 
 const l = document.location;
-const pimg = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '')  + '/image.jpg';
+const pimg = '/cgi-bin/image.cgi';
 const jpg = new Image();
 jpg.addEventListener('load', async function() {
   await sleep(${refresh_rate} * 1000);

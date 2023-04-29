@@ -135,7 +135,7 @@ e() {
 ex() {
   # NB! $() forks process and stalls output.
   echo "<div class=\"${2}\">"
-  echo "<h5># ${1}</h5><pre class=\"small\">"
+  echo "<h6># ${1}</h6><pre class=\"small\">"
   eval "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g"
   echo "</pre>"
   echo "</div>"
@@ -623,7 +623,8 @@ t_label() {
 }
 
 t_value() {
-  eval "echo \"\$${1}\""
+  # eval "echo \"\$${1}\""
+  eval echo '$'${1}
 }
 
 update_caminfo() {

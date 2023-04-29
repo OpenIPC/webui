@@ -14,4 +14,5 @@ Etag: \"$(cat /proc/sys/kernel/random/uuid)\"
 Connecton: close
 "
 cat $preview
+rm $preview
 fi

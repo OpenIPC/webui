@@ -277,3 +277,5 @@ body.expert .ui-expert { display: initial; }
     border-left: 5px solid green;
     margin-left: -5px;
 }
+
+#pb-memory, #pb-overlay { height: 4px; cursor: pointer; }

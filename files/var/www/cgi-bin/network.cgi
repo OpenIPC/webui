@@ -86,7 +86,7 @@ fi
 
     <div class="alert alert-danger mt-4">
       <h5>Reset network configuration</h5>
-      <p>Restore config file bundled with firmware. Your changes to the default configuration will be lost.</p>
+      <p>Restore the config file bundled with firmware. All changes to the default configuration will be lost!</p>
       <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">
         <% field_hidden "action" "reset" %>
         <% button_submit "Reset config" "danger" %>

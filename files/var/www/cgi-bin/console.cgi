@@ -62,7 +62,7 @@ function handler(data) {
 function runCommand() {
   cmd = $("#cmd").value.trim();
   if (cmd.length == 0) return;
-  jx.load("/cgi-bin/jrun.cgi?cmd=" + btoa(cmd), handler, "text", "GET");
+  jx.load("/cgi-bin/j/run.cgi?cmd=" + btoa(cmd), handler, "text", "GET");
   return false;
 }
 

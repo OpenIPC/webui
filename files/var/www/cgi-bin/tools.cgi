@@ -2,43 +2,17 @@
 <%in p/common.cgi %>
 <%
 page_title="Monitoring tools"
-tools_action="${POST_tools_action:=ping}"
-tools_target="${POST_tools_target:=4.2.2.1}"
-tools_interface="${POST_tools_interface:=auto}"
-tools_packet_size="${POST_tools_packet_size:=56}" # 56-1500 for ping, 38-32768 for trace
-tools_duration="${POST_tools_duration:=5}"
-
-if [ "POST" = "$REQUEST_METHOD" ]; then
-  case "$tools_action" in
-    ping)
-      title="Ping Quality"
-      cmd="ping"
-      [ "auto" != "$tools_interface" ] && cmd="$cmd -I $tools_interface"
-      cmd="$cmd -s $tools_packet_size"
-      cmd="$cmd -c $tools_duration"
-      cmd="$cmd $tools_target"
-      ;;
-    trace)
-      title="Traceroute Quality"
-      cmd="traceroute"
-      # order is important!
-      cmd="$cmd -q $tools_duration"
-      cmd="$cmd -w 1"
-      [ "auto" != "$tools_interface" ] && cmd="$cmd -i $tools_interface"
-      cmd="$cmd $tools_target"
-      cmd="$cmd $tools_packet_size"
-      ;;
-    *)
-      ;;
-  esac
-fi
+tools_action="ping"
+tools_target="4.2.2.1"
+tools_interface="auto"
+tools_packet_size="56" # 56-1500 for ping, 38-32768 for trace
+tools_duration="5"
 %>
 <%in p/header.cgi %>
-
 <div class="row g-4 mb-4">
   <div class="col col-md-4">
     <h3>Ping Quality</h3>
-    <form action="<%= $SCRIPT_NAME %>" method="post">
+    <form>
       <% field_select "tools_action" "Action" "ping,trace" %>
       <% field_text "tools_target" "Target FQDN or IP address" %>
       <% field_select "tools_interface" "Network interface" "auto,${interfaces}" %>
@@ -48,12 +22,80 @@ fi
     </form>
   </div>
   <div class="col col-md-8">
-    <h3><%= $title %></h3>
-  <% if [ -n "$cmd" ]; then %>
-    <h5># <%= $cmd %></h5>
-    <pre id="output" data-cmd="<%= $cmd %>"></pre>
-  <% fi %>
+    <div id="output-wrapper"></div>
   </div>
 </div>
 
+<script>
+$('form').addEventListener('submit', event => {
+  event.preventDefault();
+  $('form input[type=submit]').disabled = true;
+
+  if ($('#tools_action').value == 'ping') {
+    cmd = 'ping -s ' + $('#tools_packet_size').value;
+    if ($('#tools_interface').value !== 'auto') cmd =+ ' -I ' + $('#tools_interface').value;
+    cmd += ' -c ' + $('#tools_duration').value + ' ' + $('#tools_target').value;
+  } else {
+    cmd = 'traceroute -q ' + $('#tools_duration').value + ' -w 1';
+    if ($('#tools_interface').value !== 'auto') cmd =+ ' -i ' + $('#tools_interface').value;
+    cmd += ' ' + $('#tools_target').value + ' ' + $('#tools_packet_size').value;
+  }
+
+  el = document.createElement('pre')
+  el.id = "output";
+  el.dataset['cmd'] = cmd;
+
+  h6 = document.createElement('h6')
+  h6.textContent = '# ' + cmd;
+
+  $('#output-wrapper').innerHTML = '';
+  $('#output-wrapper').appendChild(h6);
+  $('#output-wrapper').appendChild(el);
+
+  async function* makeTextFileLineIterator(url) {
+      const td = new TextDecoder('utf-8');
+      const response = await fetch(url);
+      const rd = response.body.getReader();
+      let { value: chunk, done: readerDone } = await rd.read();
+      chunk = chunk ? td.decode(chunk) : '';
+      const re = /\n|\r|\r\n/gm;
+      let startIndex = 0;
+      let result;
+      try {
+          for (;;) {
+              result = re.exec(chunk);
+              if (!result) {
+                  if (readerDone) break;
+                  let remainder = chunk.substr(startIndex);
+                  ({value: chunk, done: readerDone} = await rd.read());
+                  chunk = remainder + (chunk ? td.decode(chunk) : '');
+                  startIndex = re.lastIndex = 0;
+                  continue;
+              }
+              yield chunk.substring(startIndex, result.index);
+              startIndex = re.lastIndex;
+          }
+          if (startIndex < chunk.length) yield chunk.substr(startIndex);
+      } finally {
+          if ('true' === el.dataset['reboot']) {
+              window.location.href = '/cgi-bin/reboot.cgi'
+          } else {
+              el.innerHTML += '\n--- finished ---\n';
+          }
+          $('form input[type=submit]').disabled = false;
+      }
+  }
+
+  async function run() {
+      for await (let line of makeTextFileLineIterator('/cgi-bin/j/run.cgi?cmd=' + btoa(el.dataset['cmd']))) {
+          const re1 = /\[1;(\d+)m/;
+          const re2 = /\[0m/;
+          line = line.replace(re1, '<span class="ansi-$1">').replace(re2, '</span>')
+          el.innerHTML += line + '\n';
+      }
+  }
+
+  run()
+});
+</script>
 <%in p/footer.cgi %>

@@ -40,6 +40,8 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         if [ "wlan0" = "$network_default_interface" ]; then
           command="${command} -s $network_wifi_ssid"
           command="${command} -p $network_wifi_password"
+          command="${command} -k $network_wifi_modules"
+          command="${command} -t wifi"
         fi
 
         if [ "dhcp" != "$network_mode" ]; then
@@ -84,7 +86,7 @@ fi
 
     <div class="alert alert-danger mt-4">
       <h5>Reset network configuration</h5>
-      <p>Restore config file bundled with firmware. Your changes to the default configuration will be lost.</p>
+      <p>Restore the config file bundled with firmware. All changes to the default configuration will be lost!</p>
       <form action="<%= $SCRIPT_NAME %>" method="post" enctype="multipart/form-data">
         <% field_hidden "action" "reset" %>
         <% button_submit "Reset config" "danger" %>
@@ -96,7 +98,7 @@ fi
     <% ex "cat /etc/hosts" %>
     <% ex "cat /etc/network/interfaces" %>
   <% for i in $(ls -1 /etc/network/interfaces.d/); do %>
-    <% ex "cat /etc/network/interfaces.d/$i" %>
+    <% ls /sys/class/net | grep -q $i && ex "cat /etc/network/interfaces.d/$i" %>
   <% done %>
     <% ex "ip address" %>
     <% ex "ip route list" %>

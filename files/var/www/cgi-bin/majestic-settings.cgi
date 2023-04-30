@@ -146,9 +146,11 @@ for line in $_mj2; do
   hint=${hint//_/ }                 # => From 1 to 500000.
 
   value="$(yaml-cli -g "$yaml_param_name")"
+# FIXME: this is not how it should be done. Instead, Majestic should be reporting its true values.
+# [ -z "$value" ] && value="$placeholder"
 
   # assign yaml_param_name's value to a variable with yaml_param_name's form_field_name for form fields values
-  eval "$form_field_name=\"$(yaml-cli -g "$yaml_param_name")\""
+  eval "$form_field_name=\"\$value\""
 
   # hide some params in config
   if [ "mj_netip_password_plain" != "$form_field_name" ]; then
@@ -162,7 +164,7 @@ for line in $_mj2; do
     password) field_password "$form_field_name" "$label_text" "$hint";;
     range)    field_range    "$form_field_name" "$label_text" "$options" "$hint";;
     select)   field_select   "$form_field_name" "$label_text" "$options" "$hint";;
-    string)   field_text     "$form_field_name" "$label_text" "$hint";;
+    string)   field_text     "$form_field_name" "$label_text" "$hint" "$placeholder";;
     *) echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>";;
   esac
 done
@@ -173,7 +175,11 @@ done
   <div class="col">
     <h3>Related settings</h3>
     <pre><% echo -e "$config" %></pre>
-    <p><a href="info-majestic.cgi">See majestic.yaml</a></p>
+  </div>
+  <div class="col">
+    <h3>Quick Links</h3>
+    <p><a href="info-majestic.cgi">Majestic Config File (majestic.yaml)</a></p>
+    <p><a href="majestic-endpoints.cgi">Majestic Endpoints</a></p>
   </div>
 </div>
 

@@ -12,7 +12,7 @@ Date: $(time_http)
 Server: $SERVER_SOFTWARE
 Content-type: text/plain
 Content-Disposition: attachment; filename=majestic.yaml
-Content-Length: $(wc -c $config_file | cut -d' ' -f1)
+Content-Length: $(stat -c%s $config_file)
 Cache-Control: no-store
 Pragma: no-cache
 "
@@ -26,7 +26,7 @@ Date: $(time_http)
 Server: $SERVER_SOFTWARE
 Content-type: text/plain
 Content-Disposition: attachment; filename=majestic.$(time_epoch).patch
-Content-Length: $(wc -c $patch_file | cut -d' ' -f1)
+Content-Length: $(stat -c%s $patch_file)
 Cache-Control: no-store
 Pragma: no-cache
 "
@@ -45,7 +45,7 @@ Pragma: no-cache
       error=""
       [ -z "$file_name" ] && error="No file found! Did you forget to upload?"
       [ ! -r "$file" ] && error="Cannot read uploded file!"
-      [ "$(wc -c "$file" | awk '{print $1}')" -gt "$maxsize" ] && error="Uploded file is too large! $(wc -c $file | awk '{print $1}') > ${maxsize}."
+      [ "$(stat -c%s $file)" -gt "$maxsize" ] && error="Uploded file is too large! $(stat -c%s $file) > ${maxsize}."
       #[ "$magicnum" -ne "$(xxd -p -l 10 $file)" ] && error="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 10 $file) != $magicnum"
       if [ -z "$error" ]; then
         # yaml-cli -i $POST_upfile -o /tmp/majestic.yaml # FIXME: sanitize

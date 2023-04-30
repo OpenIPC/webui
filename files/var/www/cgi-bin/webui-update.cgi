@@ -7,9 +7,9 @@ reboot="true"
 [ "true" = "$POST_web_enforce" ] && c="${c} -f"
 [ "true" = "$POST_web_verbose" ] && c="${c} -v"
 [ "true" = "$POST_web_noreboot" ] && reboot="false"
-if [ -n "$web_branch" ]; then
+if [ -n "$POST_web_branch" ]; then
   c="${c} -b $POST_web_branch"
-elif [ -n "$web_commit" ]; then
+elif [ -n "$POST_web_commit" ]; then
   c="${c} -c $POST_web_commit"
 fi
 %>

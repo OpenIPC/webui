@@ -38,7 +38,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     flash_append "danger" "MQTT topic should not contain spaces." && error=18
   fi
 
-  if [ -n "$(echo $mqtt_topic | sed -r -n /[^\x00-\xFF/]/p)" ] || [ -n "$(echo $mqtt_snap_topic | sed -r -n /[^\x00-\xFF/]/p)" ]; then
+  if [ -n "$(echo $mqtt_topic | sed -r -n /[^a-zA-Z0-9/]/p)" ] || [ -n "$(echo $mqtt_snap_topic | sed -r -n /[^a-zA-Z0-9/]/p)" ]; then
     flash_append "danger" "MQTT topic should not include non-ASCII characters." && error=19
   fi
 
@@ -71,37 +71,41 @@ fi
 %>
 <%in p/header.cgi %>
 
+<form action="<%= $SCRIPT_NAME %>" method="post">
+<% field_switch "mqtt_enabled" "Enable MQTT client" %>
+
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
   <div class="col">
-    <form action="<%= $SCRIPT_NAME %>" method="post">
-      <% field_switch "mqtt_enabled" "Enable MQTT client" %>
       <% field_text "mqtt_host" "MQTT broker host" %>
       <% field_switch "mqtt_use_ssl" "Use SSL" %>
       <% field_text "mqtt_port" "MQTT broker port" %>
       <% field_text "mqtt_client_id" "MQTT client ID" %>
       <% field_text "mqtt_username" "MQTT broker username" %>
       <% field_password "mqtt_password" "MQTT broker password" %>
+  </div>
+  <div class="col">
       <% field_text "mqtt_topic" "MQTT topic" %>
-      <% field_text "mqtt_message" "MQTT message" "Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format." %>
+      <% field_textarea "mqtt_message" "MQTT message" "Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format." %>
       <% field_switch "mqtt_send_snap" "Send a snapshot" %>
       <% field_text "mqtt_snap_topic" "MQTT topic to send the snapshot to" %>
       <% field_switch "mqtt_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
-      <% button_submit %>
-    </form>
   </div>
   <div class="col">
     <% ex "cat $config_file" %>
     <% button_webui_log %>
   </div>
 </div>
+  <% button_submit %>
+</form>
 
 <script>
+$('#mqtt_message').style.height = '7rem';
 $('#mqtt_use_ssl').addEventListener('change', evt => {
   const elPort=$('#mqtt_port');
   if (evt.target.checked) {
-    if (elPort.value === "1883") elPort.value="8883";
+    if (elPort.value === '1883') elPort.value='8883';
   } else {
-    if (elPort.value === "8883") elPort.value="1883";
+    if (elPort.value === '8883') elPort.value='1883';
   }
 });
 </script>

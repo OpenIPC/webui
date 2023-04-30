@@ -21,7 +21,7 @@ get_snapshot() {
   log "Trying to save a snapshot."
   LIMIT_ATTEMPTS=$(( $LIMIT_ATTEMPTS - 1 ))
 
-  command="curl --silent --fail --url http://127.0.0.1/image.jpg?t=$(date +"%s") --output ${SNAPSHOT}"
+  command="curl --max-time 5 --silent --fail --url http://127.0.0.1/image.jpg?t=$(date +"%s") --output ${SNAPSHOT}"
   log "$command"
   if $command >>$LOG_FILE; then
     log "Snapshot saved to ${SNAPSHOT}."

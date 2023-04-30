@@ -4,19 +4,20 @@ IFS_ORIG=$IFS
 
 # tag "tag" "text" "css" "extras"
 tag() {
-  _t="$1"; _n="$2"; _c="$3"; _x="$4"
+  local _t="$1"
+  local _n="$2"
+  local _c="$3"
+  local _x="$4"
   [ -n "$_c" ] && _c=" class=\"${_c}\""
   [ -n "$_x" ] && _x=" ${_x}"
   echo "<${_t}${_c}${_x}>${_n}</${_t}>"
-  unset _t; unset _n; unset _c; unset _x
 }
 
 # A "tag" "classes" "extras"
 A() {
-  _c="$2"; [ -n "$_c" ] && _c=" class=\"${_c}\""
-  _x="$3"; [ -n "$_x" ] && _x=" ${_x}"
+  local _c="$2"; [ -n "$_c" ] && _c=" class=\"${_c}\""
+  local _x="$3"; [ -n "$_x" ] && _x=" ${_x}"
   echo "<${1}${_c}${_x}>"
-  unset _c; unset _x
 }
 
 Z() {
@@ -102,11 +103,10 @@ button_reset_firmware() {
 
 # button_submit "text" "type" "extras"
 button_submit() {
-  _t="$1"; [ -z "$_t" ] && _t="Save changes"
-  _c="$2"; [ -z "$_c" ] && _c="primary"
-  _x="$3"; [ -z "$_x" ] && _x=" ${_x}"
+  local _t="$1"; [ -z "$_t" ] && _t="Save changes"
+  local _c="$2"; [ -z "$_c" ] && _c="primary"
+  local _x="$3"; [ -z "$_x" ] && _x=" ${_x}"
   echo "<div class=\"mt-2\"><input type=\"submit\" class=\"btn btn-${_c}\"${_x} value=\"${_t}\"></div>"
-  unset _c; unset _t; unset _x
 }
 
 button_webui_log() {
@@ -123,7 +123,7 @@ check_password() {
   _safepage="/cgi-bin/webui-settings.cgi"
   [ "0${debug}" -ge "1" ] && return
   [ -z "$REQUEST_URI" ] || [ "$REQUEST_URI" = "${_safepage}" ] && return
-  if [ -z "$ui_password" ] || [ "$ui_password_fw" = "$ui_password" ]; then
+  if [ ! -f /etc/shadow- ] || [ -z $(grep root /etc/shadow- | cut -d: -f2) ]; then
     redirect_to "${_safepage}" "danger" "You must set your own secure password!"
   fi
 }
@@ -135,7 +135,7 @@ e() {
 ex() {
   # NB! $() forks process and stalls output.
   echo "<div class=\"${2}\">"
-  echo "<h5># ${1}</h5><pre class=\"small\">"
+  echo "<h6># ${1}</h6><pre class=\"small\">"
   eval "$1" | sed "s/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g;s/\"/\&quot;/g"
   echo "</pre>"
   echo "</div>"
@@ -143,38 +143,31 @@ ex() {
 
 # field_checkbox "name" "label" "hint"
 field_checkbox() {
-  _l=$2
+  local _l=$2
   [ -z "$_l" ] && _l="$(t_label "$1")"
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
-
-  _h=$3
-
-  _v=$(t_value "$1")
+  local _h=$3
+  local _v=$(t_value "$1")
   [ -z "$_v" ] && _v="false"
-
   echo "<p class=\"boolean form-check\">" \
     "<input type=\"hidden\" id=\"${1}-false\" name=\"${1}\" value=\"false\">" \
     "<input type=\"checkbox\" name=\"${1}\" id=\"${1}\" value=\"true\" class=\"form-check-input\"$(t_checked "true" "$_v")>" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary d-block mb-2\">${_h}</span>"
   echo "</p>"
-  unset _h; unset _l; unset _v
 }
 
 # field_file "name" "label" "hint"
 field_file() {
-  _l=$2
+  local _l=$2
   [ -z "$_l" ] && _l="$(t_label "$1")"
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
-
-  _h=$3
-
+  local _h=$3
   echo "<p class=\"file\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<input type=\"file\" id=\"${1}\" name=\"${1}\" class=\"form-control\">"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
-  unset _h; unset _l
 }
 
 # field_hidden "name" "value"
@@ -185,25 +178,19 @@ field_hidden() {
 
 # field_number "name" "label" "range" "hint"
 field_number() {
-  _n=$1
-
-  _l=$2
+  local _n=$1
+  local _l=$2
   [ -z "$_l" ] && _l="$(t_label "$1")"
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
-
-  _r=$3 # min,max,step,button
-  _mn=$(echo "$_r" | cut -d, -f1)
-  _mx=$(echo "$_r" | cut -d, -f2)
-  _st=$(echo "$_r" | cut -d, -f3)
-  _ab=$(echo "$_r" | cut -d, -f4)
-
-  _h=$4
-
-  _v=$(t_value "$_n")
-
-  _vr=$_v
+  local _r=$3 # min,max,step,button
+  local _mn=$(echo "$_r" | cut -d, -f1)
+  local _mx=$(echo "$_r" | cut -d, -f2)
+  local _st=$(echo "$_r" | cut -d, -f3)
+  local _ab=$(echo "$_r" | cut -d, -f4)
+  local _h=$4
+  local _v=$(t_value "$_n")
+  local _vr=$_v
   [ -n "$_ab" ] && [ "$_ab" = "$_v" ] && _vr=$(( ( $_mn + $_mx ) / 2 ))
-
   echo "<p class=\"number\">" \
     "<label class=\"form-label\" for=\"${_n}\">${_l}</label>" \
     "<span class=\"input-group\">"
@@ -217,19 +204,15 @@ field_number() {
     "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
-  unset _ab; unset _h; unset _l; unset _mn; unset _mx; unset _n; unset _r; unset _st; unset _v
 }
 
 # field_password "name" "label" "hint"
 field_password() {
-  _l=$2
+  local _l=$2
   [ -z "$_l" ] && _l="$(t_label "$1")"
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
-
-  _h=$3
-
-  _v=$(t_value "$1")
-
+  local _h=$3
+  local _v=$(t_value "$1")
   echo "<p class=\"password\" id=\"${1}_wrap\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<span class=\"input-group\">" \
@@ -240,30 +223,23 @@ field_password() {
     "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
-  unset _h; unset _l; unset _v
 }
 
 # field_range "name" "label" "range" "hint"
 field_range() {
-  _n=$1
-
-  _l=$2
+  local _n=$1
+  local _l=$2
   [ -z "$_l" ] && _l="$(t_label "$_n")"
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">${_n}</span>"
-
-  _r=$3 # min,max,step,button
-  _mn=$(echo "$_r" | cut -d, -f1)
-  _mx=$(echo "$_r" | cut -d, -f2)
-  _st=$(echo "$_r" | cut -d, -f3)
-  _ab=$(echo "$_r" | cut -d, -f4)
-
-  _h=$4
-
-  _v=$(t_value "$_n")
-
-  _vr=$_v
+  local _r=$3 # min,max,step,button
+  local _mn=$(echo "$_r" | cut -d, -f1)
+  local _mx=$(echo "$_r" | cut -d, -f2)
+  local _st=$(echo "$_r" | cut -d, -f3)
+  local _ab=$(echo "$_r" | cut -d, -f4)
+  local _h=$4
+  local _v=$(t_value "$_n")
+  local _vr=$_v
   [ -z "$_vr" -o "$_ab" = "$_vr" ] && _vr=$(( ( $_mn + $_mx ) / 2 ))
-
   echo "<p class=\"range\" id=\"${_n}_wrap\">" \
     "<label class=\"form-label\" for=\"${_n}\">${_l}</label>" \
     "<span class=\"input-group\">"
@@ -281,22 +257,17 @@ field_range() {
     "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
-  unset _ab; unset _h; unset _mn; unset _mx; unset _n; unset _r; unset _st; unset _v; unset _vr
 }
 
 # field_select "name" "label" "options" "hint" "units"
 field_select() {
-  _l=$2
+  local _l=$2
   [ -z "$_l" ] && _l="$(t_label "$1")"
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">${1}</span>"
-
-  _o=$3
+  local _o=$3
   _o=${_o//,/ }
-
-  _h=$4
-
-  _u=$5
-
+  local _h=$4
+  local _u=$5
   echo "<p class=\"select\" id=\"${1}_wrap\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<select class=\"form-select\" id=\"${1}\" name=\"${1}\">"
@@ -314,23 +285,18 @@ field_select() {
   [ -n "$_u" ] && echo "<span class=\"input-group-text\">${_u}</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
-  unset _h; unset _l; unset _o; unset _u
 }
 
 # field_swith "name" "label" "hint" "options"
 field_switch() {
-  _l=$2
+  local _l=$2
   [ -z "$_l" ] && _l="$(t_label "$1")"
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">$1</span>"
-
-  _h=$3
-
-  _o=$4; [ -z "$_o" ] && _o="true,false"
-  _o1=$(echo "$_o" | cut -d, -f1)
-  _o2=$(echo "$_o" | cut -d, -f2)
-
-  _v=$(t_value "$1"); [ -z "$_v" ] && _v="false"
-
+  local _v=$(t_value "$1"); [ -z "$_v" ] && _v="false"
+  local _h="$3"
+  local _o=$4; [ -z "$_o" ] && _o="true,false"
+  local _o1=$(echo "$_o" | cut -d, -f1)
+  local _o2=$(echo "$_o" | cut -d, -f2)
   echo "<p class=\"boolean\">" \
     "<span class=\"form-check form-switch\">" \
     "<input type=\"hidden\" id=\"${1}-false\" name=\"${1}\" value=\"${_o2}\">" \
@@ -340,44 +306,35 @@ field_switch() {
     "</span>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
-  unset _h; unset _l; unset _o; unset _o1; unset _o2; unset _v
 }
 
-# field_text "name" "label" "hint"
+# field_text "name" "label" "hint" "placeholder"
 field_text() {
-  _l=$2
+  local _l=$2
   [ -z "$_l" ] && _l="$(t_label "$1")"
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">$1</span>"
-
-  _h=$3
-
-  _v="$(t_value "$1")"
-
-  #  placeholder="FQDN or IP address"
+  local _v="$(t_value "$1")"
+  local _h="$3"
+  local _p="$4"
   echo "<p class=\"string\" id=\"${1}_wrap\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
-    "<input type=\"text\" id=\"${1}\" name=\"${1}\" class=\"form-control\" value=\"${_v}\">"
+    "<input type=\"text\" id=\"${1}\" name=\"${1}\" class=\"form-control\" value=\"${_v}\" placeholder=\"${_p}\">"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
-  unset _h; unset _l; unset _v
 }
 
 # field_textarea "name" "label" "hint"
 field_textarea() {
-  _l=$2
+  local _l=$2
   [ -z "$_l" ] && _l="$(t_label "$1")"
   [ -z "$_l" ] && _l="<span class=\"bg-warning\">$1</span>"
-
-  _h=$3
-
-  _v=$(t_value "$1")
-
+  local _v=$(t_value "$1")
+  local _h=$3
   echo "<p class=\"textarea\" id=\"${1}_wrap\">" \
     "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
     "<textarea id=\"${1}\" name=\"${1}\" class=\"form-control\">${_v}</textarea>"
   [ -n "$_h" ] && echo "<span class=\"hint text-secondary\">${_h}</span>"
   echo "</p>"
-  unset _h; unset _l; unset _v
 }
 
 flash_append() {
@@ -391,7 +348,9 @@ flash_delete() {
 flash_read() {
   [ ! -f "$flash_file" ] && return
   [ -z "$(cat $flash_file)" ] && return
-
+  local _c
+  local _m
+  local _l
   OIFS="$IFS"
   IFS=$'\n'
   for _l in $(cat "$flash_file"); do
@@ -404,7 +363,6 @@ flash_read() {
   done
   IFS=$OIFS
   flash_delete
-  unset _c; unset _m
 }
 
 flash_save() {
@@ -434,20 +392,15 @@ html_title() {
 
 # label "name" "classes" "extras" "units"
 label() {
-  _c="form-label"
+  local _c="form-label"
   [ -n "$2" ] && _c="${_c} ${2}"
-
-  _l="$(t_label "$1")"
+  local _l="$(t_label "$1")"
   [ -z "$_l" ] && _l="$1" && _c="${_c} bg-warning"
-
-  _x="$3"
+  local _x="$3"
   [ -n "$_x" ] && _x=" ${_x}"
-
-  _u="$4"
+  local _u="$4"
   [ -n "$_u" ] && _l="${_l}, <span class=\"units text-secondary x-small\">$_u</span>"
-
   echo "<label for=\"${1}\" class=\"${_c}\"${_x}>${_l}</label>"
-  unset _c; unset _l; unset _u; unset _x
 }
 
 link_to() {
@@ -455,6 +408,8 @@ link_to() {
 }
 
 load_plugins() {
+  local _i
+  local _p
   for _i in $(ls -1 plugin-*); do
     _p="$(sed -r -n '/^plugin=/s/plugin="(.*)"/\1/p' $_i)"
     # hide plugin if not supported
@@ -467,7 +422,7 @@ load_plugins() {
     [ "true" = "$_e" ] && _css=" plugin-enabled"
     echo "<li><a class=\"dropdown-item${_css}\" href=\"${_i}\">${_n}</a></li>"
     unset _e; unset _n; unset _p; unset _css
-  done; unset _i
+  done
 }
 
 log() {
@@ -482,9 +437,10 @@ majestic_diff() {
 
 # select_option "name" "value"
 select_option() {
-  _v=$2
+  local _v=$2
   [ -z "$_v" ] && _v=$1
-  _s=""; [ "$_v" = eval \$$_v ] && $s=" selected"
+  local _s=""
+  [ "$_v" = eval \$$_v ] && $s=" selected"
   echo "<option value=\"${_v}\"${_s}>${1}</label>"
 }
 
@@ -495,7 +451,7 @@ pre() {
 }
 
 preview() {
-  refresh_rate=10
+  local refresh_rate=10
   [ -n "$1" ] && refresh_rate=$1
   if [ "true" = "$(yaml-cli -g .jpeg.enabled)" ]; then
     echo "<canvas id=\"preview\" style=\"background:gray url(/a/SMPTE_Color_Bars_16x9.svg);background-size:cover;width:100%;height:auto;\"></canvas>"
@@ -531,7 +487,7 @@ async function updatePreview() {
 }
 
 const l = document.location;
-const pimg = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '')  + '/image.jpg';
+const pimg = '/cgi-bin/image.cgi';
 const jpg = new Image();
 jpg.addEventListener('load', async function() {
   await sleep(${refresh_rate} * 1000);
@@ -547,10 +503,10 @@ calculatePreviewSize();
 }
 
 progressbar() {
-  _c="primary"; [ "$1" -ge "75" ] && _c="danger"
-  echo "<div class=\"progress\">" \
-    "<div class=\"progress-bar progress-bar-striped progress-bar-animated bg-${_c}\" role=\"progressbar\"" \
-      " style=\"width:${1}%\" aria-valuenow=\"${1}\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>" \
+  local c="primary"
+  [ "$1" -ge "75" ] && c="danger"
+  echo "<div class=\"progress\" role=\"progressbar\" aria-valuenow=\"${1}\" aria-valuemin=\"0\" aria-valuemax=\"100\">" \
+    "<div class=\"progress-bar progress-bar-striped progress-bar-animated bg-${c}\" style=\"width:${1}%\"></div>" \
     "</div>"
 }
 
@@ -575,6 +531,7 @@ Location: $1
 }
 
 reload_locale() {
+  local -l
   [ -f /etc/webui/locale ] && _l="$(cat /etc/webui/locale)"
   if [ -n "$_l" ] && [ -f "/var/www/lang/${_l}.sh" ]; then
     source "/var/www/lang/${_l}.sh"
@@ -582,7 +539,6 @@ reload_locale() {
   else
     locale="en"
   fi
-  unset _l
 }
 
 report_error() {
@@ -623,22 +579,20 @@ row() {
 }
 
 sanitize() {
-  _n=$1
+  local _n=$1
   # strip trailing whitespace
   eval $_n=$(echo \$${_n})
   # escape doublequotes
   eval $_n=$(echo \${$_n//\\\"/\\\\\\\"})
   # escape varialbles
   eval $_n=$(echo \${$_n//\$/\\\\\$})
-  unset _n
 }
 
 sanitize4web() {
-  _n=$1
+  local _n=$1
   # convert html entities
   eval $_n=$(echo \${$_n//\\\"/\&quot\;})
   eval $_n=$(echo \${$_n//\$/\\\$})
-  unset _n
 }
 
 generate_signature() {
@@ -651,12 +605,13 @@ signature() {
 }
 
 tab_lap() {
-  _c=""; _s="false"; [ -n "$3" ] && _s="true" && _c=" active"
+  local _c=""
+  local _s="false"
+  [ -n "$3" ] && _s="true" && _c=" active"
   echo "<li class=\"nav-item\" role=\"presentation\">" \
     "<button role=\"tab\" id=\"#${1}-tab\" class=\"nav-link${_c}\"" \
     " data-bs-toggle=\"tab\" data-bs-target=\"#${1}-tab-pane\"" \
     " aria-controls=\"${1}-tab-pane\" aria-selected=\"${_s}\">${2}</button></li>"
-   unset _c; unset _s
 }
 
 t_checked() {
@@ -668,7 +623,8 @@ t_label() {
 }
 
 t_value() {
-  eval "echo \"\$${1}\""
+  # eval "echo \"\$${1}\""
+  eval echo '$'${1}
 }
 
 update_caminfo() {
@@ -723,8 +679,7 @@ update_caminfo() {
 
   # WebUI version
   ui_version="bundled"; [ -f /var/www/.version ] && ui_version=$(cat /var/www/.version)
-  ui_password=$(grep admin /etc/httpd.conf|cut -d: -f3)
-  ui_password_fw=$(grep admin /rom/etc/httpd.conf|cut -d: -f3)
+  ui_password=$(grep root /etc/shadow|cut -d: -f2)
 
   # Network
   network_dhcp="false"
@@ -749,7 +704,7 @@ update_caminfo() {
   fi
   network_macaddr=$(cat /sys/class/net/${network_default_interface}/address)
   network_address=$(ip r | sed -nE "/${network_default_interface}/s/.+src ([0-9\.]+).+?/\1/p" | uniq)
-     network_cidr=$(ip r | sed -nE "/${network_default_interface}/s/^[0-9\.]+(\/[0-9]+).+?/\1/p")
+  network_cidr=$(ip r | sed -nE "/${network_default_interface}/s/^[0-9\.]+(\/[0-9]+).+?/\1/p")
   network_netmask=$(ifconfig $network_default_interface | grep "Mask:" | cut -d: -f4) # FIXME: Maybe convert from $network_cidr?
 
   overlay_root=$(mount | grep upperdir= | sed -r 's/^.*upperdir=([a-z\/]+).+$/\1/')
@@ -762,13 +717,15 @@ update_caminfo() {
     tz_name="Etc/GMT"; echo "$tz_name" >/etc/timezone
   fi
 
-  _vars="flash_size flash_type fw_version fw_variant fw_build
+  local _vars="flash_size flash_type fw_version fw_variant fw_build
 network_address network_cidr network_default_interface network_dhcp network_dns_1
 network_dns_2 network_gateway network_hostname network_interfaces network_macaddr network_netmask
 overlay_root mj_version soc soc_family soc_has_temp soc_vendor sensor sensor_ini tz_data tz_name
-ui_password ui_password_fw ui_version"
-  for _v in $_vars; do eval "echo ${_v}=\'\$${_v}\'>>${_tmpfile}"; done
-  unset _v; unset _vars
+ui_password ui_version"
+  local v
+  for _v in $_vars; do
+    eval "echo ${_v}=\'\$${_v}\'>>${_tmpfile}"
+  done
   # sort content alphabetically
   sort <$_tmpfile | sed /^$/d >$sysinfo_file && rm $_tmpfile && unset _tmpfile
 
@@ -776,12 +733,11 @@ ui_password ui_password_fw ui_version"
 }
 
 xl() {
-  _c="$1"
+  local _c="$1"
   echo "<b>${_c}</b>"
-  _o=$($_c 2>&1)
+  local _o=$($_c 2>&1)
   [ $? -ne 0 ] && error=1
   [ -n "$_o" ] && echo "<div class=\"x-small p-3\"><i>${_o}</i></div>"
-  unset _c; unset _o
 }
 
 d() {
@@ -837,6 +793,8 @@ include /etc/webui/webui.conf
 include /etc/webui/yadisk.conf
 
 # reload_locale
+
+# FIXME: mandatory password change disabled for testing purposes
 check_password
 get_soc_temp
 %>

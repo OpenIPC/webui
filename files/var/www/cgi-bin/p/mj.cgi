@@ -62,6 +62,8 @@ mj="
 .records.enabled|Enable saving records||boolean|true,false|false|
 .records.path|Template for saving video records||string||/mnt/mmc/%Y/%m/%d/%H.mp4|Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format.
 .records.maxUsage|Limit of available space usage|%|range|1,100,1|95|
+.records.timelapseInterval|Timelapse capture interval|sec|number|1,65355,1|5|in seconds
+.records.timelapseFrameRate|Timelapse output file framerate|fps|number|1,100,1|2|in frames per second
 .video0.enabled|Enable Video0||boolean|true,false|true|
 .video0.codec|Video0 codec||select|h264,h265|h264|
 .video0.size|Video resolution|px|string|1920x1080,1280x720,704x576|1920x1080|
@@ -95,6 +97,8 @@ mj="
 .audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,aac,pcm,alaw,ulaw|opus|
 .audio.device|Audio card||string||hw:2|
 .audio.outputEnabled|Enable audio output||boolean|true,false|false|
+.audio.outputGain|Output gain||range|0,31,1|15|
+.audio.outputVolume|Speaker volume|%|range|0,100,1|0|
 .audio.voiceEqualizer|Audio equalizer||select|disabled,common,music,noisy|disabled|
 .audio.speakerPin|GPIO pin of audio speaker||number|1,255,1|32|
 .audio.speakerPinInvert|Audio speaker signal is inverted||boolean|true,false|false|

@@ -15,7 +15,7 @@ Date: $(time_http)
 Server: $SERVER_SOFTWARE
 Content-type: text/plain
 Content-Disposition: attachment; filename=${log}-$(date +%s).txt
-Content-Length: $(wc -c $file | cut -d' ' -f1)
+Content-Length: $(stat -c%s $file)
 Cache-Control: no-store
 Pragma: no-cache
 "

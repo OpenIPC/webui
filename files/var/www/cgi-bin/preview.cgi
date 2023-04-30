@@ -12,8 +12,8 @@ size_h=${size#*x}
 <div class="row preview">
   <div class="col-md-8 col-xl-9 col-xxl-9 position-relative mb-3">
     <% preview 1 %>
-    <p class="text-muted">The preview image above refreshes once per second and may appear choppy.
-    To see a smooth video from the camera use one of the <a href="https://openipc.org/majestic-endpoints" target="_blank">video endpoints</a>.
+    <p class="small text-body-secondary">The image above refreshes once per second and may appear choppy.
+    To see a smooth video feed from the camera use one of the <a href="majestic-endpoints.cgi" target="_blank">video endpoints</a>.
   </div>
   <div class="col-md-4 col-xl-3 col-xxl-3">
     <div class="d-grid gap-2 mb-3">
@@ -89,14 +89,6 @@ function reqListener(data) {
   console.log(data.responseText);
 }
 
-function sendToApi(endpoint) {
-  const xhr = new XMLHttpRequest();
-  xhr.addEventListener("load", reqListener);
-  xhr.open("GET", "http://" + network_address + endpoint);
-  xhr.setRequestHeader("Authorization", "Basic " + btoa("admin:"));
-  xhr.send();
-}
-
 $$("a[id^=pan-],a[id^=zoom-]").forEach(el => {
   el.addEventListener("click", event => {
     event.preventDefault();
@@ -107,7 +99,6 @@ $$("a[id^=pan-],a[id^=zoom-]").forEach(el => {
 $("#toggle-night-mode")?.addEventListener("click", event => {
   event.preventDefault();
   $('#night-mode-status').src = ($('#night-mode-status').src.split("/").pop() == "light-on.svg") ? "/a/light-off.svg" : "/a/light-on.svg";
-  // sendToApi("/night/toggle");
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "/cgi-bin/night.cgi");
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -126,7 +117,6 @@ $$("button[data-sendto]").forEach(el => el.addEventListener("click", event => {
 $("#speed")?.addEventListener("click", event => {
   event.preventDefault();
   event.target.src = (event.target.src.split("/").pop() == "speed-slow.svg") ? "/a/speed-fast.svg" : "/a/speed-slow.svg";
-  // sendToApi("/speed/toggle");
 });
 </script>
 

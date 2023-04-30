@@ -14,7 +14,7 @@ echo_c() {
 
 log() {
   # poor man's logrotate
-  if [ -f "$LOG_FILE" ] && [ "$(wc -c $LOG_FILE | cut -d' ' -f1)" -gt $LOG_SIZE_LIMIT ]; then
+  if [ -f "$LOG_FILE" ] && [ "$(stat -c%s $LOG_FILE)" -gt $LOG_SIZE_LIMIT ]; then
     # redundant, but calling log() from within log() is wrong!
     echo "$(date +"%F %T") [${PID}:${plugin}] Rotate log file" >>$LOG_FILE
     mv "$LOG_FILE" "${LOG_FILE}.1"

@@ -16,6 +16,45 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
 }
 
+function setProgressBar(id, value, name) {
+    $(id).setAttribute('aria-valuenow', value);
+    $(id).title = name + ': ' + value + '%'
+    const pb = $(id + ' .progress-bar');
+    pb.style.width = value + '%';
+    pb.classList = 'progress-bar';
+    if (value > 95) {
+        pb.classList.add('bg-danger');
+    } else if (value > 90) {
+        pb.classList.add('bg-warning');
+    } else {
+        pb.classList.add('bg-success');
+    }
+}
+
+function heartbeat() {
+    fetch('/cgi-bin/j/heartbeat.cgi')
+         .then((response) => response.json())
+         .then((json) => {
+            if (json.soc_temp !== '') {
+                const st = $('#soc-temp')
+                st.textContent = json.soc_temp;
+                st.classList.add(['text-primary','bg-white','rounded','small']);
+                st.title = 'SoC temperature ' + json.soc_temp;
+            }
+            if (json.time_now !== '') {
+                const d = new Date(json.time_now * 1000);
+                $('#time-now').textContent = d.toLocaleString() + ' ' + json.timezone;
+            }
+            if (json.mem_used !== '') {
+                setProgressBar('#pb-memory', json.mem_used, 'Memory Usage');
+            }
+            if (json.overlay_used !== '') {
+                setProgressBar('#pb-overlay', json.overlay_used, 'Overlay Usage');
+            }
+         })
+         .then(setTimeout(heartbeat, 1000));
+}
+
 (function () {
     function initAll() {
         // serve auto value on range form fields
@@ -124,15 +163,17 @@ function sleep(ms) {
                 }
             }
             async function run() {
-                for await (let line of makeTextFileLineIterator('/cgi-bin/jrun.cgi?cmd=' + btoa(el.dataset["cmd"]))) {
+                for await (let line of makeTextFileLineIterator('/cgi-bin/j/run.cgi?cmd=' + btoa(el.dataset["cmd"]))) {
                     const re1 = /\[1;(\d+)m/;
                     const re2 = /\[0m/;
-                    line=line.replace(re1, '<span class="ansi-$1">').replace(re2, '</span>')
+                    line = line.replace(re1, '<span class="ansi-$1">').replace(re2, '</span>')
                     el.innerHTML += line + '\n';
                 }
             }
             run()
         }
+
+        heartbeat();
     }
 
     window.addEventListener('load', initAll);

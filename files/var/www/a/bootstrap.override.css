@@ -36,19 +36,49 @@ body.debug:before {
 :root {
     --bs-body-font-family: "IBM Plex Sans", sans-serif;
     --bs-font-monospace: "IBM Plex Mono", monospace;
-    --bs-blue: #4c60d8;
+    --bs-blue: rgb(76, 96, 216);
+}
+
+[data-bs-theme=light] {
+    --bs-primary: rgb(76, 96, 216);
+    --bs-secondary: rgb(76, 96, 216);
+    --bs-tertiary-bg-rgb: 76, 96, 216;
+}
+
+.navbar-nav,
+[data-bs-theme=light] .navbar-nav {
+    --bs-nav-link-color: white;
+}
+[data-bs-theme=light] .nav-link {
+    color: var(--bs-nav-link-color);
+}
+
+[data-bs-theme=dark] {
+    --bs-primary: rgb(76, 96, 216);
+    --bs-secondary: rgb(138, 159, 208);
+}
+
+[data-bs-theme=dark] .btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: rgba(13, 110, 253, 0.5);
+    --bs-btn-border-color: rgba(13, 110, 253, 0.5);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: rgba(11, 94, 215, 0.5);
+    --bs-btn-hover-border-color: rgba(10, 88, 202, 0.5);
+    --bs-btn-focus-shadow-rgb: 49,132,253;
+    --bs-btn-active-color: rgba(255, 255, 255, 0.5);
+    --bs-btn-active-bg: rgba(10, 88, 202, 0.5);
+    --bs-btn-active-border-color: rgba(10, 83, 190, 0.5);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: rgba(255, 255, 255, 0.5);
+    --bs-btn-disabled-bg: rgba(13, 110, 253, 0.5);
+    --bs-btn-disabled-border-color: rgba(13, 110, 253, 0.5);
 }
 
 body > main > .container > h2 {
     font-weight: 700;
-    color: var(--bs-blue);
+    color: var(--bs-primary);
     margin: 1rem 0 1.5rem;
-}
-
-body > nav.navbar,
-body > header {
-    background: var(--bs-blue);
-    color: #ffffff;
 }
 
 h6 {
@@ -98,13 +128,17 @@ dl.list dd {
 }
 
 .col > h3 {
-    color: var(--bs-blue);
+    color: var(--bs-secondary);
     font-size: 1.3rem;
     margin-bottom: 1.5rem;
 }
 
 .container {
     display: block;
+}
+
+.cp2cb {
+    cursor: pointer;
 }
 
 .dropdown-item {
@@ -143,14 +177,12 @@ p.range span.show-value {
     margin-bottom: 0;
 }
 
-/*.input-group-text { min-width: 4rem; }*/
-
 .nav-link {
     cursor: pointer;
 }
 
 .nav-link.active {
-    background: var(--bs-blue);
+    background: var(--bs-primary);
     color: #ffffff;
 }
 
@@ -198,8 +230,6 @@ p.range span.show-value {
     /*border-radius: 5px;*/
 }
 
-pre#output { background: #111; color: #89a; }
-
 .ansi-30 { color: rgba(0, 0, 0, 0.8); }
 .ansi-31 { color: rgba(255, 0, 0, 0.8); }
 .ansi-32 { color: rgba(0, 128, 0, 0.8); }
@@ -245,3 +275,5 @@ body.expert .ui-expert { display: initial; }
     border-left: 5px solid green;
     margin-left: -5px;
 }
+
+#pb-memory, #pb-overlay { height: 4px; cursor: pointer; }

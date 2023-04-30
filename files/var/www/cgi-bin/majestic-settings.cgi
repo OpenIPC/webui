@@ -146,7 +146,8 @@ for line in $_mj2; do
   hint=${hint//_/ }                 # => From 1 to 500000.
 
   value="$(yaml-cli -g "$yaml_param_name")"
-  [ -z "$value" ] && value="$placeholder"
+# FIXME: this is not how it should be done. Instead, Majestic should be reporting its true values.
+# [ -z "$value" ] && value="$placeholder"
 
   # assign yaml_param_name's value to a variable with yaml_param_name's form_field_name for form fields values
   eval "$form_field_name=\"\$value\""

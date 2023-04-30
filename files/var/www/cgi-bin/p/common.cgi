@@ -503,10 +503,10 @@ calculatePreviewSize();
 }
 
 progressbar() {
-  local _c="primary"
-  [ "$1" -ge "75" ] && _c="danger"
+  local c="primary"
+  [ "$1" -ge "75" ] && c="danger"
   echo "<div class=\"progress\" role=\"progressbar\" aria-valuenow=\"${1}\" aria-valuemin=\"0\" aria-valuemax=\"100\">" \
-    "<div class=\"progress-bar progress-bar-striped progress-bar-animated bg-${_c}\" style=\"width:${1}%\"></div>" \
+    "<div class=\"progress-bar progress-bar-striped progress-bar-animated bg-${c}\" style=\"width:${1}%\"></div>" \
     "</div>"
 }
 

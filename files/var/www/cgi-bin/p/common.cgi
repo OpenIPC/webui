@@ -101,6 +101,16 @@ button_reset_firmware() {
   echo "</form>"
 }
 
+button_restore_from_rom() {
+  local file=$1
+  [ ! -f "/rom/${file}" ] && return
+  if [ -z "$(diff "/rom/${file}" "${file}")" ]; then
+    echo "<p class=\"small fst-italic\">File matches the version in ROM.</p>"
+    return
+  fi
+  echo "<p><a class=\"btn btn-danger\" href=\"restore.cgi?f=${file}\">Replace ${file} with its version from ROM</a></p>"
+}
+
 # button_submit "text" "type" "extras"
 button_submit() {
   local _t="$1"; [ -z "$_t" ] && _t="Save changes"

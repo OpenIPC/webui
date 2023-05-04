@@ -1,5 +1,5 @@
 #!/bin/sh
-soc_temp=$(ipcinfo --temp);
+soc_temp=$(ipcinfo --temp 2>/dev/null);
 if [ -n "$soc_temp" ]; then
   soc_temp="${soc_temp}°C"
 else

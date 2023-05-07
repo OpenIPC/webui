@@ -4,7 +4,7 @@
 plugin="openwall"
 plugin_name="Send to OpenWall"
 page_title="Send to OpenWall"
-params="enabled interval use_heif socks5_enabled"
+params="caption enabled interval use_heif socks5_enabled"
 
 tmp_file=/tmp/${plugin}.conf
 
@@ -64,8 +64,9 @@ fi
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_switch "openwall_enabled" "Enable sending to OpenWall" %>
       <% field_select "openwall_interval" "Interval, minutes" "15,30,60" "Time between submissions. 15 minutes or longer." %>
-      <% field_switch "openwall_use_heif" "Use HEIF format." "Requires H.265 codec on Video0" %>
-      <% field_switch "openwall_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
+      <% field_text "openwall_caption" "Caption" "Location or short description." %>
+      <% field_switch "openwall_use_heif" "Use HEIF format." "Requires H.265 codec on Video0." %>
+      <% field_switch "openwall_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access." %>
       <% button_submit %>
     </form>
   </div>

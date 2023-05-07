@@ -6,9 +6,9 @@ microbe-web
 Microbe is a web interface for [OpenIPC Firmware][openipcfw],
 and is available on port 85 of your camera.
 
-Default credentials to access the web interface are: username _admin_, and
-password _12345_. You will be asked to change the password at the first login.
-Please note that this will also assign the same password to user _root_!
+Web interface uses system credentials for access. Default username is _root_,
+and password is _12345_. You will be asked to change the password at the first login.
+Please note that this will also affect your login via ssh!
 
 ### Support
 

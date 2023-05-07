@@ -8,6 +8,15 @@ tmp_file=/tmp/${plugin}.conf
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in
+    changemac)
+      if echo "$POST_mac_address" | grep -Eiq '^([0-9a-f]{2}[:-]){5}([0-9a-f]{2})$'; then
+        fw_setenv ethaddr $POST_mac_address
+        update_caminfo
+        redirect_to "reboot.cgi"
+      else
+        redirect_back "warning" "${POST_mac_address} is as invalid MAC address."
+      fi
+      ;;
     reset)
       /usr/sbin/sysreset.sh -n
       redirect_back

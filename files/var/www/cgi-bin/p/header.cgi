@@ -138,6 +138,10 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
 </div>
 <% fi %>
 
+<% if [ "$network_macaddr" = "00:00:23:34:45:66" ]; then %>
+<%in p/mac-address.cgi %>
+<% fi %>
+
 <% if [ "true" = "$openwall_socks5_enabled" ] || [ "true" = "$telegram_socks5_enabled" ] || [ "true" = "$yadisk_socks5_enabled" ]; then
   if [ -z "$socks5_host" ] || [ -z "$socks5_port" ]; then %>
 <div class="alert alert-danger">

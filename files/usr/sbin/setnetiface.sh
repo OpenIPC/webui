@@ -79,7 +79,6 @@ For static mode:
   -d addre,sses  DNS servers addresses.
 
   -v             Verbose output.
-  -h             Show this help.
 "
   exit 0
 }

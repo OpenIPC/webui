@@ -81,7 +81,7 @@ fi
       <% field_hidden "action" "update" %>
       <% field_text "network_hostname" "Hostname" %>
       <% field_select "network_default_interface" "Default network interface" "$network_interfaces" %>
-      <% field_select "network_interface_type" "Type of network interface" "eth wifi ppp usb wg"
+      <% field_select "network_interface_type" "Type of network interface" "eth wifi ppp usb wg" %>
       <% field_text "network_wifi_modules" "WiFi modules" %>
       <% field_text "network_wifi_ssid" "WiFi SSID" %>
       <% field_text "network_wifi_password" "WiFi Password" %>

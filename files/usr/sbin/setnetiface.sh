@@ -9,7 +9,7 @@ auto %s
 iface %s inet %s
 "
 
-TEMPLATE_MAC="    hwaddress ether \$(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)\n"
+TEMPLATE_MAC="    hwaddress ether \$(fw_printenv -n ethaddr || echo 00:00:23:34:45:66)\n"
 
 # $network_address $network_netmask
 TEMPLATE_STATIC="    # static address

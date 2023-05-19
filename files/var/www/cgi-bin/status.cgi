@@ -33,6 +33,10 @@
       <dd><%= $network_hostname %></dd>
     </dl>
   </div>
+
+  <div class="col">
+    <% ex "cat /etc/os-release" %>
+  </div>
 </div>
 
 <div class="row g-4 mb-4 ui-expert">

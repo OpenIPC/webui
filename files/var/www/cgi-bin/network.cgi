@@ -3,11 +3,20 @@
 <%
 plugin="network"
 page_title="Network settings"
-params="address dhcp dns_1 dns_2 gateway hostname netmask wifi_modules wifi_ssid wifi_password"
+params="address dhcp dns_1 dns_2 gateway hostname netmask interface_type wifi_modules wifi_ssid wifi_password wifi_power_pin"
 tmp_file=/tmp/${plugin}.conf
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in
+    changemac)
+      if echo "$POST_mac_address" | grep -Eiq '^([0-9a-f]{2}[:-]){5}([0-9a-f]{2})$'; then
+        fw_setenv ethaddr $POST_mac_address
+        update_caminfo
+        redirect_to "reboot.cgi"
+      else
+        redirect_back "warning" "${POST_mac_address} is as invalid MAC address."
+      fi
+      ;;
     reset)
       /usr/sbin/sysreset.sh -n
       redirect_back
@@ -24,6 +33,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         [ -z "$network_default_interface" ] && flash_append "danger" "Default network interface cannot be empty." && error=1
         [ -z "$network_address" ] && flash_append "danger" "IP address cannot be empty." && error=1
         [ -z "$network_netmask" ] && flash_append "danger" "Networking mask cannot be empty." && error=1
+        [ -z "$network_interface_type" ] && flash_append "danger" "Type of networking interface cannot be empty." && error=1
     #    [ -z "$network_gateway" ] && flash_append "danger" "Gateway IP address cannot be empty." && error=1
     #    [ -z "$network_dns_1" ] && flash_append "danger" "Nameserver address cannot be empty." && error=1
     #    [ -z "$network_dns_2" ] && flash_append "danger" "Nameserver address cannot be empty." && error=1
@@ -36,12 +46,12 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         command="${command} -i $network_default_interface"
         command="${command} -m $network_mode"
         command="${command} -n $network_hostname"
+        command="${command} -t $network_interface_type"
 
         if [ "wlan0" = "$network_default_interface" ]; then
           command="${command} -s $network_wifi_ssid"
           command="${command} -p $network_wifi_password"
           command="${command} -k $network_wifi_modules"
-          command="${command} -t wifi"
         fi
 
         if [ "dhcp" != "$network_mode" ]; then
@@ -49,7 +59,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
           command="${command} -n $network_netmask"
           command="${command} -g $network_gateway"
           command="${command} -d $network_dns_1"
-          command="${command} -D $network_dns_2"
+          [ -n "$network_dns_2" ] && command="${command},${network_dns_2}"
         fi
 
         echo "$command" >>/tmp/webui.log
@@ -69,8 +79,9 @@ fi
   <div class="col col-md-6 col-lg-4 mb-4">
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_hidden "action" "update" %>
-      <% field_text "network_hostname" "Hostname" "Make hostname unique using MAC address information: ${network_macaddr//:/-}" %>
+      <% field_text "network_hostname" "Hostname" %>
       <% field_select "network_default_interface" "Default network interface" "$network_interfaces" %>
+      <% field_select "network_interface_type" "Type of network interface" "eth wifi ppp usb wg" %>
       <% field_text "network_wifi_modules" "WiFi modules" %>
       <% field_text "network_wifi_ssid" "WiFi SSID" %>
       <% field_text "network_wifi_password" "WiFi Password" %>

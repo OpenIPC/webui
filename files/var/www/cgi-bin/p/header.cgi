@@ -56,6 +56,7 @@ Pragma: no-cache
               <li><a class="dropdown-item" href="network-socks5.cgi">SOCKS5 Proxy</a></li>
               <li><a class="dropdown-item" href="webui-settings.cgi">Web Interface</a></li>
               <li><a class="dropdown-item" href="admin.cgi">Admin Profile</a></li>
+              <li><a class="dropdown-item" href="users.cgi">Users</a></li>
               <li><a class="dropdown-item" href="debugging.cgi">Debugging</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="reset.cgi">Reset...</a></li>
@@ -135,6 +136,10 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
 <div class="alert alert-warning">
 <p class="mb-0">No Internet connection. Please <a href="network.cgi">check your network settings</a>.</p>
 </div>
+<% fi %>
+
+<% if [ "$network_macaddr" = "00:00:23:34:45:66" ]; then %>
+<%in p/mac-address.cgi %>
 <% fi %>
 
 <% if [ "true" = "$openwall_socks5_enabled" ] || [ "true" = "$telegram_socks5_enabled" ] || [ "true" = "$yadisk_socks5_enabled" ]; then

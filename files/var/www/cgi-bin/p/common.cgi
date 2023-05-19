@@ -101,6 +101,16 @@ button_reset_firmware() {
   echo "</form>"
 }
 
+button_restore_from_rom() {
+  local file=$1
+  [ ! -f "/rom/${file}" ] && return
+  if [ -z "$(diff "/rom/${file}" "${file}")" ]; then
+    echo "<p class=\"small fst-italic\">File matches the version in ROM.</p>"
+    return
+  fi
+  echo "<p><a class=\"btn btn-danger\" href=\"restore.cgi?f=${file}\">Replace ${file} with its version from ROM</a></p>"
+}
+
 # button_submit "text" "type" "extras"
 button_submit() {
   local _t="$1"; [ -z "$_t" ] && _t="Save changes"
@@ -408,20 +418,25 @@ link_to() {
 }
 
 load_plugins() {
-  local _i
-  local _p
-  for _i in $(ls -1 plugin-*); do
-    _p="$(sed -r -n '/^plugin=/s/plugin="(.*)"/\1/p' $_i)"
-    # hide plugin if not supported
-    [ "$_p" = "mqtt" ] && [ ! -f /usr/bin/mosquitto_pub ] && continue
-    [ "$_p" = "telegrambot" ] && [ ! -f /usr/bin/jsonfilter ] && continue
-    [ "$_p" = "zerotier" ] && [ ! -f /usr/sbin/zerotier-cli ] && continue
+  local i
+  local n
+  local p
+  for i in $(ls -1 plugin-*); do
+    # get plugin name
+    p="$(sed -r -n '/^plugin=/s/plugin="(.*)"/\1/p' $i)"
 
-    _n="$(sed -r -n '/^plugin_name=/s/plugin_name="(.*)"/\1/p' $_i)"
-    eval _e=\$${_p}_enabled
-    [ "true" = "$_e" ] && _css=" plugin-enabled"
-    echo "<li><a class=\"dropdown-item${_css}\" href=\"${_i}\">${_n}</a></li>"
-    unset _e; unset _n; unset _p; unset _css
+    # hide unsupported plugins
+    [ "$p" = "mqtt"        ] && [ ! -f /usr/bin/mosquitto_pub ] && continue
+    [ "$p" = "telegrambot" ] && [ ! -f /usr/bin/jsonfilter    ] && continue
+    [ "$p" = "zerotier"    ] && [ ! -f /usr/sbin/zerotier-cli ] && continue
+
+    # get plugin description
+    n="$(sed -r -n '/^plugin_name=/s/plugin_name="(.*)"/\1/p' $i)"
+
+    # check if plugin is enabled
+    echo -n "<li><a class=\"dropdown-item"
+    grep -q "^${p}_enabled=\"true\"" ${ui_config_dir}/${p}.conf && echo -n " plugin-enabled"
+    echo "\" href=\"${i}\">${n}</a></li>"
   done
 }
 

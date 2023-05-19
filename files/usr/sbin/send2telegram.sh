@@ -82,22 +82,26 @@ if [ -n "$telegram_photo" ]; then
     command1="${command1} -F 'caption=${telegram_message}'"
     log "$command1"
     eval "$command1" >>$LOG_FILE 2>&1
-  fi
-
-  if [ "true" = "$telegram_as_photo" ]; then
+  elif [ "true" = "$telegram_as_photo" ]; then
     command2="$command"
     command2="${command2}sendPhoto"
     command2="${command2} -F 'photo=@${telegram_photo}'"
     command2="${command2} -F 'caption=${telegram_message}'"
     log "$command2"
     eval "$command2" >>$LOG_FILE 2>&1
+  else
+    command3="$command"
+    command3="${command3}sendMessage"
+    command3="${command3} -F 'text=Please select a method of sending (inline photo or file attachmnet).'"
+    log "$command3"
+    eval "$command3" >>$LOG_FILE 2>&1
   fi
 else
-  command3="$command"
-  command3="${command3}sendMessage"
-  command3="${command3} -F 'text=${telegram_message}'"
-  log "$command3"
-  eval "$command3" >>$LOG_FILE 2>&1
+  command4="$command"
+  command4="${command4}sendMessage"
+  command4="${command4} -F 'text=${telegram_message}'"
+  log "$command4"
+  eval "$command4" >>$LOG_FILE 2>&1
 fi
 
 [ "1" = "$verbose" ] && cat $LOG_FILE

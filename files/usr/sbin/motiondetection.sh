@@ -12,10 +12,16 @@ UNSUPPORTED="hi3516cv100 hi3516av100"
   log "Motion detection is disabled in config!" && quit_clean 3
 
 STOP_FILE=/tmp/motion.stop
-TEMPLATE="Motion detected in [0-9]"
+TEMPLATE="Motion detected in \d* regions"
 
-logread -f | grep "$TEMPLATE" | sed -E "s/.*($TEMPLATE).*/\\1/" | while read LINE; do
-  [ "$(echo $LINE | cut -d' ' -f4)" -lt "$((51 - $motion_sensitivity))" ] && continue
+logread -f | while read line; do
+   output=$(echo $line | grep -o "$TEMPLATE" | cut -d' ' -f4)
+   if ! echo "$output" | grep -Eq "^[0-9]{1,2}$"; then
+      continue
+   fi
+   if [ "$output" -lt "$((51 - $motion_sensitivity))" ]; then
+      continue
+   fi
 
   # throttle execution
   [ -f "$STOP_FILE" ] && [ "$(date -r "$STOP_FILE" +%s)" -ge "$(($(date +%s) - $motion_throttle))" ] && continue

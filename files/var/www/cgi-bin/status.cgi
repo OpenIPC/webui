@@ -46,10 +46,6 @@
     <% ex "df -T" %>
     <% ex "cat /proc/meminfo | grep Mem" %>
   </div>
-  <div class="col">
-    <h3>Top 20 Processes</h3>
-    <% ex "top -n 1 -b | sed '/top -n/d' | sed '1,4d' | head -20" %>
-  </div>
 </div>
 
 <%in p/footer.cgi %>

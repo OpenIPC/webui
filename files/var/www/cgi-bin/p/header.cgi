@@ -138,7 +138,7 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
 </div>
 <% fi %>
 
-<% if [ "$network_macaddr" = "00:00:23:34:45:66" ]; then %>
+<% if [ "$network_macaddr" = "00:00:23:34:45:66" ] && [ -f /etc/shadow- ] && [ -n $(grep root /etc/shadow- | cut -d: -f2) ]; then %>
 <%in p/mac-address.cgi %>
 <% fi %>
 

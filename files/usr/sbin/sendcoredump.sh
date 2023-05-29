@@ -11,22 +11,19 @@ LOG_FILE=/root/coredump.log
 log "Majectic crashed"
 
 log() {
-  _txt="$(date +"%F %T") [${PID}] ${1}"
-  echo "$_txt" >>$LOG_FILE
-  [ "1" != "$quiet" ] && echo "$_txt"
-  unset _txt
+	local txt="$(date +"%F %T") [${PID}] ${1}"
+	echo "$txt" >>$LOG_FILE
+	[ "1" != "$quiet" ] && echo "$txt"
+	unset txt
 }
 
-[ ! -f "$config_file" ] &&
-  log "Config file ${config_file} not found." && exit 1
+[ ! -f "$config_file" ] && log "Config file ${config_file} not found." && exit 1
 source "$config_file"
 
-[ ! -f "$admin_file" ] &&
-  log "Admin config file ${admin_file} not found." && exit 2
+[ ! -f "$admin_file" ] && log "Admin config file ${admin_file} not found." && exit 2
 source "$admin_file"
 
-[ "true" != "$coredump_enabled" ] &&
-  log "Core dump not enabled." && exit 3
+[ "true" != "$coredump_enabled" ] && log "Core dump not enabled." && exit 3
 
 log "Stopping watchdog"
 rmmod wdt
@@ -79,33 +76,31 @@ log "done"
 rm "$core_file" "$info_file" majestic.yaml
 
 if [ "true" = "$coredump_send2devs" ]; then
-  log "Sending to S3 bucket"
-  curl --silent --verbose "https://majdumps.s3.eu-north-1.amazonaws.com/${bundle_name}" \
-    --upload-file "$bundle_name" >>$LOG_FILE
-  log "done"
+	log "Sending to S3 bucket"
+	curl --silent --verbose "https://majdumps.s3.eu-north-1.amazonaws.com/${bundle_name}" --upload-file "$bundle_name" >>$LOG_FILE
+	log "done"
 fi
 
 if [ "true" = "$coredump_send2tftp" ]; then
-  log "Sending to TFTP server"
-  tftp -p -l "$bundle_name" $coredump_tftphost >>$LOG_FILE
-  log "done"
+	log "Sending to TFTP server"
+	tftp -p -l "$bundle_name" $coredump_tftphost >>$LOG_FILE
+	log "done"
 fi
 
 if [ "true" = "$coredump_send2ftp" ]; then
-  log "Sending to FTP server"
-  curl --silent --verbose "ftp://${coredump_ftphost}/${coredump_ftppath}/" \
-    --upload-file "$bundle_name" --user "${coredump_ftpuser}:${coredump_ftppass}" --ftp-create-dirs >>$LOG_FILE
-  log "done"
+	log "Sending to FTP server"
+	curl --silent --verbose "ftp://${coredump_ftphost}/${coredump_ftppath}/" --upload-file "$bundle_name" --user "${coredump_ftpuser}:${coredump_ftppass}" --ftp-create-dirs >>$LOG_FILE
+	log "done"
 fi
 
 if [ "true" = "$coredump_save4web" ]; then
-  [ -z "$coredump_localpath" ] && coredump_localpath="/root"
-  [ ! -d "$coredump_localpath" ] && mkdir -p "$coredump_localpath"
-  log "Saving locally to ${coredump_localpath}/coredump.tgz"
-  mv "$bundle_name" "${coredump_localpath}/coredump.tgz"
-  log "done"
+	[ -z "$coredump_localpath" ] && coredump_localpath="/root"
+	[ ! -d "$coredump_localpath" ] && mkdir -p "$coredump_localpath"
+	log "Saving locally to ${coredump_localpath}/coredump.tgz"
+	mv "$bundle_name" "${coredump_localpath}/coredump.tgz"
+	log "done"
 else
-  rm "$bundle_name"
+	rm "$bundle_name"
 fi
 
 [ "1" = "$verbose" ] && cat $LOG_FILE

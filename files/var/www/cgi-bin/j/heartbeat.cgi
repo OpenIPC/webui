@@ -1,9 +1,9 @@
 #!/bin/sh
-soc_temp=$(ipcinfo --temp 2>/dev/null);
+soc_temp=$(ipcinfo --temp 2>/dev/null)
 if [ -n "$soc_temp" ]; then
-  soc_temp="${soc_temp}°C"
+	soc_temp="${soc_temp}°C"
 else
-  soc_temp=""
+	soc_temp=""
 fi
 mem_total=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 mem_free=$(awk '/MemFree/ {print $2}' /proc/meminfo)

@@ -230,7 +230,7 @@ p.range span.show-value {
     /*border-radius: 5px;*/
 }
 
-pre#output[data-cmd] { background-color: rgba(0,0,0,0); }
+pre#output[data-cmd] { background-color: rgb(0, 0, 0); }
 .ansi-30 { color: rgba(0, 0, 0, 0.8); }
 .ansi-31 { color: rgba(255, 0, 0, 0.8); }
 .ansi-32 { color: rgba(0, 128, 0, 0.8); }

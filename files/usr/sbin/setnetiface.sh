@@ -86,25 +86,25 @@ For static mode:
 
 ## override config values with command line arguments
 while getopts a:d:D:g:h:i:k:m:n:p:s:t:v flag; do
-  case ${flag} in
-    a) network_address=${OPTARG} ;;
-    d) network_nameservers=${OPTARG} ;;
-    g) network_gateway=${OPTARG} ;;
-    h) network_hostname=${OPTARG} ;;
-    i) network_interface=${OPTARG} ;;
-    k) network_interface_modules=${OPTARG} ;;
-    n) network_netmask=${OPTARG} ;;
-    m) network_mode=${OPTARG} ;;
-    p) network_password=${OPTARG} ;;
-    s) network_ssid=${OPTARG} ;;
-    t) network_interface_type=${OPTARG} ;;
-    v) verbose=1 ;;
-  esac
+	case ${flag} in
+	a) network_address=${OPTARG} ;;
+	d) network_nameservers=${OPTARG} ;;
+	g) network_gateway=${OPTARG} ;;
+	h) network_hostname=${OPTARG} ;;
+	i) network_interface=${OPTARG} ;;
+	k) network_interface_modules=${OPTARG} ;;
+	n) network_netmask=${OPTARG} ;;
+	m) network_mode=${OPTARG} ;;
+	p) network_password=${OPTARG} ;;
+	s) network_ssid=${OPTARG} ;;
+	t) network_interface_type=${OPTARG} ;;
+	v) verbose=1 ;;
+	esac
 done
 
 if [ $# -eq 0 ]; then
-  show_help
-  exit 1
+	show_help
+	exit 1
 fi
 
 # shift dns2 to dns1 if dns1 if empty
@@ -120,71 +120,69 @@ fi
 [ -z "$network_interface_type" ] && log "Network interface type is not set" && exit 12
 
 if [ "wifi" = "$network_interface_type" ]; then
-  [ -z "$network_interface_modules" ] && log "Wireless interface modules are not set" && exit 13
-  [ -z "$network_ssid" ] && log "Wireless network SSID is not set" && exit 14
-  [ -z "$network_password" ] && log "Wireless network passphrase is not set" && exit 15
+	[ -z "$network_interface_modules" ] && log "Wireless interface modules are not set" && exit 13
+	[ -z "$network_ssid" ] && log "Wireless network SSID is not set" && exit 14
+	[ -z "$network_password" ] && log "Wireless network passphrase is not set" && exit 15
 fi
 
 [ -z "$network_mode" ] && log "Network mode is not set" && exit 16
 if [ "static" = "$network_mode" ]; then
-  [ -z "$network_address" ] && log "Interface IP address is not set" && exit 17
-  [ -z "$network_netmask" ] && log "Netmask is not set" && exit 18
-  #[ -z "$network_gateway" ] && log "Gateway IP address is not set" && exit 19
-  #[ -z "$network_dns_1" ] && log "DNS1 IP address is not set" && exit 20
-  #[ -z "$network_dns_2" ] && log "DNS2 IP address is not set" && exit 21
+	[ -z "$network_address" ] && log "Interface IP address is not set" && exit 17
+	[ -z "$network_netmask" ] && log "Netmask is not set" && exit 18
+	#[ -z "$network_gateway" ] && log "Gateway IP address is not set" && exit 19
+	#[ -z "$network_dns_1" ] && log "DNS1 IP address is not set" && exit 20
+	#[ -z "$network_dns_2" ] && log "DNS2 IP address is not set" && exit 21
 fi
 
 tmp_file=/tmp/${plugin}.conf
 :>$tmp_file
 
-#cat /etc/network/interfaces |
-#  sed "/^auto ${network_interface}\$/,/^\$/d" |
-#  sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' >$tmp_file
+#cat /etc/network/interfaces | sed "/^auto ${network_interface}\$/,/^\$/d" | sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' >$tmp_file
 
 printf "$TEMPLATE_COMMON" "$(date)" $network_interface $network_interface $network_mode >>$tmp_file
 
 if [ "eth" = "$network_interface_type" ]; then
-  printf "$TEMPLATE_MAC" >>$tmp_file
+	printf "$TEMPLATE_MAC" >>$tmp_file
 fi
 
 if [ "static" = "$network_mode" ]; then
-  printf "$TEMPLATE_STATIC" $network_address $network_netmask >>$tmp_file
+	printf "$TEMPLATE_STATIC" $network_address $network_netmask >>$tmp_file
 
-  # skip gateway if empty
-  if [ -n "$network_gateway" ]; then
-    echo "    gateway ${network_gateway}" >>$tmp_file
-  fi
+	# skip gateway if empty
+	if [ -n "$network_gateway" ]; then
+		echo "    gateway ${network_gateway}" >>$tmp_file
+	fi
 
-  # skip dns servers if empty
-  if [ -n "$network_nameservers" ]; then
-    echo -n "    pre-up echo -e \"" >>$tmp_file
-    for dns in ${network_nameservers//,/ }; do
-      echo -n "nameserver ${dns}\n" >>$tmp_file
-    done; unset dns
-    echo "\" >/tmp/resolv.conf" >>$tmp_file
-  fi
+	# skip dns servers if empty
+	if [ -n "$network_nameservers" ]; then
+		echo -n "    pre-up echo -e \"" >>$tmp_file
+		for dns in ${network_nameservers//,/ }; do
+			echo -n "nameserver ${dns}\n" >>$tmp_file
+		done; unset dns
+		echo "\" >/tmp/resolv.conf" >>$tmp_file
+	fi
 fi
 
 if [ "wifi" = "$network_interface_type" ]; then
-  echo "    # load modules" >>$tmp_file
-  for module in ${network_interface_modules//,/ }; do
-    echo "    pre-up modprobe ${module}" >>$tmp_file
-  done; unset dns
-  printf "$TEMPLATE_WIRELESS" $network_ssid $network_password >>$tmp_file
+	echo "    # load modules" >>$tmp_file
+	for module in ${network_interface_modules//,/ }; do
+		echo "    pre-up modprobe ${module}" >>$tmp_file
+	done; unset dns
+	printf "$TEMPLATE_WIRELESS" $network_ssid $network_password >>$tmp_file
 fi
 
 # TODO: preset ppp_gpio
 if [ "ppp" = "$network_interface_type" ]; then
-  printf "$TEMPLATE_PPP" $ppp_gpio $ppp_gpio $ppp_gpio $ppp_gpio $ppp_gpio >>$tmp_file
+	printf "$TEMPLATE_PPP" $ppp_gpio $ppp_gpio $ppp_gpio $ppp_gpio $ppp_gpio >>$tmp_file
 fi
 
 # TODO: preset usb_vendor usb_product
 if [ "usb" = "$network_interface_type" ]; then
-  printf "$TEMPLATE_USB" $usb_vendor $usb_product >>$tmp_file
+	printf "$TEMPLATE_USB" $usb_vendor $usb_product >>$tmp_file
 fi
 
 if [ "wg" = "$network_interface_type" ]; then
-  printf "$TEMPLATE_WIREGUARD" $network_interface $network_interface $network_interface >>$tmp_file
+	printf "$TEMPLATE_WIREGUARD" $network_interface $network_interface $network_interface >>$tmp_file
 fi
 
 mv $tmp_file /etc/network/interfaces.d/$network_interface
@@ -194,17 +192,19 @@ cat /etc/network/interfaces.d/$network_interface
 exit
 
 if [ -n "$network_hostname" ]; then
-  _old_hostname="$(hostname)"
-  if [ "$network_hostname" != "$_old_hostname" ]; then
-    echo "$network_hostname" >/etc/hostname
-    hostname "$network_hostname"
-    sed -r -i "/127.0.1.1/s/(\b)${_old_hostname}(\b)/\1${network_hostname}\2/" /etc/hosts >&2
-    killall udhcpc
-    # page does not redirect without >/dev/null
-    udhcpc -x hostname:$network_hostname -T 1 -t 5 -R -b -O search >/dev/null
-  fi
+	_old_hostname="$(hostname)"
+	if [ "$network_hostname" != "$_old_hostname" ]; then
+		echo "$network_hostname" >/etc/hostname
+		hostname "$network_hostname"
+		sed -r -i "/127.0.1.1/s/(\b)${_old_hostname}(\b)/\1${network_hostname}\2/" /etc/hosts >&2
+		killall udhcpc
+		# page does not redirect without >/dev/null
+		udhcpc -x hostname:$network_hostname -T 1 -t 5 -R -b -O search >/dev/null
+	fi
 fi
 
 update_caminfo
 generate_signature
 touch /tmp/network-restart.txt
+
+exit 0

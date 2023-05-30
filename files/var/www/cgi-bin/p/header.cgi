@@ -37,6 +37,7 @@ Pragma: no-cache
               <li><a class="dropdown-item" href="info-proc-umap.cgi">Information from /proc/umap</a></li>
               <li><a class="dropdown-item" href="info-ipctool.cgi">IPC Tool</a></li>
               <li><a class="dropdown-item" href="info-netstat.cgi">Network stats</a></li>
+              <li><a class="dropdown-item" href="info-top.cgi">Top processes</a></li>
               <li><a class="dropdown-item" href="info-log.cgi">Log read</a></li>
               <li><a class="dropdown-item" href="info-overlay.cgi">Overlay partition</a></li>
             </ul>
@@ -83,7 +84,7 @@ done
 unset _css; unset _param_domain; unset _line; unset _param_name; unset _parameter_domain_old; unset _parameter;
 %>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="info-majestic.cgi">Majestic YAML</a></li>
+              <li><a class="dropdown-item" href="info-majestic.cgi">Majestic Config</a></li>
               <li><a class="dropdown-item" href="majestic-endpoints.cgi">Majestic Endpoints</a></li>
               <li><a class="dropdown-item" href="majestic-config-actions.cgi">Majestic Maintenance</a></li>
             </ul>
@@ -138,7 +139,7 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
 </div>
 <% fi %>
 
-<% if [ "$network_macaddr" = "00:00:23:34:45:66" ]; then %>
+<% if [ "$network_macaddr" = "00:00:23:34:45:66" ] && [ -f /etc/shadow- ] && [ -n $(grep root /etc/shadow- | cut -d: -f2) ]; then %>
 <%in p/mac-address.cgi %>
 <% fi %>
 

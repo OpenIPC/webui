@@ -6,10 +6,10 @@ singleton
 
 UNSUPPORTED="hi3516cv100 hi3516av100"
 [ -n "$(echo $UNSUPPORTED | sed -n "/\b$(ipcinfo --family)\b/p")" ] &&
-  log "Motion detection is not supported on your camera!" && quit_clean 1
+	log "Motion detection is not supported on your camera!" && quit_clean 1
 
 [ "true" != "$motion_enabled" ] &&
-  log "Motion detection is disabled in config!" && quit_clean 3
+	log "Motion detection is disabled in config!" && quit_clean 3
 
 STOP_FILE=/tmp/motion.stop
 TEMPLATE="Motion detected in \d* regions"

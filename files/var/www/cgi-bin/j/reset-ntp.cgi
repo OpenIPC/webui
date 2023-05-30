@@ -1,9 +1,9 @@
 #!/bin/sh
 cp /rom/etc/ntp.conf /etc/ntp.conf
 if [ $? -eq 0 ]; then
-  payload='{"result":"success","message":"Configuration reset to firmware defaults."}'
+	payload='{"result":"success","message":"Configuration reset to firmware defaults."}'
 else
-  payload='{"result":"danger","message":"Configuration reset to firmware defaults failed!"}'
+	payload='{"result":"danger","message":"Configuration reset to firmware defaults failed!"}'
 fi
 echo "HTTP/1.1 200 OK
 Content-type: application/json

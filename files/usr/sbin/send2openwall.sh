@@ -4,12 +4,12 @@ plugin="openwall"
 source /usr/sbin/common-plugins
 
 show_help() {
-  echo "Usage: $0 [-v] [-h] [-f]
+	echo "Usage: $0 [-v] [-h] [-f]
   -f          Force send.
   -v          Verbose output.
   -h          Show this help.
 "
-  exit 0
+	exit 0
 }
 
 # default values
@@ -19,9 +19,7 @@ fw_version=$(grep "OPENIPC_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)
 
 network_hostname=$(hostname -s)
 network_default_interface=$(ip r | sed -nE '/default/s/.+dev (\w+).+?/\1/p' | head -n 1)
-if [ -z "$network_default_interface" ]; then
-  network_default_interface=$(ip r | sed -nE 's/.+dev (\w+).+?/\1/p' | head -n 1)
-fi
+[ -z "$network_default_interface" ] && network_default_interface=$(ip r | sed -nE 's/.+dev (\w+).+?/\1/p' | head -n 1)
 network_macaddr=$(cat /sys/class/net/${network_default_interface}/address)
 
 sensor=$(ipcinfo --short-sensor)
@@ -35,31 +33,28 @@ uptime=$(uptime | sed -r 's/^.+ up ([^,]+), .+$/\1/')
 
 # override config values with command line arguments
 while getopts fvh flag; do
-  case ${flag} in
-  f) force=1 ;;
-  v) verbose=1 ;;
-  h) show_help ;;
-  esac
+	case ${flag} in
+	f) force=1 ;;
+	v) verbose=1 ;;
+	h) show_help ;;
+	esac
 done
 
-[ "false" = "$openwall_enabled" ] && [ $force -ne 1 ] &&
-  log "Sending to OpenIPC Wall is disabled." && exit 10
+[ "false" = "$openwall_enabled" ] && [ $force -ne 1 ] && log "Sending to OpenIPC Wall is disabled." && exit 10
 
 if [ "true" = "$openwall_use_heif" ] && [ "h265" = "$(yaml-cli -g .video0.codec)" ]; then
-  snapshot=/tmp/snapshot4cron.heif
-  curl --silent --fail --url http://127.0.0.1/image.heif?t=$(date +"%s") --output ${snapshot}
+	snapshot=/tmp/snapshot4cron.heif
+	curl --silent --fail --url http://127.0.0.1/image.heif?t=$(date +"%s") --output ${snapshot}
 else
-  snapshot4cron.sh
-  # [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
-  snapshot=/tmp/snapshot4cron.jpg
+	snapshot4cron.sh
+	# [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+	snapshot=/tmp/snapshot4cron.jpg
 fi
 [ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
 
 # validate mandatory values
-[ ! -f "$snapshot" ] &&
-  log "Snapshot file not found" && exit 11
-[ -z "$network_macaddr" ] &&
-  log "MAC address not found" && exit 12
+[ ! -f "$snapshot" ] && log "Snapshot file not found" && exit 11
+[ -z "$network_macaddr" ] && log "MAC address not found" && exit 12
 
 command="curl --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
@@ -67,9 +62,9 @@ command="${command} --max-time ${curl_timeout}"
 
 # SOCK5 proxy, if needed
 if [ "true" = "$yadisk_socks5_enabled" ]; then
-  source /etc/webui/socks5.conf
-  command="${command} --socks5-hostname ${socks5_host}:${socks5_port}"
-  command="${command} --proxy-user ${socks5_login}:${socks5_password}"
+	source /etc/webui/socks5.conf
+	command="${command} --socks5-hostname ${socks5_host}:${socks5_port}"
+	command="${command} --proxy-user ${socks5_login}:${socks5_password}"
 fi
 
 command="${command} --url https://openipc.org/snapshots"

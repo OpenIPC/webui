@@ -33,6 +33,10 @@
       <dd><%= $network_hostname %></dd>
     </dl>
   </div>
+
+  <div class="col">
+    <% ex "cat /etc/os-release" %>
+  </div>
 </div>
 
 <div class="row g-4 mb-4 ui-expert">
@@ -41,10 +45,6 @@
     <% ex "/usr/bin/uptime" %>
     <% ex "df -T" %>
     <% ex "cat /proc/meminfo | grep Mem" %>
-  </div>
-  <div class="col">
-    <h3>Top 20 Processes</h3>
-    <% ex "top -n 1 -b | sed '/top -n/d' | sed '1,4d' | head -20" %>
   </div>
 </div>
 

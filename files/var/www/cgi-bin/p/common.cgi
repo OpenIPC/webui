@@ -687,6 +687,7 @@ update_caminfo() {
   fi
 
   # Firmware
+  uboot_version=$(strings /dev/mtdblock0 | grep '^U-Boot \d' | head -1)
   fw_version=$(grep "OPENIPC_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)
   fw_variant=$(grep "BUILD_OPTION" /etc/os-release | cut -d= -f2 | tr -d /\"/); [ -z "$fw_variant" ] && fw_variant="lite"
   fw_build=$(grep "GITHUB_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)
@@ -736,7 +737,7 @@ update_caminfo() {
 network_address network_cidr network_default_interface network_dhcp network_dns_1
 network_dns_2 network_gateway network_hostname network_interfaces network_macaddr network_netmask
 overlay_root mj_version soc soc_family soc_has_temp soc_vendor sensor sensor_ini tz_data tz_name
-ui_password ui_version"
+uboot_version ui_password ui_version"
   local v
   for _v in $_vars; do
     eval "echo ${_v}=\'\$${_v}\'>>${_tmpfile}"

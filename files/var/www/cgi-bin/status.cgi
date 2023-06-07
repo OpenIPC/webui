@@ -31,6 +31,8 @@
       <dd><%= $mj_version %></dd>
       <dt>Web UI</dt>
       <dd><%= $ui_version %></dd>
+      <dt>U-Boot</dt>
+      <dd><%= $uboot_version %></dd>
     </dl>
   </div>
 

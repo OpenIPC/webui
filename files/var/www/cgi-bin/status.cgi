@@ -29,8 +29,8 @@
       <dd><%= $fw_build %></dd>
       <dt>Majestic</dt>
       <dd><%= $mj_version %></dd>
-      <dt>Hostname</dt>
-      <dd><%= $network_hostname %></dd>
+      <dt>Web UI</dt>
+      <dd><%= $ui_version %></dd>
     </dl>
   </div>
 

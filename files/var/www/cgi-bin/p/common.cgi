@@ -667,8 +667,10 @@ update_caminfo() {
     sensor=$(echo $sensor_ini | cut -d_ -f1)
   fi
 
+  soc_vendor=$(ipcinfo --vendor)
+
   soc=$(ipcinfo --chip-name)
-  if [ -z "$soc" ] || [ "unknown" = "$soc" ]; then
+  if [ -z "$soc" ] || [ "unknown" = "$soc" ] || [ "sigmastar" = "$soc_vendor" ]; then
     soc=$(fw_printenv -n soc)
   fi
 
@@ -676,8 +678,6 @@ update_caminfo() {
   if [ "unknown" = "$soc_family" ] && [ "t20" = "$soc" ]; then
     soc_family="t21"
   fi
-
-  soc_vendor=$(ipcinfo --vendor)
 
   # ipcinfo reports to stderr
   if [ "Temperature cannot be retrieved" = "$(ipcinfo --temp 2>&1)" ]; then

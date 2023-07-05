@@ -688,7 +688,10 @@ update_caminfo() {
   fi
 
   # Firmware
-  uboot_version=$(strings /dev/mtdblock0 | grep '^U-Boot \d' | head -1)
+  uboot_version=$(fw_printenv -n ver)
+  if [ -z "$uboot_version" ]; then
+    uboot_version=$(strings /dev/mtdblock0 | grep '^U-Boot \d' | head -1)
+  fi
   fw_version=$(grep "OPENIPC_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)
   fw_variant=$(grep "BUILD_OPTION" /etc/os-release | cut -d= -f2 | tr -d /\"/); [ -z "$fw_variant" ] && fw_variant="lite"
   fw_build=$(grep "GITHUB_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)

@@ -1,4 +1,4 @@
-![OpenIPC Logo](https://cdn.themactep.com/images/logo_openipc.png)
+![OpenIPC logo][logo]
 
 microbe-web
 ===========
@@ -56,6 +56,7 @@ Thank you.
 
 <p style="text-align:center"><a href="https://opencollective.com/openipc/contribute/backer-14335/checkout" target="_blank"><img src="https://opencollective.com/webpack/donate/button@2x.png?color=blue" width="375" alt="Open Collective donate button"></a></p>
 
+[logo]: https://openipc.org/assets/openipc-logo-black.svg
 [openipcfw]: https://github.com/OpenIPC/firmware
 [haserl]: http://haserl.sourceforge.net/
 [iso639]: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes

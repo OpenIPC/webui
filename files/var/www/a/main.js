@@ -136,7 +136,7 @@ function heartbeat() {
                 const rd = response.body.getReader();
                 let { value: chunk, done: readerDone } = await rd.read();
                 chunk = chunk ? td.decode(chunk) : '';
-                const re = /\n|\r|\r\n/gm;
+                const re = /\u001b/g;
                 let startIndex = 0;
                 let result;
                 try {
@@ -167,7 +167,7 @@ function heartbeat() {
                     const re1 = /\[1;(\d+)m/;
                     const re2 = /\[0m/;
                     line = line.replace(re1, '<span class="ansi-$1">').replace(re2, '</span>')
-                    el.innerHTML += line + '\n';
+                    el.innerHTML += line;
                 }
             }
             run()

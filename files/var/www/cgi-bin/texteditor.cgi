@@ -57,7 +57,7 @@ page_title="Text editor"
 <%in p/header.cgi %>
 
 <ul class="nav nav-tabs" role="tablist">
-  <% tab_lap "edit" "Editor" %>
+  <% tab_lap "edit" "Editor" "active" %>
   <% tab_lap "file" "File" %>
 <% if [ -f "${editor_file}.backup" ]; then %>
   <% tab_lap "back" "Backup" %>
@@ -70,7 +70,7 @@ page_title="Text editor"
     <form action="<%= $SCRIPT_NAME %>" method="post" class="mb-4">
       <% field_hidden "action" "save" %>
       <% field_hidden "editor_file" "$editor_file" %>
-      <% field_textarea "editor_text" "File content" %>
+      <% field_textedit "editor_text" "$editor_file" "File content" %>
       <p class="boolean"><span class="form-check form-switch">
         <input type="checkbox" id="editor_backup" name="editor_backup" value="true" class="form-check-input" role="switch">
         <label for="editor_backup" class="form-label form-check-label">Create backup file</label>

@@ -347,6 +347,18 @@ field_textarea() {
   echo "</p>"
 }
 
+# field_textedit "name" "file" "label"
+field_textedit() {
+  local _l=$3
+  [ -z "$_l" ] && _l="$(t_label "$1")"
+  [ -z "$_l" ] && _l="<span class=\"bg-warning\">$1</span>"
+  local _v=$(cat "$2")
+  echo "<p class=\"textarea\" id=\"${1}_wrap\">" \
+    "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
+    "<textarea id=\"${1}\" name=\"${1}\" class=\"form-control\">${_v}</textarea>"
+  echo "</p>"
+}
+
 flash_append() {
   echo "$1:$2" >>"$flash_file"
 }

@@ -218,7 +218,7 @@ done
     sel.id=inp.id;
     sel.options.add(new Option());
     let opt;
-    <% for i in $(ls -1 /etc/sensors/*.ini); do %>
+    <% for i in $(ls -1 /etc/sensors/*.ini || ls -1 /etc/sensors/*.bin); do %>
       opt = new Option("<%= $i %>");
       opt.selected = ("<%= $i %>" == inp.value);
       sel.options.add(opt);

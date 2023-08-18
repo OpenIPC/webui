@@ -6,9 +6,14 @@ mj=$(echo "$mj" | sed "s/ /_/g")
 only="$GET_tab"; [ -z "$only" ] && only="system"
 eval title="\$tT_mj_${only}"
 
+if [ -n "$(eval echo "\$mj_hide_${only}_${fw_variant}")" ]; then
+  only="${only}_${fw_variant}"
+  variant="OpenIPC ${fw_variant}"
+fi
+
 # hide certain domains if not supported
 if [ -n "$(eval echo "\$mj_hide_${only}" | sed -n "/\b${soc_family}\b/p")" ]; then
-  redirect_to "majestic-settings.cgi" "danger" "$title is not supported on your system."
+  redirect_to "majestic-settings.cgi" "danger" "$title is not supported on ${variant:-your system}."
 fi
 
 if [ "POST" = "$REQUEST_METHOD" ]; then

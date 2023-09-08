@@ -142,5 +142,5 @@ mj_hide_video1_codec="hi3516cv200 hi3516cv100"
 mj_hide_motionDetect="hi3516cv100 hi3516av100"
 
 # based on variant lite/ultimate
-mj_hide_audio_lite="infinity6b0 infinity6e"
-mj_hide_motionDetect_lite="infinity6b0 infinity6e"
+mj_hide_audio_lite="infinity6 infinity6b0 infinity6e"
+mj_hide_motionDetect_lite="infinity6 infinity6b0 infinity6e"

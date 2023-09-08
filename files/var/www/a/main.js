@@ -164,8 +164,8 @@ function heartbeat() {
             }
             async function run() {
                 for await (let line of makeTextFileLineIterator('/cgi-bin/j/run.cgi?cmd=' + btoa(el.dataset["cmd"]))) {
-                    const re1 = /\[1;(\d+)m/;
-                    const re2 = /\[0m/;
+                    const re1 = /\u001b\[1;(\d+)m/;
+                    const re2 = /\u001b\[0m/;
                     line = line.replace(re1, '<span class="ansi-$1">').replace(re2, '</span>')
                     el.innerHTML += line + '\n';
                 }

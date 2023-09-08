@@ -347,6 +347,18 @@ field_textarea() {
   echo "</p>"
 }
 
+# field_textedit "name" "file" "label"
+field_textedit() {
+  local _l=$3
+  [ -z "$_l" ] && _l="$(t_label "$1")"
+  [ -z "$_l" ] && _l="<span class=\"bg-warning\">$1</span>"
+  local _v=$(cat "$2")
+  echo "<p class=\"textarea\" id=\"${1}_wrap\">" \
+    "<label for=\"${1}\" class=\"form-label\">${_l}</label>" \
+    "<textarea id=\"${1}\" name=\"${1}\" class=\"form-control\">${_v}</textarea>"
+  echo "</p>"
+}
+
 flash_append() {
   echo "$1:$2" >>"$flash_file"
 }
@@ -668,8 +680,10 @@ update_caminfo() {
     sensor=$(echo $sensor_ini | cut -d_ -f1)
   fi
 
+  soc_vendor=$(ipcinfo --vendor)
+
   soc=$(ipcinfo --chip-name)
-  if [ -z "$soc" ] || [ "unknown" = "$soc" ]; then
+  if [ -z "$soc" ] || [ "unknown" = "$soc" ] || [ "sigmastar" = "$soc_vendor" ]; then
     soc=$(fw_printenv -n soc)
   fi
 
@@ -677,8 +691,6 @@ update_caminfo() {
   if [ "unknown" = "$soc_family" ] && [ "t20" = "$soc" ]; then
     soc_family="t21"
   fi
-
-  soc_vendor=$(ipcinfo --vendor)
 
   # ipcinfo reports to stderr
   if [ "Temperature cannot be retrieved" = "$(ipcinfo --temp 2>&1)" ]; then
@@ -688,7 +700,10 @@ update_caminfo() {
   fi
 
   # Firmware
-  uboot_version=$(strings /dev/mtdblock0 | grep '^U-Boot \d' | head -1)
+  uboot_version=$(fw_printenv -n ver)
+  if [ -z "$uboot_version" ]; then
+    uboot_version=$(strings /dev/mtdblock0 | grep '^U-Boot \d' | head -1)
+  fi
   fw_version=$(grep "OPENIPC_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)
   fw_variant=$(grep "BUILD_OPTION" /etc/os-release | cut -d= -f2 | tr -d /\"/); [ -z "$fw_variant" ] && fw_variant="lite"
   fw_build=$(grep "GITHUB_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)

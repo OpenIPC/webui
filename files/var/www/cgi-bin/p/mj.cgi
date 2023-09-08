@@ -132,8 +132,15 @@ mj_hide_unless_debug="audio_device isp_aGain isp_dGain isp_ispGain isp_exposure"
 # conditional settings limiters
 mj_show_audio_voiceEqualizer="gk7205v200 hi3516cv300 hi3516cv500 hi3516ev300 hi3519v101"
 mj_show_mjpeg_vendor="goke hisilicon"
+mj_hide_isp_iqProfile_vendor="sigmastar"
+mj_hide_isp_rawMode_vendor="sigmastar"
 mj_show_isp_slowShutter_vendor="goke hisilicon"
 mj_hide_isp_sensorConfig_vendor="ingenic"
+mj_hide_jpeg_toProgressive_vendor="sigmastar"
 mj_hide_video0_codec="hi3516cv200 hi3516cv100"
 mj_hide_video1_codec="hi3516cv200 hi3516cv100"
 mj_hide_motionDetect="hi3516cv100 hi3516av100"
+
+# based on variant lite/ultimate
+mj_hide_audio_lite="infinity6b0 infinity6e"
+mj_hide_motionDetect_lite="infinity6b0 infinity6e"

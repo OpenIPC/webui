@@ -6,7 +6,7 @@ mj=$(echo "$mj" | sed "s/ /_/g")
 only="$GET_tab"; [ -z "$only" ] && only="system"
 eval title="\$tT_mj_${only}"
 
-if [ -n "$(eval echo "\$mj_hide_${only}_${fw_variant}")" ]; then
+if [ -n "$(eval echo "\$mj_hide_${only}_${fw_variant}" | sed -n "/\b${soc_family}\b/p")" ]; then
   only="${only}_${fw_variant}"
   variant="OpenIPC ${fw_variant}"
 fi

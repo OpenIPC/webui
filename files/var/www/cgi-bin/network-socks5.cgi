@@ -27,7 +27,7 @@ include $config_file
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_hidden "action" "update" %>
       <% field_text "socks5_host" "SOCKS5 Host" %>
-      <% field_number "socks5_port" "SOCKS5 Port" "1080" %>
+      <% field_text "socks5_port" "SOCKS5 Port" "1080" %>
       <% field_text "socks5_username" "SOCKS5 Username" %>
       <% field_password "socks5_password" "SOCKS5 Password" %>
       <% button_submit %>

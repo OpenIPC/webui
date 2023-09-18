@@ -2,7 +2,7 @@
 <%in p/common.cgi %>
 <%
 target="$GET_to"
-if [ -n "$(echo "email ftp openwall telegram yadisk" | sed -n "/\b${target}\b/p")" ]; then
+if [ -n "$(echo "email ftp openwall telegram yadisk webhook" | sed -n "/\b${target}\b/p")" ]; then
   /usr/sbin/snapshot4cron.sh -f >/dev/null
   [ "openwall" = "$target" ] && opts="-f"
   /usr/sbin/send2${target}.sh ${opts} >/dev/null

@@ -124,6 +124,7 @@ mj="
 .watchdog.enabled|Enable watchdog||boolean|true,false|true|
 .watchdog.timeout|Watchdog timeout|sec|number|1,600,1|10|
 .cloud.enabled|Enable cloud support||boolean|true,false|false|
+.outgoing.server|Address for outgoing stream||string||udp://192.168.1.10:5600|
 "
 
 # hide these settings unless in debug mode

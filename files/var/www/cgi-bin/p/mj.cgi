@@ -67,7 +67,7 @@ mj="
 .video0.enabled|Enable Video0||boolean|true,false|true|
 .video0.codec|Video0 codec||select|h264,h265|h264|
 .video0.size|Video resolution|px|string|1920x1080,1280x720,704x576|1920x1080|
-.video0.fps|Video frame rate|fps|number|1,60,1|25|
+.video0.fps|Video frame rate|fps|number|1,120,1|25|
 .video0.bitrate|Video bitrate|kbps|number|1,68000,1|4096|
 .video0.gopSize|Send I-frames each 1 second||number|0.1,20,0.1|1|
 .video0.gopMode|Group of Pictures (GOP) mode||select|normal,dual,smart|normal|
@@ -124,6 +124,7 @@ mj="
 .watchdog.enabled|Enable watchdog||boolean|true,false|true|
 .watchdog.timeout|Watchdog timeout|sec|number|1,600,1|10|
 .cloud.enabled|Enable cloud support||boolean|true,false|false|
+.outgoing.server|Address for outgoing stream||string||udp://192.168.1.10:5600|
 "
 
 # hide these settings unless in debug mode

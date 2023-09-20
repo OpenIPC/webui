@@ -105,6 +105,8 @@ mj="
 .rtsp.enabled|Enable output||boolean|true,false|true|
 .rtsp.port|Port for RTSP protocol||number|1,65535,1|554|rtsp://user:pass@${network_address}:[port]/stream={0,1}
 .hls.enabled|Enable HTTP Live Streaming (HLS)||boolean|true,false|true|
+.outgoing.enabled|Enable output||boolean|true,false|false|
+.outgoing.server|Address for outgoing stream||string||udp://192.168.1.10:5600|
 .youtube.enabled|Enable Youtube support||boolean|true,false|false|
 .youtube.key|Youtube API key||string||xxxx-xxxx-xxxx-xxxx-xxxx|
 .motionDetect.enabled|Enable motion detection||boolean|true,false|false|
@@ -124,7 +126,6 @@ mj="
 .watchdog.enabled|Enable watchdog||boolean|true,false|true|
 .watchdog.timeout|Watchdog timeout|sec|number|1,600,1|10|
 .cloud.enabled|Enable cloud support||boolean|true,false|false|
-.outgoing.server|Address for outgoing stream||string||udp://192.168.1.10:5600|
 "
 
 # hide these settings unless in debug mode

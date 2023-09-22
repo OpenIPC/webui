@@ -30,6 +30,15 @@ command="curl --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout} -X POST"
 
+if [ "true" = "$webhook_attach_snapshot" ]; then
+	snapshot4cron.sh
+	exitcode=$?
+	[ $exitcode -ne 0 ] && log "Cannot get a snapshot. Exit code: $exitcode" && exit 2
+	snapshot=/tmp/snapshot4cron.jpg
+	[ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
+	command="${command} -F 'image=@$snapshot'"
+fi
+
 # SOCK5 proxy, if needed
 if [ "true" = "$webhook_socks5_enabled" ]; then
 	source /etc/webui/socks5.conf

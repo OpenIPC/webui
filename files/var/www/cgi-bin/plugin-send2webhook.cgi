@@ -4,7 +4,7 @@
 plugin="webhook"
 plugin_name="Send to Webhook"
 page_title="Send to Webhook"
-params="enabled url socks5_enabled"
+params="enabled attach_snapshot url socks5_enabled"
 
 tmp_file=/tmp/${plugin}.conf
 
@@ -38,6 +38,8 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   redirect_to $SCRIPT_NAME
 else
   include $config_file
+
+  [ -z "$webhook_attach_snapshot" ] && webhook_attach_snapshot="true"
 fi
 %>
 <%in p/header.cgi %>
@@ -47,6 +49,7 @@ fi
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_switch "webhook_enabled" "Enable sending to webhook" %>
       <% field_text "webhook_url" "Webhook URL" %>
+      <% field_switch "webhook_attach_snapshot" "Attach Snapshot" %>
       <% field_switch "webhook_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
       <% button_submit %>
     </form>

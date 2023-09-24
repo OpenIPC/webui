@@ -447,7 +447,7 @@ load_plugins() {
 
     # check if plugin is enabled
     echo -n "<li><a class=\"dropdown-item"
-    grep -q "^${p}_enabled=\"true\"" ${ui_config_dir}/${p}.conf && echo -n " plugin-enabled"
+    grep -q -s "^${p}_enabled=\"true\"" ${ui_config_dir}/${p}.conf && echo -n " plugin-enabled"
     echo "\" href=\"${i}\">${n}</a></li>"
   done
 }

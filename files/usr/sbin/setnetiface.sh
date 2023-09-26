@@ -18,10 +18,9 @@ TEMPLATE_STATIC="    # static address
 "
 
 # $network_ssid $network_password
-TEMPLATE_WIRELESS="    # configure access
-    pre-up wpa_passphrase \"%s\" \"%s\" >/tmp/wpa_supplicant.conf
-    pre-up sed -i '2i \\\\\\\tscan_ssid=1' /tmp/wpa_supplicant.conf
-    pre-up (sleep 3; wpa_supplicant -B -D nl80211 -i wlan0 -c/tmp/wpa_supplicant.conf)
+TEMPLATE_WIRELESS="    post-up wpa_passphrase \"\$(fw_printenv -n wlanssid || echo %s)\" \"\$(fw_printenv -n wlanpass || echo %s)\" > /tmp/wpa_supplicant.conf
+    post-up sed -i '2i \\\\\\\tscan_ssid=1' /tmp/wpa_supplicant.conf
+    post-up wpa_supplicant -D nl80211,wext -i wlan0 -c /tmp/wpa_supplicant.conf -B
     post-down killall -q wpa_supplicant
 "
 
@@ -64,25 +63,22 @@ show_help() {
 Where:
   -i iface       Network interface.
   -m mode        Mode [dhcp, static].
-  -t type        Type of interface [eth, wifi, ppp, usb, wg].
   -h name        Hostname.
 
 For wireless interface:
   -s SSID        WiFi network SSID.
   -p password    WiFi passphrase.
-  -k modu,les    Kernel modules.
 
 For static mode:
   -a address     Interface IP address.
   -n netmask     Network mask.
   -g address     Gateway IP address.
-  -d addre,sses  DNS servers addresses.
+  -d addresses   DNS servers addresses.
 
   -v             Verbose output.
 "
   exit 0
 }
-
 
 ## override config values with command line arguments
 while getopts a:d:D:g:h:i:k:m:n:p:s:t:v flag; do
@@ -92,12 +88,10 @@ while getopts a:d:D:g:h:i:k:m:n:p:s:t:v flag; do
 	g) network_gateway=${OPTARG} ;;
 	h) network_hostname=${OPTARG} ;;
 	i) network_interface=${OPTARG} ;;
-	k) network_interface_modules=${OPTARG} ;;
 	n) network_netmask=${OPTARG} ;;
 	m) network_mode=${OPTARG} ;;
 	p) network_password=${OPTARG} ;;
 	s) network_ssid=${OPTARG} ;;
-	t) network_interface_type=${OPTARG} ;;
 	v) verbose=1 ;;
 	esac
 done
@@ -116,22 +110,20 @@ fi
 # [ -z "$network_dns_1" ] && network_dns_1="127.0.0.1"
 
 ## validate mandatory values
-[ -z "$network_interface" ] && log "Network interface is not set" && exit 11
-[ -z "$network_interface_type" ] && log "Network interface type is not set" && exit 12
+[ -z "$network_interface" ] && echo "Network interface is not set" && exit 11
 
-if [ "wifi" = "$network_interface_type" ]; then
-	[ -z "$network_interface_modules" ] && log "Wireless interface modules are not set" && exit 13
-	[ -z "$network_ssid" ] && log "Wireless network SSID is not set" && exit 14
-	[ -z "$network_password" ] && log "Wireless network passphrase is not set" && exit 15
+if [ "wlan0" = "$network_interface" ]; then
+	[ -z "$network_ssid" ] && echo "Wireless network SSID is not set" && exit 12
+	[ -z "$network_password" ] && echo "Wireless network passphrase is not set" && exit 13
 fi
 
-[ -z "$network_mode" ] && log "Network mode is not set" && exit 16
+[ -z "$network_mode" ] && echo "Network mode is not set" && exit 14
 if [ "static" = "$network_mode" ]; then
-	[ -z "$network_address" ] && log "Interface IP address is not set" && exit 17
-	[ -z "$network_netmask" ] && log "Netmask is not set" && exit 18
-	#[ -z "$network_gateway" ] && log "Gateway IP address is not set" && exit 19
-	#[ -z "$network_dns_1" ] && log "DNS1 IP address is not set" && exit 20
-	#[ -z "$network_dns_2" ] && log "DNS2 IP address is not set" && exit 21
+	[ -z "$network_address" ] && echo "Interface IP address is not set" && exit 15
+	[ -z "$network_netmask" ] && echo "Netmask is not set" && exit 16
+	#[ -z "$network_gateway" ] && echo "Gateway IP address is not set" && exit 17
+	#[ -z "$network_dns_1" ] && echo "DNS1 IP address is not set" && exit 18
+	#[ -z "$network_dns_2" ] && echo "DNS2 IP address is not set" && exit 19
 fi
 
 tmp_file=/tmp/${plugin}.conf
@@ -141,7 +133,7 @@ tmp_file=/tmp/${plugin}.conf
 
 printf "$TEMPLATE_COMMON" "$(date)" $network_interface $network_interface $network_mode >>$tmp_file
 
-if [ "eth" = "$network_interface_type" ]; then
+if [ "eth0" = "$network_interface" ]; then
 	printf "$TEMPLATE_MAC" >>$tmp_file
 fi
 
@@ -163,25 +155,21 @@ if [ "static" = "$network_mode" ]; then
 	fi
 fi
 
-if [ "wifi" = "$network_interface_type" ]; then
-	echo "    # load modules" >>$tmp_file
-	for module in ${network_interface_modules//,/ }; do
-		echo "    pre-up modprobe ${module}" >>$tmp_file
-	done; unset dns
+if [ "wlan0" = "$network_interface" ]; then
 	printf "$TEMPLATE_WIRELESS" $network_ssid $network_password >>$tmp_file
 fi
 
 # TODO: preset ppp_gpio
-if [ "ppp" = "$network_interface_type" ]; then
+if [ "ppp0" = "$network_interface" ]; then
 	printf "$TEMPLATE_PPP" $ppp_gpio $ppp_gpio $ppp_gpio $ppp_gpio $ppp_gpio >>$tmp_file
 fi
 
 # TODO: preset usb_vendor usb_product
-if [ "usb" = "$network_interface_type" ]; then
+if [ "usb0" = "$network_interface" ]; then
 	printf "$TEMPLATE_USB" $usb_vendor $usb_product >>$tmp_file
 fi
 
-if [ "wg" = "$network_interface_type" ]; then
+if [ "wg0" = "$network_interface" ]; then
 	printf "$TEMPLATE_WIREGUARD" $network_interface $network_interface $network_interface >>$tmp_file
 fi
 

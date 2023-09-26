@@ -3,7 +3,7 @@
 <%
 plugin="network"
 page_title="Network settings"
-params="address dhcp dns_1 dns_2 gateway hostname netmask interface_type wifi_modules wifi_ssid wifi_password wifi_power_pin"
+params="address dhcp dns_1 dns_2 gateway hostname netmask interface wifi_ssid wifi_password"
 tmp_file=/tmp/${plugin}.conf
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
@@ -28,12 +28,12 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         sanitize "${plugin}_${_p}"
       done; unset _p
 
+      [ -z "$network_interface" ] && flash_append "danger" "Default network interface cannot be empty." && error=1
+
       if [ "false" = "$network_dhcp" ]; then
         network_mode="static"
-        [ -z "$network_default_interface" ] && flash_append "danger" "Default network interface cannot be empty." && error=1
         [ -z "$network_address" ] && flash_append "danger" "IP address cannot be empty." && error=1
         [ -z "$network_netmask" ] && flash_append "danger" "Networking mask cannot be empty." && error=1
-        [ -z "$network_interface_type" ] && flash_append "danger" "Type of networking interface cannot be empty." && error=1
     #    [ -z "$network_gateway" ] && flash_append "danger" "Gateway IP address cannot be empty." && error=1
     #    [ -z "$network_dns_1" ] && flash_append "danger" "Nameserver address cannot be empty." && error=1
     #    [ -z "$network_dns_2" ] && flash_append "danger" "Nameserver address cannot be empty." && error=1
@@ -41,24 +41,27 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         network_mode="dhcp"
       fi
 
+      if [ "wlan0" = "$network_interface" ]; then
+        [ -z "$network_wifi_ssid" ] && flash_append "danger" "WLAN SSID cannot be empty." && error=1
+        [ -z "$network_wifi_password" ] && flash_append "danger" "WLAN Password cannot be empty." && error=1
+      fi
+
       if [ -z "$error" ]; then
         command="setnetiface.sh"
-        command="${command} -i $network_default_interface"
+        command="${command} -i $network_interface"
         command="${command} -m $network_mode"
         command="${command} -n $network_hostname"
-        command="${command} -t $network_interface_type"
 
-        if [ "wlan0" = "$network_default_interface" ]; then
+        if [ "wlan0" = "$network_interface" ]; then
           command="${command} -s $network_wifi_ssid"
           command="${command} -p $network_wifi_password"
-          command="${command} -k $network_wifi_modules"
         fi
 
         if [ "dhcp" != "$network_mode" ]; then
           command="${command} -a $network_address"
           command="${command} -n $network_netmask"
-          command="${command} -g $network_gateway"
-          command="${command} -d $network_dns_1"
+          [ -n "$network_gateway" ] && command="${command} -g $network_gateway"
+          [ -n "$network_dns_1" ] && command="${command} -d $network_dns_1"
           [ -n "$network_dns_2" ] && command="${command},${network_dns_2}"
         fi
 
@@ -80,11 +83,9 @@ fi
     <form action="<%= $SCRIPT_NAME %>" method="post">
       <% field_hidden "action" "update" %>
       <% field_text "network_hostname" "Hostname" %>
-      <% field_select "network_default_interface" "Default network interface" "$network_interfaces" %>
-      <% field_select "network_interface_type" "Type of network interface" "eth wifi ppp usb wg" %>
-      <% field_text "network_wifi_modules" "WiFi modules" %>
-      <% field_text "network_wifi_ssid" "WiFi SSID" %>
-      <% field_text "network_wifi_password" "WiFi Password" %>
+      <% field_select "network_interface" "Network interface" "eth0 wlan0" %>
+      <% field_text "network_wifi_ssid" "WLAN SSID" %>
+      <% field_text "network_wifi_password" "WLAN Password" %>
 
       <% field_switch "network_dhcp" "Use DHCP" %>
       <% field_text "network_address" "IP Address" %>
@@ -129,15 +130,15 @@ fi
   }
 
   function toggleIface() {
-    const ids = ['network_wifi_modules','network_wifi_ssid','network_wifi_password'];
-    if ($('#network_default_interface').value == 'wlan0') {
+    const ids = ['network_wifi_ssid','network_wifi_password'];
+    if ($('#network_interface').value == 'wlan0') {
       ids.forEach(id => $('#' + id + '_wrap').classList.remove('d-none'));
     } else {
       ids.forEach(id => $('#' + id + '_wrap').classList.add('d-none'));
     }
   }
 
-  $('#network_default_interface').addEventListener('change', toggleIface);
+  $('#network_interface').addEventListener('change', toggleIface);
   $('#network_dhcp[type=checkbox]').addEventListener('change', toggleDhcp);
 
   toggleIface();

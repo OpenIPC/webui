@@ -133,6 +133,8 @@ for line in $_mj2; do
   [ -n "$(eval echo "\$mj_show_${_param_name}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${_param_name}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
   # show certain parameters only in debug mode
   [ -n "$(echo "$mj_hide_unless_debug" | sed -n "/\b${_param_name}\b/p")" ] && [ "0$debug" -lt "1" ] && continue
+  # hide certain parameters for specific vendor
+  [ -n "$(eval echo "\$mj_hide_vendor_${soc_vendor}" | sed -n "/\b${_param_name}\b/p")" ] && continue
 
   form_field_name=mj_${_param_name} # => mj_isp_exposure
   line=${line#*|}                   # line: Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.

@@ -3,7 +3,7 @@
 plugin="speaker"
 source /usr/sbin/common-plugins
 
-SUPPORTED="goke hisilicon ingenic"
+SUPPORTED="goke hisilicon ingenic sigmastar"
 [ -z "$(echo $SUPPORTED | sed -n "/\b$(ipcinfo --vendor)\b/p")" ] &&
 	log "Playing on speaker is not supported on your camera!" && exit 1
 

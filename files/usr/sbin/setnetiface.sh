@@ -110,20 +110,20 @@ fi
 # [ -z "$network_dns_1" ] && network_dns_1="127.0.0.1"
 
 ## validate mandatory values
-[ -z "$network_interface" ] && echo "Network interface is not set" && exit 11
+[ -z "$network_interface" ] && log "Network interface is not set" && exit 11
 
 if [ "wlan0" = "$network_interface" ]; then
-	[ -z "$network_ssid" ] && echo "Wireless network SSID is not set" && exit 12
-	[ -z "$network_password" ] && echo "Wireless network passphrase is not set" && exit 13
+	[ -z "$network_ssid" ] && log "Wireless network SSID is not set" && exit 12
+	[ -z "$network_password" ] && log "Wireless network passphrase is not set" && exit 13
 fi
 
-[ -z "$network_mode" ] && echo "Network mode is not set" && exit 14
+[ -z "$network_mode" ] && log "Network mode is not set" && exit 14
 if [ "static" = "$network_mode" ]; then
-	[ -z "$network_address" ] && echo "Interface IP address is not set" && exit 15
-	[ -z "$network_netmask" ] && echo "Netmask is not set" && exit 16
-	#[ -z "$network_gateway" ] && echo "Gateway IP address is not set" && exit 17
-	#[ -z "$network_dns_1" ] && echo "DNS1 IP address is not set" && exit 18
-	#[ -z "$network_dns_2" ] && echo "DNS2 IP address is not set" && exit 19
+	[ -z "$network_address" ] && log "Interface IP address is not set" && exit 15
+	[ -z "$network_netmask" ] && log "Netmask is not set" && exit 16
+	#[ -z "$network_gateway" ] && log "Gateway IP address is not set" && exit 17
+	#[ -z "$network_dns_1" ] && log "DNS1 IP address is not set" && exit 18
+	#[ -z "$network_dns_2" ] && log "DNS2 IP address is not set" && exit 19
 fi
 
 tmp_file=/tmp/${plugin}.conf

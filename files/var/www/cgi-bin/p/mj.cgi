@@ -141,9 +141,9 @@ mj_hide_video1_codec="hi3516cv200 hi3516cv100"
 mj_hide_motionDetect="hi3516cv100 hi3516av100"
 
 # hide settings based on vendor
-mj_hide_vendor_sigmastar="audio_outputGain audio_speakerPin audio_speakerPinInvert
-	motionDetect_roi isp_memMode isp_blkCnt isp_lowDelay isp_rawMode isp_iqProfile
-	jpeg_size jpeg_toProgressive video0_gopMode video1_size video1_gopMode"
+mj_hide_vendor_sigmastar="audio_outputGain audio_speakerPin audio_speakerPinInvert motionDetect_roi
+	isp_memMode isp_blkCnt isp_lowDelay isp_rawMode isp_iqProfile jpeg_size jpeg_toProgressive
+	video0_gopMode video0_sliceUnits video1_size video1_gopMode video1_sliceUnits"
 
 # hide settings based on variant lite/ultimate
 mj_hide_audio_lite="infinity6 infinity6b0 infinity6e"

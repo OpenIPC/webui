@@ -107,6 +107,7 @@ mj="
 .hls.enabled|Enable HTTP Live Streaming (HLS)||boolean|true,false|true|
 .outgoing.enabled|Enable output||boolean|true,false|false|
 .outgoing.server|Address for outgoing stream||string||udp://192.168.1.10:5600|
+.outgoing.naluSize|Packet size||number|200,20000,1|1200|
 .youtube.enabled|Enable Youtube support||boolean|true,false|false|
 .youtube.key|Youtube API key||string||xxxx-xxxx-xxxx-xxxx-xxxx|
 .motionDetect.enabled|Enable motion detection||boolean|true,false|false|

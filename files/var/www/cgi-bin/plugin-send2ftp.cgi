@@ -58,7 +58,7 @@ fi
       <% field_text "ftp_username" "FTP username" %>
       <% field_password "ftp_password" "FTP password" %>
       <% field_text "ftp_path" "FTP path" "relative to FTP root directory" %>
-      <% field_text "ftp_template" "File template" "Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format." %>
+      <% field_text "ftp_template" "File template" "Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format. Using subdirectories in template is alowed." %>
       <% field_switch "ftp_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
       <% button_submit %>
     </form>

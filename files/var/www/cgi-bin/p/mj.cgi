@@ -148,6 +148,6 @@ mj_hide_vendor_sigmastar="audio_outputGain audio_speakerPin audio_speakerPinInve
 	isp_memMode isp_blkCnt isp_lowDelay isp_rawMode isp_iqProfile jpeg_size jpeg_toProgressive
 	video0_gopMode video0_sliceUnits video1_size video1_gopMode video1_sliceUnits"
 
-# hide settings based on variant lite/ultimate
-mj_hide_audio_lite="infinity6 infinity6b0 infinity6e"
-mj_hide_motionDetect_lite="infinity6 infinity6b0 infinity6e"
+# hide settings based on firmware variant
+mj_hide_audio_sigmastar="fpv lite"
+mj_hide_motionDetect_sigmastar="fpv lite"

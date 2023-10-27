@@ -4,7 +4,7 @@
 plugin="yadisk"
 plugin_name="Send to Yandex Disk"
 page_title="Send to Yandex Disk"
-params="enabled username password path socks5_enabled"
+params="enabled username password path use_heif socks5_enabled"
 
 tmp_file=/tmp/${plugin}.conf
 
@@ -39,25 +39,31 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
   redirect_to $SCRIPT_NAME
 else
   include $config_file
+
+  # Default values
+  [ -z "$yadisk_use_heif" ] && yadisk_use_heif="false"
 fi
 %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
-  <div class="col">
-    <form action="<%= $SCRIPT_NAME %>" method="post">
+<form action="<%= $SCRIPT_NAME %>" method="post">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+    <div class="col">
       <% field_switch "yadisk_enabled" "Enable Yandex Disk bot" %>
       <% field_text "yadisk_username" "Yandex Disk username" %>
       <% field_password "yadisk_password" "Yandex Disk password" "A dedicated password for application. <a href=\"https://yandex.com/support/id/authorization/app-passwords.html\">Create it here</a>." %>
+    </div>
+    <div class="col">
       <% field_text "yadisk_path" "Yandex Disk path" %>
+      <% field_switch "yandex_use_heif" "Use HEIF format." "Requires H.265 codec on Video0." %>
       <% field_switch "yadisk_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
-      <% button_submit %>
-    </form>
+    </div>
+    <div class="col">
+      <% ex "cat $config_file" %>
+      <% button_webui_log %>
+    </div>
   </div>
-  <div class="col">
-    <% ex "cat $config_file" %>
-    <% button_webui_log %>
-  </div>
-</div>
+  <% button_submit %>
+</form>
 
 <%in p/footer.cgi %>

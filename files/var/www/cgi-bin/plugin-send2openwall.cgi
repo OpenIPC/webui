@@ -48,6 +48,7 @@ else
 
   # Default values
   [ -z "$openwall_interval" ] && openwall_interval="15"
+  [ -z "$openwall_use_heif" ] && openwall_use_heif="false"
 fi
 %>
 <%in p/header.cgi %>
@@ -59,23 +60,25 @@ fi
  firmware version, and camera uptime to do this.</p>
 </div>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
-  <div class="col">
-    <form action="<%= $SCRIPT_NAME %>" method="post">
+<form action="<%= $SCRIPT_NAME %>" method="post">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+    <div class="col">
       <% field_switch "openwall_enabled" "Enable sending to OpenWall" %>
       <% field_select "openwall_interval" "Interval, minutes" "15,30,60" "Time between submissions. 15 minutes or longer." %>
       <% field_text "openwall_caption" "Caption" "Location or short description." %>
       <% field_switch "openwall_use_heif" "Use HEIF format." "Requires H.265 codec on Video0." %>
       <% field_switch "openwall_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access." %>
-      <% button_submit %>
-    </form>
+    </div>
+    <div class="col">
+      <% ex "cat $config_file" %>
+    </div>
+    <div class="col">
+      <% ex "grep send2openwall /etc/crontabs/root" %>
+      <% button_webui_log %>
+    </div>
   </div>
-  <div class="col">
-    <% ex "cat $config_file" %>
-    <% ex "grep send2openwall /etc/crontabs/root" %>
-    <% button_webui_log %>
-  </div>
-</div>
+  <% button_submit %>
+</form>
 
 <% if [ "h265" != "$(yaml-cli -g .video0.codec)" ]; then %>
 <script>

@@ -8,6 +8,7 @@ show_help() {
   -t topic    MQTT topic.
   -m message  Message playload.
   -s          Send a snapshot.
+  -r          Use HEIF image format.
   -v          Verbose output.
   -h          Show this help.
 "
@@ -18,6 +19,7 @@ show_help() {
 while getopts m:st:vh flag; do
 	case ${flag} in
 	m) mqtt_message=${OPTARG} ;;
+	r) mqtt_use_heif="true" ;;
 	s) mqtt_send_snap="true" ;;
 	t) mqtt_topic=${OPTARG} ;;
 	v) verbose="true" ;;
@@ -63,7 +65,13 @@ eval "$command1" >>$LOG_FILE 2>&1
 
 # send file
 if [ "true" = "$mqtt_send_snap" ]; then
-	snapshot4cron.sh
+	if [ "true" = "$mqtt_use_heif" ] && [ "h265" = "$(yaml-cli -g .video0.codec)" ]; then
+		snapshot=/tmp/snapshot4cron.heif
+		snapshot4cron.sh -r
+	else
+		snapshot=/tmp/snapshot4cron.jpg
+		snapshot4cron.sh
+	fi
 	exitcode=$?
 	[ $exitcode -ne 0 ] && log "Cannot get a snapshot. Exit code: $exitcode" && exit 2
 	snapshot=/tmp/snapshot4cron.jpg

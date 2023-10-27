@@ -5,9 +5,10 @@ source /usr/sbin/common-plugins
 
 show_help() {
 	echo "Usage: $0 [-v] [-h] [-f]
-  -f          Force send.
-  -v          Verbose output.
-  -h          Show this help.
+  -f   Force send.
+  -r   Use HEIF image format.
+  -v   Verbose output.
+  -h   Show this help.
 "
 	exit 0
 }
@@ -36,23 +37,25 @@ uptime=$(uptime | sed -r 's/^.+ up ([^,]+), .+$/\1/')
 # override config values with command line arguments
 while getopts fvh flag; do
 	case ${flag} in
-	f) force=1 ;;
-	v) verbose=1 ;;
 	f) force="true" ;;
+	r) use_heif="true"
 	v) verbose="true" ;;
 	h) show_help ;;
 	esac
 done
 
-[ "false" = "$openwall_enabled" ] && [ $force -ne 1 ] && log "Sending to OpenIPC Wall is disabled." && exit 10
+if [ "false" = "$openwall_enabled" ] && [ "true" != "$force" ]; then
+	log "Sending to OpenIPC Wall is disabled."
+	exit 10
+fi
 
 if [ "true" = "$openwall_use_heif" ] && [ "h265" = "$(yaml-cli -g .video0.codec)" ]; then
 	snapshot=/tmp/snapshot4cron.heif
-	curl --silent --fail --url http://127.0.0.1/image.heif?t=$(date +"%s") --output ${snapshot}
+	snapshot4cron.sh -r
 else
+	snapshot=/tmp/snapshot4cron.jpg
 	snapshot4cron.sh
 	# [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
-	snapshot=/tmp/snapshot4cron.jpg
 fi
 [ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
 

@@ -11,6 +11,7 @@ show_help() {
   -f file     File to upload.
   -u username FTP username.
   -P password FTP password.
+  -r          Use HEIF image format.
   -v          Verbose output.
   -h          Show this help.
 "
@@ -24,6 +25,7 @@ while getopts d:f:p:P:s:u:vh flag; do
 	f) ftp_file=${OPTARG} ;;
 	p) ftp_port=${OPTARG} ;;
 	P) ftp_password=${OPTARG} ;;
+	r) ftp_use_heif="true" ;;
 	s) ftp_host=${OPTARG} ;;
 	u) ftp_username=${OPTARG} ;;
 	v) verbose="true" ;;
@@ -41,9 +43,14 @@ done
 	log "FTP port not found" && exit 12
 
 if [ -z "$ftp_file" ]; then
-	snapshot4cron.sh
+	if [ "true" = "$ftp_use_heif" ] && [ "h265" = "$(yaml-cli -g .video0.codec)" ]; then
+		snapshot=/tmp/snapshot4cron.heif
+		snapshot4cron.sh -r
+	else
+		snapshot=/tmp/snapshot4cron.jpg
+		snapshot4cron.sh
+	fi
 	# [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
-	snapshot=/tmp/snapshot4cron.jpg
 	[ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
 
 	ftp_file=$snapshot

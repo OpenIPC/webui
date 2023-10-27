@@ -9,6 +9,7 @@ show_help() {
   -f file     File to upload.
   -u username Yandex Disk username.
   -P password Yandex Disk username.
+  -r          Use HEIF image format.
   -v          Verbose output.
   -h          Show this help.
 "
@@ -21,6 +22,7 @@ while getopts d:f:P:u:vh flag; do
 	d) yadisk_path=${OPTARG} ;;
 	f) yadisk_file=${OPTARG} ;;
 	P) yadisk_password=${OPTARG} ;;
+	r) yadisk_use_heif="true" ;;
 	u) yadisk_username=${OPTARG} ;;
 	v) verbose="true" ;;
 	h) show_help ;;
@@ -30,8 +32,13 @@ done
 [ "false" = "$yadisk_enabled" ] && log "Sending to Yandex Disk is disabled." && exit 10
 
 if [ -z "$yadisk_file" ]; then
-	snapshot4cron.sh
-	# [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
+	if [ "true" = "$yadisk_use_heif" ] && [ "h265" = "$(yaml-cli -g .video0.codec)" ]; then
+		snapshot=/tmp/snapshot4cron.heif
+		snapshot4cron.sh -r
+	else
+		snapshot=/tmp/snapshot4cron.jpg
+		snapshot4cron.sh
+	fi
 	snapshot=/tmp/snapshot4cron.jpg
 	[ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
 

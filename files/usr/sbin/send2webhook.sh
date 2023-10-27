@@ -6,6 +6,7 @@ source /usr/sbin/common-plugins
 show_help() {
 	echo "Usage: $0 [-u url] [-v] [-h]
   -u url      Webhook URL.
+  -r          Use HEIF image format.
   -v          Verbose output.
   -h          Show this help.
 "
@@ -15,6 +16,7 @@ show_help() {
 # override config values with command line arguments
 while getopts u:vh flag; do
 	case ${flag} in
+	r) webhook_use_heif="true" ;;
 	u) webhook_url=${OPTARG} ;;
 	v) verbose="true" ;;
 	h) show_help ;;
@@ -31,7 +33,13 @@ command="${command} --connect-timeout ${curl_timeout}"
 command="${command} --max-time ${curl_timeout} -X POST"
 
 if [ "true" = "$webhook_attach_snapshot" ]; then
-	snapshot4cron.sh
+	if [ "true" = "$webhoook_use_heif" ] && [ "h265" = "$(yaml-cli -g .video0.codec)" ]; then
+		snapshot=/tmp/snapshot4cron.heif
+		snapshot4cron.sh -r
+	else
+		snapshot=/tmp/snapshot4cron.jpg
+		snapshot4cron.sh
+	fi
 	exitcode=$?
 	[ $exitcode -ne 0 ] && log "Cannot get a snapshot. Exit code: $exitcode" && exit 2
 	snapshot=/tmp/snapshot4cron.jpg

@@ -11,6 +11,7 @@ show_help() {
   -p photo    Path to photo file.
     -i          Send inline.
     -a          Send as attachment.
+    -r          Use HEIF image format.
   -s          Disable notification.
   -v          Verbose output.
   -h          Show this help.
@@ -29,6 +30,7 @@ while getopts ac:im:p:st:vh flag; do
 	i) telegram_as_photo="true" ;;
 	m) telegram_message=${OPTARG} ;;
 	p) telegram_photo=${OPTARG} ;;
+	r) teleram_use_heif="true" ;;
 	s) telegram_disable_notification=true ;;
 	t) telegram_token=${OPTARG} ;;
 	v) verbose="true" ;;
@@ -46,9 +48,13 @@ if [ -z "$telegram_message" ]; then
 	telegram_message="$(echo "$telegram_caption" | sed "s/%hostname/$(hostname -s)/;s/%datetime/$(date +"%F %T")/;s/%soctemp/$(ipcinfo --temp)/")"
 
 	if [ -z "$telegram_photo" ]; then
-		snapshot4cron.sh
-		# [ $? -ne 0 ] && echo "Cannot get a snapshot" && exit 2
-		snapshot=/tmp/snapshot4cron.jpg
+		if [ "true" = "$telegram_use_heif" ] && [ "h265" = "$(yaml-cli -g .video0.codec)" ]; then
+			snapshot=/tmp/snapshot4cron.heif
+			snapshot4cron.sh -r
+		else
+			snapshot=/tmp/snapshot4cron.jpg
+			snapshot4cron.sh
+		fi
 		[ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
 
 		telegram_photo=$snapshot

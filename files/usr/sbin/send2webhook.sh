@@ -16,7 +16,7 @@ show_help() {
 while getopts u:vh flag; do
 	case ${flag} in
 	u) webhook_url=${OPTARG} ;;
-	v) verbose=1 ;;
+	v) verbose="true" ;;
 	h) show_help ;;
 	esac
 done
@@ -51,6 +51,6 @@ command="${command} --url ${webhook_url}"
 log "$command"
 eval "$command" >>$LOG_FILE 2>&1
 
-[ "1" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat $LOG_FILE
 
 exit 0

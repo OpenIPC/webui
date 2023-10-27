@@ -12,6 +12,7 @@ show_help() {
 	echo "Usage: $0 [-f ] [-q] [-h]
   -f   Saving a new snapshot, no matter what.
   -q   Quiet output.
+  -v   Verbose output.
   -h   Show this help.
 "
 	exit 0
@@ -42,6 +43,8 @@ verbose=1
 while getopts fhq flag; do
 	case ${flag} in
 	f) force=true ;;
+	f) force="true" ;;
+	v) verbose="true" ;;
 	h) show_help ;;
 	q) verbose=0 ;;
 	esac
@@ -62,5 +65,7 @@ else
 	sleep 2
 	quit_clean 0
 fi
+
+[ "true" = "$verbose" ] && cat $LOG_FILE
 
 exit 0

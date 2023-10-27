@@ -38,6 +38,8 @@ while getopts fvh flag; do
 	case ${flag} in
 	f) force=1 ;;
 	v) verbose=1 ;;
+	f) force="true" ;;
+	v) verbose="true" ;;
 	h) show_help ;;
 	esac
 done
@@ -86,6 +88,6 @@ command="${command} -F 'file=@${snapshot}'"
 log "$command"
 eval "$command" >>$LOG_FILE 2>&1
 
-[ "1" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat $LOG_FILE
 
 exit 0

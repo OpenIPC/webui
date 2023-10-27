@@ -22,7 +22,7 @@ while getopts d:f:P:u:vh flag; do
 	f) yadisk_file=${OPTARG} ;;
 	P) yadisk_password=${OPTARG} ;;
 	u) yadisk_username=${OPTARG} ;;
-	v) verbose=1 ;;
+	v) verbose="true" ;;
 	h) show_help ;;
 	esac
 done
@@ -82,6 +82,6 @@ command="${command} --upload-file ${snapshot}"
 log "$command"
 eval "$command" >>$LOG_FILE 2>&1
 
-[ "1" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat $LOG_FILE
 
 exit 0

@@ -22,7 +22,7 @@ while getopts f:t:s:b:vh flag; do
 	f) email_from_address=${OPTARG} ;;
 	s) email_subject=${OPTARG} ;;
 	t) email_to_address=${OPTARG} ;;
-	v) verbose=1 ;;
+	v) verbose="true" ;;
 	h) show_help ;;
 	esac
 done
@@ -86,7 +86,7 @@ fi
 log "$command"
 eval "$command" >>$LOG_FILE 2>&1
 
-[ "1" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat $LOG_FILE
 
 [ -f ${email_file} ] && rm -f ${email_file}
 

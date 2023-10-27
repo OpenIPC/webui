@@ -20,7 +20,7 @@ while getopts m:st:vh flag; do
 	m) mqtt_message=${OPTARG} ;;
 	s) mqtt_send_snap="true" ;;
 	t) mqtt_topic=${OPTARG} ;;
-	v) verbose=1 ;;
+	v) verbose="true" ;;
 	h) show_help ;;
 	esac
 done
@@ -74,6 +74,6 @@ if [ "true" = "$mqtt_send_snap" ]; then
 	eval "$command2" >>$LOG_FILE 2>&1
 fi
 
-[ "1" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat $LOG_FILE
 
 exit 0

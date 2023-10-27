@@ -31,7 +31,7 @@ while getopts ac:im:p:st:vh flag; do
 	p) telegram_photo=${OPTARG} ;;
 	s) telegram_disable_notification=true ;;
 	t) telegram_token=${OPTARG} ;;
-	v) verbose=1 ;;
+	v) verbose="true" ;;
 	h) show_help ;;
 	esac
 done
@@ -101,6 +101,6 @@ else
 	eval "$command4" >>$LOG_FILE 2>&1
 fi
 
-[ "1" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat $LOG_FILE
 
 exit 0

@@ -22,7 +22,7 @@ while getopts f:u:vh flag; do
 	case ${flag} in
 	f) speaker_file=${OPTARG} ;;
 	u) speaker_url=${OPTARG} ;;
-	v) verbose=1 ;;
+	v) verbose="true" ;;
 	h) show_help ;;
 	esac
 done
@@ -50,6 +50,6 @@ command="${command} --url ${speaker_url}"
 log "$command"
 eval "$command" >>$LOG_FILE 2>&1
 
-[ "1" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat $LOG_FILE
 
 exit 0

@@ -3,8 +3,13 @@
 <%
 plugin="network"
 page_title="Network settings"
-params="address dhcp dns_1 dns_2 gateway hostname netmask interface wifi_ssid wifi_password"
+params="address dhcp dns_1 dns_2 gateway hostname netmask interface wifi_device wifi_ssid wifi_password"
 tmp_file=/tmp/${plugin}.conf
+
+profiles="$(grep -r '$1..=' /etc/wireless | cut -d '"' -f 4 | sort | grep -e ${soc} -e generic)"
+wlandev="$(fw_printenv -n wlandev)"
+wlanssid="$(fw_printenv -n wlanssid)"
+wlanpass="$(fw_printenv -n wlanpass)"
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
   case "$POST_action" in
@@ -34,14 +39,12 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         network_mode="static"
         [ -z "$network_address" ] && flash_append "danger" "IP address cannot be empty." && error=1
         [ -z "$network_netmask" ] && flash_append "danger" "Networking mask cannot be empty." && error=1
-    #    [ -z "$network_gateway" ] && flash_append "danger" "Gateway IP address cannot be empty." && error=1
-    #    [ -z "$network_dns_1" ] && flash_append "danger" "Nameserver address cannot be empty." && error=1
-    #    [ -z "$network_dns_2" ] && flash_append "danger" "Nameserver address cannot be empty." && error=1
       else
         network_mode="dhcp"
       fi
 
       if [ "wlan0" = "$network_interface" ]; then
+        [ -z "$network_wifi_device" ] && flash_append "danger" "WLAN Device cannot be empty." && error=1
         [ -z "$network_wifi_ssid" ] && flash_append "danger" "WLAN SSID cannot be empty." && error=1
         [ -z "$network_wifi_password" ] && flash_append "danger" "WLAN Password cannot be empty." && error=1
       fi
@@ -50,9 +53,10 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         command="setnetiface.sh"
         command="${command} -i $network_interface"
         command="${command} -m $network_mode"
-        command="${command} -n $network_hostname"
+        command="${command} -h $network_hostname"
 
         if [ "wlan0" = "$network_interface" ]; then
+          command="${command} -r $network_wifi_device"
           command="${command} -s $network_wifi_ssid"
           command="${command} -p $network_wifi_password"
         fi
@@ -68,7 +72,6 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
         echo "$command" >>/tmp/webui.log
         eval "$command" >/dev/null 2>&1
 
-        /etc/init.d/S40network restart >/dev/null
         update_caminfo
         redirect_back "success" "Network settings updated."
       fi
@@ -84,8 +87,9 @@ fi
       <% field_hidden "action" "update" %>
       <% field_text "network_hostname" "Hostname" %>
       <% field_select "network_interface" "Network interface" "eth0 wlan0" %>
-      <% field_text "network_wifi_ssid" "WLAN SSID" %>
-      <% field_text "network_wifi_password" "WLAN Password" %>
+      <% field_select "network_wifi_device" "WLAN Device" "$profiles" %>
+      <% field_text "network_wifi_ssid" "WLAN SSID" "" "$wlanssid" %>
+      <% field_text "network_wifi_password" "WLAN Password" "" "$wlanpass" %>
 
       <% field_switch "network_dhcp" "Use DHCP" %>
       <% field_text "network_address" "IP Address" %>
@@ -130,7 +134,7 @@ fi
   }
 
   function toggleIface() {
-    const ids = ['network_wifi_ssid','network_wifi_password'];
+    const ids = ['network_wifi_device','network_wifi_ssid','network_wifi_password'];
     if ($('#network_interface').value == 'wlan0') {
       ids.forEach(id => $('#' + id + '_wrap').classList.remove('d-none'));
     } else {
@@ -140,6 +144,7 @@ fi
 
   $('#network_interface').addEventListener('change', toggleIface);
   $('#network_dhcp[type=checkbox]').addEventListener('change', toggleDhcp);
+  $('#network_wifi_device').value = "<%= $wlandev %>";
 
   toggleIface();
   toggleDhcp();

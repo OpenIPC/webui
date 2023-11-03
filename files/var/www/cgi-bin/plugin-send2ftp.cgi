@@ -4,7 +4,7 @@
 plugin="ftp"
 plugin_name="Send to FTP"
 page_title="Send to FTP"
-params="enabled host username password path port socks5_enabled template"
+params="enabled host username password path port socks5_enabled template use_heif"
 
 tmp_file=/tmp/${plugin}.conf
 
@@ -45,28 +45,32 @@ else
   # Default values
   [ -z "$ftp_port" ] && ftp_port="21"
   [ -z "$ftp_template" ] && ftp_template="${network_hostname}-%Y%m%d-%H%M%S.jpg"
+  [ -z "$ftp_use_heif" ] && ftp_use_heif="false"
 fi
 %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
-  <div class="col">
-    <form action="<%= $SCRIPT_NAME %>" method="post">
-      <% field_switch "ftp_enabled" "Enable sending to FTP server" %>
+<form action="<%= $SCRIPT_NAME %>" method="post">
+  <% field_switch "ftp_enabled" "Enable sending to FTP server" %>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+    <div class="col">
       <% field_text "ftp_host" "FTP host" %>
       <% field_text "ftp_port" "FTP port" %>
       <% field_text "ftp_username" "FTP username" %>
       <% field_password "ftp_password" "FTP password" %>
+    </div>
+    <div class="col">
       <% field_text "ftp_path" "FTP path" "relative to FTP root directory" %>
       <% field_text "ftp_template" "File template" "Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format." %>
+      <% field_switch "ftp_use_heif" "Use HEIF image format" "Requires H.265 codec on Video0." %>
       <% field_switch "ftp_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
-      <% button_submit %>
-    </form>
+    </div>
+    <div class="col">
+      <% ex "cat $config_file" %>
+      <% button_webui_log %>
+    </div>
   </div>
-  <div class="col">
-    <% ex "cat $config_file" %>
-    <% button_webui_log %>
-  </div>
-</div>
+  <% button_submit %>
+</form>
 
 <%in p/footer.cgi %>

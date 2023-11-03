@@ -6,13 +6,10 @@ mj=$(echo "$mj" | sed "s/ /_/g")
 only="$GET_tab"; [ -z "$only" ] && only="system"
 eval title="\$tT_mj_${only}"
 
-if [ -n "$(eval echo "\$mj_hide_${only}_${fw_variant}" | sed -n "/\b${soc_family}\b/p")" ]; then
-  only="${only}_${fw_variant}"
-  variant="OpenIPC ${fw_variant}"
-fi
+[ -n "$(eval echo "\$mj_hide_${only}_${soc_vendor}" | sed -n "/\b${fw_variant}\b/p")" ] && variant="this ${fw_variant} version"
 
 # hide certain domains if not supported
-if [ -n "$(eval echo "\$mj_hide_${only}" | sed -n "/\b${soc_family}\b/p")" ]; then
+if [ -n "$(eval echo "\$mj_hide_${only}" | sed -n "/\b${soc_family}\b/p")" ] || [ -n "$variant" ]; then
   redirect_to "majestic-settings.cgi" "danger" "$title is not supported on ${variant:-your system}."
 fi
 

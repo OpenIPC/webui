@@ -4,7 +4,7 @@
 plugin="telegram"
 plugin_name="Send to Telegram"
 page_title="Send to Telegram"
-params="enabled token as_attachment as_photo channel caption socks5_enabled"
+params="enabled token as_attachment as_photo use_heif channel caption socks5_enabled"
 
 tmp_file=/tmp/${plugin}.conf
 
@@ -42,28 +42,32 @@ else
 
   # Default values
   [ -z "$telegram_caption" ] && telegram_caption="%hostname, %datetime"
+  [ -z "$telegram_use_heif" ] && telegram_use_heif="false"
 fi
 %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
-  <div class="col">
-    <form action="<%= $SCRIPT_NAME %>" method="post">
-      <% field_switch "telegram_enabled" "Enable sending to Telegram" %>
+<form action="<%= $SCRIPT_NAME %>" method="post">
+  <% field_switch "telegram_enabled" "Enable sending to Telegram" %>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+    <div class="col">
       <% field_text "telegram_token" "Token" "Your Telegram Bot authentication token." %>
       <% field_text "telegram_channel" "Chat ID" "Numeric ID of the channel you want the bot to post images to." %>
-      <% field_switch "telegram_as_photo" "Send as photo." %>
       <% field_text "telegram_caption" "Photo caption" "Available variables: %hostname, %datetime, %soctemp." %>
+    </div>
+    <div class="col">
       <% field_switch "telegram_as_attachment" "Send as attachment." %>
+      <% field_switch "telegram_as_photo" "Send as photo." %>
+      <% field_switch "telegram_use_heif" "Use HEIF format." "Requires H.265 codec on Video0." %>
       <% field_switch "telegram_socks5_enabled" "Use SOCKS5" "<a href=\"network-socks5.cgi\">Configure</a> SOCKS5 access" %>
-      <% button_submit %>
-    </form>
+    </div>
+    <div class="col">
+      <% ex "cat $config_file" %>
+      <% button_webui_log %>
+    </div>
   </div>
-  <div class="col">
-    <% ex "cat $config_file" %>
-    <% button_webui_log %>
-  </div>
-</div>
+  <% button_submit %>
+</form>
 
 <% if [ -z "$telegram_token" ]; then %>
 <div class="alert alert-info mt-4">

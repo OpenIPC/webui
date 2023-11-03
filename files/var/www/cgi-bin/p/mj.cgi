@@ -57,7 +57,7 @@ mj="
 .nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|0,255,1|1|
 .nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|0,255,1|2|
 .nightMode.dncDelay|Delay before toggling Day/Night mode||range|1,60,1|20|
-.nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|1,255,1|65|
+.nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|0,255,1|65|
 .nightMode.nightAPI|Use night mode API||boolean|true,false|false|
 .nightMode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1,1000,1|300|
 .records.enabled|Enable saving records||boolean|true,false|false|
@@ -148,6 +148,6 @@ mj_hide_vendor_sigmastar="audio_outputGain audio_speakerPin audio_speakerPinInve
 	isp_memMode isp_blkCnt isp_lowDelay isp_rawMode isp_iqProfile jpeg_size jpeg_toProgressive
 	video0_gopMode video0_sliceUnits video1_size video1_gopMode video1_sliceUnits"
 
-# hide settings based on variant lite/ultimate
-mj_hide_audio_lite="infinity6 infinity6b0 infinity6e"
-mj_hide_motionDetect_lite="infinity6 infinity6b0 infinity6e"
+# hide settings based on firmware variant
+mj_hide_audio_sigmastar="fpv lite"
+mj_hide_motionDetect_sigmastar="fpv lite"

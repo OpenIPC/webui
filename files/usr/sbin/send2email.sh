@@ -7,6 +7,7 @@ show_help() {
 	echo "Usage: $0 [-f address] [-t address] [-s subject] [-b body] [-v] [-h]
   -f address  Sender's email address
   -t address  Recipient's email address
+  -r          Use HEIF image format.
   -s subject  Subject line.
   -b body     Letter body.
   -v          Verbose output.
@@ -20,9 +21,10 @@ while getopts f:t:s:b:vh flag; do
 	case ${flag} in
 	b) email_body=${OPTARG} ;;
 	f) email_from_address=${OPTARG} ;;
+	r) email_use_heif="true" ;;
 	s) email_subject=${OPTARG} ;;
 	t) email_to_address=${OPTARG} ;;
-	v) verbose=1 ;;
+	v) verbose="true" ;;
 	h) show_help ;;
 	esac
 done
@@ -56,10 +58,15 @@ command="${command} --mail-rcpt ${email_to_address}"
 command="${command} --user '${email_smtp_username}:${email_smtp_password}'"
 
 if [ "true" = "$email_attach_snapshot" ]; then
-	snapshot4cron.sh
+	if [ "true" = "$email_use_heif" ] && [ "h265" = "$(yaml-cli -g .video0.codec)" ]; then
+		snapshot=/tmp/snapshot4cron.heif
+		snapshot4cron.sh -r
+	else
+		snapshot=/tmp/snapshot4cron.jpg
+		snapshot4cron.sh
+	fi
 	exitcode=$?
 	[ $exitcode -ne 0 ] && log "Cannot get a snapshot. Exit code: $exitcode" && exit 2
-	snapshot=/tmp/snapshot4cron.jpg
 	[ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
 
 	email_body="$(date -R)"
@@ -86,7 +93,7 @@ fi
 log "$command"
 eval "$command" >>$LOG_FILE 2>&1
 
-[ "1" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat $LOG_FILE
 
 [ -f ${email_file} ] && rm -f ${email_file}
 

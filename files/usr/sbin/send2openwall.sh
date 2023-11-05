@@ -38,7 +38,7 @@ uptime=$(uptime | sed -r 's/^.+ up ([^,]+), .+$/\1/')
 while getopts fvh flag; do
 	case ${flag} in
 	f) force="true" ;;
-	r) use_heif="true"
+	r) use_heif="true" ;;
 	v) verbose="true" ;;
 	h) show_help ;;
 	esac

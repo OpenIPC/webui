@@ -72,6 +72,15 @@ size_h=${size#*x}
     <div class="alert alert-danger small">
       PTZ feature is not ready. Please consider <a href="https://t.me/OpenIPC">supporting further development</a>.
     </div>
+    <div class="input-group">
+      <div class="input-group-text">
+        <img src="/a/light-off.svg" alt="Image: IR filter indicator" id="ircut-status">
+      </div>
+      <button class="form-control btn btn-secondary text-start" type="button" id="ircut">IR-cut filter</button>
+      <div class="input-group-text">
+        <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -105,18 +114,34 @@ $("#toggle-night-mode")?.addEventListener("click", event => {
   xhr.send("mode=toggle");
 });
 
-$$("button[data-sendto]").forEach(el => el.addEventListener("click", event => {
+$$("button[data-sendto]").forEach(el => {
+  el.addEventListener("click", event => {
     event.preventDefault();
     if (!confirm("Are you sure?")) return false;
     const tgt = event.target.dataset["sendto"];
     const xhr = new XMLHttpRequest();
     xhr.open("GET", "/cgi-bin/send.cgi?to=" + tgt);
     xhr.send();
-}))
+  });
+});
 
 $("#speed")?.addEventListener("click", event => {
   event.preventDefault();
   event.target.src = (event.target.src.split("/").pop() == "speed-slow.svg") ? "/a/speed-fast.svg" : "/a/speed-slow.svg";
+});
+
+$("#ircut").addEventListener("click", event => {
+  event.preventDefault();
+  if ($('#ircut-status').src.split("/").pop() == "light-on.svg") {
+    $('#ircut-status').src = "/a/light-off.svg";
+    mode = 'off';
+  } else {
+    $('#ircut-status').src = "/a/light-on.svg";
+    mode = 'on';
+  }
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "/cgi-bin/j/ircut.cgi?mode=" + mode);
+  xhr.send();
 });
 </script>
 

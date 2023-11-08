@@ -42,22 +42,19 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
     done; unset _p
     mv $tmp_file $config_file
 
-    if [ "true" = "$motion_enabled" ]; then
-      if [ -z "$(eval echo "DEBUG TRACE" | sed -n "/\b$(yaml-cli -g .system.logLevel)\b/p")" ]; then
+#    if [ "true" = "$motion_enabled" ]; then
+#      if [ -z "$(eval echo "DEBUG TRACE" | sed -n "/\b$(yaml-cli -g .system.logLevel)\b/p")" ]; then
         # make required changes to majestic.yaml
-        _t=$(mktemp)
-        cp -f /tmp/majestic.yaml $_t
-        yaml-cli -i $_t -s .system.logLevel DEBUG
-        yaml-cli -i $_t -s .motionDetect.visualize true
-        yaml-cli -i $_t -s .motionDetect.debug true
-        mv -f $_t /tmp/majestic.yaml
-        unset _t
-      fi
+#        _t=$(mktemp)
+#        cp -f /tmp/majestic.yaml $_t
+#        yaml-cli -i $_t -s .system.logLevel DEBUG
+#        yaml-cli -i $_t -s .motionDetect.visualize true
+#        yaml-cli -i $_t -s .motionDetect.debug true
+#        mv -f $_t /tmp/majestic.yaml
+#        unset _t
+#      fi
       # touch /tmp/motionguard-restart.txt
-      /etc/init.d/S92motion restart >/dev/null
-    else
-      /etc/init.d/S92motion stop >/dev/null
-    fi
+#    fi
 
     update_caminfo
     redirect_to "$SCRIPT_NAME"

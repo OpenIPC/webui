@@ -26,6 +26,7 @@ mj="
 .isp.sensorConfig|Path to sensor configuration file||string||/etc/sensors/imx222_1080p_line.ini|<a href=\"sensor.cgi\">Upload your own driver and config</a>
 .isp.memMode|Memory mode||select|normal,reduction|reduction|
 .isp.slowShutter|Slow shutter||select|disabled,low,medium,high|low|Automatic frame rate reduction mode.
+.isp.overrideGain|Set sensor gain||number|1,128,1|0|
 .isp.overrideShutter|Set shutter fps||number|5,200,1|0|
 .isp.antiFlicker|Anti-flicker||select|disabled,50,60|disabled|Usually, the utility frequency in your grid line.
 .isp.blkCnt|Block count||number|1,32,1|4|Use 4 for small memory systems, 10+ for performant SoCs.
@@ -138,6 +139,7 @@ mj_show_audio_voiceEqualizer="gk7205v200 hi3516cv300 hi3516cv500 hi3516ev300 hi3
 mj_show_mjpeg_vendor="goke hisilicon"
 mj_hide_isp_sensorConfig_vendor="ingenic"
 mj_show_isp_slowShutter_vendor="goke hisilicon"
+mj_show_isp_overrideGain_vendor="sigmastar"
 mj_show_isp_overrideShutter_vendor="sigmastar"
 mj_hide_video0_codec="hi3516cv200 hi3516cv100"
 mj_hide_video1_codec="hi3516cv200 hi3516cv100"

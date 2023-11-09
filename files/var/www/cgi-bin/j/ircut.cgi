@@ -8,10 +8,6 @@ PIN2=$(fw_printenv -n ircut_pin2)
 [ -z "$PIN1" ] && PIN1=$(cli -g .nightMode.irCutPin1)
 [ -z "$PIN2" ] && PIN2=$(cli -g .nightMode.irCutPin2)
 
-# read IRCUT pins from majestic config, if empty
-[ -z "$PIN1" ] && PIN1=$(cli -g .nightMode.irCutPin1)
-[ -z "$PIN2" ] && PIN2=$(cli -g .nightMode.irCutPin2)
-
 if [ -z "$PIN1" ]; then
 	echo "Please define IR-CUT pin"
 	echo "fw_setenv ircut_pin1 <pin>"

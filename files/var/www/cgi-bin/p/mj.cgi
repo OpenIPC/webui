@@ -26,11 +26,9 @@ mj="
 .isp.sensorConfig|Path to sensor configuration file||string||/etc/sensors/imx222_1080p_line.ini|<a href=\"sensor.cgi\">Upload your own driver and config</a>
 .isp.memMode|Memory mode||select|normal,reduction|reduction|
 .isp.slowShutter|Slow shutter||select|disabled,low,medium,high|low|Automatic frame rate reduction mode.
-.isp.overrideGain|Set sensor gain||number|1,128,1|0|
-.isp.overrideShutter|Set shutter fps||number|5,200,1|0|
 .isp.antiFlicker|Anti-flicker||select|disabled,50,60|disabled|Usually, the utility frequency in your grid line.
 .isp.blkCnt|Block count||number|1,32,1|4|Use 4 for small memory systems, 10+ for performant SoCs.
-.isp.exposure|Sensor exposure time|&micro;s|range|1,500000,1,auto|auto|From 1 to 500,000.
+.isp.exposure|Sensor exposure time||range|1,1000,1,auto|auto|
 .isp.aGain|Sensor analog gain||number|1,10000,1|1|
 .isp.dGain|Sensor digital gain||number|1,10000,1|1|
 .isp.ispGain|ISP gain||number|1,10000,1|1|
@@ -132,15 +130,16 @@ mj="
 "
 
 # hide these settings unless in debug mode
-mj_hide_unless_debug="audio_device isp_aGain isp_dGain isp_ispGain isp_exposure"
+mj_hide_unless_debug="audio_device isp_ispGain"
 
 # conditional settings limiters
 mj_show_audio_voiceEqualizer="gk7205v200 hi3516cv300 hi3516cv500 hi3516ev300 hi3519v101"
 mj_show_mjpeg_vendor="goke hisilicon"
 mj_hide_isp_sensorConfig_vendor="ingenic"
 mj_show_isp_slowShutter_vendor="goke hisilicon"
-mj_show_isp_overrideGain_vendor="sigmastar"
-mj_show_isp_overrideShutter_vendor="sigmastar"
+mj_show_isp_aGain_vendor="sigmastar"
+mj_show_isp_dGain_vendor="sigmastar"
+mj_show_isp_exposure_vendor="sigmastar"
 mj_hide_video0_codec="hi3516cv200 hi3516cv100"
 mj_hide_video1_codec="hi3516cv200 hi3516cv100"
 mj_hide_motionDetect="hi3516cv100 hi3516av100"

@@ -72,13 +72,25 @@ size_h=${size#*x}
     <div class="alert alert-danger small">
       PTZ feature is not ready. Please consider <a href="https://t.me/OpenIPC">supporting further development</a>.
     </div>
-    <div class="input-group">
-      <div class="input-group-text">
-        <img src="/a/light-off.svg" alt="Image: IR filter indicator" id="ircut-status">
+
+    <div class="d-grid gap-2 mb-3">
+      <div class="input-group">
+        <div class="input-group-text">
+          <img src="/a/light-off.svg" alt="Image: IR filter indicator" id="ircut-status">
+        </div>
+        <button class="form-control btn btn-secondary text-start" type="button" id="ircut">IR-cut filter</button>
+        <div class="input-group-text">
+          <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
+        </div>
       </div>
-      <button class="form-control btn btn-secondary text-start" type="button" id="ircut">IR-cut filter</button>
-      <div class="input-group-text">
-        <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
+      <div class="input-group">
+        <div class="input-group-text">
+          <img src="/a/light-off.svg" alt="Image: IR LED indicator" id="irled-status">
+        </div>
+        <button class="form-control btn btn-secondary text-start" type="button" id="irled">IR LED lights</button>
+        <div class="input-group-text">
+          <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
+        </div>
       </div>
     </div>
   </div>
@@ -141,6 +153,20 @@ $("#ircut").addEventListener("click", event => {
   }
   const xhr = new XMLHttpRequest();
   xhr.open("GET", "/cgi-bin/j/ircut.cgi?mode=" + mode);
+  xhr.send();
+});
+
+$("#irled").addEventListener("click", event => {
+  event.preventDefault();
+  if ($('#irled-status').src.split("/").pop() == "light-on.svg") {
+    $('#irled-status').src = "/a/light-off.svg";
+    mode = 'off';
+  } else {
+    $('#irled-status').src = "/a/light-on.svg";
+    mode = 'on';
+  }
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "/cgi-bin/j/irled.cgi?mode=" + mode);
   xhr.send();
 });
 </script>

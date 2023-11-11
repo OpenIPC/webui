@@ -28,9 +28,9 @@ mj="
 .isp.slowShutter|Slow shutter||select|disabled,low,medium,high|low|Automatic frame rate reduction mode.
 .isp.antiFlicker|Anti-flicker||select|disabled,50,60|disabled|Usually, the utility frequency in your grid line.
 .isp.blkCnt|Block count||number|1,32,1|4|Use 4 for small memory systems, 10+ for performant SoCs.
-.isp.exposure|Sensor exposure time||range|1,200,1,auto|auto|In milliseconds (1000 / fps).
-.isp.aGain|Sensor analog gain||number|1,10000,1|1|Recommended range: 1024-8192
-.isp.dGain|Sensor digital gain||number|1,10000,1|1|Recommended range: 1024-2048
+.isp.exposure|Sensor exposure time||range|1,200,1,auto|auto|In milliseconds.
+.isp.aGain|Sensor analog gain||number|1,10000,1|1|Recommended range: 8-1024
+.isp.dGain|Sensor digital gain||number|1,10000,1|1|Recommended range: 8-16
 .isp.ispGain|ISP gain||number|1,10000,1|1|
 .isp.drc|Dynamic Range Compression (DRC) rate|:1|number|1,1000,1|300|
 .isp.lowDelay|Low delay mode||boolean|true,false|false|May break sophisticated settings.

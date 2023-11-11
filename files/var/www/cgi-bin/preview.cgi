@@ -112,6 +112,7 @@ size_h=${size#*x}
       </div>
 <% fi %>
     </div>
+    <%in p/joystick.cgi %>
   </div>
 </div>
 

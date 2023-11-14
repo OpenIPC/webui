@@ -142,12 +142,9 @@ mj_show_isp_dGain_vendor="sigmastar"
 mj_show_isp_exposure_vendor="sigmastar"
 mj_hide_video0_codec="hi3516cv200 hi3516cv100"
 mj_hide_video1_codec="hi3516cv200 hi3516cv100"
-mj_hide_motionDetect="hi3516cv100 hi3516av100"
+mj_hide_motionDetect="hi3516cv100 hi3516av100 infinity6"
 
 # hide settings based on vendor
 mj_hide_vendor_sigmastar="audio_outputGain motionDetect_skipIn isp_memMode isp_blkCnt
 	isp_lowDelay isp_rawMode isp_iqProfile jpeg_size jpeg_toProgressive
 	video0_gopMode video0_sliceUnits video1_gopMode video1_sliceUnits"
-
-# hide settings based on firmware variant
-mj_hide_motionDetect_sigmastar="fpv lite"

@@ -7,7 +7,7 @@ only="$GET_tab"; [ -z "$only" ] && only="system"
 eval title="\$tT_mj_${only}"
 
 # hide certain domains if not supported
-if [ -n "$(eval echo "\$mj_hide_${only}" | sed -n "/\b${soc_family}\b/p")" ] || [ -n "$variant" ]; then
+if [ -n "$(eval echo "\$mj_hide_${only}" | sed -n "/\b${soc_family}\b/p")" ]; then
   redirect_to "majestic-settings.cgi" "danger" "$title is not supported on your system."
 fi
 

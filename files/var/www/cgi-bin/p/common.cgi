@@ -764,6 +764,14 @@ uboot_version ui_password ui_version"
   echo -e "debug=\"$debug\"\n# caminfo $(date +"%F %T")\n" >>$sysinfo_file
 }
 
+update_uboot_env() {
+  local name="$1"
+  local value="$2"
+  if [ "$value" != "$(fw_printenv -n $name)" ]; then
+    fw_setenv $name $value
+  fi
+}
+
 xl() {
   local _c="$1"
   echo "<b>${_c}</b>"

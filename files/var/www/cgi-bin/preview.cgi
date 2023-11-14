@@ -68,9 +68,49 @@ size_h=${size#*x}
           <a href="plugin-send2openwall.cgi" title="Open Wall settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
-    </div>
-    <div class="alert alert-danger small">
-      PTZ feature is not ready. Please consider <a href="https://t.me/OpenIPC">supporting further development</a>.
+      <div class="input-group">
+        <div class="input-group-text">
+          <img src="/a/light-off.svg" alt="Image: IR filter indicator" id="ircut-status">
+        </div>
+        <button class="form-control btn btn-secondary text-start" type="button" id="toggle-ircut">IR-cut filter</button>
+        <div class="input-group-text">
+          <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
+        </div>
+      </div>
+
+<% if fw_printenv -n ir850_led_pin >/dev/null; then %>
+      <div class="input-group">
+        <div class="input-group-text">
+          <img src="/a/light-off.svg" alt="Image: IR LED indicator" id="ir850-led-status">
+        </div>
+        <button class="form-control btn btn-secondary text-start" type="button" id="toggle-ir850-led">IR LED 850 nm</button>
+        <div class="input-group-text">
+          <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
+        </div>
+      </div>
+<% fi %>
+<% if fw_printenv -n ir940_led_pin >/dev/null; then %>
+      <div class="input-group">
+        <div class="input-group-text">
+          <img src="/a/light-off.svg" alt="Image: IR LED indicator" id="ir940-led-status">
+        </div>
+        <button class="form-control btn btn-secondary text-start" type="button" id="toggle-ir940-led">IR LED 940 nm</button>
+        <div class="input-group-text">
+          <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
+        </div>
+      </div>
+<% fi %>
+<% if fw_printenv -n white_led_pin >/dev/null; then %>
+      <div class="input-group">
+        <div class="input-group-text">
+          <img src="/a/light-off.svg" alt="Image: White LED indicator" id="white-led-status">
+        </div>
+        <button class="form-control btn btn-secondary text-start" type="button" id="toggle-white-led">White Light</button>
+        <div class="input-group-text">
+          <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
+        </div>
+      </div>
+<% fi %>
     </div>
   </div>
 </div>
@@ -85,6 +125,14 @@ const network_address = "<%= $network_address %>";
 <% [ "true" != "$telegram_enabled" ] && echo "\$('button[data-sendto=telegram]').disabled = true;" %>
 <% [ "true" != "$yadisk_enabled"   ] && echo "\$('button[data-sendto=yadisk]').disabled = true;" %>
 
+function sendToApi(endpoint) {
+  const xhr = new XMLHttpRequest();
+  xhr.addEventListener("load", reqListener);
+  xhr.open("GET", 'http://' + ipaddr + endpoint);
+  xhr.setRequestHeader("Authorization", "Basic " + btoa("admin:"));
+  xhr.send();
+}
+
 function reqListener(data) {
   console.log(data.responseText);
 }
@@ -96,6 +144,22 @@ $$("a[id^=pan-],a[id^=zoom-]").forEach(el => {
   });
 });
 
+$$("button[data-sendto]").forEach(el => {
+  el.addEventListener("click", event => {
+    event.preventDefault();
+    if (!confirm("Are you sure?")) return false;
+    const tgt = event.target.dataset["sendto"];
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "/cgi-bin/send.cgi?to=" + tgt);
+    xhr.send();
+  });
+});
+
+$("#speed")?.addEventListener("click", event => {
+  event.preventDefault();
+  event.target.src = (event.target.src.split("/").pop() == "speed-slow.svg") ? "/a/speed-fast.svg" : "/a/speed-slow.svg";
+});
+
 $("#toggle-night-mode")?.addEventListener("click", event => {
   event.preventDefault();
   $('#night-mode-status').src = ($('#night-mode-status').src.split("/").pop() == "light-on.svg") ? "/a/light-off.svg" : "/a/light-on.svg";
@@ -105,19 +169,36 @@ $("#toggle-night-mode")?.addEventListener("click", event => {
   xhr.send("mode=toggle");
 });
 
-$$("button[data-sendto]").forEach(el => el.addEventListener("click", event => {
-    event.preventDefault();
-    if (!confirm("Are you sure?")) return false;
-    const tgt = event.target.dataset["sendto"];
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/cgi-bin/send.cgi?to=" + tgt);
-    xhr.send();
-}))
-
-$("#speed")?.addEventListener("click", event => {
+$("#toggle-ircut").addEventListener("click", event => {
   event.preventDefault();
-  event.target.src = (event.target.src.split("/").pop() == "speed-slow.svg") ? "/a/speed-fast.svg" : "/a/speed-slow.svg";
+  if ($('#ircut-status').src.split("/").pop() == "light-on.svg") {
+    $('#ircut-status').src = "/a/light-off.svg";
+    mode = 'off';
+  } else {
+    $('#ircut-status').src = "/a/light-on.svg";
+    mode = 'on';
+  }
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "/cgi-bin/j/ircut.cgi?mode=" + mode);
+  xhr.send();
 });
+
+["ir850", "ir940", "white"].forEach(n => {
+  if ($('#toggle-' + n + '-led'))
+    $('#toggle-' + n + '-led').addEventListener('click', event => {
+      event.preventDefault();
+      if ($('#' + n + '-led-status').src.split('/').pop() == 'light-on.svg') {
+        $('#' + n + '-led-status').src = '/a/light-off.svg';
+        mode = 'off';
+      } else {
+        $('#' + n + '-led-status').src = '/a/light-on.svg';
+        mode = 'on';
+      }
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', '/cgi-bin/j/light.cgi?type=' + n + '&mode=' + mode);
+      xhr.send();
+    });
+})
 </script>
 
 <%in p/footer.cgi %>

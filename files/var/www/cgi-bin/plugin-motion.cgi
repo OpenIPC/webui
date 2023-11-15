@@ -60,7 +60,7 @@ fi
       <% field_switch "motion_enabled" "Enable motion guard" %>
       <% field_number "motion_min_width" "Minimum zone width" %>
       <% field_number "motion_max_width" "Maximum zone width" %>
-      <% field_number "motion_min_height" "Maximum zone height" %>
+      <% field_number "motion_min_height" "Minimum zone height" %>
       <% field_number "motion_max_height" "Maximum zone height" %>
       <% field_range "motion_sensitivity" "Minimum number of objects" "1,30,1" %>
       <% field_range "motion_throttle" "Delay between notifications, sec." "1,30,1" %>

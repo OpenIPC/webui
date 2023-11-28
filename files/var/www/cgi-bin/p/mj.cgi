@@ -55,6 +55,7 @@ mj="
 .nightMode.irSensorPinInvert|IR sensor signal is inverted||boolean|true,false|false|
 .nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|0,255,1|1|
 .nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|0,255,1|2|
+.nightMode.irCutSingleInvert|IRcut filter polarity is inverted||boolean|true,false|false|
 .nightMode.dncDelay|Delay before toggling Day/Night mode||range|1,60,1|20|
 .nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|0,255,1|65|
 .nightMode.nightAPI|Use night mode API||boolean|true,false|false|

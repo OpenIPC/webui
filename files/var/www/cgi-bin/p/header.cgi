@@ -4,7 +4,31 @@ Date: <%= $(time_http) %>
 Server: <%= $SERVER_SOFTWARE %>
 Cache-Control: no-store
 Pragma: no-cache
-
+<%
+majestic_menu() {
+	local l # line
+	local c # css class
+	local p # parameter
+	local pd # parameter domain
+	local pn # parameter name
+	local cpd # cached parameter domain
+	mj=$(echo "$mj" | sed "s/ /_/g")
+	for l in $mj; do
+		p=${l%%|*}
+		pn=${p#.}
+		pd=${pn%.*}
+		if [ "$cpd" != "$pd" ]; then
+			# hide certain domains if not supported
+			[ -n "$(eval echo "\$mj_hide_${pd}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+			[ -n "$(eval echo "\$mj_show_${pd}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${pd}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
+			cpd="$pd"
+			c="class=\"dropdown-item\""
+			[ "$pd" = "$only" ] && c="class=\"dropdown-item active\" aria-current=\"true\""
+			echo "<li><a ${c} href=\"majestic-settings.cgi?tab=${pd}\">$(eval echo \$tT_mj_${pd})</a></li>"
+		fi
+	done
+}
+%>
 <!DOCTYPE html>
 <html lang="<%= ${locale:=en} %>" data-bs-theme="<%= ${webui_theme:=light} %>">
 <head>
@@ -69,23 +93,7 @@ Pragma: no-cache
           <li class="nav-item dropdown">
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownMajestic" role="button">Majestic</a>
             <ul aria-labelledby="dropdownMajestic" class="dropdown-menu">
-<%
-mj=$(echo "$mj" | sed "s/ /_/g")
-for _line in $mj; do
-  _parameter=${_line%%|*};
-  _param_name=${_parameter#.};
-  _param_domain=${_param_name%.*}
-  if [ "$_parameter_domain_old" != "$_param_domain" ]; then
-    # hide certain domains if not supported
-    [ -n "$(eval echo "\$mj_hide_${_param_domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
-    [ -n "$(eval echo "\$mj_show_${_param_domain}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${_param_domain}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
-    _parameter_domain_old="$_param_domain"
-    _css="class=\"dropdown-item\""; [ "$_param_domain" = "$only" ] && _css="class=\"dropdown-item active\" aria-current=\"true\""
-    echo "<li><a ${_css} href=\"majestic-settings.cgi?tab=${_param_domain}\">$(eval echo \$tT_mj_${_param_domain})</a></li>"
-  fi
-done
-unset _css; unset _param_domain; unset _line; unset _param_name; unset _parameter_domain_old; unset _parameter;
-%>
+              <% majestic_menu %>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="info-majestic.cgi">Majestic Config</a></li>
               <li><a class="dropdown-item" href="majestic-endpoints.cgi">Majestic Endpoints</a></li>

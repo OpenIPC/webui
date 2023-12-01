@@ -13,15 +13,18 @@ PIN=$(fw_printenv -n ${type}_led_pin)
 if [ -z "$PIN" ]; then
 	# read LED pin from majestic config
 	case "$type" in
-	"ir850")
-		[ -z "$PIN" ] && PIN=$(cli -g .nightMode.backlightPin)
-		;;
-	"ir940")
-		#[ -z "$PIN" ] && PIN=$(cli -g .nightMode.backlightPin)
-		;;
-	"white")
-		#[ -z "$PIN" ] && PIN=$(cli -g .nightMode.backlightPin)
-		;;
+		ir850)
+			[ -z "$PIN" ] && PIN=$(cli -g .nightMode.backlightPin)
+			;;
+		ir940)
+			#[ -z "$PIN" ] && PIN=$(cli -g .nightMode.backlightPin)
+			;;
+		white)
+			#[ -z "$PIN" ] && PIN=$(cli -g .nightMode.backlightPin)
+			;;
+		*)
+			echo "Unknown LED type"
+			exit 2
 	esac
 fi
 
@@ -32,13 +35,15 @@ if [ -z "$PIN" ]; then
 fi
 
 case "$mode" in
-	"on"|"1")
+	on|1)
 		gpio set $PIN >/dev/null
 		;;
-	"off"|"0")
+	off|0)
 		gpio clear $PIN >/dev/null
 		;;
 	*)
+		echo "Unknown mode"
+		exit 3
 		;;
 esac
 

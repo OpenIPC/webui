@@ -10,32 +10,32 @@ config_file="${ui_config_dir}/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  # parse values from parameters
-  for _p in $params; do
-    eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-    sanitize "${plugin}_${_p}"
-  done; unset _p
+	# parse values from parameters
+	for p in $params; do
+		eval ${plugin}_${p}=\$POST_${plugin}_${p}
+		sanitize "${plugin}_${p}"
+	done; unset p
 
-  [ -z "$admin_name"  ] && flash_append "danger" "Admin name cannot be empty." && error=1
-  [ -z "$admin_email" ] && flash_append "danger" "Admin email cannot be empty." && error=1
-  # [ -z "$admin_telegram" ] && error="Admin telegram username cannot be empty."
+	[ -z "$admin_name"  ] && set_error_flag "Admin name cannot be empty."
+	[ -z "$admin_email" ] && set_error_flag "Admin email cannot be empty."
+	# [ -z "$admin_telegram" ] && error="Admin telegram username cannot be empty."
 
-  # add @ to Telegram username, if missed
-  [ -n "$admin_telegram" ] && [ "${admin_telegram:0:1}" != "@" ] && admin_telegram="@$admin_telegram"
+	# add @ to Telegram username, if missed
+	[ -n "$admin_telegram" ] && [ "${admin_telegram:0:1}" != "@" ] && admin_telegram="@$admin_telegram"
 
-  if [ -z "$error" ]; then
-    # create temp config file
-    :>$tmp_file
-    for _p in $params; do
-      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
-    done; unset _p
-    mv $tmp_file $config_file
+	if [ -z "$error" ]; then
+		# create temp config file
+		:>$tmp_file
+		for p in $params; do
+			echo "${plugin}_${p}=\"$(eval echo \$${plugin}_${p})\"" >>$tmp_file
+		done; unset p
+		mv $tmp_file $config_file
 
-    update_caminfo
-    redirect_back "success" "Admin profile updated."
-  fi
+		update_caminfo
+		redirect_back "success" "Admin profile updated."
+	fi
 else
-  include $config_file
+	include $config_file
 fi
 %>
 <%in p/header.cgi %>

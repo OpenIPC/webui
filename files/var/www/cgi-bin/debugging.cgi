@@ -6,54 +6,49 @@ plugin_name="Majestic debugging"
 page_title="Majestic debugging"
 params="consent enabled ftphost ftppath ftppass ftpuser localpath save4web send2devs send2ftp send2tftp tftphost"
 
-[ ! -f "/rom/${mj_bin_file}" ] && redirect_to "status.cgi" "danger" "Majestic is not supported on this system."
+[ ! -f "/rom/${mj_bin_file}" ] && redirect_to "status.cgi" "danger" $STR_NOT_SUPPORTED
 
 tmp_file=/tmp/${plugin}.conf
 config_file=/etc/${plugin}.conf
 [ ! -f "$config_file" ] && touch $config_file
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  # parse values from parameters
-  for _p in $params; do
-    eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-    sanitize "${plugin}_${_p}"
-  done; unset _p
+	# parse values from parameters
+	for p in $params; do
+		eval ${plugin}_${p}=\$POST_${plugin}_${p}
+		sanitize "${plugin}_${p}"
+	done; unset p
 
-  ### Normalization
-  # FIXME: strip trailing slashes
-  #sanitize "coredump_localpath"
-  #sanitize "coredump_ftppath"
+	### Normalization
+	# FIXME: strip trailing slashes
+	#sanitize "coredump_localpath"
+	#sanitize "coredump_ftppath"
 
-  ### Validation
-  if [ "true" = "$coredump_enabled" ]; then
-    if [ "true" = "$coredump_send2devs" ]; then
-      [ -z "$admin_name" ] || [ -z "$admin_email" ] &&
-        flash_append "danger" "Please <a href=\"admin.cgi\">fill out the admin profile</a> first." && error=1
-    fi
-    [ "true" != "$coredump_consent"  ] &&
-      flash_append "danger" "You have to understand and acknowledge security risk." && error=1
-    [ "true" = "$coredump_send2ftp"  ] && [ -z "$coredump_ftphost"   ] &&
-      flash_append "danger" "FTP address cannot be empty." && error=1
-    [ "true" = "$coredump_send2tftp" ] && [ -z "$coredump_tftphost"  ] &&
-      flash_append "danger" "TFTP address cannot be empty." && error=1
-    [ "true" = "$coredump_save4web"  ] && [ -z "$coredump_localpath" ] &&
-      flash_append "danger" "Local path cannot be empty." && error=1
-  fi
+	### Validation
+	if [ "true" = "$coredump_enabled" ]; then
+		if [ "true" = "$coredump_send2devs" ]; then
+			[ -z "$admin_name" ] || [ -z "$admin_email" ] && set_error_flag Please <a href=\"admin.cgi\">fill out the admin profile</a> first."
+		fi
+		[ "true" != "$coredump_consent"  ] && set_error_flag "You have to understand and acknowledge security risk."
+		[ "true" = "$coredump_send2ftp"  ] && [ -z "$coredump_ftphost"   ] && set_error_flag "FTP address cannot be empty."
+		[ "true" = "$coredump_send2tftp" ] && [ -z "$coredump_tftphost"  ] && set_error_flag "TFTP address cannot be empty."
+		[ "true" = "$coredump_save4web"  ] && [ -z "$coredump_localpath" ] && set_error_flag "Local path cannot be empty."
+	fi
 
-  if [ -z "$error" ]; then
-    # create temp config file
-    :>$tmp_file
-    for _p in $params; do
-      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
-    done; unset _p
-    mv $tmp_file $config_file
+	if [ -z "$error" ]; then
+		# create temp config file
+		:>$tmp_file
+		for p in $params; do
+			echo "${plugin}_${p}=\"$(eval echo \$${plugin}_${p})\"" >>$tmp_file
+		done; unset p
+		mv $tmp_file $config_file
 
-    update_caminfo
-    touch /tmp/coredump-restart.txt
-    redirect_back "success" "${plugin_name} config updated."
-  fi
+		update_caminfo
+		touch /tmp/coredump-restart.txt
+		redirect_back "success" "${plugin_name} config updated."
+	fi
 else
-  include $config_file
+	include $config_file
 fi
 
 [ -z "$coredump_ftpuser" ] && coredump_ftpuser="anonymous"
@@ -61,11 +56,11 @@ fi
 [ -z "$coredump_tftphost" ] && coredump_tftphost=$(fw_printenv -n serverip)
 
 if [ -z "$coredump_localpath" ]; then
-  if [ -d "/mnt/mmc" ]; then
-    coredump_localpath="/mnt/mmc"
-  else
-    coredump_localpath="/root"
-  fi
+	if [ -d "/mnt/mmc" ]; then
+		coredump_localpath="/mnt/mmc"
+	else
+		coredump_localpath="/root"
+	fi
 fi
 %>
 <%in p/header.cgi %>

@@ -20,10 +20,10 @@ if [ -z "$PIN2" ]; then
 fi
 
 # parse parameters from query string
-eval $(echo ${QUERY_STRING//&/;})
+[ -n "$QUERY_STRING" ] && eval $(echo "$QUERY_STRING" | sed "s/&/;/g")
 
 # set parameters from cli, if empty
-[ -z "mode" ] && mode=$1
+[ -z "$mode" ] && mode=$1
 
 case "$mode" in
 "on")

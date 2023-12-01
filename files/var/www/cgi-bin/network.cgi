@@ -12,71 +12,71 @@ wlanssid="$(fw_printenv -n wlanssid)"
 wlanpass="$(fw_printenv -n wlanpass)"
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  case "$POST_action" in
-    changemac)
-      if echo "$POST_mac_address" | grep -Eiq '^([0-9a-f]{2}[:-]){5}([0-9a-f]{2})$'; then
-        fw_setenv ethaddr $POST_mac_address
-        update_caminfo
-        redirect_to "reboot.cgi"
-      else
-        redirect_back "warning" "${POST_mac_address} is as invalid MAC address."
-      fi
-      ;;
-    reset)
-      /usr/sbin/sysreset.sh -n
-      redirect_back
-      ;;
-    update)
-      # parse values from parameters
-      for _p in $params; do
-        eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-        sanitize "${plugin}_${_p}"
-      done; unset _p
+	case "$POST_action" in
+		changemac)
+			if echo "$POST_mac_address" | grep -Eiq '^([0-9a-f]{2}[:-]){5}([0-9a-f]{2})$'; then
+				fw_setenv ethaddr $POST_mac_address
+				update_caminfo
+				redirect_to "reboot.cgi"
+			else
+				redirect_back "warning" "${POST_mac_address} is as invalid MAC address."
+			fi
+			;;
+		reset)
+			/usr/sbin/sysreset.sh -n
+			redirect_back
+			;;
+		update)
+			# parse values from parameters
+			for _p in $params; do
+				eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
+				sanitize "${plugin}_${_p}"
+			done; unset _p
 
-      [ -z "$network_interface" ] && flash_append "danger" "Default network interface cannot be empty." && error=1
+			[ -z "$network_interface" ] && flash_append "danger" "Default network interface cannot be empty." && error=1
 
-      if [ "false" = "$network_dhcp" ]; then
-        network_mode="static"
-        [ -z "$network_address" ] && flash_append "danger" "IP address cannot be empty." && error=1
-        [ -z "$network_netmask" ] && flash_append "danger" "Networking mask cannot be empty." && error=1
-      else
-        network_mode="dhcp"
-      fi
+			if [ "false" = "$network_dhcp" ]; then
+				network_mode="static"
+				[ -z "$network_address" ] && flash_append "danger" "IP address cannot be empty." && error=1
+				[ -z "$network_netmask" ] && flash_append "danger" "Networking mask cannot be empty." && error=1
+			else
+				network_mode="dhcp"
+			fi
 
-      if [ "wlan0" = "$network_interface" ]; then
-        [ -z "$network_wifi_device" ] && flash_append "danger" "WLAN Device cannot be empty." && error=1
-        [ -z "$network_wifi_ssid" ] && flash_append "danger" "WLAN SSID cannot be empty." && error=1
-        [ -z "$network_wifi_password" ] && flash_append "danger" "WLAN Password cannot be empty." && error=1
-      fi
+			if [ "wlan0" = "$network_interface" ]; then
+				[ -z "$network_wifi_device" ] && flash_append "danger" "WLAN Device cannot be empty." && error=1
+				[ -z "$network_wifi_ssid" ] && flash_append "danger" "WLAN SSID cannot be empty." && error=1
+				[ -z "$network_wifi_password" ] && flash_append "danger" "WLAN Password cannot be empty." && error=1
+			fi
 
-      if [ -z "$error" ]; then
-        command="setnetiface.sh"
-        command="${command} -i $network_interface"
-        command="${command} -m $network_mode"
-        command="${command} -h $network_hostname"
+			if [ -z "$error" ]; then
+				command="setnetiface.sh"
+				command="${command} -i $network_interface"
+				command="${command} -m $network_mode"
+				command="${command} -h $network_hostname"
 
-        if [ "wlan0" = "$network_interface" ]; then
-          command="${command} -r $network_wifi_device"
-          command="${command} -s $network_wifi_ssid"
-          command="${command} -p $network_wifi_password"
-        fi
+				if [ "wlan0" = "$network_interface" ]; then
+					command="${command} -r $network_wifi_device"
+					command="${command} -s $network_wifi_ssid"
+					command="${command} -p $network_wifi_password"
+				fi
 
-        if [ "dhcp" != "$network_mode" ]; then
-          command="${command} -a $network_address"
-          command="${command} -n $network_netmask"
-          [ -n "$network_gateway" ] && command="${command} -g $network_gateway"
-          [ -n "$network_dns_1" ] && command="${command} -d $network_dns_1"
-          [ -n "$network_dns_2" ] && command="${command},${network_dns_2}"
-        fi
+				if [ "dhcp" != "$network_mode" ]; then
+					command="${command} -a $network_address"
+					command="${command} -n $network_netmask"
+					[ -n "$network_gateway" ] && command="${command} -g $network_gateway"
+					[ -n "$network_dns_1" ] && command="${command} -d $network_dns_1"
+					[ -n "$network_dns_2" ] && command="${command},${network_dns_2}"
+				fi
 
-        echo "$command" >>/tmp/webui.log
-        eval "$command" >/dev/null 2>&1
+				echo "$command" >>/tmp/webui.log
+				eval "$command" >/dev/null 2>&1
 
-        update_caminfo
-        redirect_back "success" "Network settings updated."
-      fi
-      ;;
-  esac
+				update_caminfo
+				redirect_back "success" "Network settings updated."
+			fi
+			;;
+	esac
 fi
 %>
 <%in p/header.cgi %>

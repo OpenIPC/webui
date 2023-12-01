@@ -4,10 +4,19 @@
 file=$(mktemp)
 log="$GET_log"
 case "$log" in
-  dmesg) dmesg >$file ;;
-  logread) logread >$file ;;
-  netstat) netstat -a >$file ;;
-  *) echo "Unknown file." && exit 1 ;;
+	dmesg)
+		dmesg >$file
+		 ;;
+	logread)
+		logread >$file
+		 ;;
+	netstat)
+		netstat -a >$file
+		 ;;
+	*)
+		echo "Unknown file."
+		exit 1
+		;;
 esac
 check_file_exist $file
 echo "HTTP/1.0 200 OK

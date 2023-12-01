@@ -13,59 +13,59 @@ config_file="${ui_config_dir}/${plugin}.conf"
 locale_file=/etc/webui/locale
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  case "$POST_action" in
-  access)
-    new_password="$POST_ui_password_new"
-    [ -z "$new_password" ] && redirect_to $SCRIPT_NAME "danger" "Password cannot be empty!"
+	case "$POST_action" in
+		access)
+			new_password="$POST_ui_password_new"
+			[ -z "$new_password" ] && redirect_to $SCRIPT_NAME "danger" "Password cannot be empty!"
 
-    echo "root:${new_password}" | chpasswd
-    update_caminfo
+			echo "root:${new_password}" | chpasswd
+			update_caminfo
 
-    redirect_to "/" "success" "Password updated."
-    ;;
+			redirect_to "/" "success" "Password updated."
+			;;
 
-  interface)
-    params="level theme"
-    for _p in $params; do
-      eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-      sanitize "${plugin}_${_p}"
-    done; unset _p
+		interface)
+			params="level theme"
+			for _p in $params; do
+				eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
+				sanitize "${plugin}_${_p}"
+			done; unset _p
 
-    [ -z "$webui_level" ] && webui_level="user"
+			[ -z "$webui_level" ] && webui_level="user"
 
-    if [ -z "$error" ]; then
-      # create temp config file
-      :>$tmp_file
-      for _p in $params; do
-        echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
-      done; unset _p
-      mv $tmp_file $config_file
+			if [ -z "$error" ]; then
+				# create temp config file
+				:>$tmp_file
+				for _p in $params; do
+					echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
+				done; unset _p
+				mv $tmp_file $config_file
 
-      update_caminfo
-      redirect_back "success" "${plugin_name} config updated."
-    fi
-    ;;
+				update_caminfo
+				redirect_back "success" "${plugin_name} config updated."
+			fi
+			;;
 
-  locale)
-    locale="$POST_ui_language" # set language.
-    # upload new language and switch to it. overrides aboveset language.
-    _fname="$POST_ui_locale_file_name"
-    if [ -n "$_fname" ]; then
-      mv "$POST_ui_locale_file_path" /var/www/lang/$_fname
-      locale=${_fname%%.*}
-    fi
-    # save new language settings and reload locale
-    [ -z "$locale" ] && locale="en"
-    echo "$locale" >$locale_file
-    reload_locale
-    update_caminfo
-    redirect_to $SCRIPT_NAME "success" "Locale updated."
-    ;;
+		locale)
+			locale="$POST_ui_language" # set language.
+			# upload new language and switch to it. overrides aboveset language.
+			_fname="$POST_ui_locale_file_name"
+			if [ -n "$_fname" ]; then
+				mv "$POST_ui_locale_file_path" /var/www/lang/$_fname
+				locale=${_fname%%.*}
+			fi
+			# save new language settings and reload locale
+			[ -z "$locale" ] && locale="en"
+			echo "$locale" >$locale_file
+			reload_locale
+			update_caminfo
+			redirect_to $SCRIPT_NAME "success" "Locale updated."
+			;;
 
-  *)
-    redirect_to $SCRIPT_NAME "danger" "UNKNOWN ACTION: $POST_action"
-    ;;
-  esac
+		*)
+			redirect_to $SCRIPT_NAME "danger" "UNKNOWN ACTION: $POST_action"
+			;;
+	esac
 fi
 
 page_title="Web Interface Settings"
@@ -76,11 +76,12 @@ ui_language="$locale"
 
 ui_locales="en|English"
 if [ -d /var/www/lang/ ]; then
- for i in $(ls -1 /var/www/lang/); do
-    code="$(basename $i)"; code="${code%%.sh}"
-    name="$(sed -n 2p $i|sed "s/ /_/g"|cut -d: -f2)"
-    ui_locales="${ui_locales},${code}|${name}"
-  done
+	for i in $(ls -1 /var/www/lang/); do
+		code="$(basename $i)"
+		code="${code%%.sh}"
+		name="$(sed -n 2p $i|sed "s/ /_/g"|cut -d: -f2)"
+		ui_locales="${ui_locales},${code}|${name}"
+	done
 fi
 %>
 <%in p/header.cgi %>

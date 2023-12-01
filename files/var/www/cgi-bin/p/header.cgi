@@ -58,9 +58,9 @@ majestic_menu() {
               <li><a class="dropdown-item" href="info-dmesg.cgi">Diagnostic messages</a></li>
               <li><a class="dropdown-item" href="info-httpd.cgi">HTTPd environment</a></li>
               <li><a class="dropdown-item" href="info-modules.cgi">Modules</a></li>
-              <% if [ -e /proc/umap ]; then %>
+            <% if [ -e /proc/umap ]; then %>
               <li><a class="dropdown-item" href="info-proc-umap.cgi">Information from /proc/umap</a></li>
-              <% fi %>
+            <% fi %>
               <li><a class="dropdown-item" href="info-ipctool.cgi">IPC Tool</a></li>
               <li><a class="dropdown-item" href="info-netstat.cgi">Network stats</a></li>
               <li><a class="dropdown-item" href="info-top.cgi">Top processes</a></li>

@@ -6,8 +6,7 @@ plugin_name="Motion guard"
 page_title="Motion guard"
 params="enabled sensitivity send2email send2ftp send2mqtt send2telegram send2webhook send2yadisk playonspeaker throttle"
 
-[ -n "$(echo "$mj_hide_motionDetect" | sed -n "/\b${soc_family}\b/p")" ] &&
-  redirect_to "/" "danger" "Motion detection is not supported on your camera."
+[ -n "$(echo "$mj_hide_motionDetect" | sed -n "/\b${soc_family}\b/p")" ] && redirect_to "/" "danger" "Motion detection is not supported on your camera."
 
 tmp_file=/tmp/${plugin}
 
@@ -15,41 +14,41 @@ config_file="${ui_config_dir}/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  # parse values from parameters
-  for _p in $params; do
-    eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-    sanitize "${plugin}_${_p}"
-  done; unset _p
+	# parse values from parameters
+	for _p in $params; do
+		eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
+		sanitize "${plugin}_${_p}"
+	done; unset _p
 
-  ### Validation
-  if [ "true" = "$motion_enabled" ]; then
-    [ "false" = "$motion_send2email" ] && \
-    [ "false" = "$motion_send2ftp" ] && \
-    [ "false" = "$motion_send2mqtt" ] && \
-    [ "false" = "$motion_send2telegram" ] && \
-    [ "false" = "$motion_send2webhook" ] && \
-    [ "false" = "$motion_send2yadisk" ] && \
-    [ "false" = "$motion_playonspeaker" ] && \
-    flash_append "danger" "You need to select at least one method of notification" && error=1
-  fi
+	### Validation
+	if [ "true" = "$motion_enabled" ]; then
+		[ "false" = "$motion_send2email" ] && \
+			[ "false" = "$motion_send2ftp" ] && \
+			[ "false" = "$motion_send2mqtt" ] && \
+			[ "false" = "$motion_send2telegram" ] && \
+			[ "false" = "$motion_send2webhook" ] && \
+			[ "false" = "$motion_send2yadisk" ] && \
+			[ "false" = "$motion_playonspeaker" ] && \
+			flash_append "danger" "You need to select at least one method of notification" && error=1
+	fi
 
-  if [ -z "$error" ]; then
-    # create temp config file
-    :>$tmp_file
-    for _p in $params; do
-      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
-    done; unset _p
-    mv $tmp_file $config_file
+	if [ -z "$error" ]; then
+		# create temp config file
+		:>$tmp_file
+		for _p in $params; do
+			echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
+		done; unset _p
+		mv $tmp_file $config_file
 
-    update_caminfo
-    redirect_to "$SCRIPT_NAME"
-  fi
+		update_caminfo
+		redirect_to "$SCRIPT_NAME"
+	fi
 else
-  include $config_file
+	include $config_file
 
-  # Default values
-  [ -z "$motion_sensitivity" ] && motion_sensitivity=1
-  [ -z "$motion_throttle"    ] && motion_throttle=10
+	# Default values
+	[ -z "$motion_sensitivity" ] && motion_sensitivity=1
+	[ -z "$motion_throttle"    ] && motion_throttle=10
 fi
 %>
 <%in p/header.cgi %>

@@ -3,17 +3,27 @@
 <%
 page_title="Firmware"
 if [ -n "$network_gateway" ]; then
-  case "$soc" in
-   # Ingenic firmware does not correspond to SoC model
-   t10*) url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t10-lite-nor.tgz" ;;
-   t20*) url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t20-lite-nor.tgz" ;;
-   t21*) url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t21-lite-nor.tgz" ;;
-   t31*) url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t31-line-nor.tgz" ;;
-      *) url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.${soc}-${flash_type}-${fw_variant}.tgz" ;;
-  esac
-  fw_date=$(date -D "%a, %d %b %Y %T GMT" +"2.3.%m.%d" --date "$(curl -ILs "$url" | grep Last-Modified | cut -d' ' -f2-)")
+	case "$soc" in
+		# Ingenic firmware does not correspond to SoC model
+		t10*)
+			url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t10-lite-nor.tgz"
+			 ;;
+		t20*)
+			url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t20-lite-nor.tgz"
+			 ;;
+		t21*)
+			url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t21-lite-nor.tgz"
+			 ;;
+		t31*)
+			url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t31-line-nor.tgz"
+			 ;;
+		*)
+			url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.${soc}-${flash_type}-${fw_variant}.tgz"
+			 ;;
+	esac
+	fw_date=$(date -D "%a, %d %b %Y %T GMT" +"2.3.%m.%d" --date "$(curl -ILs "$url" | grep Last-Modified | cut -d' ' -f2-)")
 else
-  fw_date="<span class=\"text-danger\">- no access to GitHub -</span>"
+	fw_date="<span class=\"text-danger\">- no access to GitHub -</span>"
 fi
 fw_kernel="true"
 fw_rootfs="true"

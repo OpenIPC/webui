@@ -8,9 +8,9 @@ reboot="true"
 [ "true" = "$POST_web_verbose" ] && c="${c} -v"
 [ "true" = "$POST_web_noreboot" ] && reboot="false"
 if [ -n "$POST_web_branch" ]; then
-  c="${c} -b $POST_web_branch"
+	c="${c} -b $POST_web_branch"
 elif [ -n "$POST_web_commit" ]; then
-  c="${c} -c $POST_web_commit"
+	c="${c} -c $POST_web_commit"
 fi
 %>
 <%in p/header.cgi %>

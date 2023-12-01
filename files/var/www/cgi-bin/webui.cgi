@@ -2,15 +2,15 @@
 <%in p/common.cgi %>
 <%
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  case "$POST_action" in
-  init)
-    update_caminfo
-    redirect_back
-    ;;
-  *)
-    redirect_to $SCRIPT_NAME "danger" "UNKNOWN ACTION: $POST_action"
-    ;;
-  esac
+	case "$POST_action" in
+		init)
+			update_caminfo
+			redirect_back
+			;;
+		*)
+			redirect_to $SCRIPT_NAME "danger" "UNKNOWN ACTION: $POST_action"
+			;;
+	esac
 fi
 
 page_title="Web Interface"

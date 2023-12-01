@@ -8,18 +8,18 @@ service_file=/etc/init.d/S98vtun
 conf_file=/tmp/vtund.conf
 
 if [ -n "$POST_action" ] && [ "$POST_action" = "reset" ]; then
-  killall tunnel
-  killall vtund
-  rm $conf_file
-  rm $service_file
-  redirect_to "$SCRIPT_NAME" "danger" "Tunnel is down"
+	killall tunnel
+	killall vtund
+	rm $conf_file
+	rm $service_file
+	redirect_to "$SCRIPT_NAME" "danger" "Tunnel is down"
 fi
 
 if [ -n "$POST_vtun_host" ]; then
-  echo -e "#!/bin/sh\n\ntunnel $POST_vtun_host\n" >$service_file
-  chmod +x $service_file
-  $service_file
-  redirect_to "$SCRIPT_NAME" "success" "Tunnel is up"
+	echo -e "#!/bin/sh\n\ntunnel $POST_vtun_host\n" >$service_file
+	chmod +x $service_file
+	$service_file
+	redirect_to "$SCRIPT_NAME" "success" "Tunnel is up"
 fi
 %>
 <%in p/header.cgi %>

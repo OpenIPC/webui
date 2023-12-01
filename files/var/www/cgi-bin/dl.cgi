@@ -3,11 +3,11 @@
 <%
 file=$GET_file
 if [ "/tmp/webui.log" = "$file" ]; then
-  fname="webui-$(date +%s).log"
-  mime="text/plain"
+	fname="webui-$(date +%s).log"
+	mime="text/plain"
 else
-  fname=$(basename $file)
-  mime="application/octet-stream"
+	fname=$(basename $file)
+	mime="application/octet-stream"
 fi
 check_file_exist $file
 echo "HTTP/1.0 200 OK

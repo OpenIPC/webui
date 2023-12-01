@@ -2,9 +2,9 @@
 preview=/tmp/preview.jpg
 wget -q -O $preview http://127.0.0.1/image.jpg
 if [ ! -f "$preview" ]; then
-echo "HTTP/1.0 404"
+	echo "HTTP/1.0 404"
 else
-echo "HTTP/1.1 200 OK
+	echo "HTTP/1.1 200 OK
 Content-type: image/jpeg
 Content-Length: $(stat -c%s $preview)
 Pragma: no-cache

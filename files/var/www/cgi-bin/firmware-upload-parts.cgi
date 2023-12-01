@@ -10,20 +10,20 @@ error=""
 
 case "$POST_parts_type" in
 kernel)
-  maxsize=2097152
-  magicnum="27051956"
-  new_sysupgrade_date=$(time_epoch "2021-12-07")
-  cmd="sysupgrade --kernel=/tmp/${file_name} --force_ver"
-  ;;
+	maxsize=2097152
+	magicnum="27051956"
+	new_sysupgrade_date=$(time_epoch "2021-12-07")
+	cmd="sysupgrade --kernel=/tmp/${file_name} --force_ver"
+	;;
 rootfs)
-  maxsize=5242880
-  magicnum="68737173"
-  new_sysupgrade_date=$(time_epoch "2022-02-22")
-  cmd="sysupgrade --rootfs=/tmp/${file_name} --force_ver --force_all"
-  ;;
+	maxsize=5242880
+	magicnum="68737173"
+	new_sysupgrade_date=$(time_epoch "2022-02-22")
+	cmd="sysupgrade --rootfs=/tmp/${file_name} --force_ver --force_all"
+	;;
 *)
-  error="Please select type of file and upload it again!"
-  ;;
+	error="Please select type of file and upload it again!"
+	;;
 esac
 
 [ -z "$file_name"  ] && error="No file found! Did you forget to upload?"
@@ -33,7 +33,7 @@ esac
 [ "$sysupgrade_date" -lt "$new_sysupgrade_date" ] && error="This feature requires the latest sysupgrade tool. Please upgrade firmware first."
 
 if [ -n "$error" ]; then
-  redirect_back "danger" "$error"
+	redirect_back "danger" "$error"
 else %>
 <%in p/header.cgi %>
 <pre class="bg-light p-4 log-scroll">

@@ -14,60 +14,60 @@ config_file="${ui_config_dir}/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  # parse values from parameters
-  for _p in $params; do
-    eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-    sanitize "${plugin}_${_p}"
-  done; unset _p
+	# parse values from parameters
+	for _p in $params; do
+		eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
+		sanitize "${plugin}_${_p}"
+	done; unset _p
 
-  ### Validation
-  if [ "true" = "$mqtt_enabled" ]; then
-    [ -z "$mqtt_host"      ] && flash_append "danger" "MQTT broker host cannot be empty." && error=11
-    [ -z "$mqtt_port"      ] && flash_append "danger" "MQTT port cannot be empty." && error=12
-#    [ -z "$mqtt_username"  ] && flash_append "danger" "MQTT username cannot be empty." && error=13
-#    [ -z "$mqtt_password"  ] && flash_append "danger" "MQTT password cannot be empty." && error=14
-    [ -z "$mqtt_topic"     ] && flash_append "danger" "MQTT topic cannot be empty." && error=15
-    [ -z "$mqtt_message"   ] && flash_append "danger" "MQTT message cannot be empty." && error=16
-  fi
+	### Validation
+	if [ "true" = "$mqtt_enabled" ]; then
+		[ -z "$mqtt_host"      ] && flash_append "danger" "MQTT broker host cannot be empty." && error=11
+		[ -z "$mqtt_port"      ] && flash_append "danger" "MQTT port cannot be empty." && error=12
+		#    [ -z "$mqtt_username"  ] && flash_append "danger" "MQTT username cannot be empty." && error=13
+		#    [ -z "$mqtt_password"  ] && flash_append "danger" "MQTT password cannot be empty." && error=14
+		[ -z "$mqtt_topic"     ] && flash_append "danger" "MQTT topic cannot be empty." && error=15
+		[ -z "$mqtt_message"   ] && flash_append "danger" "MQTT message cannot be empty." && error=16
+	fi
 
-  if [ "${mqtt_topic:0:1}" = "/" ] || [ "${mqtt_snap_topic:0:1}" = "/" ]; then
-    flash_append "danger" "MQTT topic should not start with a slash." && error=17
-  fi
+	if [ "${mqtt_topic:0:1}" = "/" ] || [ "${mqtt_snap_topic:0:1}" = "/" ]; then
+		flash_append "danger" "MQTT topic should not start with a slash." && error=17
+	fi
 
-  if [ "$mqtt_topic" != "${mqtt_topic// /}" ] || [ "$mqtt_snap_topic" != "${mqtt_snap_topic// /}" ]; then
-    flash_append "danger" "MQTT topic should not contain spaces." && error=18
-  fi
+	if [ "$mqtt_topic" != "${mqtt_topic// /}" ] || [ "$mqtt_snap_topic" != "${mqtt_snap_topic// /}" ]; then
+		flash_append "danger" "MQTT topic should not contain spaces." && error=18
+	fi
 
-  if [ -n "$(echo $mqtt_topic | sed -r -n /[^a-zA-Z0-9/]/p)" ] || [ -n "$(echo $mqtt_snap_topic | sed -r -n /[^a-zA-Z0-9/]/p)" ]; then
-    flash_append "danger" "MQTT topic should not include non-ASCII characters." && error=19
-  fi
+	if [ -n "$(echo $mqtt_topic | sed -r -n /[^a-zA-Z0-9/]/p)" ] || [ -n "$(echo $mqtt_snap_topic | sed -r -n /[^a-zA-Z0-9/]/p)" ]; then
+		flash_append "danger" "MQTT topic should not include non-ASCII characters." && error=19
+	fi
 
-  if [ "true" = "$mqtt_send_snap" ] && [ -z "$mqtt_snap_topic" ]; then
-    flash_append "danger" "MQTT topic for snapshot should not be empty." && error=20
-  fi
+	if [ "true" = "$mqtt_send_snap" ] && [ -z "$mqtt_snap_topic" ]; then
+		flash_append "danger" "MQTT topic for snapshot should not be empty." && error=20
+	fi
 
-  if [ -z "$error" ]; then
-    # create temp config file
-    :>$tmp_file
-    for _p in $params; do
-      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
-    done; unset _p
-    mv $tmp_file $config_file
+	if [ -z "$error" ]; then
+		# create temp config file
+		:>$tmp_file
+		for _p in $params; do
+			echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
+		done; unset _p
+		mv $tmp_file $config_file
 
-    update_caminfo
-    redirect_back "success" "${plugin_name} config updated."
-  fi
+		update_caminfo
+		redirect_back "success" "${plugin_name} config updated."
+	fi
 
-  redirect_to $SCRIPT_NAME
+	redirect_to $SCRIPT_NAME
 else
-  include $config_file
+	include $config_file
 
-  # Default values
-  [ -z "$mqtt_client_id" ] && mqtt_client_id="${network_macaddr//:/}"
-  [ -z "$mqtt_port"      ] && mqtt_port="1883"
-  [ -z "$mqtt_topic"     ] && mqtt_topic="openipc/${mqtt_client_id}"
-  [ -z "$mqtt_message"   ] && mqtt_message=""
-  [ -z "$mqtt_use_heif"   ] && mqtt_use_heif="false"
+	# Default values
+	[ -z "$mqtt_client_id" ] && mqtt_client_id="${network_macaddr//:/}"
+	[ -z "$mqtt_port"      ] && mqtt_port="1883"
+	[ -z "$mqtt_topic"     ] && mqtt_topic="openipc/${mqtt_client_id}"
+	[ -z "$mqtt_message"   ] && mqtt_message=""
+	[ -z "$mqtt_use_heif"   ] && mqtt_use_heif="false"
 fi
 %>
 <%in p/header.cgi %>

@@ -7,34 +7,36 @@ page_title="Time"
 config_file="${ui_config_dir}/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
 
+seq=$(seq 0 3)
+
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  case "$POST_action" in
-    reset)
-      cp /rom/etc/ntp.conf /etc/ntp.conf
-      redirect_back "success" "Configuration reset to firmware defaults."
-      ;;
-    update)
-      # check for mandatory data
-      [ -z "$POST_tz_name" ] && redirect_to $SCRIPT_NAME "warning" "Empty timezone name. Skipping."
-      [ -z "$POST_tz_data" ] && redirect_to $SCRIPT_NAME "warning" "Empty timezone value. Skipping."
+	case "$POST_action" in
+		reset)
+			cp /rom/etc/ntp.conf /etc/ntp.conf
+			redirect_back "success" "Configuration reset to firmware defaults."
+			;;
+		update)
+			# check for mandatory data
+			[ -z "$POST_tz_name" ] && redirect_to $SCRIPT_NAME "warning" "Empty timezone name. Skipping."
+			[ -z "$POST_tz_data" ] && redirect_to $SCRIPT_NAME "warning" "Empty timezone value. Skipping."
 
-      [ "$tz_data" != "$POST_tz_data" ] && echo "${POST_tz_data}" >/etc/TZ
-      [ "$tz_name" != "$POST_tz_name" ] && echo "${POST_tz_name}" >/etc/timezone
+			[ "$tz_data" != "$POST_tz_data" ] && echo "${POST_tz_data}" >/etc/TZ
+			[ "$tz_name" != "$POST_tz_name" ] && echo "${POST_tz_name}" >/etc/timezone
 
-      tmp_file=/tmp/ntp.conf
-      :>$tmp_file
-      for _i in 0 1 2 3; do
-        eval _s="\$POST_ntp_server_${_i}"
-        [ -n "$_s" ] && echo "server ${_s} iburst" >>$tmp_file
-      done
-      unset _i; unset _s
-      mv $tmp_file /etc/ntp.conf
-      redirect_back "success" "Configuration updated."
-      ;;
-  esac
+			tmp_file=/tmp/ntp.conf
+			:>$tmp_file
+			for _i in $seq; do
+				eval _s="\$POST_ntp_server_${_i}"
+				[ -n "$_s" ] && echo "server ${_s} iburst" >>$tmp_file
+			done
+			unset _i; unset _s
+			mv $tmp_file /etc/ntp.conf
+			redirect_back "success" "Configuration updated."
+			;;
+	esac
 
-  update_caminfo
-  redirect_to $SCRIPT_NAME "success" "Timezone updated."
+	update_caminfo
+	redirect_to $SCRIPT_NAME "success" "Timezone updated."
 fi
 %>
 
@@ -62,7 +64,7 @@ fi
   <div class="col">
     <h4>Time Synchronization</h4>
 <%
-for _i in 0 1 2 3; do
+for _i in $seq; do
   _x=$(expr $_i + 1)
   eval ntp_server_${_i}="$(sed -n ${_x}p /etc/ntp.conf | cut -d' ' -f2)"
   field_text "ntp_server_${_i}" "NTP Server $(( _i + 1 ))"

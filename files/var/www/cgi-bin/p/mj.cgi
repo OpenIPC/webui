@@ -51,8 +51,8 @@ mj="
 .osd.posY|Vertical position of OSD|px|number|-2000,2000,2|-100|
 .osd.privacyMasks|Privacy masks|px|string||0x0x234x640,2124x0x468x1300|Coordinates of masked areas separated by commas.
 .nightMode.enabled|Enable night mode||boolean|true,false|false|
-.nightMode.irSensorPin|GPIO pin of signal from IR sensor||number|0,255,1|62|
-.nightMode.irSensorPinInvert|IR sensor signal is inverted||boolean|true,false|false|
+.nightMode.irSensorPin|GPIO pin of signal from Light sensor||number|0,255,1|62|
+.nightMode.irSensorPinInvert|Light sensor signal is inverted||boolean|true,false|false|
 .nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|0,255,1|1|
 .nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|0,255,1|2|
 .nightMode.irCutSingleInvert|IRcut filter polarity is inverted||boolean|true,false|false|

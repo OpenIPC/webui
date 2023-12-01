@@ -1,6 +1,6 @@
 #!/usr/bin/haserl
 Content-type: text/html; charset=UTF-8
-Date: <%= $(TZ=GMT0 date +'%a, %d %b %Y %T %Z') %>
+Date: <%= $(time_http) %>
 Server: <%= $SERVER_SOFTWARE %>
 Cache-Control: no-store
 Pragma: no-cache

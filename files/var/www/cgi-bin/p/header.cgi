@@ -66,6 +66,9 @@ majestic_menu() {
               <li><a class="dropdown-item" href="info-top.cgi">Top processes</a></li>
               <li><a class="dropdown-item" href="info-log.cgi">Log read</a></li>
               <li><a class="dropdown-item" href="info-overlay.cgi">Overlay partition</a></li>
+            <% if [ "$debug" -gt 0 -a "$soc_vendor" = "ingenic" ]; then %>
+              <li><a class="dropdown-item" href="info-imp.cgi">IMP Control</a></li>
+            <% fi %>
             </ul>
           </li>
           <li class="nav-item dropdown">

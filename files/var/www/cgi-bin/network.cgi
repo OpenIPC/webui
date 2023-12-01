@@ -6,10 +6,11 @@ page_title="Network settings"
 params="address dhcp dns_1 dns_2 gateway hostname netmask interface wifi_device wifi_ssid wifi_password"
 tmp_file=/tmp/${plugin}.conf
 
-profiles="$(grep -r '$1..=' /etc/wireless | cut -d '"' -f 4 | sort | grep -e ${soc} -e generic)"
-wlandev="$(fw_printenv -n wlandev)"
-wlanssid="$(fw_printenv -n wlanssid)"
-wlanpass="$(fw_printenv -n wlanpass)"
+network_wifi_device="$(fw_printenv -n wlandev)"
+network_wifi_ssid="$(fw_printenv -n wlanssid)"
+network_wifi_password="$(fw_printenv -n wlanpass)"
+
+profiles="$(grep -r '$1..=' /etc/wireless | cut -d '"' -f 4 | sort | grep -e ${soc_family})" # -e generic
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
 	case "$POST_action" in
@@ -33,20 +34,22 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 				sanitize "${plugin}_${_p}"
 			done; unset _p
 
-			[ -z "$network_interface" ] && flash_append "danger" "Default network interface cannot be empty." && error=1
+			network_interface=$(echo $network_interfaces | cut -d' ' -f1)
+
+			[ -z "$network_interface" ] && set_error_flag "Default network interface cannot be empty."
+
+			if [ "wlan0" = "$network_interface" ]; then
+				[ -z "$network_wifi_device" ] && set_error_flag "WLAN Device cannot be empty."
+				[ -z "$network_wifi_ssid" ] && set_error_flag"WLAN SSID cannot be empty."
+				[ -z "$network_wifi_password" ] && set_error_flag "WLAN Password cannot be empty."
+			fi
 
 			if [ "false" = "$network_dhcp" ]; then
 				network_mode="static"
-				[ -z "$network_address" ] && flash_append "danger" "IP address cannot be empty." && error=1
-				[ -z "$network_netmask" ] && flash_append "danger" "Networking mask cannot be empty." && error=1
+				[ -z "$network_address" ] && set_error_flag "IP address cannot be empty."
+				[ -z "$network_netmask" ] && set_error_flag "Networking mask cannot be empty."
 			else
 				network_mode="dhcp"
-			fi
-
-			if [ "wlan0" = "$network_interface" ]; then
-				[ -z "$network_wifi_device" ] && flash_append "danger" "WLAN Device cannot be empty." && error=1
-				[ -z "$network_wifi_ssid" ] && flash_append "danger" "WLAN SSID cannot be empty." && error=1
-				[ -z "$network_wifi_password" ] && flash_append "danger" "WLAN Password cannot be empty." && error=1
 			fi
 
 			if [ -z "$error" ]; then
@@ -88,8 +91,8 @@ fi
       <% field_text "network_hostname" "Hostname" %>
       <% field_select "network_interface" "Network interface" "eth0 wlan0" %>
       <% field_select "network_wifi_device" "WLAN Device" "$profiles" %>
-      <% field_text "network_wifi_ssid" "WLAN SSID" "" "$wlanssid" %>
-      <% field_text "network_wifi_password" "WLAN Password" "" "$wlanpass" %>
+      <% field_text "network_wifi_ssid" "WLAN SSID" %>
+      <% field_text "network_wifi_password" "WLAN Password" %>
 
       <% field_switch "network_dhcp" "Use DHCP" %>
       <% field_text "network_address" "IP Address" %>
@@ -144,7 +147,6 @@ fi
 
   $('#network_interface').addEventListener('change', toggleIface);
   $('#network_dhcp[type=checkbox]').addEventListener('change', toggleDhcp);
-  $('#network_wifi_device').value = "<%= $wlandev %>";
 
   toggleIface();
   toggleDhcp();

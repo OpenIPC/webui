@@ -24,23 +24,23 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 	case "$POST_action" in
 		create)
 			# parse values from parameters
-			for _p in $params; do
-				eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-				sanitize "${plugin}_${_p}"
-			done; unset _p
+			for p in $params; do
+				eval ${plugin}_${p}=\$POST_${plugin}_${p}
+				sanitize "${plugin}_${p}"
+			done; unset p
 
 			### Validation
 			if [ "true" = "$zerotier_enabled" ]; then
-				[ -z "$zerotier_nwid" ] && flash_append "danger" "ZeroTier Network ID cannot be empty." && error=1
-				[ "${#zerotier_nwid}" -ne "16" ] && flash_append "danger" "ZeroTier Network ID should be 16 digits long." && error=2
+				[ -z "$zerotier_nwid" ] && set_error_flag "ZeroTier Network ID cannot be empty."
+				[ "${#zerotier_nwid}" -ne "16" ] && set_error_flag "ZeroTier Network ID should be 16 digits long."
 			fi
 
 			if [ -z "$error" ]; then
 				# create temp config file
 				:>$tmp_file
-				for _p in $params; do
-					echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
-				done; unset _p
+				for p in $params; do
+					echo "${plugin}_${p}=\"$(eval echo \$${plugin}_${p})\"" >>$tmp_file
+				done; unset p
 				mv $tmp_file $config_file
 
 				update_caminfo

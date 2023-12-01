@@ -13,25 +13,25 @@ config_file="${ui_config_dir}/${plugin}.conf"
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
 	# parse values from parameters
-	for _p in $params; do
-		eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-		sanitize "${plugin}_${_p}"
-	done; unset _p
+	for p in $params; do
+		eval ${plugin}_${p}=\$POST_${plugin}_${p}
+		sanitize "${plugin}_${p}"
+	done; unset p
 
 	### Validation
 	if [ "true" = "$ftp_enabled" ]; then
-		[ "true" = "$ftp_send2ftp"  ] && [ -z "$ftp_ftphost"   ] && flash_append "danger" "FTP address cannot be empty." && error=11
-		[ "true" = "$ftp_send2tftp" ] && [ -z "$ftp_tftphost"  ] && flash_append "danger" "TFTP address cannot be empty." && error=12
-		[ "true" = "$ftp_save4web"  ] && [ -z "$ftp_localpath" ] && flash_append "danger" "Local path cannot be empty." && error=13
+		[ "true" = "$ftp_send2ftp" ] && [ -z "$ftp_ftphost" ] && set_error_flag "FTP address cannot be empty."
+		[ "true" = "$ftp_send2tftp" ] && [ -z "$ftp_tftphost" ] && set_error_flag "TFTP address cannot be empty."
+		[ "true" = "$ftp_save4web" ] && [ -z "$ftp_localpath" ] && set_error_flag "Local path cannot be empty."
 	fi
 	[ -z "$ftp_template" ] && ftp_template="Screenshot-%Y%m%d-%H%M%S.jpg"
 
 	if [ -z "$error" ]; then
 		# create temp config file
 		:>$tmp_file
-		for _p in $params; do
-			echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
-		done; unset _p
+		for p in $params; do
+			echo "${plugin}_${p}=\"$(eval echo \$${plugin}_${p})\"" >>$tmp_file
+		done; unset p
 		mv $tmp_file $config_file
 
 		update_caminfo

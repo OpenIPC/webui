@@ -13,23 +13,23 @@ config_file="${ui_config_dir}/${plugin}.conf"
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
 	# parse values from parameters
-	for _p in $params; do
-		eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-		sanitize "${plugin}_${_p}"
-	done; unset _p
+	for p in $params; do
+		eval ${plugin}_${p}=\$POST_${plugin}_${p}
+		sanitize "${plugin}_${p}"
+	done; unset p
 
 	### Validation
 	if [ "true" = "$telegram_enabled" ]; then
-		[ -z "$telegram_token"   ] && flash_append "danger" "Telegram token cannot be empty." && error=11
-		[ -z "$telegram_channel" ] && flash_append "danger" "Telegram channel cannot be empty." && error=12
+		[ -z "$telegram_token"   ] && set_error_flag "Telegram token cannot be empty."
+		[ -z "$telegram_channel" ] && set_error_flag "Telegram channel cannot be empty."
 	fi
 
 	if [ -z "$error" ]; then
 		# create temp config file
 		:>$tmp_file
-		for _p in $params; do
-			echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
-		done; unset _p
+		for p in $params; do
+			echo "${plugin}_${p}=\"$(eval echo \$${plugin}_${p})\"" >>$tmp_file
+		done; unset p
 		mv $tmp_file $config_file
 
 		update_caminfo

@@ -18,8 +18,8 @@ if [ -n "$POST_action" ] && [ "$POST_action" = "create" ]; then
 
 	[ -n "$user_name_new" ] && user_name=$user_name_new
 
-	[ -z "$user_name" ] && flash_append "danger" "User name cannot be empty." && error=1
-	[ -z "$user_password" ] && flash_append "danger" "User password cannot be empty." && error=1
+	[ -z "$user_name" ] && set_error_flag "User name cannot be empty."
+	[ -z "$user_password" ] && set_error_flag "User password cannot be empty."
 
 	if [ -z "$error" ]; then
 		if grep -q "^${user_name}:" /etc/passwd; then
@@ -29,7 +29,7 @@ if [ -n "$POST_action" ] && [ "$POST_action" = "create" ]; then
 			if [ $? -eq 0 ]; then
 				flash_append "success" "User ${user_name} created."
 			else
-				flash_append "danger" "Failed to create user ${user_name}." && error=1
+				set_error_flag "Failed to create user ${user_name}."
 			fi
 		fi
 

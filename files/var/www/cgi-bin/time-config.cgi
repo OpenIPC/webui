@@ -25,11 +25,11 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
 			tmp_file=/tmp/ntp.conf
 			:>$tmp_file
-			for _i in $seq; do
-				eval _s="\$POST_ntp_server_${_i}"
-				[ -n "$_s" ] && echo "server ${_s} iburst" >>$tmp_file
+			for i in $seq; do
+				eval s="\$POST_ntp_server_${i}"
+				[ -n "$s" ] && echo "server ${s} iburst" >>$tmp_file
 			done
-			unset _i; unset _s
+			unset i; unset s
 			mv $tmp_file /etc/ntp.conf
 			redirect_back "success" "Configuration updated."
 			;;
@@ -64,11 +64,11 @@ fi
   <div class="col">
     <h4>Time Synchronization</h4>
 <%
-for _i in $seq; do
-  _x=$(expr $_i + 1)
-  eval ntp_server_${_i}="$(sed -n ${_x}p /etc/ntp.conf | cut -d' ' -f2)"
-  field_text "ntp_server_${_i}" "NTP Server $(( _i + 1 ))"
-done; unset _i; unset _x
+for i in $seq; do
+  x=$(expr $i + 1)
+  eval ntp_server_${i}="$(sed -n ${x}p /etc/ntp.conf | cut -d' ' -f2)"
+  field_text "ntp_server_${i}" "NTP Server $(( i + 1 ))"
+done; unset i; unset x
 %>
   </div>
   <div class="col">

@@ -45,9 +45,9 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 else
 	include $config_file
 
-	for _p in $params; do
-		sanitize4web "${plugin}_${_p}"
-	done; unset _p
+	for p in $params; do
+		sanitize4web "${plugin}_${p}"
+	done; unset p
 
 	# Default values
 	[ -z "$telegrambot_caption" ] && telegrambot_caption="%hostname, %datetime"

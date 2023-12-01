@@ -29,10 +29,10 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 			;;
 		update)
 			# parse values from parameters
-			for _p in $params; do
-				eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-				sanitize "${plugin}_${_p}"
-			done; unset _p
+			for p in $params; do
+				eval ${plugin}_${p}=\$POST_${plugin}_${p}
+				sanitize "${plugin}_${p}"
+			done; unset p
 
 			network_interface=$(echo $network_interfaces | cut -d' ' -f1)
 

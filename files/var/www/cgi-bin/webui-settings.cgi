@@ -26,19 +26,19 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
 		interface)
 			params="level theme"
-			for _p in $params; do
-				eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-				sanitize "${plugin}_${_p}"
-			done; unset _p
+			for p in $params; do
+				eval ${plugin}_${p}=\$POST_${plugin}_${p}
+				sanitize "${plugin}_${p}"
+			done; unset p
 
 			[ -z "$webui_level" ] && webui_level="user"
 
 			if [ -z "$error" ]; then
 				# create temp config file
 				:>$tmp_file
-				for _p in $params; do
-					echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
-				done; unset _p
+				for p in $params; do
+					echo "${plugin}_${p}=\"$(eval echo \$${plugin}_${p})\"" >>$tmp_file
+				done; unset p
 				mv $tmp_file $config_file
 
 				update_caminfo
@@ -49,11 +49,11 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 		locale)
 			locale="$POST_ui_language" # set language.
 			# upload new language and switch to it. overrides aboveset language.
-			_fname="$POST_ui_locale_file_name"
-			if [ -n "$_fname" ]; then
-				mv "$POST_ui_locale_file_path" /var/www/lang/$_fname
-				locale=${_fname%%.*}
-			fi
+			fn="$POST_ui_locale_file_name"
+			if [ -n "$fn" ]; then
+				mv "$POST_ui_locale_file_path" /var/www/lang/$fn
+				locale=${fn%%.*}
+			fi; unset fn
 			# save new language settings and reload locale
 			[ -z "$locale" ] && locale="en"
 			echo "$locale" >$locale_file

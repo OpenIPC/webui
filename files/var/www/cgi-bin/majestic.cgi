@@ -1,7 +1,7 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
 <%
-[ ! -f "/rom/${mj_bin_file}" ] && redirect_to '/' "danger" "Majestic is not supported on this system."
+[ ! -f "/rom/${mj_bin_file}" ] && redirect_to '/' "danger" $STR_NOT_SUPPORTED
 
 update_meta() {
 	# re-download metafile if older than 1 hour

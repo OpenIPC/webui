@@ -783,13 +783,13 @@ update_caminfo() {
 		tz_name="Etc/GMT"; echo "$tz_name" >/etc/timezone
 	fi
 
-	local _vars="flash_size flash_type fw_version fw_variant fw_build
+	local variables="flash_size flash_type fw_version fw_variant fw_build
 network_address network_cidr network_default_interface network_dhcp network_dns_1
 network_dns_2 network_gateway network_hostname network_interfaces network_macaddr network_netmask
 overlay_root mj_version soc soc_family soc_has_temp soc_vendor sensor sensor_ini tz_data tz_name
 uboot_version ui_password ui_version"
 	local v
-	for v in $_vars; do
+	for v in $variables; do
 		eval "echo ${v}=\'\$${v}\'>>${tmpfile}"
 	done
 	# sort content alphabetically
@@ -801,9 +801,7 @@ uboot_version ui_password ui_version"
 update_uboot_env() {
 	local name="$1"
 	local value="$2"
-	if [ "$value" != "$(fw_printenv -n $name)" ]; then
-		fw_setenv $name $value
-	fi
+	[ "$value" != "$(fw_printenv -n $name)" ] && fw_setenv $name $value
 }
 
 xl() {

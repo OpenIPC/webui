@@ -3,8 +3,8 @@
 . /usr/sbin/common
 
 clean_quit() {
-	[ -f "$mj_meta_file" ] && rm $mj_meta_file
-	exit $1
+	[ -f "$mj_meta_file" ] && rm "$mj_meta_file"
+	exit "$1"
 }
 
 print_usage() {
@@ -21,7 +21,7 @@ curl_opts="--silent --insecure --location --fail" # --write-out %{http_code}
 
 # override config values with command line arguments
 while getopts b:fvh flag; do
-	case ${flag} in
+	case "$flag" in
 		b)
 			branch=$OPTARG
 			;;
@@ -82,7 +82,7 @@ get_system_info() {
 	fi
 
 	echo_c 37 "\nComparing versions"
-	mj_version_new=$(sed -n 1p $mj_meta_file)
+	mj_version_new=$(sed -n 1p "$mj_meta_file")
 	echo_c 38 "Installed: $mj_version\nAvailable: $mj_version_new\n"
 	if [ "$mj_version_new" = "$mj_version" ]; then
 		echo_c 32 "Update is the same version!"
@@ -99,7 +99,7 @@ get_system_info() {
 check_space() {
 	# NB! size in bytes, but since blocks are 1024 bytes each, we are safe here for now.
 	# Rounding up by priming, since $(()) sucks at floats.
-	mj_filesize_new=$(( ($(sed -n 2p $mj_meta_file) + 1024) / 1024 ))
+	mj_filesize_new=$(( ($(sed -n 2p "$mj_meta_file") + 1024) / 1024 ))
 
 	# space available for update
 	# NB! sizes are in allocated blocks.

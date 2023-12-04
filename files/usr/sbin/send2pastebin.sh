@@ -5,10 +5,18 @@ if [ -z "$1" ]; then
 	exit 1
 fi
 
-file=$1
-[ ! -f $file ] && echo "Cannot find file $file" && exit 2
-[ -z "$(cat $file)" ] && echo "File $file is empty" && exit 3
+file="$1"
+if [ ! -f "$file" ]; then
+	echo "Cannot find file ${file}"
+	exit 2
+fi
 
-url=$(cat $file | nc termbin.com 9999)
-echo $url
+if [ -z "$(cat "$file")" ]; then
+	echo "File ${file} is empty"
+	exit 3
+fi
+
+url=$(cat "$file" | nc termbin.com 9999)
+echo "$url"
+
 exit 0

@@ -91,9 +91,9 @@ else
 fi
 
 log "$command"
-eval "$command" >>$LOG_FILE 2>&1
+eval "$command" >>"$LOG_FILE" 2>&1
 
-[ "true" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat "$LOG_FILE"
 
 [ -f ${email_file} ] && rm -f ${email_file}
 

@@ -61,7 +61,7 @@ command="${command} ${socks_opts}"
 # send text message
 command1="${command} -t ${mqtt_topic} -m \"${mqtt_message}\""
 log "$command1"
-eval "$command1" >>$LOG_FILE 2>&1
+eval "$command1" >>"$LOG_FILE" 2>&1
 
 # send file
 if [ "true" = "$mqtt_send_snap" ]; then
@@ -79,9 +79,9 @@ if [ "true" = "$mqtt_send_snap" ]; then
 	mqtt_file=$snapshot
 	command2="${command} -t ${mqtt_snap_topic} -f \"${mqtt_file}\""
 	log "$command2"
-	eval "$command2" >>$LOG_FILE 2>&1
+	eval "$command2" >>"$LOG_FILE" 2>&1
 fi
 
-[ "true" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat "$LOG_FILE"
 
 exit 0

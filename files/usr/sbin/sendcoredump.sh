@@ -6,15 +6,13 @@ core_file=dump.core
 info_file=info.txt
 
 LOG_FILE=/root/coredump.log
-:>$LOG_FILE
-
-log "Majectic crashed"
+:>"$LOG_FILE"
 
 log() {
-	local txt="$(date +"%F %T") [${PID}] ${1}"
-	echo "$txt" >>$LOG_FILE
+	local txt
+	txt="$(date +"%F %T") [${PID}] ${1}"
+	echo "$txt" >>"$LOG_FILE"
 	[ "1" != "$quiet" ] && echo "$txt"
-	unset txt
 }
 
 [ ! -f "$config_file" ] && log "Config file ${config_file} not found." && exit 1
@@ -32,7 +30,7 @@ log "done"
 cd /tmp
 
 log "Dumping core"
-cat /dev/stdin >$core_file
+cat /dev/stdin >"$core_file"
 log "done"
 
 bundle_name=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/[: ]//g" | uniq)-$(date +"%Y%m%d-%H%M%S").tgz
@@ -46,7 +44,7 @@ mac=$(ipcinfo --xm-mac)
 os=$(cat /etc/os-release)
 mj=$(majestic -v)
 
-:>$info_file
+:>"$info_file"
 echo "
 Date: $(TZ=GMT0 date)
 Name: ${admin_name}
@@ -77,19 +75,22 @@ rm "$core_file" "$info_file" majestic.yaml
 
 if [ "true" = "$coredump_send2devs" ]; then
 	log "Sending to S3 bucket"
-	curl --silent --verbose "https://majdumps.s3.eu-north-1.amazonaws.com/${bundle_name}" --upload-file "$bundle_name" >>$LOG_FILE
+	curl --silent --verbose "https://majdumps.s3.eu-north-1.amazonaws.com/${bundle_name}" \
+		--upload-file "$bundle_name" >>"$LOG_FILE"
 	log "done"
 fi
 
 if [ "true" = "$coredump_send2tftp" ]; then
 	log "Sending to TFTP server"
-	tftp -p -l "$bundle_name" $coredump_tftphost >>$LOG_FILE
+	tftp -p -l "$bundle_name" $coredump_tftphost >>"$LOG_FILE"
 	log "done"
 fi
 
 if [ "true" = "$coredump_send2ftp" ]; then
 	log "Sending to FTP server"
-	curl --silent --verbose "ftp://${coredump_ftphost}/${coredump_ftppath}/" --upload-file "$bundle_name" --user "${coredump_ftpuser}:${coredump_ftppass}" --ftp-create-dirs >>$LOG_FILE
+	curl --silent --verbose "ftp://${coredump_ftphost}/${coredump_ftppath}/" \
+		--upload-file "$bundle_name" --user "${coredump_ftpuser}:${coredump_ftppass}" \
+		--ftp-create-dirs >>"$LOG_FILE"
 	log "done"
 fi
 
@@ -103,7 +104,7 @@ else
 	rm "$bundle_name"
 fi
 
-[ "1" = "$verbose" ] && cat $LOG_FILE
+[ "1" = "$verbose" ] && cat "$LOG_FILE"
 
 log "All done. Rebooting..."
 umount -a -t nfs -l

@@ -158,11 +158,12 @@ if [ "usb0" = "$network_interface" ]; then
 fi
 
 if [ "wg0" = "$network_interface" ]; then
-	printf "$TEMPLATE_WIREGUARD" $network_interface $network_interface $network_interface >>$tmp_file
+	printf "$TEMPLATE_WIREGUARD" "$network_interface" "$network_interface" "$network_interface" >>"$tmp_config_file"
 fi
 
-mv $tmp_file /etc/network/interfaces.d/$network_interface
-cat /etc/network/interfaces.d/$network_interface
+iface_file="/etc/network/interfaces.d/${network_interface}"
+mv "$tmp_config_file" "$iface_file"
+cat "$iface_file"
 
 if [ -n "$network_hostname" ]; then
 	_old_hostname="$(hostname)"

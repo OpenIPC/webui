@@ -25,7 +25,7 @@ get_snapshot() {
 	command="${command} --silent --fail"
 	command="${command} --url ${snapshot_url}?t=$(date +"%s") --output ${snapshot}"
 	log "$command"
-	if $command >>$LOG_FILE; then
+	if $command >>"$LOG_FILE"; then
 		log "Snapshot saved to ${snapshot}."
 		quit_clean 0
 	fi
@@ -76,6 +76,6 @@ else
 	quit_clean 0
 fi
 
-[ "true" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat "$LOG_FILE"
 
 exit 0

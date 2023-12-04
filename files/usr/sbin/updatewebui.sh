@@ -4,8 +4,8 @@
 
 clean_quit() {
 	echo_c 37 "$2" >&2
-	[ -f "$tmp_file" ] && rm $v_opts $tmp_file
-	exit $1
+	[ -f "$tmp_file" ] && rm $v_opts "$tmp_file"
+	exit "$1"
 }
 
 print_usage() {
@@ -68,23 +68,23 @@ upd_dir="${unzip_dir}/${bundle_dir}/files"
 echo_c 37 "Copy newer files from ${upd_dir} to web directory"
 for upd_file in $(find $upd_dir -type f -or -type l); do
 	ovl_file=${upd_file#${upd_dir}}
-	if [ ! -f "$ovl_file" ] || [ "$(diff -q $ovl_file $upd_file)" ]; then
-		[ ! -d "${ovl_file%/*}" ] && mkdir -p $(dirname $ovl_file)
-		cp $v_opts -f $upd_file $ovl_file
+	if [ ! -f "$ovl_file" ] || diff -q "$ovl_file" "$upd_file"; then
+		[ ! -d "${ovl_file%/*}" ] && mkdir -p "$(dirname "$ovl_file")"
+		cp $v_opts -f "$upd_file" "$ovl_file"
 	fi
 done
 
 echo_c 37 "Remove absent files from overlay"
 for file in $(diff -qr "/var/www" "${upd_dir}/var/www" | grep "Only in /var/www:" | cut -d':' -f2 | tr -d "^ "); do
-	[ "$file" != "$etag_file" ] && rm $v_opts -f /var/www/${file}
+	[ "$file" != "$etag_file" ] && rm $v_opts -f "/var/www/${file}"
 done
 mount -o remount /
 
 echo_c 37 "Delete bundle"
-rm $v_opts -f $tmp_file
+rm $v_opts -f "$tmp_file"
 
 echo_c 37 "Delete temp directory"
-rm $v_opts -rf $unzip_dir
+rm $v_opts -rf "$unzip_dir"
 
 if [ -n "$error" ]; then
 	rm $v_opts $etag_file

@@ -58,8 +58,8 @@ fi
 command="${command} --url ${webhook_url}"
 
 log "$command"
-eval "$command" >>$LOG_FILE 2>&1
+eval "$command" >>"$LOG_FILE" 2>&1
 
-[ "true" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat "$LOG_FILE"
 
 exit 0

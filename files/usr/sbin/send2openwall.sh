@@ -21,7 +21,7 @@ fw_version=$(grep "OPENIPC_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)
 network_hostname=$(hostname -s)
 network_default_interface=$(ip r | sed -nE '/default/s/.+dev (\w+).+?/\1/p' | head -n 1)
 [ -z "$network_default_interface" ] && network_default_interface=$(ip r | sed -nE 's/.+dev (\w+).+?/\1/p' | head -n 1)
-network_macaddr=$(cat /sys/class/net/${network_default_interface}/address)
+network_macaddr=$(cat "/sys/class/net/${network_default_interface}/address")
 
 sensor=$(ipcinfo --short-sensor)
 [ -z "$sensor" ] && sensor=$(fw_printenv -n sensor | cut -d_ -f1)
@@ -89,8 +89,8 @@ command="${command} -F 'uptime=${uptime}'"
 command="${command} -F 'file=@${snapshot}'"
 
 log "$command"
-eval "$command" >>$LOG_FILE 2>&1
+eval "$command" >>"$LOG_FILE" 2>&1
 
-[ "true" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat "$LOG_FILE"
 
 exit 0

@@ -76,7 +76,7 @@ while [ -n "$subdirs" ]; do
 		suburl="${suburl}/${subdir}"
 		_command="${command} --request MKCOL ${url}/${_url}/ " # disposable subcommand
 		log "$_command"
-		eval "$_command" >>$LOG_FILE 2>&1
+		eval "$_command" >>"$LOG_FILE" 2>&1
 	fi
 	subdirs="${subdirs#*/}"
 done; unset _command
@@ -88,8 +88,8 @@ command="${command} --request PUT"
 command="${command} --upload-file ${snapshot}"
 
 log "$command"
-eval "$command" >>$LOG_FILE 2>&1
+eval "$command" >>"$LOG_FILE" 2>&1
 
-[ "true" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat "$LOG_FILE"
 
 exit 0

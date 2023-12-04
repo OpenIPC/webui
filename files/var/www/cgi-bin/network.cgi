@@ -10,7 +10,7 @@ network_wifi_device="$(fw_printenv -n wlandev)"
 network_wifi_ssid="$(fw_printenv -n wlanssid)"
 network_wifi_password="$(fw_printenv -n wlanpass)"
 
-profiles="$(grep -r '$1..=' /etc/wireless | cut -d '"' -f 4 | sort | grep -e ${soc_family})" # -e generic
+profiles="$(echo unknown-device && grep -r '$1..=' /etc/wireless | cut -d '"' -f 4 | sort | grep -e ${soc} -e ${soc_family} -e generic)"
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
 	case "$POST_action" in

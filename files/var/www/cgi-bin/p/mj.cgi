@@ -58,7 +58,6 @@ mj="
 .nightMode.irCutSingleInvert|IRcut filter polarity is inverted||boolean|true,false|false|
 .nightMode.dncDelay|Delay before toggling Day/Night mode||range|1,60,1|20|
 .nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|0,255,1|65|
-.nightMode.nightAPI|Use night mode API||boolean|true,false|false|
 .nightMode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1,1000,1|300|
 .records.enabled|Enable saving records||boolean|true,false|false|
 .records.path|Template for saving video records||string||/mnt/mmc/%Y/%m/%d/%H.mp4|Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format.

@@ -59,11 +59,21 @@ while getopts ac:im:p:rst:vh flag; do
 	esac
 done
 
-[ "false" = "$telegram_enabled" ] && log "Sending to Telegram is disabled." && exit 10
+if [ "false" = "$telegram_enabled" ]; then
+	log "Sending to Telegram is disabled."
+	exit 10
+fi
 
 # validate mandatory values
-[ -z "$telegram_token" ] && log "Telegram token not found" && exit 11
-[ -z "$telegram_channel" ] && log "Telegram channel not found" && exit 12
+if [ -z "$telegram_token" ]; then
+	log "Telegram token not found"
+	exit 11
+fi
+
+if [ -z "$telegram_channel" ]; then
+	log "Telegram channel not found"
+	exit 12
+fi
 
 if [ -z "$telegram_message" ]; then
 	telegram_message="$(echo "$telegram_caption" | sed "s/%hostname/$(hostname -s)/;s/%datetime/$(date +"%F %T")/;s/%soctemp/$(ipcinfo --temp)/")"
@@ -76,7 +86,11 @@ if [ -z "$telegram_message" ]; then
 			snapshot=/tmp/snapshot4cron.jpg
 			snapshot4cron.sh
 		fi
-		[ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
+
+		if [ ! -f "$snapshot" ]; then
+			log "Cannot find a snapshot"
+			exit 3
+		fi
 
 		telegram_photo=$snapshot
 	fi

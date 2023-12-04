@@ -15,19 +15,30 @@ log() {
 	[ "1" != "$quiet" ] && echo "$txt"
 }
 
-[ ! -f "$config_file" ] && log "Config file ${config_file} not found." && exit 1
+log "Majectic crashed"
+
+if [ ! -f "$config_file" ]; then
+	log "Config file ${config_file} not found."
+	exit 1
+fi
 . $config_file
 
-[ ! -f "$admin_file" ] && log "Admin config file ${admin_file} not found." && exit 2
+if [ ! -f "$admin_file" ]; then
+	log "Admin config file ${admin_file} not found."
+	exit 2
+fi
 . $admin_file
 
-[ "true" != "$coredump_enabled" ] && log "Core dump not enabled." && exit 3
+if [ "true" != "$coredump_enabled" ]; then
+	log "Core dump not enabled."
+	exit 3
+fi
 
 log "Stopping watchdog"
 rmmod wdt
 log "done"
 
-cd /tmp
+cd /tmp || return
 
 log "Dumping core"
 cat /dev/stdin >"$core_file"

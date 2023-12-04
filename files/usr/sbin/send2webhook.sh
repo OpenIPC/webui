@@ -32,10 +32,16 @@ while getopts u:rvh flag; do
 	esac
 done
 
-[ "false" = "$webhook_enabled" ] && log "Sending to webhook is disabled." && exit 10
+if [ "false" = "$webhook_enabled" ]; then
+	log "Sending to webhook is disabled."
+	exit 10
+fi
 
 # validate mandatory values
-[ -z "$webhook_url" ] && log "Webhook URL not found" && exit 11
+if [ -z "$webhook_url" ]; then
+	log "Webhook URL not found"
+	exit 11
+fi
 
 command="curl --verbose"
 command="${command} --connect-timeout ${curl_timeout}"
@@ -45,14 +51,24 @@ if [ "true" = "$webhook_attach_snapshot" ]; then
 	if [ "true" = "$webhoook_use_heif" ] && [ "h265" = "$(yaml-cli -g .video0.codec)" ]; then
 		snapshot=/tmp/snapshot4cron.heif
 		snapshot4cron.sh -r
+		exitcode=$?
 	else
 		snapshot=/tmp/snapshot4cron.jpg
 		snapshot4cron.sh
+		exitcode=$?
 	fi
-	exitcode=$?
-	[ $exitcode -ne 0 ] && log "Cannot get a snapshot. Exit code: $exitcode" && exit 2
+
+	if [ $exitcode -ne 0 ]; then
+		log "Cannot get a snapshot. Exit code: $exitcode"
+		exit 2
+	fi
+
 	snapshot=/tmp/snapshot4cron.jpg
-	[ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
+	if [ ! -f "$snapshot" ]; then
+		log "Cannot find a snapshot"
+		exit 3
+	fi
+
 	command="${command} -F 'image=@$snapshot'"
 fi
 

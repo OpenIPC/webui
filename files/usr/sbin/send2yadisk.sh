@@ -44,7 +44,10 @@ while getopts d:f:P:ru:vh flag; do
 	esac
 done
 
-[ "false" = "$yadisk_enabled" ] && log "Sending to Yandex Disk is disabled." && exit 10
+if [ "false" = "$yadisk_enabled" ]; then
+	log "Sending to Yandex Disk is disabled."
+	exit 10
+fi
 
 if [ -z "$yadisk_file" ]; then
 	if [ "true" = "$yadisk_use_heif" ] && [ "h265" = "$(yaml-cli -g .video0.codec)" ]; then
@@ -54,15 +57,25 @@ if [ -z "$yadisk_file" ]; then
 		snapshot=/tmp/snapshot4cron.jpg
 		snapshot4cron.sh
 	fi
-	snapshot=/tmp/snapshot4cron.jpg
-	[ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
+
+	if [ ! -f "$snapshot" ]; then
+		log "Cannot find a snapshot"
+		exit 3
+	fi
 
 	yadisk_file=$snapshot
 fi
 
 # validate mandatory values
-[ -z "$yadisk_username" ] && log "Yandex Disk username not found" && exit 11
-[ -z "$yadisk_password" ] && log "Yandex Disk password not found" && exit 12
+if [ -z "$yadisk_username" ]; then
+	log "Yandex Disk username not found"
+	exit 11
+fi
+
+if [ -z "$yadisk_password" ]; then
+	log "Yandex Disk password not found"
+	exit 12
+fi
 
 command="curl --verbose"
 command="${command} --connect-timeout ${curl_timeout}"

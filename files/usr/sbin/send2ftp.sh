@@ -52,14 +52,21 @@ while getopts d:f:p:P:rs:u:vh flag; do
 	esac
 done
 
-[ "false" = "$ftp_enabled" ] &&
-	log "Sending to FTP is disabled." && exit 10
+if [ "false" = "$ftp_enabled" ]; then
+	log "Sending to FTP is disabled."
+	exit 10
+fi
 
 # validate mandatory values
-[ -z "$ftp_host" ] &&
-	log "FTP host not found" && exit 11
-[ -z "$ftp_port" ] &&
-	log "FTP port not found" && exit 12
+if [ -z "$ftp_host" ]; then
+	log "FTP host not found"
+	exit 11
+fi
+
+if [ -z "$ftp_port" ]; then
+	log "FTP port not found"
+	exit 12
+fi
 
 if [ -z "$ftp_file" ]; then
 	if [ "true" = "$ftp_use_heif" ] && [ "h265" = "$(yaml-cli -g .video0.codec)" ]; then

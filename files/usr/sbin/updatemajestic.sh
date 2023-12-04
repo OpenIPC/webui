@@ -40,10 +40,10 @@ while getopts b:fvh flag; do
 done
 
 check_flash_memory_size() {
-	if [ $(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd) -lt 16 ]; then
+	if [ "$(awk '{sum+=sprintf("0x%s", $2);} END{print sum/1048576;}' /proc/mtd)" -lt 16 ]; then
 		echo_c 31 "Flash memory is smaller than 16MB. Aborting."
 		exit 1
-  fi
+	fi
 }
 
 get_system_info() {

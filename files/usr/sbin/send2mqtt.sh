@@ -40,14 +40,36 @@ while getopts m:rst:vh flag; do
 	esac
 done
 
-[ "false" = "$mqtt_enabled" ] && log "Sending to MQTT broker is disabled." && exit 10
+if [ "false" = "$mqtt_enabled" ]; then
+	log "Sending to MQTT broker is disabled."
+	exit 10
+fi
 
 # validate mandatory values
-[ -z "$mqtt_host" ] && log "MQTT broker host not found in config" && exit 11
-[ -z "$mqtt_port" ] && log "MQTT broker port not found in config" && exit 12
-[ -z "$mqtt_topic" ] && log "MQTT topic not found" && exit 13
-[ -z "$mqtt_message" ] && log "MQTT message template not found" && exit 14
-[ "true" = "$mqtt_send_snap" ] && [ -z "$mqtt_snap_topic" ] && log "MQTT topic for sending snapshot not found in config" && exit 15
+if [ -z "$mqtt_host" ]; then
+	log "MQTT broker host not found in config"
+	exit 11
+fi
+
+if [ -z "$mqtt_port" ]; then
+	log "MQTT broker port not found in config"
+	exit 12
+fi
+
+if [ -z "$mqtt_topic" ]; then
+	log "MQTT topic not found"
+	exit 13
+fi
+
+if [ -z "$mqtt_message" ]; then
+	log "MQTT message template not found"
+	exit 14
+fi
+
+if [ "true" = "$mqtt_send_snap" ] && [ -z "$mqtt_snap_topic" ]; then
+	log "MQTT topic for sending snapshot not found in config"
+	exit 15
+fi
 
 # assign default values if not set
 [ -z "$mqtt_client_id" ] && mqtt_client_id="${network_hostname}"
@@ -86,9 +108,15 @@ if [ "true" = "$mqtt_send_snap" ]; then
 		snapshot4cron.sh
 	fi
 	exitcode=$?
-	[ $exitcode -ne 0 ] && log "Cannot get a snapshot. Exit code: $exitcode" && exit 2
+	if [ $exitcode -ne 0 ]; then
+		log "Cannot get a snapshot. Exit code: $exitcode"
+		exit 2
+	fi
 	snapshot=/tmp/snapshot4cron.jpg
-	[ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
+	if [ ! -f "$snapshot" ]; then
+		log "Cannot find a snapshot"
+		exit 3
+	fi
 	mqtt_file=$snapshot
 	command2="${command} -t ${mqtt_snap_topic} -f \"${mqtt_file}\""
 	log "$command2"

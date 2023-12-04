@@ -123,22 +123,44 @@ if [ $# -eq 0 ]; then
 fi
 
 ## validate mandatory values
-[ -z "$network_interface" ] && log "Network interface is not set" && exit 11
+if [ -z "$network_interface" ]; then
+	log "Network interface is not set"
+	exit 11
+fi
 
 if [ "wlan0" = "$network_interface" ]; then
-	[ -z "$network_device" ] && log "Wireless network device is not set" && exit 12
-	[ -z "$network_ssid" ] && log "Wireless network SSID is not set" && exit 13
-	[ -z "$network_password" ] && log "Wireless network passphrase is not set" && exit 14
+	if [ -z "$network_device" ]; then
+		log "Wireless network device is not set"
+		exit 12
+	fi
+
+	if [ -z "$network_ssid" ]; then
+		log "Wireless network SSID is not set"
+		exit 13
+	fi
+
+	if [ -z "$network_password" ]; then
+		log "Wireless network passphrase is not set"
+		exit 14
+	fi
 fi
 
-[ -z "$network_mode" ] && log "Network mode is not set" && exit 15
+if [ -z "$network_mode" ]; then
+	log "Network mode is not set"
+	exit 15
+fi
+
 if [ "static" = "$network_mode" ]; then
-	[ -z "$network_address" ] && log "Interface IP address is not set" && exit 16
-	[ -z "$network_netmask" ] && log "Netmask is not set" && exit 17
-fi
+	if [ -z "$network_address" ]; then
+		log "Interface IP address is not set"
+		exit 16
+	fi
 
-tmp_file=/tmp/${plugin}.conf
-:>$tmp_file
+	if [ -z "$network_netmask" ]; then
+		log "Netmask is not set"
+		exit 17
+	fi
+fi
 
 printf "$TEMPLATE_COMMON" $network_interface $network_mode >>$tmp_file
 

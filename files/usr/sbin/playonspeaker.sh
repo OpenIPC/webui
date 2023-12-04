@@ -1,6 +1,7 @@
 #!/bin/sh
 
 plugin="speaker"
+
 . /usr/sbin/common-plugins
 
 SUPPORTED="goke hisilicon ingenic sigmastar"
@@ -19,11 +20,19 @@ show_help() {
 
 # override config values with command line arguments
 while getopts f:u:vh flag; do
-	case ${flag} in
-	f) speaker_file=${OPTARG} ;;
-	u) speaker_url=${OPTARG} ;;
-	v) verbose="true" ;;
-	h) show_help ;;
+	case "$flag" in
+		f)
+			speaker_file=$OPTARG
+			;;
+		u)
+			speaker_url=$OPTARG
+			;;
+		v)
+			verbose="true"
+			;;
+		h|*)
+			show_help
+			;;
 	esac
 done
 

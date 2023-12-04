@@ -18,15 +18,29 @@ show_help() {
 }
 
 # override config values with command line arguments
-while getopts d:f:P:u:vh flag; do
-	case ${flag} in
-	d) yadisk_path=${OPTARG} ;;
-	f) yadisk_file=${OPTARG} ;;
-	P) yadisk_password=${OPTARG} ;;
-	r) yadisk_use_heif="true" ;;
-	u) yadisk_username=${OPTARG} ;;
-	v) verbose="true" ;;
-	h) show_help ;;
+while getopts d:f:P:ru:vh flag; do
+	case "$flag" in
+		d)
+			yadisk_path=$OPTARG
+			 ;;
+		f)
+			yadisk_file=$OPTARG
+			 ;;
+		P)
+			yadisk_password=$OPTARG
+			;;
+		r)
+			yadisk_use_heif="true"
+			;;
+		u)
+			yadisk_username=$OPTARG
+			;;
+		v)
+			verbose="true"
+			;;
+		h|*)
+			show_help
+			;;
 	esac
 done
 

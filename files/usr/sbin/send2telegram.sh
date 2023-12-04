@@ -24,18 +24,38 @@ show_help() {
 telegram_disable_notification=false
 
 # override config values with command line arguments
-while getopts ac:im:p:st:vh flag; do
-	case ${flag} in
-	a) telegram_as_attachment="true" ;;
-	c) telegram_channel=${OPTARG} ;;
-	i) telegram_as_photo="true" ;;
-	m) telegram_message=${OPTARG} ;;
-	p) telegram_photo=${OPTARG} ;;
-	r) teleram_use_heif="true" ;;
-	s) telegram_disable_notification=true ;;
-	t) telegram_token=${OPTARG} ;;
-	v) verbose="true" ;;
-	h) show_help ;;
+while getopts ac:im:p:rst:vh flag; do
+	case "$flag" in
+		a)
+			telegram_as_attachment="true"
+			;;
+		c)
+			telegram_channel=$OPTARG
+			;;
+		i)
+			telegram_as_photo="true"
+			;;
+		m)
+			telegram_message=$OPTARG
+			;;
+		p)
+			telegram_photo=$OPTARG
+			;;
+		r)
+			teleram_use_heif="true"
+			;;
+		s)
+			telegram_disable_notification=true
+			;;
+		t)
+			telegram_token=$OPTARG
+			;;
+		v)
+			verbose="true"
+			;;
+		h|*)
+			show_help
+			;;
 	esac
 done
 

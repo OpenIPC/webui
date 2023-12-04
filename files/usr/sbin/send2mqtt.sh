@@ -1,7 +1,8 @@
 #!/bin/sh
 
 plugin="mqtt"
-source /usr/sbin/common-plugins
+
+. /usr/sbin/common-plugins
 
 show_help() {
 	echo "Usage: $0 [-t topic] [-m message] [-s] [-v] [-h]
@@ -16,14 +17,26 @@ show_help() {
 }
 
 # override config values with command line arguments
-while getopts m:st:vh flag; do
-	case ${flag} in
-	m) mqtt_message=${OPTARG} ;;
-	r) mqtt_use_heif="true" ;;
-	s) mqtt_send_snap="true" ;;
-	t) mqtt_topic=${OPTARG} ;;
-	v) verbose="true" ;;
-	h) show_help ;;
+while getopts m:rst:vh flag; do
+	case "$flag" in
+		m)
+			mqtt_message=$OPTARG
+			;;
+		r)
+			mqtt_use_heif="true"
+			;;
+		s)
+			mqtt_send_snap="true"
+			;;
+		t)
+			mqtt_topic=$OPTARG
+			;;
+		v)
+			verbose="true"
+			;;
+		h|*)
+			show_help
+			;;
 	esac
 done
 
@@ -53,7 +66,7 @@ command="${command} -i ${mqtt_client_id}"
 
 # SOCK5 proxy, if needed
 if [ "true" = "$mqtt_socks5_enabled" ]; then
-	source /etc/webui/socks5.conf
+	. /etc/webui/socks5.conf
 	socks_opts="--proxy socks5h://${socks5_login}:${socks5_password}@${socks5_host}:${socks5_port}"
 fi
 command="${command} ${socks_opts}"

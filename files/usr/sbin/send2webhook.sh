@@ -15,12 +15,20 @@ show_help() {
 }
 
 # override config values with command line arguments
-while getopts u:vh flag; do
-	case ${flag} in
-	r) webhook_use_heif="true" ;;
-	u) webhook_url=${OPTARG} ;;
-	v) verbose="true" ;;
-	h) show_help ;;
+while getopts u:rvh flag; do
+	case "$flag" in
+		r)
+			webhook_use_heif="true"
+			;;
+		u)
+			webhook_url=$OPTARG
+			;;
+		v)
+			verbose="true"
+			;;
+		h|*)
+			show_help
+			;;
 	esac
 done
 

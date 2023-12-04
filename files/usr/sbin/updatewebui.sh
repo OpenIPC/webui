@@ -20,12 +20,23 @@ print_usage() {
 }
 
 while getopts b:c:fhv flag; do
-	case ${flag} in
-	b) branch=${OPTARG} ;;
-	c) commit=${OPTARG} ;;
-	f) enforce=1 ;;
-	v) verbose=1; v_opts="-v" ;;
-	h) print_usage ;;
+	case "$flag" in
+		b)
+			branch=$OPTARG
+			;;
+		c)
+			commit=$OPTARG
+			;;
+		f)
+			enforce=1
+			;;
+		v)
+			verbose=1
+			v_opts="-v"
+			;;
+		h|*)
+			print_usage
+			;;
 	esac
 done
 

@@ -1,7 +1,8 @@
 #!/bin/sh
 
 plugin="ftp"
-source /usr/sbin/common-plugins
+
+. /usr/sbin/common-plugins
 
 show_help() {
 	echo "Usage: $0 [-h host] [-p port] [-u username] [-P password] [-d path] [-f file] [-v] [-h]
@@ -19,17 +20,35 @@ show_help() {
 }
 
 # override config values with command line arguments
-while getopts d:f:p:P:s:u:vh flag; do
-	case ${flag} in
-	d) ftp_path=${OPTARG} ;;
-	f) ftp_file=${OPTARG} ;;
-	p) ftp_port=${OPTARG} ;;
-	P) ftp_password=${OPTARG} ;;
-	r) ftp_use_heif="true" ;;
-	s) ftp_host=${OPTARG} ;;
-	u) ftp_username=${OPTARG} ;;
-	v) verbose="true" ;;
-	h) show_help ;;
+while getopts d:f:p:P:rs:u:vh flag; do
+	case "$flag" in
+		d)
+			ftp_path=$OPTARG
+			;;
+		f)
+			ftp_file=$OPTARG
+			;;
+		p)
+			ftp_port=$OPTARG
+			;;
+		P)
+			ftp_password=$OPTARG
+			;;
+		r)
+			ftp_use_heif="true"
+			;;
+		s)
+			ftp_host=$OPTARG
+			;;
+		u)
+			ftp_username=$OPTARG
+			;;
+		v)
+			verbose="true"
+			;;
+		h|*)
+			show_help
+			;;
 	esac
 done
 
@@ -62,7 +81,7 @@ command="${command} --max-time ${curl_timeout}"
 
 # SOCK5 proxy, if needed
 if [ "true" = "$ftp_socks5_enabled" ]; then
-	source /etc/webui/socks5.conf
+	. /etc/webui/socks5.conf
 	command="${command} --socks5-hostname ${socks5_host}:${socks5_port}"
 	command="${command} --proxy-user ${socks5_login}:${socks5_password}"
 fi

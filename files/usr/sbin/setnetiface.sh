@@ -78,18 +78,42 @@ For static mode:
 
 ## override config values with command line arguments
 while getopts a:d:D:g:h:i:k:m:n:p:r:s:t:v flag; do
-	case ${flag} in
-	a) network_address=${OPTARG} ;;
-	d) network_nameservers=${OPTARG} ;;
-	g) network_gateway=${OPTARG} ;;
-	h) network_hostname=${OPTARG} ;;
-	i) network_interface=${OPTARG} ;;
-	n) network_netmask=${OPTARG} ;;
-	m) network_mode=${OPTARG} ;;
-	p) network_password=${OPTARG} ;;
-	r) network_device=${OPTARG} ;;
-	s) network_ssid=${OPTARG} ;;
-	v) verbose=1 ;;
+	case "$flag" in
+		a)
+			network_address=$OPTARG
+			;;
+		d)
+			network_nameservers=$OPTARG
+			;;
+		g)
+			network_gateway=$OPTARG
+			;;
+		h)
+			network_hostname=$OPTARG
+			;;
+		i)
+			network_interface=$OPTARG
+			;;
+		n)
+			network_netmask=$OPTARG
+			;;
+		m)
+			network_mode=$OPTARG
+			;;
+		p)
+			network_password=$OPTARG
+			;;
+		r)
+			network_device=$OPTARG
+			;;
+		s)
+			network_ssid=$OPTARG
+			;;
+		v)
+			verbose=1
+			;;
+		*)
+			;;
 	esac
 done
 

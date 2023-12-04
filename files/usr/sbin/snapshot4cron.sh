@@ -43,12 +43,20 @@ get_snapshot() {
 SECONDS_TO_EXPIRE=120
 LIMIT_ATTEMPTS=5
 
-while getopts fhqrv flag; do
-	case ${flag} in
-	f) force="true" ;;
-	r) use_heif="true" ;;
-	v) verbose="true" ;;
-	h) show_help ;;
+while getopts fhrv flag; do
+	case "$flag" in
+		f)
+			force="true"
+			;;
+		r)
+			use_heif="true"
+			;;
+		v)
+			verbose="true"
+			;;
+		h|*)
+			show_help
+			;;
 	esac
 done
 

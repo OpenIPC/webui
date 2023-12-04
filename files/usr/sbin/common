@@ -20,7 +20,6 @@ log() {
 		mv "$LOG_FILE" "${LOG_FILE}.1"
 		echo "$(date +"%F %T") [${PID}:${plugin}] Log file rotated." >>"$LOG_FILE"
 	fi
-	echo "$(date +"%F %T") [${PID}:${plugin}] ${1}" >>$LOG_FILE
 	echo "$(date +"%F %T") [${PID}:${plugin}] ${1}" >>"$LOG_FILE"
 }
 

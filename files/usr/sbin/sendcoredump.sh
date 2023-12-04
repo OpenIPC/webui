@@ -18,10 +18,10 @@ log() {
 }
 
 [ ! -f "$config_file" ] && log "Config file ${config_file} not found." && exit 1
-source "$config_file"
+. $config_file
 
 [ ! -f "$admin_file" ] && log "Admin config file ${admin_file} not found." && exit 2
-source "$admin_file"
+. $admin_file
 
 [ "true" != "$coredump_enabled" ] && log "Core dump not enabled." && exit 3
 

@@ -1,7 +1,8 @@
 #!/bin/sh
 
 plugin="yadisk"
-source /usr/sbin/common-plugins
+
+. /usr/sbin/common-plugins
 
 show_help() {
 	echo "Usage: $0 [-u username] [-P password] [-v] [-h]
@@ -58,7 +59,7 @@ command="${command} --user '${yadisk_username}:${yadisk_password}'"
 
 # SOCK5 proxy, if needed
 if [ "true" = "$yadisk_socks5_enabled" ]; then
-	source /etc/webui/socks5.conf
+	. /etc/webui/socks5.conf
 	command="${command} --socks5-hostname ${socks5_host}:${socks5_port}"
 	command="${command} --proxy-user ${socks5_login}:${socks5_password}"
 fi

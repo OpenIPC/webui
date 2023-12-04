@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source /usr/sbin/common
+. /usr/sbin/common
 
 clean_quit() {
 	echo_c 37 "$2" >&2

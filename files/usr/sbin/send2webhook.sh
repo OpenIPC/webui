@@ -1,7 +1,8 @@
 #!/bin/sh
 
 plugin="webhook"
-source /usr/sbin/common-plugins
+
+. /usr/sbin/common-plugins
 
 show_help() {
 	echo "Usage: $0 [-u url] [-v] [-h]
@@ -49,7 +50,7 @@ fi
 
 # SOCK5 proxy, if needed
 if [ "true" = "$webhook_socks5_enabled" ]; then
-	source /etc/webui/socks5.conf
+	. /etc/webui/socks5.conf
 	command="${command} --socks5-hostname ${socks5_host}:${socks5_port}"
 	command="${command} --proxy-user ${socks5_login}:${socks5_password}"
 fi

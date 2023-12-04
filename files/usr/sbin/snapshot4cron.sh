@@ -1,7 +1,8 @@
 #!/bin/sh
 
 plugin="snapshot"
-source /usr/sbin/common-plugins
+
+. /usr/sbin/common-plugins
 singleton
 
 show_help() {

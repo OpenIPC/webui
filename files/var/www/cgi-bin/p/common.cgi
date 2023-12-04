@@ -595,7 +595,7 @@ reload_locale() {
 	local l
 	[ -f /etc/webui/locale ] && l="$(cat /etc/webui/locale)"
 	if [ -n "$l" ] && [ -f "/var/www/lang/${l}.sh" ]; then
-	source "/var/www/lang/${l}.sh"
+		. "/var/www/lang/${l}.sh"
 		locale="$l"
 	else
 		locale="en"

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source /usr/sbin/common
+. /usr/sbin/common
 
 clean_quit() {
 	[ -f "$mj_meta_file" ] && rm $mj_meta_file
@@ -22,14 +22,21 @@ curl_opts="--silent --insecure --location --fail" # --write-out %{http_code}
 # override config values with command line arguments
 while getopts b:fvh flag; do
 	case ${flag} in
-	b) branch=${OPTARG} ;;
-	f) enforce=1 ;;
-	v) verbose=1
-		curl_opts="${curl_opts} --verbose"
-		v_opts="-v"
-		;;
-	h) print_usage ;;
-  esac
+		b)
+			branch=$OPTARG
+			;;
+		f)
+			enforce=1
+			;;
+		v)
+			verbose=1
+			curl_opts="${curl_opts} --verbose"
+			v_opts="-v"
+			;;
+		h|*)
+			print_usage
+			;;
+	esac
 done
 
 check_flash_memory_size() {

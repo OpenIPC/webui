@@ -1,7 +1,8 @@
 #!/bin/sh
 
 plugin="telegram"
-source /usr/sbin/common-plugins
+
+. /usr/sbin/common-plugins
 
 show_help() {
 	echo "Usage: $0 [-t token] [-c channel] [-m message] [-p photo] [-s] [-b] [-v] [-h]
@@ -67,7 +68,7 @@ command="${command} --max-time ${curl_timeout}"
 
 # SOCK5 proxy, if needed
 if [ "true" = "$telegram_socks5_enabled" ]; then
-	source /etc/webui/socks5.conf
+	. /etc/webui/socks5.conf
 	command="${command} --socks5-hostname ${socks5_host}:${socks5_port}"
 	command="${command} --proxy-user ${socks5_login}:${socks5_password}"
 fi

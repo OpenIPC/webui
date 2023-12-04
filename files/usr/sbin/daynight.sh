@@ -1,7 +1,8 @@
 #!/bin/sh
 
 plugin="daynight"
-source /usr/sbin/common-plugins
+
+. /usr/sbin/common-plugins
 singleton
 
 STOP_FILE=/tmp/daynight.stop

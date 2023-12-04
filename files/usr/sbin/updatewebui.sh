@@ -55,19 +55,25 @@ fi
 
 etag_file=/root/.ui.etag
 tmp_file="$(mktemp -u)"
+
 cmd="curl --silent --location --insecure --fail"
 [ "1" = "$verbose" ] && cmd="${cmd} --verbose"
+
 cmd="${cmd} --etag-save ${etag_file}"
-[ "1" != "$enforce" ] && [ -f "$etag_file" ] && cmd="${cmd} --etag-compare ${etag_file}"
+if [ "1" != "$enforce" ] && [ -f "$etag_file" ]; then
+	cmd="${cmd} --etag-compare ${etag_file}"
+fi
+
 cmd="${cmd} --url $url"
 cmd="${cmd} --output $tmp_file"
 log_and_run "$cmd"
 [ ! -f "$tmp_file" ] && clean_quit 1 "GitHub version matches the installed one. Nothing to update."
 
 [ -z "$commit" ] && commit=$(tail -c 40 $tmp_file | cut -b1-7)
+
 # date in ISO format. ugly but it works
-_ts=$(unzip -l $tmp_file | head -5 | tail -1 | xargs | cut -d" " -f2)
-timestamp="$(echo $_ts | cut -d- -f3)-$(echo $_ts | cut -d- -f1)-$(echo $_ts | cut -d- -f2)"
+_ts=$(unzip -l "$tmp_file" | head -5 | tail -1 | xargs | cut -d" " -f2)
+timestamp="$(echo "$_ts" | cut -d- -f3)-$(echo "$_ts" | cut -d- -f1)-$(echo "$_ts" | cut -d- -f2)"
 
 unzip_dir=$(mktemp -d)
 cmd="unzip -o -d ${unzip_dir} ${tmp_file}"
@@ -77,7 +83,7 @@ log_and_run "$cmd"
 
 upd_dir="${unzip_dir}/${bundle_dir}/files"
 echo_c 37 "Copy newer files from ${upd_dir} to web directory"
-for upd_file in $(find $upd_dir -type f -or -type l); do
+for upd_file in $(find "$upd_dir" -type f -or -type l); do
 	ovl_file=${upd_file#${upd_dir}}
 	if [ ! -f "$ovl_file" ] || diff -q "$ovl_file" "$upd_file"; then
 		[ ! -d "${ovl_file%/*}" ] && mkdir -p "$(dirname "$ovl_file")"
@@ -98,10 +104,11 @@ echo_c 37 "Delete temp directory"
 rm $v_opts -rf "$unzip_dir"
 
 if [ -n "$error" ]; then
-	rm $v_opts $etag_file
+	rm $v_opts "$etag_file"
 	clean_quit 2 "ATTENTION! There were errors!"
 fi
 
 echo "${branch}+${commit}, ${timestamp}" >/var/www/.version
 [ -f /tmp/sysinfo.txt ] && rm $v_opts /tmp/sysinfo.txt
+
 clean_quit 0 "Done."

@@ -7,16 +7,16 @@ fi
 
 IPC_IP="root@192.168.1.$1"
 
-# copy ssh key
+echo "Copy SSH key"
 ssh-copy-id "$IPC_IP"
 
-# copy dev configs
+echo "Copy dev configs"
 scp -O ../files/etc/init.d/S50httpd "${IPC_IP}:/etc/init.d/S50httpd"
 
-# set env variable for dev web ui nfs share path
-ssh "$IPC_IP" fw_setenv devnfs "$OPENIPC_WEBUI_DEV_SHARE"
+echo "Set env variable for dev Web UI NFS share path"
+ssh "$IPC_IP" "fw_setenv devnfs $OPENIPC_WEBUI_DEV_SHARE"
 
-# reboot
+echo "Reboot"
 ssh "$IPC_IP" reboot -f
 
 echo "Done"

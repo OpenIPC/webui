@@ -162,45 +162,49 @@ if [ "static" = "$network_mode" ]; then
 	fi
 fi
 
-printf "$TEMPLATE_COMMON" $network_interface $network_mode >>$tmp_file
+tmp_config_file="/tmp/${plugin}.conf"
+:>"$tmp_config_file"
+
+printf "$TEMPLATE_COMMON" $network_interface $network_mode >>"$tmp_config_file"
 
 if [ "eth0" = "$network_interface" ]; then
-	printf "$TEMPLATE_MAC" >>$tmp_file
+	printf "$TEMPLATE_MAC" >>"$tmp_config_file"
 fi
 
 if [ "static" = "$network_mode" ]; then
-	printf "$TEMPLATE_STATIC" $network_address $network_netmask >>$tmp_file
+	printf "$TEMPLATE_STATIC" "$network_address" "$network_netmask" >>"$tmp_config_file"
 
 	# skip gateway if empty
 	if [ -n "$network_gateway" ]; then
-		echo "    gateway ${network_gateway}" >>$tmp_file
+		echo "    gateway ${network_gateway}" >>"$tmp_config_file"
 	fi
 
 	# skip dns servers if empty
 	if [ -n "$network_nameservers" ]; then
-		echo -n "    pre-up echo -e \"" >>$tmp_file
+		echo -n "    pre-up echo -e \"" >>"$tmp_config_file"
 		for dns in ${network_nameservers//,/ }; do
-			echo -n "nameserver ${dns}\n" >>$tmp_file
+			printf "nameserver %s\n" "$dns" >>"$tmp_config_file"
 		done; unset dns
-		echo "\" >/tmp/resolv.conf" >>$tmp_file
+		echo "\" >/tmp/resolv.conf" >>"$tmp_config_file"
 	fi
 fi
 
 if [ "wlan0" = "$network_interface" ]; then
-	fw_setenv wlandev $network_device
-	fw_setenv wlanssid $network_ssid
-	fw_setenv wlanpass $network_password
-	printf "$TEMPLATE_WIRELESS" $network_ssid $network_password >>$tmp_file
+	tmp_env_file=$(mktemp)
+	printf "wlandev %s\nwlanssid %s\nwlanpass %s" "$network_device" "$network_ssid" "$network_password" >"$tmp_env_file"
+	fw_setenv -s "$tmp_env_file"
+
+	printf "$TEMPLATE_WIRELESS" $network_ssid $network_password >>"$tmp_config_file"
 fi
 
 # TODO: preset ppp_gpio
 if [ "ppp0" = "$network_interface" ]; then
-	printf "$TEMPLATE_PPP" $ppp_gpio $ppp_gpio $ppp_gpio $ppp_gpio $ppp_gpio >>$tmp_file
+	printf "$TEMPLATE_PPP" "$ppp_gpio" "$ppp_gpio" "$ppp_gpio" "$ppp_gpio" "$ppp_gpio" >>"$tmp_config_file"
 fi
 
 # TODO: preset usb_vendor usb_product
 if [ "usb0" = "$network_interface" ]; then
-	printf "$TEMPLATE_USB" $usb_vendor $usb_product >>$tmp_file
+	printf "$TEMPLATE_USB" "$usb_vendor" "$usb_product" >>"$tmp_config_file"
 fi
 
 if [ "wg0" = "$network_interface" ]; then

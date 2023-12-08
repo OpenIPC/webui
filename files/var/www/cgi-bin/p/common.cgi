@@ -511,9 +511,9 @@ pre() {
 }
 
 preview() {
-	local refresh_rate=10
+	local refresh_rate=1
 	[ -n "$1" ] && refresh_rate=$1
-	[ "$debug" -gt 0 ] && refresh_rate=$(( refresh_rate * 10 ))
+	[ "$debug" -gt 0 ] && refresh_rate=$(( refresh_rate * 100 ))
 	if [ "true" = "$(yaml-cli -g .jpeg.enabled)" ]; then
 		echo "<canvas id=\"preview\" style=\"background:gray url(/a/SMPTE_Color_Bars_16x9.svg);background-size:cover;width:100%;height:auto;\"></canvas>"
 	else

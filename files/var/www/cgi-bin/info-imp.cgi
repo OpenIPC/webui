@@ -8,7 +8,8 @@ commands="aihpf aiagc ains aiaec aivol aigain flip contrast brightness saturatio
 temper aecomp aeitmax dpc drc hilight again dgain hue ispmode flicker whitebalance sensorfps
 backlightcomp defogstrength framerate gopattr setbitrate setgoplength setqp setqpbounds setqpipdelta
 rcmode aemin autozoom frontcrop mask getosdattr getosdgrpattr getgamma getevattr getaeluma getawbct
-getafmetrics gettotalgain getaeattr getimpversion getcpuinfo"
+getafmetrics gettotalgain getaeattr getimpversion getsysversion getcpuinfo getcpuinfo getdeviceid
+getmodelfamily"
 %>
 <%in p/header.cgi %>
 <% for i in $commands; do %>

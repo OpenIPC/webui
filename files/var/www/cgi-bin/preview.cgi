@@ -165,21 +165,6 @@ $("#speed")?.addEventListener("click", event => {
   event.target.src = (event.target.src.split("/").pop() == "speed-slow.svg") ? "/a/speed-fast.svg" : "/a/speed-slow.svg";
 });
 
-$("#toggle-night")?.addEventListener("click", event => {
-  event.preventDefault();
-  const icn = $('#night-status');
-  if (icn.src.split("/").pop() == "light-on.svg") {
-    icn.src = "/a/light-off.svg";
-    mode = 'day';
-  } else {
-    icn.src = "/a/light-on.svg";
-    mode = 'night';
-  }
-  const xhr = new XMLHttpRequest();
-  xhr.open("GET", "/cgi-bin/j/night.cgi?mode=" + mode);
-  xhr.send();
-});
-
 $("#toggle-color").addEventListener("click", event => {
   event.preventDefault();
   const icn = $('#color-status');
@@ -238,6 +223,32 @@ $('#isp-test-range').addEventListener("change", event => {
       xhr.send();
     });
 })
+
+$("#toggle-night")?.addEventListener("click", event => {
+  event.preventDefault();
+  const icn = $('#night-status');
+  if (icn.src.split("/").pop() == "light-on.svg") {
+    mode = 'day';
+    icn.src = "/a/light-off.svg";
+    $('#color-status').src = '/a/palette-fill.svg';
+    $('#ircut-status').src = '/a/light-on.svg';
+    ["ir850", "ir940", "white"].forEach(n => {
+      if ($('#' + n + '-led-status')) $('#' + n + '-led-status').src = '/a/light-off.svg';
+    })
+  } else {
+    icn.src = "/a/light-on.svg";
+    $('#color-status').src = '/a/palette.svg';
+    $('#ircut-status').src = '/a/light-off.svg';
+    ["ir850", "ir940", "white"].forEach(n => {
+      if ($('#' + n + '-led-status')) $('#' + n + '-led-status').src = '/a/light-on.svg';
+    })
+    mode = 'night';
+  }
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "/cgi-bin/j/night.cgi?mode=" + mode);
+  xhr.send();
+});
+
 </script>
 
 <%in p/footer.cgi %>

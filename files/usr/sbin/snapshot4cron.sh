@@ -17,7 +17,7 @@ show_help() {
 
 get_snapshot() {
 	log "Trying to save a snapshot."
-	LIMIT_ATTEMPTS=$(( $LIMIT_ATTEMPTS - 1 ))
+	LIMIT_ATTEMPTS=$(( LIMIT_ATTEMPTS - 1 ))
 
 	command="curl --verbose"
 	command="${command} --connect-timeout ${curl_timeout}"
@@ -30,7 +30,7 @@ get_snapshot() {
 		quit_clean 0
 	fi
 
-	if [ "$LIMIT_ATTEMPTS" -le "0" ]; then
+	if [ "$LIMIT_ATTEMPTS" -le 0 ]; then
 		log "Maximum amount of retries reached."
 		quit_clean 2
 	else
@@ -74,7 +74,7 @@ if [ "true" = "$force" ]; then
 elif [ ! -f "$snapshot" ]; then
 	log "Snapshot not found."
 	get_snapshot
-elif [ "$(date -r "$snapshot" +%s)" -le "$(($(date +%s) - $SECONDS_TO_EXPIRE))" ]; then
+elif [ "$(date -r "$snapshot" +%s)" -le "$(( $(date +%s) - SECONDS_TO_EXPIRE ))" ]; then
 	log "Snapshot is expired."
 	rm $snapshot
 	get_snapshot

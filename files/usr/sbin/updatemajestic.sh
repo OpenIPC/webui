@@ -66,7 +66,7 @@ get_system_info() {
 
 	# majestic in overlay
 	mj_bin_file_ol="${overlay_root}${mj_bin_file}"
-	[ -f "$mj_bin_file_ol" ] && mj_filesize_ol=$(ls -s $mj_bin_file_ol | xargs | cut -d' ' -f1)
+	[ -f "$mj_bin_file_ol" ] && mj_filesize_ol=$(ls -s "$mj_bin_file_ol" | xargs | cut -d' ' -f1)
 
 	# majestic online
 	#mj_meta_file=/tmp/mj_meta.txt
@@ -109,7 +109,7 @@ check_space() {
 	if [ "$mj_filesize_new" -gt "$available_space" ]; then
 		echo_c 31 "Not enough space to update Majestic!"
 		echo_c 37 "Update requires ${mj_filesize_new}K, but only ${available_space}K is available."
-		if [ "$mj_filesize_ol" -ge "1" ]; then
+		if [ "$mj_filesize_ol" -ge 1 ]; then
 			echo_c 37 "(${free_space}K of unallocated space plus ${mj_filesize_ol:=0}K Majestic in overlay)"
 		fi
 		clean_quit 4

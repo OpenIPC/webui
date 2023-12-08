@@ -54,7 +54,7 @@ TEMPLATE_WIREGUARD="    # WireGuard
 "
 
 show_help() {
-  echo "Usage: $0 [OPTIONS]
+	echo "Usage: $0 [OPTIONS]
 Where:
   -i iface       Network interface.
   -m mode        Mode [dhcp, static].
@@ -73,7 +73,7 @@ For static mode:
 
   -v             Verbose output.
 "
-  exit 0
+	exit 0
 }
 
 ## override config values with command line arguments

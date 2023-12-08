@@ -27,12 +27,26 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 	### Validation
 	if [ "true" = "$coredump_enabled" ]; then
 		if [ "true" = "$coredump_send2devs" ]; then
-			[ -z "$admin_name" ] || [ -z "$admin_email" ] && set_error_flag Please <a href=\"admin.cgi\">fill out the admin profile</a> first."
+			if [ -z "$admin_name" ] || [ -z "$admin_email" ]; then
+				set_error_flag "Please <a href=\"admin.cgi\">fill out the admin profile</a> first."
+			fi
 		fi
-		[ "true" != "$coredump_consent"  ] && set_error_flag "You have to understand and acknowledge security risk."
-		[ "true" = "$coredump_send2ftp"  ] && [ -z "$coredump_ftphost"   ] && set_error_flag "FTP address cannot be empty."
-		[ "true" = "$coredump_send2tftp" ] && [ -z "$coredump_tftphost"  ] && set_error_flag "TFTP address cannot be empty."
-		[ "true" = "$coredump_save4web"  ] && [ -z "$coredump_localpath" ] && set_error_flag "Local path cannot be empty."
+
+		if [ "true" != "$coredump_consent" ]; then
+			set_error_flag "You have to understand and acknowledge security risk."
+		fi
+
+		if [ "true" = "$coredump_send2ftp" ] && [ -z "$coredump_ftphost" ]; then
+			set_error_flag "FTP address cannot be empty."
+		fi
+
+		if [ "true" = "$coredump_send2tftp" ] && [ -z "$coredump_tftphost" ]; then
+			set_error_flag "TFTP address cannot be empty."
+		fi
+
+		if [ "true" = "$coredump_save4web"  ] && [ -z "$coredump_localpath" ]; then
+			set_error_flag "Local path cannot be empty."
+		fi
 	fi
 
 	if [ -z "$error" ]; then

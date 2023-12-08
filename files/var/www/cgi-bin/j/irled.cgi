@@ -7,20 +7,23 @@
 if [ -z "$mode" ]; then
 	echo "HTTP/1.1 400 Bad Request"
 	echo # separate headers from content
-	echo "missing required pin1 parameter"
+	echo "missing required mode parameter"
 	exit 1
 fi
 
+# use ir850 as default LED if not set
+[ -z "$type" ] && type="ir850"
+
 case "$mode" in
 	off | on | toggle)
-		/usr/sbin/ircut.sh "$mode" $pin1 $pin2
+		/usr/sbin/irled.sh "$mode" "$type"
 		echo "HTTP/1.1 200 OK
 Content-type: application/json
 Pragma: no-cache
 Expires: $(TZ=GMT0 date +'%a, %d %b %Y %T %Z')
 Etag: \"$(cat /proc/sys/kernel/random/uuid)\"
 
-{\"ircut\":\"${mode}\"}
+{\"led_${type}\":\"${mode}\"}
 "
 		;;
 	*)

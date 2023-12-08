@@ -19,9 +19,9 @@ size_h=${size#*x}
     <div class="d-grid gap-2 mb-3">
       <div class="input-group">
         <div class="input-group-text">
-          <img src="/a/light-off.svg" alt="Image: Night mode indicator" id="night-mode-status">
+          <img src="/a/light-off.svg" alt="Image: Night mode indicator" id="night-status">
         </div>
-        <button class="form-control btn btn-primary text-start" type="button" id="toggle-night-mode">Toggle night mode</button>
+        <button class="form-control btn btn-primary text-start" type="button" id="toggle-night">Toggle night mode</button>
         <div class="input-group-text">
           <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
@@ -160,22 +160,29 @@ $("#speed")?.addEventListener("click", event => {
   event.target.src = (event.target.src.split("/").pop() == "speed-slow.svg") ? "/a/speed-fast.svg" : "/a/speed-slow.svg";
 });
 
-$("#toggle-night-mode")?.addEventListener("click", event => {
+$("#toggle-night")?.addEventListener("click", event => {
   event.preventDefault();
-  $('#night-mode-status').src = ($('#night-mode-status').src.split("/").pop() == "light-on.svg") ? "/a/light-off.svg" : "/a/light-on.svg";
+  const icn = $('#night-status');
+  if (icn.src.split("/").pop() == "light-on.svg") {
+    icn.src = "/a/light-off.svg";
+    mode = 'day';
+  } else {
+    icn.src = "/a/light-on.svg";
+    mode = 'night';
+  }
   const xhr = new XMLHttpRequest();
-  xhr.open("POST", "/cgi-bin/night.cgi");
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  xhr.send("mode=toggle");
+  xhr.open("GET", "/cgi-bin/j/night.cgi?mode=" + mode);
+  xhr.send();
 });
 
 $("#toggle-ircut").addEventListener("click", event => {
   event.preventDefault();
-  if ($('#ircut-status').src.split("/").pop() == "light-on.svg") {
-    $('#ircut-status').src = "/a/light-off.svg";
+  const icn = $('#ircut-status');
+  if (icn.src.split("/").pop() == "light-on.svg") {
+    icn.src = "/a/light-off.svg";
     mode = 'off';
   } else {
-    $('#ircut-status').src = "/a/light-on.svg";
+    icn.src = "/a/light-on.svg";
     mode = 'on';
   }
   const xhr = new XMLHttpRequest();
@@ -183,19 +190,31 @@ $("#toggle-ircut").addEventListener("click", event => {
   xhr.send();
 });
 
+$('#isp-test-range').addEventListener("change", event => {
+  const data = 'video cont ' + event.target.value;
+  console.log(data);
+  const xhr = new XMLHttpRequest();
+  //xhr.addEventListener("load", reqListener);
+  //xhr.setRequestHeader("Authorization", "Basic " + btoa("admin:"));
+  xhr.open("POST", 'http://' + network_address + ':4000');
+  xhr.setRequestHeader('Content-type', 'application/json')
+  xhr.send(JSON.stringify(data));
+});
+
 ["ir850", "ir940", "white"].forEach(n => {
   if ($('#toggle-' + n + '-led'))
     $('#toggle-' + n + '-led').addEventListener('click', event => {
       event.preventDefault();
-      if ($('#' + n + '-led-status').src.split('/').pop() == 'light-on.svg') {
-        $('#' + n + '-led-status').src = '/a/light-off.svg';
+      const icn = $('#' + n + '-led-status');
+      if (icn.src.split('/').pop() == 'light-on.svg') {
+        icn.src = '/a/light-off.svg';
         mode = 'off';
       } else {
-        $('#' + n + '-led-status').src = '/a/light-on.svg';
+        icn.src = '/a/light-on.svg';
         mode = 'on';
       }
       const xhr = new XMLHttpRequest();
-      xhr.open('GET', '/cgi-bin/j/light.cgi?type=' + n + '&mode=' + mode);
+      xhr.open('GET', '/cgi-bin/j/irled.cgi?type=' + n + '&mode=' + mode);
       xhr.send();
     });
 })

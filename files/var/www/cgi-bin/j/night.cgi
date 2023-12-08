@@ -11,17 +11,24 @@ if [ -z "$mode" ]; then
 	exit 1
 fi
 
-# use ir850 as default LED if not set
-[ -z "$type" ] && type="ir850"
-
-# switch light
-response=$(/usr/sbin/light.sh "$mode" "$type")
-
-echo "HTTP/1.1 200 OK
+case "$mode" in
+	day | night | toggle)
+		/usr/sbin/daynight.sh "$mode"
+		echo "HTTP/1.1 200 OK
 Content-type: application/json
 Pragma: no-cache
 Expires: $(TZ=GMT0 date +'%a, %d %b %Y %T %Z')
 Etag: \"$(cat /proc/sys/kernel/random/uuid)\"
 
-{\"led_${type}\":\"${mode}\",\"response\":\"${response}\"}
+{\"night\":\"${mode}\"}
 "
+		;;
+	*)
+		echo "HTTP/1.1 400 Bad Request"
+		echo # separate headers from content
+		echo "unknown mode"
+		exit 1
+		;;
+esac
+
+exit 0

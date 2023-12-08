@@ -14,7 +14,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
 		if [ -z "$file_name" ]; then
 			error="No file found! Did you forget to upload?"
-		elif [ "hisilicon" = "$soc_vendor" -a "7f454c460101" != $(xxd -p -l 6 $file) ]; then
+		elif [ "hisilicon" = "$soc_vendor" ] && [ "7f454c460101" != $(xxd -p -l 6 $file) ]; then
 			error="File magic number does not match. Did you upload a wrong file?"
 		elif [ -f "/usr/lib/sensors/${file_name}" ]; then
 			error="File already exists!"
@@ -29,7 +29,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
 		if [ -z "$file_name" ]; then
 			error="No file found! Did you forget to upload?"
-		elif [ "hisilicon" = "$soc_vendor" -a -n $(grep "\[sensor\]" $file) ]; then
+		elif [ "hisilicon" = "$soc_vendor" ] && [ -n $(grep "\[sensor\]" $file) ]; then
 			error="File magic number does not match. Did you upload a wrong file?"
 		elif [ -f "/etc/sensors/${file_name}" ]; then
 			error="File already exists!"

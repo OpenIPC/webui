@@ -826,12 +826,14 @@ Connection: close
 $(env|sort)
 --------------------
 "
-  for x in $1; do echo -e "$x = $(eval echo \$$x)\n"; done
-  exit
+	for x in $1; do
+		echo -e "$x = $(eval echo \$$x)\n"
+	done
+	exit
 }
 
 include() {
-	[ -f "$1" ] && source "$1"
+	[ -f "$1" ] && . "$1"
 }
 
 ui_tmp_dir=/tmp/webui

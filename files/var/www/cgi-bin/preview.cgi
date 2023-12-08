@@ -70,6 +70,12 @@ size_h=${size#*x}
       </div>
       <div class="input-group">
         <div class="input-group-text">
+          <img src="/a/palette-fill.svg" alt="Image: Color mode indicator" id="color-status">
+        </div>
+        <button class="form-control btn btn-secondary text-start" type="button" id="toggle-color">Color mode</button>
+      </div>
+      <div class="input-group">
+        <div class="input-group-text">
           <img src="/a/light-off.svg" alt="Image: IR filter indicator" id="ircut-status">
         </div>
         <button class="form-control btn btn-secondary text-start" type="button" id="toggle-ircut">IR-cut filter</button>
@@ -77,7 +83,6 @@ size_h=${size#*x}
           <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
-
 <% if fw_printenv -n ir850_led_pin >/dev/null; then %>
       <div class="input-group">
         <div class="input-group-text">
@@ -172,6 +177,21 @@ $("#toggle-night")?.addEventListener("click", event => {
   }
   const xhr = new XMLHttpRequest();
   xhr.open("GET", "/cgi-bin/j/night.cgi?mode=" + mode);
+  xhr.send();
+});
+
+$("#toggle-color").addEventListener("click", event => {
+  event.preventDefault();
+  const icn = $('#color-status');
+  if (icn.src.split("/").pop() == "palette-fill.svg") {
+    icn.src = "/a/palette.svg";
+    mode = 'off';
+  } else {
+    icn.src = "/a/palette-fill.svg";
+    mode = 'on';
+  }
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "/cgi-bin/j/color.cgi?mode=" + mode);
   xhr.send();
 });
 

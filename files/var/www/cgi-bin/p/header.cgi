@@ -54,21 +54,21 @@ majestic_menu() {
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownInformation" role="button">Information</a>
             <ul aria-labelledby="dropdownInformation" class="dropdown-menu">
               <li><a class="dropdown-item" href="status.cgi">Overview</a></li>
-              <li><a class="dropdown-item" href="info-cron.cgi">Cron config</a></li>
-              <li><a class="dropdown-item" href="info-dmesg.cgi">Diagnostic messages</a></li>
-              <li><a class="dropdown-item" href="info-httpd.cgi">HTTPd environment</a></li>
-              <li><a class="dropdown-item" href="info-modules.cgi">Modules</a></li>
+              <li><a class="dropdown-item" href="info-cron.cgi">Cron Configuration</a></li>
+              <li><a class="dropdown-item" href="info-httpd.cgi">HTTPd Environment</a></li>
+              <li><a class="dropdown-item" href="info-top.cgi">Top Processes</a></li>
+              <li><a class="dropdown-item" href="info-overlay.cgi">Overlay Partition</a></li>
             <% if [ -e /proc/umap ]; then %>
               <li><a class="dropdown-item" href="info-proc-umap.cgi">Information from /proc/umap</a></li>
             <% fi %>
-              <li><a class="dropdown-item" href="info-ipctool.cgi">IPC Tool</a></li>
-              <li><a class="dropdown-item" href="info-netstat.cgi">Network stats</a></li>
-              <li><a class="dropdown-item" href="info-top.cgi">Top processes</a></li>
-              <li><a class="dropdown-item" href="info-log.cgi">Log read</a></li>
-              <li><a class="dropdown-item" href="info-overlay.cgi">Overlay partition</a></li>
             <% if [ "$debug" -gt 0 -a "$soc_vendor" = "ingenic" ]; then %>
               <li><a class="dropdown-item" href="info-imp.cgi">IMP Control</a></li>
             <% fi %>
+              <li><a class="dropdown-item" href="info-netstat.cgi">Output of netstat</a></li>
+              <li><a class="dropdown-item" href="info-modules.cgi">Output of lsmod</a></li>
+              <li><a class="dropdown-item" href="info-ipctool.cgi">Output of ipctool</a></li>
+              <li><a class="dropdown-item" href="info-dmesg.cgi">Output of dmesg</a></li>
+              <li><a class="dropdown-item" href="info-log.cgi">Output of logread</a></li>
             </ul>
           </li>
           <li class="nav-item dropdown">

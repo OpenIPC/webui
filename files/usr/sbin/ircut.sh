@@ -24,29 +24,77 @@ if [ -z "$pin2" ]; then
 	echo "fw_setenv ircut_pin2 <pin>"
 fi
 
+vendor=$(ipcinfo -v)
+
+ir_filter_off() {
+	if [ -z "$pin2" ]; then
+		gpio set "$pin1"
+	else
+		gpio set "$pin1"
+		gpio clear "$pin2"
+		usleep 10000
+		gpio clear "$pin1"
+		gpio clear "$pin2"
+	fi
+	echo "IRCUT filter removed"
+}
+
+ir_filter_on() {
+	if [ -z "$pin2" ]; then
+		gpio clear "$pin1"
+	else
+		gpio clear "$pin1"
+		gpio set "$pin2"
+		usleep 10000
+		gpio clear "$pin1"
+		gpio clear "$pin2"
+	fi
+	echo "IRCUT filter set"
+}
+
+set_image_mode() {
+	local m
+	case "$vendor" in
+		ingenic)
+			[ "$1" = "on" ] && m=1 || m=0
+			/usr/sbin/imp-control.sh ispmode "$m"
+			;;
+		*)
+			[ "$1" -eq 0 ] && m="off" || m="on"
+       			curl "http://127.0.0.1/night/${m}"
+			;;
+	esac
+}
+
+image_black() {
+	set_image_mode 0
+}
+
+image_color() {
+	set_image_mode 1
+}
+
 case "$mode" in
-"on")
-	if [ -z "$pin2" ]; then
-		gpio set $pin1
-	else
-		gpio set $pin1
-		gpio clear $pin2
-		usleep 10000
-		gpio clear $pin1
-		gpio clear $pin2
-	fi
-	;;
-"off")
-	if [ -z "$pin2" ]; then
-		gpio clear $pin1
-	else
-		gpio clear $pin1
-		gpio set $pin2
-		usleep 10000
-		gpio clear $pin1
-		gpio clear $pin2
-	fi
-	;;
-*)
-	;;
+	0|off|night)
+		ir_filter_off
+		;;
+	1|on|day)
+		ir_filter_on
+		;;
+	~|toggle)
+
+		if [ "$mode" -eq 0 ]; then
+			ir_filter_on
+			image_color
+		else
+			ir_filter_off
+			image_black
+		fi
+		;;
+	*)
+		echo "Unknown mode ${mode}"
+		exit 1
+		;;
 esac
+
+exit 0

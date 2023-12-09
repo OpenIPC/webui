@@ -138,6 +138,16 @@ setbitrate setgoplength setqp setqpbounds setqpipdelta rcmode aemin autozoom fro
 
 <script>
 function callImp(command, value) {
+	if (["flip", "mirror"].includes(command)) {
+		command = "flip"
+		value = document.querySelector('#flip').checked ? 'flip' : ''
+		if (document.querySelector('#mirror').checked) {
+			if (value != '') value += '_'
+		 	value += 'mirror'
+		}
+		if (value == '') value += 'normal'
+	}
+
 	const xhr = new XMLHttpRequest();
 	xhr.open('GET', '/cgi-bin/j/imp.cgi?cmd=' + command + '&val=' + value);
 	xhr.send();

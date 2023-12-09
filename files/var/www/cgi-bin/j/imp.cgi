@@ -30,23 +30,25 @@ case "$cmd" in
 	aivol | aovol)
 		[ "$val" -lt -30 ] && unknown_value
 		;;
-	aecomp | aialc | aigain | aogain | brightness | contrast | defogstrength | dpc | drc | flicker | hilight | hue | ispmode | saturation | sharpness | sinter | temper)
+	ains)
+		[ "$val" -lt -1 ] && unknown_value
+		;;
+	aecomp | aialc | aigain | aogain | brightness | contrast | defogstrength | dpc | drc | flicker | flip | hilight | hue | ispmode | saturation | sharpness | sinter | temper)
 		[ "$val" -lt -0 ] && unknown_value
 		;;
 	*) ;;
-
 esac
 
 # check upper limit
 case "$cmd" in
-	aivol | aovol)
-		[ "$val" -gt -120 ] && unknown_value
-		;;
 	ispmode)
 		[ "$val" -gt 1 ] && unknown_value
 		;;
 	flicker)
 		[ "$val" -gt 2 ] && unknown_value
+		;;
+	ains | flip)
+		[ "$val" -gt 3 ] && unknown_value
 		;;
 	aialc)
 		[ "$val" -gt 7 ] && unknown_value
@@ -57,6 +59,9 @@ case "$cmd" in
 	aigain | aogain)
 		[ "$val" -gt 31 ] && unknown_value
 		;;
+	aivol | aovol)
+		[ "$val" -gt 120 ] && unknown_value
+		;;
 	aecomp | brightness | contrast | defogstrength | dpc | drc | hue | saturation | sharpness | sinter | temper)
 		[ "$val" -gt 255 ] && unknown_value
 		;;
@@ -66,19 +71,9 @@ esac
 
 # check non-numeric values
 case "$cmd" in
-	aihpf | aiaec | aiagc | ains)
+	aihpf | aiaec | aiagc)
 		case "$val" in
 			on | off)
-				we_are_good
-				;;
-			*)
-				unknown_value
-				;;
-		esac
-		;;
-	flip)
-		case "$val" in
-			normal | flip | mirror | flip_mirror)
 				we_are_good
 				;;
 			*)

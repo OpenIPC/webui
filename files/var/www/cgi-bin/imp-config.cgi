@@ -156,6 +156,11 @@ document.querySelectorAll('input[type=checkbox]').forEach(el => {
 	el.addEventListener('change', ev => callImp(ev.target.id, ev.target.checked ? 1 : 0))
 });
 
+// checkboxes
+document.querySelectorAll('input[type=radio]').forEach(el => {
+	el.addEventListener('change', ev => callImp(ev.target.id, ev.target.value))
+});
+
 // ranges
 document.querySelectorAll('input[type=range]').forEach(el => {
 	el.addEventListener('change', ev => callImp(ev.target.id.replace('-range', ''), ev.target.value))

@@ -5,9 +5,15 @@ imp_config_file=/etc/webui/imp.cfg
 mj_config_file=/etc/majestic.yaml
 
 page_title="IMP Configuration"
-commands="aihpf aiagc ains aiaec aivol aigain flip contrast brightness saturation sharpness sinter temper aecomp aeitmax
-dpc drc hilight again dgain hue ispmode flicker whitebalance sensorfps backlightcomp defogstrength framerate gopattr
-setbitrate setgoplength setqp setqpbounds setqpipdelta rcmode aemin autozoom frontcrop mask"
+
+commands="aihpf aiagc ains aiaec aivol aigain flip contrast brightness saturation sharpness sinter temper aecomp
+aeitmax dpc drc hilight again dgain hue ispmode flicker whitebalance sensorfps backlightcomp defogstrength
+framerate gopattr setbitrate setgoplength setqp setqpbounds setqpipdelta rcmode aemin autozoom frontcrop mask"
+
+commands="brightness contrast saturation sharpness sinter temper"
+for i in $commands; do
+	eval "$i=$(/usr/sbin/imp-control.sh $i)"
+done
 %>
 <%in p/header.cgi %>
 

@@ -18,15 +18,6 @@ size_h=${size#*x}
   <div class="col-md-4 col-xl-3 col-xxl-3">
     <div class="d-grid gap-2 mb-3">
       <div class="input-group">
-        <div class="input-group-text">
-          <img src="/a/light-off.svg" alt="Image: Night mode indicator" id="night-status">
-        </div>
-        <button class="form-control btn btn-primary text-start" type="button" id="toggle-night">Toggle night mode</button>
-        <div class="input-group-text">
-          <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
-        </div>
-      </div>
-      <div class="input-group">
         <button class="form-control btn btn-primary text-start" type="button" data-sendto="email">Send to email</button>
         <div class="input-group-text">
           <a href="plugin-send2email.cgi" title="Email settings"><img src="/a/gear.svg" alt="Gear"></a>
@@ -66,6 +57,16 @@ size_h=${size#*x}
         <button class="form-control btn btn-primary text-start" type="button" data-sendto="openwall">Send to Open Wall</button>
         <div class="input-group-text">
           <a href="plugin-send2openwall.cgi" title="Open Wall settings"><img src="/a/gear.svg" alt="Gear"></a>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-group-text">
+          <img src="/a/light-off.svg" alt="Image: Night mode indicator" id="night-status">
+        </div>
+        <button class="form-control btn btn-primary text-start" type="button" id="toggle-night">Toggle night mode</button>
+        <div class="input-group-text">
+          <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
         </div>
       </div>
       <div class="input-group">

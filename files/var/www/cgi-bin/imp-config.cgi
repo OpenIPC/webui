@@ -37,8 +37,6 @@ setbitrate setgoplength setqp setqpbounds setqpipdelta rcmode aemin autozoom fro
 	</div>
 </div>
 
-<% field_select "flip" "Image Flip/Mirror" "," %>
-
 <% field_range "brightness" "Brightness" "0,255" %>
 <% field_range "contrast" "Contrast" "0,255" %>
 <% field_range "saturation" "Saturation" "0,255" %>

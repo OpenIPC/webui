@@ -1,0 +1,104 @@
+#!/bin/sh
+
+bad_request() {
+	echo "HTTP/1.1 400 Bad Request"
+	echo # separate headers from content
+	echo "$1"
+	exit 1
+}
+
+we_are_good() {
+	echo "we are good"
+}
+
+unknown_command() {
+	bad_request "unknown command"
+}
+
+unknown_value() {
+	bad_request "unknown value"
+}
+
+# parse parameters from query string
+[ -n "$QUERY_STRING" ] && eval $(echo "$QUERY_STRING" | sed "s/&/;/g")
+
+# quit if no command sent
+[ -z "$cmd" ] && bad_request "missing required parameter cmd"
+
+# check lower limit
+case "$cmd" in
+	aivol | aovol)
+		[ "$val" -lt -30 ] && unknown_value
+		;;
+	aecomp | aialc | aigain | aogain | brightness | contrast | defogstrength | dpc | drc | flicker | hilight | hue | ispmode | saturation | sharpness | sinter | temper)
+		[ "$val" -lt -0 ] && unknown_value
+		;;
+	*) ;;
+
+esac
+
+# check upper limit
+case "$cmd" in
+	aivol | aovol)
+		[ "$val" -gt -120 ] && unknown_value
+		;;
+	ispmode)
+		[ "$val" -gt 1 ] && unknown_value
+		;;
+	flicker)
+		[ "$val" -gt 2 ] && unknown_value
+		;;
+	aialc)
+		[ "$val" -gt 7 ] && unknown_value
+		;;
+	hilight)
+		[ "$val" -gt 10 ] && unknown_value
+		;;
+	aigain | aogain)
+		[ "$val" -gt 31 ] && unknown_value
+		;;
+	aecomp | brightness | contrast | defogstrength | dpc | drc | hue | saturation | sharpness | sinter | temper)
+		[ "$val" -gt 255 ] && unknown_value
+		;;
+	*) ;;
+
+esac
+
+# check non-numeric values
+case "$cmd" in
+	aihpf | aiaec | aiagc | ains)
+		case "$val" in
+			on | off)
+				we_are_good
+				;;
+			*)
+				unknown_value
+				;;
+		esac
+		;;
+	flip)
+		case "$val" in
+			normal | flip | mirror | flip_mirror)
+				we_are_good
+				;;
+			*)
+				unknown_value
+				;;
+		esac
+		;;
+	*) ;;
+esac
+
+command="/usr/sbin/imp-control.sh $cmd $val"
+result=$($command)
+
+echo "HTTP/1.1 200 OK
+Content-type: application/json
+Pragma: no-cache
+Expires: $(TZ=GMT0 date +'%a, %d %b %Y %T %Z')
+Etag: \"$(cat /proc/sys/kernel/random/uuid)\"
+
+{\"command\":\"${command}\",\"result\":\"${result}\"}
+"
+
+exit 0

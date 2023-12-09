@@ -6,14 +6,13 @@ mj_config_file=/etc/majestic.yaml
 
 page_title="IMP Configuration"
 
-commands_unchecked="aiagc aigain aecomp aeitmax again dgain whitebalance sensorfps backlightcomp framerate gopattr
-setbitrate setgoplength setqp setqpbounds setqpipdelta rcmode aemin autozoom frontcrop mask"
+commands_do_not_work="ains framerate frontcrop mask rcmode setbitrate setgoplength setqp setqpbounds setqpipdelta"
 
-commands_do_not_work="ains"
+commands="aecomp aeitmax aemin again aiaec aigain aiagc aialc aigain aihpf aivol aogain aovol autozoom
+backlightcomp brightness contrast defogstrength dgain dpc drc flicker flip gopattr hilight hue ispmode
+saturation sensorfps sharpness sinter temper whitebalance"
 
-commands="aecomp aiaec aialc aigain aihpf aivol aogain aovol
-brightness contrast defogstrength dpc drc flicker flip hilight hue ispmode
-saturation sharpness sinter temper"
+commands_channel="framerate"
 
 # reading values
 for i in $commands; do
@@ -34,7 +33,7 @@ check_mirror() {
 %>
 <%in p/header.cgi %>
 
-<div class="row row-cols-4 g-4">
+<div class="row row-cols-5 g-4">
 <div class="col">
 <pre>
 <%
@@ -86,6 +85,7 @@ done
 			<% field_number "again" "Analog Gain" %>
 			<% field_number "dgain" "Digital Gain" %>
 			<% field_number "backlightcomp" "Backlight Compensation Strength" %>
+			<% field_number "sensorfps" "Sensor FPS" %>
 		</div>
 	</div>
 </div>
@@ -112,69 +112,78 @@ done
 	</div>
 </div>
 
+<%# field_select "encchn" "Encoder Channel" "0,1" %>
+<%
+for ch in 1 2; do
+	for i in $commands_channel; do
+		eval "$i_$ch=$(/usr/sbin/imp-control.sh $i $ch)"
+	done
+%>
 <div class="col">
-<% field_select "encchn" "Encoder Channel" "0,1" %>
+	<h3>Channel <%= $ch %></h3>
 
-<b>White Balance</b>
-<% field_number "whitebalance_mode" "Mode" %>
-<% field_number "whitebalance_rgain" "R Gain" %>
-<% field_number "whitebalance_bgain" "B Gain" %>
-<b>Sensor FPS</b>
-<% field_number "sensorfps_num" "Number" %>
-<% field_number "sensorfps_den" "Density" %>
-<b>Sensor Frame Rate</b>
-<% field_number "framerate_num" "Number" %>
-<% field_number "framerate_den" "Density" %>
-<b>Bit Rate</b>
-<% field_number "setbitrate_tgtbr" "Target Bitrate" %>
-<% field_number "setbitrate_maxbr" "Maximum Bitrate" %>
-<b>GOP Attributes</b>
-<% field_number "gopattr_length" "GOP Length" %>
-<b>GOP Length</b>
-<% field_number "setgoplength_length" "GOP Length" %>
-<b>QP</b>
-<% field_number "setqp_qp" "QP" %>
-<% field_number "setqpbounds_minqp" "Minimum QP" %>
-<% field_number "setqpbounds_maxqp" "Maximum QP" %>
-<% field_number "setqpipdelta_ipdelta" "QP IP Delta" %>
-<b>Rate Control Mode</b>
-<% field_number "rcmode_mode" "Mode" %>
-<% field_text "rcmode_params" "Parameters" %>
-<b>Set AE Min Parameters</b>
-<% field_number "aemin_min_it" "Minimum IT" %>
-<% field_number "aemin_min_again" "Minimum aGain" %>
-<% field_number "aemin_min_it_short" "Minimum IT Short" %>
-<% field_number "aemin_min_again_short" "Minimum aGain Short" %>
+	<b>White Balance</b>
+	<% field_number "whitebalance_${ch}_mode" "Mode" %>
+	<% field_number "whitebalance_${ch}_rgain" "R Gain" %>
+	<% field_number "whitebalance_${ch}_bgain" "B Gain" %>
 
-<b>Set Auto Zoom</b>
-<% field_number "autozoom_ch" "Channel" %>
-<% field_number "autozoom_sc_en" "Scaler Enabled" %>
-<% field_number "autozoom_sc_w" "Scale Width" %>
-<% field_number "autozoom_sc_w" "Scale Height" %>
-<% field_number "autozoom_cr_en" "Crop Enabled" %>
-<% field_number "autozoom_cr_l" "Crop Left" %>
-<% field_number "autozoom_cr_t" "Crop Top" %>
-<% field_number "autozoom_cr_w" "Crop Width" %>
-<% field_number "autozoom_cr_h" "Crop Height" %>
+	<% field_number "framerate_${ch}" "Encoder FPS" %>
 
-<b>Set Front Crop</b>
-<% field_number "frontcrop_en" "Crop Enable" %>
-<% field_number "frontcrop_t" "Crop Top" %>
-<% field_number "frontcrop_l" "Crop Left" %>
-<% field_number "frontcrop_w" "Crop Width" %>
-<% field_number "frontcrop_h" "Crop Height" %>
+	<b>Bit Rate</b>
+	<% field_number "setbitrate_tgtbr" "Target Bitrate" %>
+	<% field_number "setbitrate_maxbr" "Maximum Bitrate" %>
 
-<b>Set Mask</b>
-<% field_number "mask_en" "Mask Enable" %>
-<% field_number "mask_t" "Mask Top" %>
-<% field_number "mask_l" "Mask Left" %>
-<% field_number "mask_w" "Mask Width" %>
-<% field_number "mask_h" "Mask Height" %>
-<% field_number "mask_g" "Mask Green" %>
-<% field_number "mask_b" "Mask Blue" %>
-<% field_number "mask_r" "Mask Red" %>
+	<b>GOP Attributes</b>
+	<% field_number "gopattr_length" "GOP Length" %>
 
+	<b>GOP Length</b>
+	<% field_number "setgoplength_length" "GOP Length" %>
+
+	<b>QP</b>
+	<% field_number "setqp_qp" "QP" %>
+	<% field_number "setqpbounds_minqp" "Minimum QP" %>
+	<% field_number "setqpbounds_maxqp" "Maximum QP" %>
+	<% field_number "setqpipdelta_ipdelta" "QP IP Delta" %>
+
+	<b>Rate Control Mode</b>
+	<% field_number "rcmode_mode" "Mode" %>
+	<% field_text "rcmode_params" "Parameters" %>
+
+	<b>Set AE Min Parameters</b>
+	<% field_number "aemin_min_it" "Minimum IT" %>
+	<% field_number "aemin_min_again" "Minimum aGain" %>
+	<% field_number "aemin_min_it_short" "Minimum IT Short" %>
+	<% field_number "aemin_min_again_short" "Minimum aGain Short" %>
+
+	<b>Set Auto Zoom</b>
+	<% field_number "autozoom_ch" "Channel" %>
+	<% field_number "autozoom_sc_en" "Scaler Enabled" %>
+	<% field_number "autozoom_sc_w" "Scale Width" %>
+	<% field_number "autozoom_sc_w" "Scale Height" %>
+	<% field_number "autozoom_cr_en" "Crop Enabled" %>
+	<% field_number "autozoom_cr_l" "Crop Left" %>
+	<% field_number "autozoom_cr_t" "Crop Top" %>
+	<% field_number "autozoom_cr_w" "Crop Width" %>
+	<% field_number "autozoom_cr_h" "Crop Height" %>
+
+	<b>Set Front Crop</b>
+	<% field_number "frontcrop_en" "Crop Enable" %>
+	<% field_number "frontcrop_t" "Crop Top" %>
+	<% field_number "frontcrop_l" "Crop Left" %>
+	<% field_number "frontcrop_w" "Crop Width" %>
+	<% field_number "frontcrop_h" "Crop Height" %>
+
+	<b>Set Mask</b>
+	<% field_number "mask_en" "Mask Enable" %>
+	<% field_number "mask_t" "Mask Top" %>
+	<% field_number "mask_l" "Mask Left" %>
+	<% field_number "mask_w" "Mask Width" %>
+	<% field_number "mask_h" "Mask Height" %>
+	<% field_number "mask_g" "Mask Green" %>
+	<% field_number "mask_b" "Mask Blue" %>
+	<% field_number "mask_r" "Mask Red" %>
 </div>
+<% done %>
 </div>
 
 <script>

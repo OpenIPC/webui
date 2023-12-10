@@ -84,6 +84,10 @@ case "$cmd" in
 	*) ;;
 esac
 
+# save to temp config
+sed -i "/^$cmd/d" /tmp/imp.conf
+echo "$cmd $val" >> /tmp/imp.conf
+
 command="/usr/sbin/imp-control.sh $cmd $val"
 result=$($command)
 

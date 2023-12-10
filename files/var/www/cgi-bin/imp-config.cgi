@@ -1,5 +1,6 @@
 #!/usr/bin/haserl
 <%in p/common.cgi %>
+<%in p/icons.cgi %>
 <%
 imp_config_file=/etc/imp.conf
 imp_config_temp_file=/tmp/imp.conf
@@ -10,10 +11,18 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 	if [ -n "$POST_save_changes" ] && [ -f "$imp_config_temp_file" ]; then
 		sort $imp_config_temp_file > $imp_config_file
 	fi
-	# reopen via GET to allow clean refresh
+
+	# reset changes and start afresh
+	if [ -n "$POST_reset_changes" ]; then
+		[ -f "$imp_config_file" ] && rm $imp_config_file
+		[ -f "$imp_config_temp_file" ] && rm $imp_config_temp_file
+		/etc/init.d/S95majestic restart >/dev/null
+		sleep 1
+	fi
+
+	# reload the page via GET to allow clean refresh
 	redirect_to $SCRIPT_NAME
 fi
-
 
 page_title="IMP Configuration"
 
@@ -42,14 +51,16 @@ done
 
 # normalizing values
 [ "$ispmode" -eq 1 ] && ispmode="true"
-[ "$aihpf" = "on" ] && aihpf=1
+[ "$ispmode" -eq 1 ] && ispmode="true"
+[ "$aiaec" = "on" ] && aiaec="true"
+[ "$aihpf" = "on" ] && aihpf="true"
 
 check_flip() {
-	[ $flip -eq 2 ] || [ $flip -eq 3 ] && echo " checked"
+	[ $flip -eq 2 ] || [ $flip -eq 3 ] && echo -n " checked"
 }
 
 check_mirror() {
-	[ $flip -eq 1 ] || [ $flip -eq 3 ] && echo " checked"
+	[ $flip -eq 1 ] || [ $flip -eq 3 ] && echo -n " checked"
 }
 %>
 <%in p/header.cgi %>
@@ -59,25 +70,36 @@ check_mirror() {
     <div class="card mb-3">
       <h5 class="card-header">Video Output</h5>
       <div class="card-body">
-        <% field_switch "ispmode" "Night Mode" %>
-        <div class="mb-3">
-          <p class="form-label">Anti-Flicker</p>
-          <div class="btn-group" role="group" aria-label="Anti-flicker">
-            <input type="radio" class="btn-check" name="flicker" id="flicker_off" value="0"<% [ "$flicker" -eq 0 ] && echo " checked" %>>
-            <label class="btn btn-outline-primary" for="flicker_off">OFF</label>
-            <input type="radio" class="btn-check" name="flicker" id="flicker_50" value="1"<% [ "$flicker" -eq 1 ] && echo " checked" %>>
-            <label class="btn btn-outline-primary" for="flicker_50">50 Hz</label>
-            <input type="radio" class="btn-check" name="flicker" id="flicker_60" value="2"<% [ "$flicker" -eq 2 ] && echo " checked" %>>
-            <label class="btn btn-outline-primary" for="flicker_60">60 Hz</label>
+        <%# field_switch "ispmode" "$icon_moon" %>
+        <div class="row">
+          <div class="col mb-3">
+            <p class="form-label">Color</p>
+            <div class="btn-group" role="group" aria-label="Night Mode">
+              <input type="radio" class="btn-check" name="ispmode" id="ispmode_day" value="0"<% [ "$ispmode" -eq 0 ] && echo -n " checked" %>>
+              <label class="btn btn-outline-primary" for="ispmode_day" title="Day mode"><%= $icon_sun %></label>
+              <input type="radio" class="btn-check" name="ispmode" id="ispmode_night" value="1"<% [ "$ispmode" -eq 1 ] && echo -n " checked" %>>
+              <label class="btn btn-outline-primary" for="ispmode_night" title="Night mode"><%= $icon_moon %></label>
+            </div>
+          </div>
+          <div class="col mb-3">
+            <p class="form-label">Flip</p>
+            <div class="btn-group" role="group" aria-label="Flip and Mirror">
+              <input type="checkbox" class="btn-check" name="flip" id="flip" value="1"<% check_flip %>>
+              <label class="btn btn-outline-primary" for="flip" title="Flip vertically"><%= $icon_flip %></label>
+              <input type="checkbox" class="btn-check" name="mirror" id="mirror" value="1"<% check_mirror %>>
+              <label class="btn btn-outline-primary" for="mirror" title="Flip horizontally"><%= $icon_flop %></label>
+            </div>
           </div>
         </div>
         <div class="mb-3">
-          <p class="form-label">Image Transformation</p>
+          <p class="form-label">Anti-Flicker</p>
           <div class="btn-group" role="group" aria-label="Anti-flicker">
-            <input type="checkbox" class="btn-check" name="flip" id="flip" value="1"<% check_flip %>>
-            <label class="btn btn-outline-primary" for="flip">Flip</label>
-            <input type="checkbox" class="btn-check" name="mirror" id="mirror" value="1"<% check_mirror %>>
-            <label class="btn btn-outline-primary" for="mirror">Mirror</label>
+            <input type="radio" class="btn-check" name="flicker" id="flicker_off" value="0"<% [ "$flicker" -eq 0 ] && echo -n " checked" %>>
+            <label class="btn btn-outline-primary" for="flicker_off">OFF</label>
+            <input type="radio" class="btn-check" name="flicker" id="flicker_50" value="1"<% [ "$flicker" -eq 1 ] && echo -n " checked" %>>
+            <label class="btn btn-outline-primary" for="flicker_50">50 Hz</label>
+            <input type="radio" class="btn-check" name="flicker" id="flicker_60" value="2"<% [ "$flicker" -eq 2 ] && echo -n " checked" %>>
+            <label class="btn btn-outline-primary" for="flicker_60">60 Hz</label>
           </div>
         </div>
         <% field_range "brightness" "Brightness" "0,255" %>
@@ -103,7 +125,7 @@ check_mirror() {
         <% field_number "again" "Analog Gain" %>
         <% field_number "dgain" "Digital Gain" %>
         <% field_number "backlightcomp" "Backlight Compensation Strength" %>
-        <% field_number "sensorfps" "Sensor FPS" %>
+        <% field_range "sensorfps" "Sensor FPS" "5,30" %>
       </div>
     </div>
   </div>
@@ -130,10 +152,24 @@ check_mirror() {
   </div>
 </div>
 
-<form action="<%= $SCRIPT_NAME %>" method="post" class="mb-3">
-  <input type="hidden" name="save_changes" value="1">
-  <input type="submit" value="Save Changes" class="btn btn-primary">
-</form>
+<div id="savechanges" class="alert alert-warning mb-3 d-none">
+  <p class="mb-0">Please do not forget to save your changes!</p>
+</div>
+
+<div class="row">
+  <div class="col-auto me-auto mb-3">
+    <form action="<%= $SCRIPT_NAME %>" method="post" class="mb-3">
+      <input type="hidden" name="save_changes" value="1">
+      <input type="submit" value="Save Changes" class="btn btn-primary">
+    </form>
+  </div>
+  <div class="col-auto mb-3">
+    <form action="<%= $SCRIPT_NAME %>" method="post" class="mb-3">
+      <input type="hidden" name="reset_changes" value="1">
+      <input type="submit" value="Reset to default" class="btn btn-danger">
+    </form>
+  </div>
+</div>
 
 <h3>Debug</h3>
 <div class="row row-cols-2 g-3">
@@ -155,14 +191,16 @@ function callImp(command, value) {
 		if (document.querySelector('#flip').checked) value = (1 << 1)
 		if (document.querySelector('#mirror').checked) value += 1
 	} else if (["aiaec", "aihpf"].includes(command)) {
-		value = (value == 1) ? "on" : "off"
+		value = (value === 1) ? "on" : "off"
 	} else if (["ains"].includes(command)) {
-		if (value == -1) value = "off"
+		if (value === -1) value = "off"
 	}
 
 	const xhr = new XMLHttpRequest();
 	xhr.open('GET', '/cgi-bin/j/imp.cgi?cmd=' + command + '&val=' + value);
 	xhr.send();
+
+  document.querySelector('#savechanges').classList.remove('d-none');
 }
 
 // checkboxes

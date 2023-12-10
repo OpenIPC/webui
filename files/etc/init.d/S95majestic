@@ -60,7 +60,7 @@ stop() {
 }
 
 restart() {
-	stop
+	stop || true
 	sleep 1
 	reload
 }

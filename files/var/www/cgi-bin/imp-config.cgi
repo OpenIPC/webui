@@ -50,8 +50,6 @@ for i in $commands; do
 done
 
 # normalizing values
-[ "$ispmode" -eq 1 ] && ispmode="true"
-[ "$ispmode" -eq 1 ] && ispmode="true"
 [ "$aiaec" = "on" ] && aiaec="true"
 [ "$aihpf" = "on" ] && aihpf="true"
 
@@ -75,9 +73,9 @@ check_mirror() {
           <div class="col mb-3">
             <p class="form-label">Color</p>
             <div class="btn-group" role="group" aria-label="Night Mode">
-              <input type="radio" class="btn-check" name="ispmode" id="ispmode_day" value="0"<% [ "$ispmode" -eq 0 ] && echo -n " checked" %>>
+              <input type="radio" class="btn-check" name="ispmode" id="ispmode_day" value="0"<% checked_if $ispmode 0 %>>
               <label class="btn btn-outline-primary" for="ispmode_day" title="Day mode"><%= $icon_sun %></label>
-              <input type="radio" class="btn-check" name="ispmode" id="ispmode_night" value="1"<% [ "$ispmode" -eq 1 ] && echo -n " checked" %>>
+              <input type="radio" class="btn-check" name="ispmode" id="ispmode_night" value="1"<% checked_if $ispmode 1 %>>
               <label class="btn btn-outline-primary" for="ispmode_night" title="Night mode"><%= $icon_moon %></label>
             </div>
           </div>
@@ -94,11 +92,11 @@ check_mirror() {
         <div class="mb-3">
           <p class="form-label">Anti-Flicker</p>
           <div class="btn-group" role="group" aria-label="Anti-flicker">
-            <input type="radio" class="btn-check" name="flicker" id="flicker_off" value="0"<% [ "$flicker" -eq 0 ] && echo -n " checked" %>>
+            <input type="radio" class="btn-check" name="flicker" id="flicker_off" value="0"<% checked_if "$flicker" 0 %>>
             <label class="btn btn-outline-primary" for="flicker_off">OFF</label>
-            <input type="radio" class="btn-check" name="flicker" id="flicker_50" value="1"<% [ "$flicker" -eq 1 ] && echo -n " checked" %>>
+            <input type="radio" class="btn-check" name="flicker" id="flicker_50" value="1"<% checked_if "$flicker" 1 %>>
             <label class="btn btn-outline-primary" for="flicker_50">50 Hz</label>
-            <input type="radio" class="btn-check" name="flicker" id="flicker_60" value="2"<% [ "$flicker" -eq 2 ] && echo -n " checked" %>>
+            <input type="radio" class="btn-check" name="flicker" id="flicker_60" value="2"<% checked_if "$flicker" 2 %>>
             <label class="btn btn-outline-primary" for="flicker_60">60 Hz</label>
           </div>
         </div>

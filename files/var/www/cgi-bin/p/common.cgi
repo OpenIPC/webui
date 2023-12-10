@@ -169,6 +169,10 @@ check_password() {
 	fi
 }
 
+checked_if() {
+	[ "$1" = "$2" ] && echo -n " checked"
+}
+
 e() {
 	echo -e -n "$1"
 }
@@ -190,7 +194,7 @@ field_checkbox() {
 	[ -z "$v" ] && v="false"
 	echo "<p class=\"boolean form-check\">" \
 		"<input type=\"hidden\" id=\"${1}-false\" name=\"${1}\" value=\"false\">" \
-		"<input type=\"checkbox\" name=\"${1}\" id=\"${1}\" value=\"true\" class=\"form-check-input\"$(t_checked "true" "$v")>" \
+		"<input type=\"checkbox\" name=\"${1}\" id=\"${1}\" value=\"true\" class=\"form-check-input\"$(checked_if "true" "$v")>" \
 		"<label for=\"${1}\" class=\"form-label\">${l}</label>"
 	[ -n "$h" ] && echo "<span class=\"hint text-secondary d-block mb-2\">${h}</span>"
 	echo "</p>"
@@ -235,7 +239,7 @@ field_number() {
 		"<span class=\"input-group\">"
 	# NB! no name on checkbox, since we don't want its data submitted
 	[ -n "$ab" ] && echo "<label class=\"input-group-text\" for=\"${n}-auto\">${ab}" \
-		"<input type=\"checkbox\" class=\"form-check-input auto-value ms-1\" id=\"${n}-auto\" data-for=\"${n}\" data-value=\"${vr}\" $(t_checked "$ab" "$v")>" \
+		"<input type=\"checkbox\" class=\"form-check-input auto-value ms-1\" id=\"${n}-auto\" data-for=\"${n}\" data-value=\"${vr}\" $(checked_if "$ab" "$v")>" \
 		"</label>"
 	echo "<input type=\"number\" id=\"${n}\" name=\"${n}\" class=\"form-control text-end\" value=\"${vr}\" min=\"${mn}\" max=\"${mx}\" step=\"${st}\">" \
 		"</span>"
@@ -280,7 +284,7 @@ field_range() {
 		"<span class=\"input-group\">"
 	# NB! no name on checkbox, since we don't want its data submitted
 	[ -n "$ab" ] && echo "<label class=\"input-group-text\" for=\"${n}-auto\">${ab}" \
-		"<input type=\"checkbox\" class=\"form-check-input auto-value ms-1\" id=\"${n}-auto\" data-for=\"${n}\" data-value=\"${vr}\" $(t_checked "$ab" "$v")>" \
+		"<input type=\"checkbox\" class=\"form-check-input auto-value ms-1\" id=\"${n}-auto\" data-for=\"${n}\" data-value=\"${vr}\" $(checked_if "$ab" "$v")>" \
 		"</label>"
 	# Input that holds the submitting value.
 	echo "<input type=\"hidden\" name=\"${n}\" id=\"${n}\" value=\"${v}\">"
@@ -335,7 +339,7 @@ field_switch() {
 	echo "<p class=\"boolean\">" \
 		"<span class=\"form-check form-switch\">" \
 		"<input type=\"hidden\" id=\"${1}-false\" name=\"${1}\" value=\"${o2}\">" \
-		"<input type=\"checkbox\" id=\"${1}\" name=\"${1}\" value=\"${o1}\" role=\"switch\" class=\"form-check-input\"$(t_checked "$o1" "$v")>" \
+		"<input type=\"checkbox\" id=\"${1}\" name=\"${1}\" value=\"${o1}\" role=\"switch\" class=\"form-check-input\"$(checked_if "$o1" "$v")>" \
 		"<label for=\"$1\" class=\"form-check-label\">${l}</label>" \
 		"</span>"
 	[ -n "$h" ] && echo "<span class=\"hint text-secondary\">${h}</span>"
@@ -677,10 +681,6 @@ tab_lap() {
 	echo "<li class=\"nav-item\" role=\"presentation\">" \
 		"<button role=\"tab\" id=\"#${1}-tab\" class=\"nav-link${c}\" data-bs-toggle=\"tab\" data-bs-target=\"#${1}-tab-pane\" aria-controls=\"${1}-tab-pane\" aria-selected=\"${s}\">${2}</button>" \
 		"</li>"
-}
-
-t_checked() {
-	[ "$2" = "$1" ] && echo " checked"
 }
 
 t_label() {

@@ -72,7 +72,7 @@ check_mirror() {
         <div class="row">
           <div class="col mb-3">
             <p class="form-label">Color</p>
-            <div class="btn-group" role="group" aria-label="Night Mode">
+            <div class="btn-group d-flex" role="group" aria-label="Night Mode">
               <input type="radio" class="btn-check" name="ispmode" id="ispmode_day" value="0"<% checked_if $ispmode 0 %>>
               <label class="btn btn-outline-primary" for="ispmode_day" title="Day mode"><%= $icon_sun %></label>
               <input type="radio" class="btn-check" name="ispmode" id="ispmode_night" value="1"<% checked_if $ispmode 1 %>>
@@ -81,7 +81,7 @@ check_mirror() {
           </div>
           <div class="col mb-3">
             <p class="form-label">Flip</p>
-            <div class="btn-group" role="group" aria-label="Flip and Mirror">
+            <div class="btn-group d-flex" role="group" aria-label="Flip and Mirror">
               <input type="checkbox" class="btn-check" name="flip" id="flip" value="1"<% check_flip %>>
               <label class="btn btn-outline-primary" for="flip" title="Flip vertically"><%= $icon_flip %></label>
               <input type="checkbox" class="btn-check" name="mirror" id="mirror" value="1"<% check_mirror %>>
@@ -91,7 +91,7 @@ check_mirror() {
         </div>
         <div class="mb-3">
           <p class="form-label">Anti-Flicker</p>
-          <div class="btn-group" role="group" aria-label="Anti-flicker">
+          <div class="btn-group d-flex" role="group" aria-label="Anti-flicker">
             <input type="radio" class="btn-check" name="flicker" id="flicker_off" value="0"<% checked_if "$flicker" 0 %>>
             <label class="btn btn-outline-primary" for="flicker_off">OFF</label>
             <input type="radio" class="btn-check" name="flicker" id="flicker_50" value="1"<% checked_if "$flicker" 1 %>>

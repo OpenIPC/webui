@@ -201,13 +201,19 @@ function callImp(command, value) {
   document.querySelector('#savechanges').classList.remove('d-none');
 }
 
+// numbers
+document.querySelectorAll('input[type=number]').forEach(el => {
+	el.autocomplete = "off"
+	el.addEventListener('change', ev => callImp(ev.target.name, ev.target.value))
+});
+
 // checkboxes
 document.querySelectorAll('input[type=checkbox]').forEach(el => {
 	el.autocomplete = "off"
 	el.addEventListener('change', ev => callImp(ev.target.name, ev.target.checked ? 1 : 0))
 });
 
-// checkboxes
+// radios
 document.querySelectorAll('input[type=radio]').forEach(el => {
 	el.autocomplete = "off"
 	el.addEventListener('change', ev => callImp(ev.target.name, ev.target.value))

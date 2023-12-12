@@ -70,6 +70,27 @@ size_h=${size#*x}
       <div class="collapse collapsed" id="night-buttons">
       <div class="btn-group d-flex" role="group" aria-label="IR LEDs">
         <input type="checkbox" class="btn-check" id="toggle-color" value="1">
+        <label class="btn btn-outline-primary" for="toggle-color" title="ISP Color Mode"><%= $icon_color %></label>
+        <input type="checkbox" class="btn-check" id="toggle-ircut" value="1"<% fw_printenv -n ircut_pins >/dev/null || echo " disabled" %>>
+        <label class="btn btn-outline-primary" for="toggle-ircut" title="IRCUT Filter"><%= $icon_ircut %></label>
+        <input type="checkbox" class="btn-check" id="toggle-ir850" value="1"<% fw_printenv -n ir850_led_pin >/dev/null || echo " disabled" %>>
+        <label class="btn btn-outline-primary" for="toggle-ir850" title="IR LEDs 850 nm"><img src="/a/ir850.svg" alt="Icon: IR 850 LED"></label>
+        <input type="checkbox" class="btn-check" id="toggle-ir940" value="1"<% fw_printenv -n ir940_led_pin >/dev/null || echo " disabled" %>>
+        <label class="btn btn-outline-primary" for="toggle-ir940" title="IR LEDs 940 nm"><img src="/a/ir940.svg" alt="Icon: IR 940 LED"></label>
+        <input type="checkbox" class="btn-check" id="toggle-white" value="1"<% fw_printenv -n white_led_pin >/dev/null || echo " disabled" %>>
+        <label class="btn btn-outline-primary" for="toggle-white" title="White Light LEDs"><%= $icon_whled %></label>
+      </div>
+    </div>
+      <div class="input-group">
+        <button type="button" class="form-control btn btn-primary text-start" id="toggle-night" data-bs-toggle="button">Day/Night Mode</button>
+        <div class="input-group-text">
+          <a href="#night-buttons" data-bs-toggle="collapse" data-bs-target="#night-buttons"><img src="/a/chevron-compact-down.svg" alt="Open"></a>
+        </div>
+      </div>
+
+      <div class="collapse collapsed" id="night-buttons">
+      <div class="btn-group d-flex" role="group" aria-label="IR LEDs">
+        <input type="checkbox" class="btn-check" id="toggle-color" value="1">
         <label class="btn btn-outline-primary" for="toggle-color" title="ISP Color Mode"><img src="/a/palette.svg" alt="Icon: Color mode"></label>
         <input type="checkbox" class="btn-check" id="toggle-ircut" value="1"<% fw_printenv -n ircut_pins >/dev/null || echo " disabled" %>>
         <label class="btn btn-outline-primary" for="toggle-ircut" title="IRCUT Filter"><img src="/a/shadows.svg" alt="Icon: IRCUT filter"></label>

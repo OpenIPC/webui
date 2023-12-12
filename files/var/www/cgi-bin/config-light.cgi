@@ -41,6 +41,9 @@ ircut_pins=$(fw_printenv -n ircut_pins)
 ircut_pin1=$(echo $ircut_pins | awk '{print $1}')
 ircut_pin2=$(echo $ircut_pins | awk '{print $2}')
 
+ircut_pin1=$(echo $ircut_pins | awk '{print $1}')
+ircut_pin2=$(echo $ircut_pins | awk '{print $2}')
+
 # reuse Majestic values is not found in env
 if [ -z "$ir850_led_pin" ]; then
 	ir850_led_pin=$(cli -g .nightMode.backlightPin)

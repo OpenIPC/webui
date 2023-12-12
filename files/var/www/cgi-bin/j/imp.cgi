@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck disable=SC2039
 
 bad_request() {
 	echo "HTTP/1.1 400 Bad Request"
@@ -19,11 +20,18 @@ unknown_value() {
 	bad_request "unknown value"
 }
 
+urldecode() {
+	local i="${*//+/ }"
+	echo -e "${i//%/\\x}"
+}
+
 # parse parameters from query string
 [ -n "$QUERY_STRING" ] && eval $(echo "$QUERY_STRING" | sed "s/&/;/g")
 
 # quit if no command sent
 [ -z "$cmd" ] && bad_request "missing required parameter cmd"
+
+val="$(urldecode "$val")"
 
 # check lower limit
 case "$cmd" in
@@ -33,7 +41,7 @@ case "$cmd" in
 	ains)
 		[ "$val" -lt -1 ] && unknown_value
 		;;
-	aecomp | aialc | aigain | aogain | brightness | contrast | defogstrength | dpc | drc | flicker | flip | hilight | hue | ispmode | saturation | sharpness | sinter | temper)
+	aecomp | aialc | aigain | aogain | brightness | contrast | defogstrength | dpc | drc | flicker | flip | hilight | hue | ispmode | saturation | setosdalpha | sharpness | sinter | temper)
 		[ "$val" -lt -0 ] && unknown_value
 		;;
 	*) ;;
@@ -62,7 +70,7 @@ case "$cmd" in
 	aivol | aovol)
 		[ "$val" -gt 120 ] && unknown_value
 		;;
-	aecomp | brightness | contrast | defogstrength | dpc | drc | hue | saturation | sharpness | sinter | temper)
+	aecomp | brightness | contrast | defogstrength | dpc | drc | hue | saturation | setosdalpha | sharpness | sinter | temper)
 		[ "$val" -gt 255 ] && unknown_value
 		;;
 	*) ;;

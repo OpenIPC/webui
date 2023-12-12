@@ -26,13 +26,13 @@ fi
 
 page_title="IMP Configuration"
 
-commands_do_not_work="ains framerate frontcrop mask rcmode setbitrate
-setgoplength setqp setqpbounds setqpipdelta"
+commands_do_not_work="aemin aiaec aiagc aihpf ains aogain aovol autozoom
+framerate gopattr mask rcmode setbitrate setgoplength setqp
+setqpbounds setqpipdelta whitebalance"
 
-commands="aecomp aeitmax aemin again aiaec aigain aiagc aialc aigain aihpf
-aivol aogain aovol autozoom backlightcomp brightness contrast defogstrength
-dgain dpc drc flicker flip gopattr hilight hue ispmode saturation sensorfps
-sharpness sinter temper whitebalance"
+commands="aecomp aeitmax again aigain aialc aigain aivol backlightcomp brightness
+contrast defogstrength dgain dpc drc flicker flip frontcrop hilight hue ispmode
+saturation sensorfps setosdalpha setosdpos sharpness sinter temper"
 
 commands_channel="framerate"
 
@@ -42,16 +42,29 @@ cp -f $imp_config_file $imp_config_temp_file
 # reading values
 for i in $commands; do
 	if grep -q "^$i\s" $imp_config_temp_file; then
-		eval "$i=$(awk "/^$i\s/ {print \$2}" $imp_config_temp_file)"
+		eval "$i=\"$(sed -n "/^$i\s/p" $imp_config_temp_file | cut -d" " -f2-)\""
 	else
-		eval "$i=$(/usr/sbin/imp-control.sh $i)"
+		eval "$i=\"$(/usr/sbin/imp-control.sh $i)\""
 	fi
-	#while read -r line; do /usr/sbin/imp-control.sh $line; done < /etc/imp.conf
 done
 
-# normalizing values
+# convert complex values
+if [ -n "$setosdpos" ]; then
+	setosdpos_x=$(echo "$setosdpos" | awk '{print $2}')
+	setosdpos_y=$(echo "$setosdpos" | awk '{print $3}')
+fi
+
+if [ -n "$whitebalance" ]; then
+	whitebalance_mode=$(echo "$whitebalance" | awk '{print $1}')
+	whitebalance_rgain=$(echo "$whitebalance" | awk '{print $2}')
+	whitebalance_bgain=$(echo "$whitebalance" | awk '{print $3}')
+fi
+
+# normalize values
 [ "$aiaec" = "on" ] && aiaec="true"
 [ "$aihpf" = "on" ] && aihpf="true"
+[ -z "$setosdpos_x" ] && setosdpos_x=0
+[ -z "$setosdpos_y" ] && setosdpos_y=0
 
 check_flip() {
 	[ $flip -eq 2 ] || [ $flip -eq 3 ] && echo -n " checked"
@@ -100,6 +113,7 @@ check_mirror() {
             <label class="btn btn-outline-primary" for="flicker_60">60 Hz</label>
           </div>
         </div>
+        <% field_range "sensorfps" "Sensor FPS" "5,30" %>
         <% field_range "brightness" "Brightness" "0,255" %>
         <% field_range "contrast" "Contrast" "0,255" %>
         <% field_range "saturation" "Saturation" "0,255" %>
@@ -122,8 +136,18 @@ check_mirror() {
         <% field_number "aeitmax" "AE Max Parameters" %>
         <% field_number "again" "Analog Gain" %>
         <% field_number "dgain" "Digital Gain" %>
-        <% field_number "backlightcomp" "Backlight Compensation Strength" %>
-        <% field_range "sensorfps" "Sensor FPS" "5,30" %>
+        <% field_number "backlightcomp" "Backlight Compensation" %>
+        <div class="row">
+          <div class="col">
+            <% field_number "whitebalance_mode" "Mode" %>
+          </div>
+          <div class="col">
+            <% field_number "whitebalance_rgain" "RGain" %>
+          </div>
+          <div class="col">
+            <% field_number "whitebalance_bgain" "BGain" %>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -148,6 +172,24 @@ check_mirror() {
       </div>
     </div>
   </div>
+  <div class="col">
+    <div class="card mb-3">
+      <h5 class="card-header">OSD</h5>
+      <div class="card-body">
+        <% field_range "setosdalpha" "Opacity" "0,255" %>
+        <div class="row">
+          <div class="col">
+            <% field_number "setosdpos_x" "X-position" %>
+          </div>
+          <div class="col">
+            <% field_number "setosdpos_y" "Y-position" %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <% field_text "frontcrop" "Front Crop" %>
+  </div>
 </div>
 
 <div id="savechanges" class="alert alert-warning mb-3 d-none">
@@ -170,64 +212,23 @@ check_mirror() {
 </div>
 
 <h3>Debug</h3>
-<div class="row row-cols-2 g-3">
-  <div class="col mb-3">
+<div class="row">
+  <div class="col col-3 mb-3">
     <b>/etc/imp.conf</b>
     <pre><% cat /etc/imp.conf %></pre>
+    <b>/tmp/imp.conf</b>
+    <pre><% cat /tmp/imp.conf %></pre>
   </div>
-  <div class="col mb-3">
+  <div class="col col-3 mb-3">
     <b>in memory values</b>
     <pre><% for i in $commands; do eval "echo $i = \$$i"; done %></pre>
   </div>
+  <div class="col col-6 mb-3">
+    <b>commands to fix</b>
+    <pre><% for i in $commands_do_not_work; do echo -e "$i\n$(/usr/sbin/imp-control.sh $i)\n"; done %></pre>
+  </div>
 </div>
 
-<script>
-function callImp(command, value) {
-	if (["flip", "mirror"].includes(command)) {
-		command = "flip"
-		value = 0
-		if (document.querySelector('#flip').checked) value = (1 << 1)
-		if (document.querySelector('#mirror').checked) value += 1
-	} else if (["aiaec", "aihpf"].includes(command)) {
-		value = (value === 1) ? "on" : "off"
-	} else if (["ains"].includes(command)) {
-		if (value === -1) value = "off"
-	}
-
-	const xhr = new XMLHttpRequest();
-	xhr.open('GET', '/cgi-bin/j/imp.cgi?cmd=' + command + '&val=' + value);
-	xhr.send();
-
-  document.querySelector('#savechanges').classList.remove('d-none');
-}
-
-// numbers
-document.querySelectorAll('input[type=number]').forEach(el => {
-	el.autocomplete = "off"
-	el.addEventListener('change', ev => callImp(ev.target.name, ev.target.value))
-});
-
-// checkboxes
-document.querySelectorAll('input[type=checkbox]').forEach(el => {
-	el.autocomplete = "off"
-	el.addEventListener('change', ev => callImp(ev.target.name, ev.target.checked ? 1 : 0))
-});
-
-// radios
-document.querySelectorAll('input[type=radio]').forEach(el => {
-	el.autocomplete = "off"
-	el.addEventListener('change', ev => callImp(ev.target.name, ev.target.value))
-});
-
-// ranges
-document.querySelectorAll('input[type=range]').forEach(el => {
-	el.addEventListener('change', ev => callImp(ev.target.id.replace('-range', ''), ev.target.value))
-});
-
-// selects
-document.querySelectorAll('select').forEach(el => {
-	el.addEventListener('change', ev => callImp(ev.target.id, ev.target.value))
-});
-</script>
+<script src="/a/imp-config.js"></script>
 
 <%in p/footer.cgi %>

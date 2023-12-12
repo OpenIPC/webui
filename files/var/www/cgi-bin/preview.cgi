@@ -102,7 +102,6 @@ size_h=${size#*x}
         <label class="btn btn-outline-primary" for="toggle-white" title="White Light LEDs"><img src="/a/light-on.svg" alt="Icon: White light"></label>
       </div>
     </div>
-    </div>
   </div>
 </div>
 

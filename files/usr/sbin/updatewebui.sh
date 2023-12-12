@@ -85,7 +85,7 @@ upd_dir="${unzip_dir}/${bundle_dir}/files"
 echo_c 37 "Copy newer files from ${upd_dir} to web directory"
 for upd_file in $(find "$upd_dir" -type f -or -type l); do
 	ovl_file=${upd_file#${upd_dir}}
-	if [ ! -f "$ovl_file" ] || diff -q "$ovl_file" "$upd_file"; then
+	if [ ! -f "$ovl_file" ] || ! diff -q "$ovl_file" "$upd_file"; then
 		[ ! -d "${ovl_file%/*}" ] && mkdir -p "$(dirname "$ovl_file")"
 		cp $v_opts -f "$upd_file" "$ovl_file"
 	fi

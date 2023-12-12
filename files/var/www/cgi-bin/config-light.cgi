@@ -15,16 +15,13 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 	[ -z "$day_night_min" ] && day_night_min=400
 	[ -z "$day_night_max" ] && day_night_max=600
 
-	ircut_pin1 = $(echo $POST_ircut_pin1 | awk '{print $1}')
-	ircut_pin2 = $(echo $POST_ircut_pin2 | awk '{print $2}')
-
 	# save values to env
 	update_uboot_env ir850_led_pin $POST_ir850_led_pin
 	update_uboot_env ir940_led_pin $POST_ir940_led_pin
 	update_uboot_env white_led_pin $POST_white_led_pin
 	update_uboot_env day_night_min $day_night_min
 	update_uboot_env day_night_max $day_night_max
-	update_uboot_env ircut_pins "$ircut_pin1 $ircut_pin2"
+	update_uboot_env ircut_pins "$POST_ircut_pin1 $POST_ircut_pin2"
 
 	# update Majestic config
 	cli -s .nightMode.irCutPin1 $ircut_pin1
@@ -41,6 +38,9 @@ white_led_pin=$(fw_printenv -n white_led_pin)
 day_night_min=$(fw_printenv -n day_night_min)
 day_night_max=$(fw_printenv -n day_night_max)
 ircut_pins=$(fw_printenv -n ircut_pins)
+
+ircut_pin1=$(echo $ircut_pins | awk '{print $1}')
+ircut_pin2=$(echo $ircut_pins | awk '{print $2}')
 
 # reuse Majestic values is not found in env
 if [ -z "$ir850_led_pin" ]; then

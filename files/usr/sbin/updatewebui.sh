@@ -69,7 +69,7 @@ cmd="${cmd} --output $tmp_file"
 log_and_run "$cmd"
 [ ! -f "$tmp_file" ] && clean_quit 1 "GitHub version matches the installed one. Nothing to update."
 
-[ -z "$commit" ] && commit=$(tail -c 40 $tmp_file | cut -b1-7)
+[ -z "$commit" ] && commit=$(tail -c 40 "$tmp_file" | cut -b1-7)
 
 # date in ISO format. ugly but it works
 _ts=$(unzip -l "$tmp_file" | head -5 | tail -1 | xargs | cut -d" " -f2)

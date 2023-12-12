@@ -22,7 +22,7 @@ load_majestic() {
 		start-stop-daemon -b -m -S -q -p "$PIDFILE" -x /usr/bin/env -- \
 			LD_PRELOAD=/usr/lib/libimp_control.so /usr/bin/$DAEMON $DAEMON_ARGS
 	else
-		start-stop-daemon -b -m -S -q -p "$PIDFILE" -x /usr/bin/$DAEMON $DAEMON_ARGS
+		start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/bin/$DAEMON" -- $DAEMON_ARGS
 	fi
 
 	status=$?

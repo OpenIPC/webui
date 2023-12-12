@@ -1,13 +1,14 @@
 #!/bin/sh
 
-# set parameters from cli, if empty
-[ -z "$mode" ] && mode=$1
-[ -z "$pin1" ] && pin1=$2
-[ -z "$pin2" ] && pin2=$3
+# set parameters from cli
+mode=$1
+pin1=$2
+pin2=$3
 
 # read IRCUT pins from bootloader environment
-pin1=$(fw_printenv -n ircut_pin1)
-pin2=$(fw_printenv -n ircut_pin2)
+ircut_pins=$(fw_printenv -n ircut_pins)
+[ -z "$pin1" ] && pin1=$(echo $ircut_pins | awk '{print $1}')
+[ -z "$pin2" ] && pin2=$(echo $ircut_pins | awk '{print $2}')
 
 # read IRCUT pins from majestic config, if empty
 [ -z "$pin1" ] && pin1=$(cli -g .nightMode.irCutPin1)

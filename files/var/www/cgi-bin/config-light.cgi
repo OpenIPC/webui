@@ -38,7 +38,6 @@ white_led_pin=$(fw_printenv -n white_led_pin)
 day_night_min=$(fw_printenv -n day_night_min)
 day_night_max=$(fw_printenv -n day_night_max)
 ircut_pins=$(fw_printenv -n ircut_pins)
-
 ircut_pin1=$(echo $ircut_pins | awk '{print $1}')
 ircut_pin2=$(echo $ircut_pins | awk '{print $2}')
 

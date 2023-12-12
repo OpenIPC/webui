@@ -39,14 +39,15 @@ commands_channel="framerate"
 # create a copy of IMP config file
 cp -f $imp_config_file $imp_config_temp_file
 
-# reading values
+# reading actual values from implib
 for i in $commands; do
-	if grep -q "^$i\s" $imp_config_temp_file; then
-		eval "$i=\"$(sed -n "/^$i\s/p" $imp_config_temp_file | cut -d" " -f2-)\""
-	else
-		eval "$i=\"$(/usr/sbin/imp-control.sh $i)\""
-	fi
+	eval "$i=\"$(/usr/sbin/imp-control.sh $i)\""
 done
+
+# read values from temp config file
+# if grep -q "^$i\s" $imp_config_temp_file; then
+#	eval "$i=\"$(sed -n "/^$i\s/p" $imp_config_temp_file | cut -d" " -f2-)\""
+# fi
 
 # convert complex values
 if [ -n "$setosdpos" ]; then

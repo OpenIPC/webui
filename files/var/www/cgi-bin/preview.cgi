@@ -61,62 +61,26 @@ size_h=${size#*x}
       </div>
 
       <div class="input-group">
+        <button type="button" class="form-control btn btn-primary text-start" id="toggle-night" data-bs-toggle="button">Day/Night Mode</button>
         <div class="input-group-text">
-          <img src="/a/light-off.svg" alt="Image: Night mode indicator" id="night-status">
-        </div>
-        <button class="form-control btn btn-primary text-start" type="button" id="toggle-night">Toggle night mode</button>
-        <div class="input-group-text">
-          <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
+          <a href="#night-buttons" data-bs-toggle="collapse" data-bs-target="#night-buttons"><img src="/a/chevron-compact-down.svg" alt="Open"></a>
         </div>
       </div>
-      <div class="input-group">
-        <div class="input-group-text">
-          <img src="/a/palette-fill.svg" alt="Image: Color mode indicator" id="color-status">
-        </div>
-        <button class="form-control btn btn-secondary text-start" type="button" id="toggle-color">Color mode</button>
+
+      <div class="collapse collapsed" id="night-buttons">
+      <div class="btn-group d-flex" role="group" aria-label="IR LEDs">
+        <input type="checkbox" class="btn-check" id="toggle-color" value="1">
+        <label class="btn btn-outline-primary" for="toggle-color" title="ISP Color Mode"><img src="/a/palette.svg" alt="Icon: Color mode"></label>
+        <input type="checkbox" class="btn-check" id="toggle-ircut" value="1"<% fw_printenv -n ircut_pins >/dev/null || echo " disabled" %>>
+        <label class="btn btn-outline-primary" for="toggle-ircut" title="IRCUT Filter"><img src="/a/shadows.svg" alt="Icon: IRCUT filter"></label>
+        <input type="checkbox" class="btn-check" id="toggle-ir850" value="1"<% fw_printenv -n ir850_led_pin >/dev/null || echo " disabled" %>>
+        <label class="btn btn-outline-primary" for="toggle-ir850" title="IR LEDs 850 nm"><img src="/a/ir850.svg" alt="Icon: IR 850 LED"></label>
+        <input type="checkbox" class="btn-check" id="toggle-ir940" value="1"<% fw_printenv -n ir940_led_pin >/dev/null || echo " disabled" %>>
+        <label class="btn btn-outline-primary" for="toggle-ir940" title="IR LEDs 940 nm"><img src="/a/ir940.svg" alt="Icon: IR 940 LED"></label>
+        <input type="checkbox" class="btn-check" id="toggle-white" value="1"<% fw_printenv -n white_led_pin >/dev/null || echo " disabled" %>>
+        <label class="btn btn-outline-primary" for="toggle-white" title="White Light LEDs"><img src="/a/light-on.svg" alt="Icon: White light"></label>
       </div>
-      <div class="input-group">
-        <div class="input-group-text">
-          <img src="/a/light-off.svg" alt="Image: IR filter indicator" id="ircut-status">
-        </div>
-        <button class="form-control btn btn-secondary text-start" type="button" id="toggle-ircut">IR-cut filter</button>
-        <div class="input-group-text">
-          <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
-        </div>
-      </div>
-<% if fw_printenv -n ir850_led_pin >/dev/null; then %>
-      <div class="input-group">
-        <div class="input-group-text">
-          <img src="/a/light-off.svg" alt="Image: IR LED indicator" id="ir850-led-status">
-        </div>
-        <button class="form-control btn btn-secondary text-start" type="button" id="toggle-ir850-led">IR LED 850 nm</button>
-        <div class="input-group-text">
-          <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
-        </div>
-      </div>
-<% fi %>
-<% if fw_printenv -n ir940_led_pin >/dev/null; then %>
-      <div class="input-group">
-        <div class="input-group-text">
-          <img src="/a/light-off.svg" alt="Image: IR LED indicator" id="ir940-led-status">
-        </div>
-        <button class="form-control btn btn-secondary text-start" type="button" id="toggle-ir940-led">IR LED 940 nm</button>
-        <div class="input-group-text">
-          <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
-        </div>
-      </div>
-<% fi %>
-<% if fw_printenv -n white_led_pin >/dev/null; then %>
-      <div class="input-group">
-        <div class="input-group-text">
-          <img src="/a/light-off.svg" alt="Image: White LED indicator" id="white-led-status">
-        </div>
-        <button class="form-control btn btn-secondary text-start" type="button" id="toggle-white-led">White Light</button>
-        <div class="input-group-text">
-          <a href="majestic-settings.cgi?tab=nightMode" title="Night mode settings"><img src="/a/gear.svg" alt="Gear"></a>
-        </div>
-      </div>
-<% fi %>
+    </div>
     </div>
   </div>
 </div>
@@ -143,111 +107,59 @@ function reqListener(data) {
   console.log(data.responseText);
 }
 
+function xhrGet(url) {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', url);
+  xhr.send();
+}
+
 $$("a[id^=pan-],a[id^=zoom-]").forEach(el => {
-  el.addEventListener("click", event => {
-    event.preventDefault();
+  el.addEventListener("click", ev => {
+    ev.preventDefault();
     alert("Sorry, this feature does not work, yet!");
   });
 });
 
 $$("button[data-sendto]").forEach(el => {
-  el.addEventListener("click", event => {
-    event.preventDefault();
+  el.addEventListener("click", ev => {
+    ev.preventDefault();
     if (!confirm("Are you sure?")) return false;
-    const tgt = event.target.dataset["sendto"];
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/cgi-bin/send.cgi?to=" + tgt);
-    xhr.send();
+    const tgt = ev.target.dataset["sendto"];
+    xhrGet("/cgi-bin/send.cgi?to=" + tgt);
   });
 });
 
-$("#speed")?.addEventListener("click", event => {
-  event.preventDefault();
-  event.target.src = (event.target.src.split("/").pop() == "speed-slow.svg") ? "/a/speed-fast.svg" : "/a/speed-slow.svg";
+[ "color", "ircut" ].forEach(n => {
+  $("#toggle-" + n).addEventListener("change", ev => {
+    mode = (ev.target.checked) ? "on" : "off";
+    xhrGet("/cgi-bin/j/" + n + ".cgi?mode=" + mode);
+  });
 });
 
-$("#toggle-color").addEventListener("click", event => {
-  event.preventDefault();
-  const icn = $('#color-status');
-  if (icn.src.split("/").pop() == "palette-fill.svg") {
-    icn.src = "/a/palette.svg";
-    mode = 'off';
+[ "ir850", "ir940", "white" ].forEach(n => {
+  $("#toggle-" + n).addEventListener("change", ev => {
+    mode = (ev.target.checked) ? "on" : "off";
+    xhrGet("/cgi-bin/j/irled.cgi?type=" + n + "&mode=" + mode);
+  });
+});
+
+$("#toggle-night").addEventListener("click", ev => {
+  if (ev.target.classList.contains('active')) {
+    $("#toggle-color").checked = false;
+    $("#toggle-ircut").checked = false;
+    ["ir850", "ir940", "white"].forEach(n => $("#toggle-" + n).checked = true)
+    ev.target.classList.toggle('btn-secondary')
+    ev.target.textContent = 'night mode on'
+    mode = "night";
   } else {
-    icn.src = "/a/palette-fill.svg";
-    mode = 'on';
+    $("#toggle-color").checked = true;
+    $("#toggle-ircut").checked = true;
+    ["ir850", "ir940", "white"].forEach(n => $("#toggle-" + n).checked = false)
+    ev.target.classList.toggle('btn-secondary')
+    ev.target.textContent = 'night mode off'
+    mode = "day";
   }
-  const xhr = new XMLHttpRequest();
-  xhr.open("GET", "/cgi-bin/j/color.cgi?mode=" + mode);
-  xhr.send();
-});
-
-$("#toggle-ircut").addEventListener("click", event => {
-  event.preventDefault();
-  const icn = $('#ircut-status');
-  if (icn.src.split("/").pop() == "light-on.svg") {
-    icn.src = "/a/light-off.svg";
-    mode = 'off';
-  } else {
-    icn.src = "/a/light-on.svg";
-    mode = 'on';
-  }
-  const xhr = new XMLHttpRequest();
-  xhr.open("GET", "/cgi-bin/j/ircut.cgi?mode=" + mode);
-  xhr.send();
-});
-
-$('#isp-test-range').addEventListener("change", event => {
-  const data = 'video cont ' + event.target.value;
-  console.log(data);
-  const xhr = new XMLHttpRequest();
-  //xhr.addEventListener("load", reqListener);
-  //xhr.setRequestHeader("Authorization", "Basic " + btoa("admin:"));
-  xhr.open("POST", 'http://' + network_address + ':4000');
-  xhr.setRequestHeader('Content-type', 'application/json')
-  xhr.send(JSON.stringify(data));
-});
-
-["ir850", "ir940", "white"].forEach(n => {
-  if ($('#toggle-' + n + '-led'))
-    $('#toggle-' + n + '-led').addEventListener('click', event => {
-      event.preventDefault();
-      const icn = $('#' + n + '-led-status');
-      if (icn.src.split('/').pop() == 'light-on.svg') {
-        icn.src = '/a/light-off.svg';
-        mode = 'off';
-      } else {
-        icn.src = '/a/light-on.svg';
-        mode = 'on';
-      }
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', '/cgi-bin/j/irled.cgi?type=' + n + '&mode=' + mode);
-      xhr.send();
-    });
-})
-
-$("#toggle-night")?.addEventListener("click", event => {
-  event.preventDefault();
-  const icn = $('#night-status');
-  if (icn.src.split("/").pop() == "light-on.svg") {
-    mode = 'day';
-    icn.src = "/a/light-off.svg";
-    $('#color-status').src = '/a/palette-fill.svg';
-    $('#ircut-status').src = '/a/light-on.svg';
-    ["ir850", "ir940", "white"].forEach(n => {
-      if ($('#' + n + '-led-status')) $('#' + n + '-led-status').src = '/a/light-off.svg';
-    })
-  } else {
-    icn.src = "/a/light-on.svg";
-    $('#color-status').src = '/a/palette.svg';
-    $('#ircut-status').src = '/a/light-off.svg';
-    ["ir850", "ir940", "white"].forEach(n => {
-      if ($('#' + n + '-led-status')) $('#' + n + '-led-status').src = '/a/light-on.svg';
-    })
-    mode = 'night';
-  }
-  const xhr = new XMLHttpRequest();
-  xhr.open("GET", "/cgi-bin/j/night.cgi?mode=" + mode);
-  xhr.send();
+  xhrGet("/cgi-bin/j/night.cgi?mode=" + mode);
 });
 
 </script>

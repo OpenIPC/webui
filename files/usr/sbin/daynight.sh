@@ -53,7 +53,6 @@ case "$1" in
 	toggle)
 		case "$vendor" in
 			ingenic)
-#				if [ "Day" = "$(awk '/ISP Runing Mode/ {print $5}' /proc/jz/isp/isp-m0)" ]; then
 				if [ "$(/usr/sbin/imp-control.sh ispmode)" -eq 0 ]; then
 					switch_to_night
 				else
@@ -70,8 +69,8 @@ case "$1" in
 		esac
 		;;
 	*)
-		day_night_max=$(fw_printenv -n day_night_max)
-		day_night_min=$(fw_printenv -n day_night_min)
+		day_night_max=$(fw_printenv -n day_night_max || echo 2400)
+		day_night_min=$(fw_printenv -n day_night_min || echo 1200)
 
 		echo "$day_night_min - $value - $day_night_max"
 

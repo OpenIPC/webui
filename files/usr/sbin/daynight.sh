@@ -26,11 +26,7 @@ switch_to_night() {
 reversed=0
 case "$vendor" in
 	ingenic)
-		if [ "t20" = "$(ipcinfo -c)" ]; then
-			value=$(awk '/ISP total gain :/ {print $5}' /proc/jz/isp/isp_info)
-		else
-			value=$(awk '/ISP EV value:/ {print $4}' /proc/jz/isp/isp-m0)
-		fi
+		value=$(imp-control.sh gettotalgain)
 		reversed=1
 		;;
 	sigmastar)

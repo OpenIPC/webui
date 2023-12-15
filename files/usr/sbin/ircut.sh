@@ -16,13 +16,13 @@ ircut_pins=$(fw_printenv -n ircut_pins)
 
 if [ -z "$pin1" ]; then
 	echo "Please define IR-CUT pin"
-	echo "fw_setenv ircut_pin1 <pin>"
+	echo "fw_setenv ircut_pins <pin>"
 	exit 1
 fi
 
 if [ -z "$pin2" ]; then
 	echo "Unless you have a single GPIO IR-Cut driver, please define the second pin:"
-	echo "fw_setenv ircut_pin2 <pin>"
+	echo "fw_setenv ircut_pins <pin1> <pin2>"
 fi
 
 vendor=$(ipcinfo -v)

@@ -14,12 +14,16 @@ switch_to_day() {
 	/usr/sbin/color.sh on
 	/usr/sbin/irled.sh off
 	/usr/sbin/ircut.sh on
+	echo "Switched to day mode"
+	echo "day" >$MODE_FILE
 }
 
 switch_to_night() {
 	/usr/sbin/color.sh off
 	/usr/sbin/irled.sh on
 	/usr/sbin/ircut.sh off
+	echo "Switched to night mode"
+	echo "night" >$MODE_FILE
 }
 
 # determine luminance of the scene
@@ -50,23 +54,12 @@ case "$1" in
 	day)
 		switch_to_day
 		;;
-	toggle)
-		case "$vendor" in
-			ingenic)
-				if [ "$(/usr/sbin/imp-control.sh ispmode)" -eq 0 ]; then
-					switch_to_night
-				else
-					switch_to_day
-				fi
-				;;
-			*)
-				if [ "day" = "$(cat $MODE_FILE 2>/dev/null)" ]; then
-					switch_to_night
-				else
-					switch_to_day
-				fi
-				;;
-		esac
+	~ | toggle)
+		if [ "$(cat $MODE_FILE 2>/dev/null)" = "day" ]; then
+			switch_to_night
+		else
+			switch_to_day
+		fi
 		;;
 	*)
 		day_night_max=$(fw_printenv -n day_night_max || echo 2400)

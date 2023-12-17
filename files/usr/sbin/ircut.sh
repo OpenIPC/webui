@@ -15,17 +15,19 @@ ircut_pins=$(fw_printenv -n ircut_pins)
 [ -z "$pin2" ] && pin2=$(cli -g .nightMode.irCutPin2)
 
 if [ -z "$pin1" ]; then
-	echo "Please define IR-CUT pin"
+	echo "Please define IRCUT pin"
 	echo "fw_setenv ircut_pins <pin>"
 	exit 1
 fi
 
 if [ -z "$pin2" ]; then
-	echo "Unless you have a single GPIO IR-Cut driver, please define the second pin:"
+	echo "Unless you have a single GPIO IRCUT driver, please define the second pin:"
 	echo "fw_setenv ircut_pins <pin1> <pin2>"
 fi
 
-vendor=$(ipcinfo -v)
+MODE_FILE=/tmp/ircutmode.txt
+
+vendor=$(ipcinfo --vendor)
 
 ir_filter_off() {
 	if [ -z "$pin2" ]; then
@@ -35,7 +37,6 @@ ir_filter_off() {
 		gpio clear "$pin2"
 		usleep 10000
 		gpio clear "$pin1"
-		gpio clear "$pin2"
 	fi
 	echo "IRCUT filter removed"
 }
@@ -47,49 +48,27 @@ ir_filter_on() {
 		gpio clear "$pin1"
 		gpio set "$pin2"
 		usleep 10000
-		gpio clear "$pin1"
 		gpio clear "$pin2"
 	fi
 	echo "IRCUT filter set"
 }
 
-set_image_mode() {
-	local m
-	case "$vendor" in
-		ingenic)
-			[ "$1" = "on" ] && m=1 || m=0
-			/usr/sbin/imp-control.sh ispmode "$m"
-			;;
-		*)
-			[ "$1" -eq 0 ] && m="off" || m="on"
-       			curl "http://127.0.0.1/night/${m}"
-			;;
-	esac
-}
-
-image_black() {
-	set_image_mode 0
-}
-
-image_color() {
-	set_image_mode 1
-}
-
 case "$mode" in
-	0|off|night)
+	0 | off | night)
 		ir_filter_off
+		echo 0 >$MODE_FILE
 		;;
-	1|on|day)
+	1 | on | day)
 		ir_filter_on
+		echo 1 >$MODE_FILE
 		;;
-	~|toggle)
-
-		if [ "$mode" -eq 0 ]; then
+	~ | toggle)
+		if [ "$(cat $MODE_FILE 2>/dev/null)" -eq 0 ]; then
 			ir_filter_on
-			image_color
+			echo 1 >$MODE_FILE
 		else
 			ir_filter_off
-			image_black
+			echo 0 >$MODE_FILE
 		fi
 		;;
 	*)

@@ -25,6 +25,7 @@ if [ -z "$pin" ]; then
 		*)
 			echo "Unknown LED type"
 			exit 2
+			;;
 	esac
 fi
 
@@ -35,10 +36,10 @@ if [ -z "$pin" ]; then
 fi
 
 case "$mode" in
-	on|1)
+	on | 1)
 		gpio set $pin >/dev/null
 		;;
-	off|0)
+	off | 0)
 		gpio clear $pin >/dev/null
 		;;
 	*)

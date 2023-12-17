@@ -58,6 +58,7 @@ mj="
 .nightMode.irCutSingleInvert|IRcut filter polarity is inverted||boolean|true,false|false|
 .nightMode.dncDelay|Delay before toggling Day/Night mode||range|1,60,1|20|
 .nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|0,255,1|65|
+.nightMode.colorToGray|Set black/white night mode||boolean|true,false|false|
 .nightMode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1,1000,1|300|
 .records.enabled|Enable saving records||boolean|true,false|false|
 .records.path|Template for saving video records||string||/mnt/mmc/%Y/%m/%d/%H.mp4|Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format.
@@ -142,6 +143,7 @@ mj_show_isp_exposure_vendor="sigmastar"
 mj_hide_video0_codec="hi3516cv200 hi3516cv100"
 mj_hide_video1_codec="hi3516cv200 hi3516cv100"
 mj_hide_motionDetect="hi3516cv100 hi3516av100 infinity6"
+mj_show_nightMode_colorToGray_vendor="sigmastar"
 
 # hide settings based on vendor
 mj_hide_vendor_sigmastar="audio_outputGain motionDetect_skipIn isp_memMode isp_blkCnt

@@ -40,7 +40,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 			update_meta
 			mj_filesize_new=$(( ($(cat $mj_meta_file | sed -n 2p) + 1024) / 1024 ))
 			[ "$mj_filesize_new" -gt "$available_space" ] && redirect_back "danger" "Not enough space to update Majestic. ${mj_filesize_new} KB > ${available_space} KB."
-			curl --silent --insecure --location -o - http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.bz2 | bunzip2 | tar -x ./majestic -C /usr/bin/
+			curl --silent --insecure --location -o - http://openipc.s3-eu-west-1.amazonaws.com/majestic.${soc_family}.${fw_variant}.master.tar.bz2 | bunzip2 | tar -x majestic -C /usr/bin
 			[ $? -ne 0 ] && redirect_back "error" "Cannot retrieve update from server."
 			redirect_to "reboot.cgi"
 		;;

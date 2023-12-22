@@ -43,7 +43,6 @@ mj="
 .image.hue|Image hue|%|range|1,100,1|50|
 .image.saturation|Image saturation|%|range|1,100,1|50|
 .image.luminance|Image luminance|%|range|1,100,1,auto|auto|
-.image.sharpness|Image sharpness||number|1,100,1|1|
 .osd.enabled|Enable On-Screen Display (OSD)||boolean|true,false|false|
 .osd.font|Path to font file used in OSD||string||/usr/share/fonts/truetype/UbuntuMono-Regular.ttf|
 .osd.template|OSD template||string||%a %e %B %Y %H:%M:%S %Z|Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format.
@@ -141,7 +140,6 @@ mj_hide_isp_sensorConfig_vendor="ingenic"
 mj_show_isp_slowShutter_vendor="goke hisilicon"
 mj_show_isp_aGain_vendor="sigmastar"
 mj_show_isp_exposure_vendor="sigmastar"
-mj_show_image_sharpness_vendor="sigmastar"
 mj_hide_video0_codec="hi3516cv200 hi3516cv100"
 mj_hide_video1_codec="hi3516cv200 hi3516cv100"
 mj_hide_motionDetect="hi3516cv100 hi3516av100 infinity6"

@@ -42,6 +42,9 @@ case "$mode" in
 	off | 0)
 		gpio clear $pin >/dev/null
 		;;
+  	~ | toggle)
+   		gpio toggle $pin >/dev/null
+     		;;
 	*)
 		echo "Unknown mode"
 		exit 3

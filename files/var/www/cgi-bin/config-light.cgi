@@ -5,10 +5,10 @@ page_title="Illumination"
 if [ "POST" = "$REQUEST_METHOD" ]; then
 	error=""
 
-	if [ -n "$POST_day_night_limit" ]; then
+	if [ -n "$POST_day_night_threshold" ]; then
 		if [ -n "$POST_day_night_tolerance" ]; then
-			day_night_max=$(( $POST_day_night_limit + $POST_day_night_tolerance ))
-			day_night_min=$(( $POST_day_night_limit - $POST_day_night_tolerance ))
+			day_night_max=$(( $POST_day_night_threshold + $POST_day_night_tolerance ))
+			day_night_min=$(( $POST_day_night_threshold - $POST_day_night_tolerance ))
 		fi
 	fi
 

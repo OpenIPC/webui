@@ -139,9 +139,10 @@ majestic_menu() {
           <div id="pb-memory" class="progress my-1" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar"></div></div>
           <div id="pb-overlay" class="progress my-1" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar"></div></div>
         </div>
-        <div class="col-md-7 mb-2">
+        <div class="col-md-6 mb-2">
           <%= $(signature) %>
         </div>
+        <div class="col-1" id="daynight_value"></div>
         <div class="col-md-4 col-lg-3 mb-2 text-end">
           <div id="time-now"></div>
           <div id="soc-temp"></div>

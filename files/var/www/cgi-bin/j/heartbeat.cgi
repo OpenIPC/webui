@@ -10,18 +10,28 @@ else
 	soc_temp=""
 fi
 
-case "$vendor" in
-	ingenic)
-		daynight_value=$(imp-control.sh gettotalgain)
-		;;
-	sigmastar)
-		echo 2 >/sys/devices/virtual/mstar/sar/channel
-		daynight_value=$(cat /sys/devices/virtual/mstar/sar/value)
-		;;
-	*)
-		daynight_value=-1
-		;;
-esac
+if [ ! -z $(pidof majestic) ]; then
+	daynight_value=$(curl -s http://127.0.0.1/metrics?value=isp_again)
+fi
+
+if [ -z "$daynight_value" ]; then
+	case "$vendor" in
+		ingenic)
+			daynight_value=$(imp-control.sh gettotalgain)
+			;;
+		sigmastar)
+			if [ -e /sys/devices/virtual/mstar/sar/channel ]; then
+				echo 2 >/sys/devices/virtual/mstar/sar/channel
+				daynight_value=$(cat /sys/devices/virtual/mstar/sar/value)
+			else
+				daynight_value=-1
+			fi
+			;;
+		*)
+			daynight_value=-1
+			;;
+	esac
+fi
 
 mem_total=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 mem_free=$(awk '/MemFree/ {print $2}' /proc/meminfo)

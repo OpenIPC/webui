@@ -12,47 +12,47 @@ config_file="${ui_config_dir}/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  # parse values from parameters
-  for _p in $params; do
-    eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-    sanitize "${plugin}_${_p}"
-  done; unset _p
+	# parse values from parameters
+	for p in $params; do
+		eval ${plugin}_${p}=\$POST_${plugin}_${p}
+		sanitize "${plugin}_${p}"
+	done; unset p
 
-  ### Normalization
-  email_body="$(echo "$email_body" | tr "\r?\n" " ")"
+	### Normalization
+	email_body="$(echo "$email_body" | tr "\r?\n" " ")"
 
-  ### Validation
-  if [ "true" = "$email_enabled" ]; then
-    [ -z "$email_smtp_host"    ] && flash_append "danger" "SMTP host cannot be empty." && error=11
-    [ -z "$email_from_address" ] && flash_append "danger" "Sender email address cannot be empty." && error=12
-    [ -z "$email_from_name"    ] && flash_append "danger" "Sender name cannot be empty." && error=13
-    [ -z "$email_to_address"   ] && flash_append "danger" "Recipient email address cannot be empty." && error=14
-    [ -z "$email_to_name"      ] && flash_append "danger" "Recipient name cannot be empty." && error=15
-  fi
+	### Validation
+	if [ "true" = "$email_enabled" ]; then
+		[ -z "$email_smtp_host"    ] && set_error_flag "SMTP host cannot be empty."
+		[ -z "$email_from_address" ] && set_error_flag "Sender email address cannot be empty."
+		[ -z "$email_from_name"    ] && set_error_flag "Sender name cannot be empty."
+		[ -z "$email_to_address"   ] && set_error_flag "Recipient email address cannot be empty."
+		[ -z "$email_to_name"      ] && set_error_flag "Recipient name cannot be empty."
+	fi
 
-  if [ -z "$error" ]; then
-    # create temp config file
-    :>$tmp_file
-    for _p in $params; do
-      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
-    done; unset _p
-    mv $tmp_file $config_file
+	if [ -z "$error" ]; then
+		# create temp config file
+		:>$tmp_file
+		for p in $params; do
+			echo "${plugin}_${p}=\"$(eval echo \$${plugin}_${p})\"" >>$tmp_file
+		done; unset p
+		mv $tmp_file $config_file
 
-    update_caminfo
-    redirect_back "success" "${plugin_name} config updated."
-  fi
+		update_caminfo
+		redirect_back "success" "${plugin_name} config updated."
+	fi
 
-  redirect_to $SCRIPT_NAME
+	redirect_to $SCRIPT_NAME
 else
-  include $config_file
+	include $config_file
 
-  # Default values
-  [ -z "$email_attach_snapshot" ] && email_attach_snapshot="true"
-  [ -z "$email_use_heif" ] && email_use_heif="false"
-  [ -z "$email_smtp_port" ] && email_smtp_port="25"
-  [ -z "$email_from_name" ] && email_from_name="Camera ${network_hostname}"
-  [ -z "$email_to_name" ] && email_to_name="Camera admin"
-#  [ -z "$email_subject" ] && email_subject="Snapshot from ${network_hostname}"
+	# Default values
+	[ -z "$email_attach_snapshot" ] && email_attach_snapshot="true"
+	[ -z "$email_use_heif" ] && email_use_heif="false"
+	[ -z "$email_smtp_port" ] && email_smtp_port="25"
+	[ -z "$email_from_name" ] && email_from_name="Camera ${network_hostname}"
+	[ -z "$email_to_name" ] && email_to_name="Camera admin"
+	#  [ -z "$email_subject" ] && email_subject="Snapshot from ${network_hostname}"
 fi
 %>
 <%in p/header.cgi %>

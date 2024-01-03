@@ -48,9 +48,12 @@ function heartbeat() {
             if (json.mem_used !== '') {
                 setProgressBar('#pb-memory', json.mem_used, 'Memory Usage');
             }
-            if (json.overlay_used !== '') {
-                setProgressBar('#pb-overlay', json.overlay_used, 'Overlay Usage');
-            }
+             if (json.overlay_used !== '') {
+                 setProgressBar('#pb-overlay', json.overlay_used, 'Overlay Usage');
+             }
+             if (json.daynight_value !== -1) {
+                 $('#daynight_value').textContent = '☀️ ' + json.daynight_value;
+             }
          })
          .then(setTimeout(heartbeat, 1000));
 }

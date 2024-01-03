@@ -1,7 +1,8 @@
 #!/bin/sh
 
 plugin="snapshot"
-source /usr/sbin/common-plugins
+
+. /usr/sbin/common-plugins
 singleton
 
 show_help() {
@@ -16,7 +17,7 @@ show_help() {
 
 get_snapshot() {
 	log "Trying to save a snapshot."
-	LIMIT_ATTEMPTS=$(( $LIMIT_ATTEMPTS - 1 ))
+	LIMIT_ATTEMPTS=$(( LIMIT_ATTEMPTS - 1 ))
 
 	command="curl --verbose"
 	command="${command} --connect-timeout ${curl_timeout}"
@@ -24,12 +25,12 @@ get_snapshot() {
 	command="${command} --silent --fail"
 	command="${command} --url ${snapshot_url}?t=$(date +"%s") --output ${snapshot}"
 	log "$command"
-	if $command >>$LOG_FILE; then
+	if $command >>"$LOG_FILE"; then
 		log "Snapshot saved to ${snapshot}."
 		quit_clean 0
 	fi
 
-	if [ "$LIMIT_ATTEMPTS" -le "0" ]; then
+	if [ "$LIMIT_ATTEMPTS" -le 0 ]; then
 		log "Maximum amount of retries reached."
 		quit_clean 2
 	else
@@ -42,12 +43,20 @@ get_snapshot() {
 SECONDS_TO_EXPIRE=120
 LIMIT_ATTEMPTS=5
 
-while getopts fhqrv flag; do
-	case ${flag} in
-	f) force="true" ;;
-	r) use_heif="true" ;;
-	v) verbose="true" ;;
-	h) show_help ;;
+while getopts fhrv flag; do
+	case "$flag" in
+		f)
+			force="true"
+			;;
+		r)
+			use_heif="true"
+			;;
+		v)
+			verbose="true"
+			;;
+		h|*)
+			show_help
+			;;
 	esac
 done
 
@@ -65,7 +74,7 @@ if [ "true" = "$force" ]; then
 elif [ ! -f "$snapshot" ]; then
 	log "Snapshot not found."
 	get_snapshot
-elif [ "$(date -r "$snapshot" +%s)" -le "$(($(date +%s) - $SECONDS_TO_EXPIRE))" ]; then
+elif [ "$(date -r "$snapshot" +%s)" -le "$(( $(date +%s) - SECONDS_TO_EXPIRE ))" ]; then
 	log "Snapshot is expired."
 	rm $snapshot
 	get_snapshot
@@ -75,6 +84,6 @@ else
 	quit_clean 0
 fi
 
-[ "true" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat "$LOG_FILE"
 
 exit 0

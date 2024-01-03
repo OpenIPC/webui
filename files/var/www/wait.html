@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width,initial-scale=1" name="viewport">
   <title>Please wait... - OpenIPC</title>
+  <link href="/a/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
       text-align: center;
@@ -13,15 +14,19 @@
     h1 {
       font-size: 10vw;
       line-height: 1;
+      margin-top: 5rem;
     }
 
     h3 {
-      font-size: 5vw;
+      font-size: 3vw;
       line-height: 1;
+      margin-top: 5rem;
     }
 
     progress {
-      width: 90%;
+      width: 30rem;
+      max-width: 90%;
+      margin-top: 5rem;
     }
   </style>
 </head>
@@ -29,7 +34,7 @@
 <main>
   <h1>OpenIPC</h1>
   <h3>Restarting. Please wait...</h3>
-  <progress max="15" value="0"></progress>
+  <progress max="30" value="0"></progress>
 </main>
 <script>
   const u = window.location.protocol + '//' + window.location.host;

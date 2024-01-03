@@ -8,74 +8,74 @@ eval title="\$tT_mj_${only}"
 
 # hide certain domains if not supported
 if [ -n "$(eval echo "\$mj_hide_${only}" | sed -n "/\b${soc_family}\b/p")" ]; then
-  redirect_to "majestic-settings.cgi" "danger" "$title is not supported on your system."
+	redirect_to "majestic-settings.cgi" "danger" "$title is not supported on your system."
 fi
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  mj_conf=/etc/majestic.yaml
-  temp_yaml=/tmp/majestic.yaml
+	mj_conf=/etc/majestic.yaml
+	temp_yaml=/tmp/majestic.yaml
 
-  # make a copy of the actual config into memory
-  cp -f $mj_conf $temp_yaml
+	# make a copy of the actual config into memory
+	cp -f $mj_conf $temp_yaml
 
-  OIFS=$IFS
-  IFS=$'\n' # make newlines the only separator
-  for yaml_param_name in $(printenv|grep POST_); do
-    form_field_name=$(echo $yaml_param_name | sed 's/^POST_mj_//')
-    key=".$(echo $form_field_name | cut -d= -f1 | sed 's/_/./g')"
+	OIFS=$IFS
+	IFS=$'\n' # make newlines the only separator
+	for yaml_param_name in $(printenv|grep POST_); do
+		form_field_name=$(echo $yaml_param_name | sed 's/^POST_mj_//')
+		key=".$(echo $form_field_name | cut -d= -f1 | sed 's/_/./g')"
 
-    # do not include helping fields into config
-    if [ "$key" = ".netip.password.plain" ] || [ "$key" = ".osd.corner" ]; then
-      continue
-    fi
+		# do not include helping fields into config
+		if [ "$key" = ".netip.password.plain" ] || [ "$key" = ".osd.corner" ]; then
+			continue
+		fi
 
-    value="$(echo $form_field_name | cut -d= -f2)"
+		value="$(echo $form_field_name | cut -d= -f2)"
 
-    # normalization
-    # (that's why we can't have nice things)
-    case "$key" in
-      .image.rotate)
-        [ "0" = "$value" ] && value="none"
-        ;;
-      .isp.antiFlicker)
-        [ "50Hz" = "$value" ] && value="50"
-        [ "60Hz" = "$value" ] && value="60"
-        ;;
-      .motionDetect.visualize)
-        [ "true" = "$value" ] && yaml-cli -s ".osd.enabled" "true" -i $temp_yaml
-        ;;
-      .osd.enabled)
-        [ "false" = "$value" ] && yaml-cli -s ".motionDetect.visualize" "false" -i $temp_yaml
-        ;;
-      .system.webAdmin)
-        [ "true" = "$value" ] && value="enabled"
-        [ "false" = "$value" ] && value="disabled"
-        ;;
-    esac
+		# normalization
+		# (that's why we can't have nice things)
+		case "$key" in
+			.image.rotate)
+				[ "0" = "$value" ] && value="none"
+				;;
+			.isp.antiFlicker)
+				[ "50Hz" = "$value" ] && value="50"
+				[ "60Hz" = "$value" ] && value="60"
+				;;
+			.motionDetect.visualize)
+				[ "true" = "$value" ] && yaml-cli -s ".osd.enabled" "true" -i $temp_yaml
+				;;
+			.osd.enabled)
+				[ "false" = "$value" ] && yaml-cli -s ".motionDetect.visualize" "false" -i $temp_yaml
+				;;
+			.system.webAdmin)
+				[ "true" = "$value" ] && value="enabled"
+				[ "false" = "$value" ] && value="disabled"
+				;;
+		esac
 
-    # read existing value
-    oldvalue=$(yaml-cli -g "$key" -i $temp_yaml)
+		# read existing value
+		oldvalue=$(yaml-cli -g "$key" -i $temp_yaml)
 
-    if [ -z "$value" ]; then
-      # if no new value submitted but there is an existing value, delete the yaml_param_name
-      [ -n "$oldvalue" ] && yaml-cli -d $key -i "$temp_yaml" -o "$temp_yaml"
-    else
-      # if new value is submitted and it differs from the existing one, update the yaml_param_name
-      [ "$oldvalue" != "$value" ] && yaml-cli -s $key "$value" -i "$temp_yaml" -o "$temp_yaml"
-    fi
-  done
-  IFS=$OIFS
+		if [ -z "$value" ]; then
+			# if no new value submitted but there is an existing value, delete the yaml_param_name
+			[ -n "$oldvalue" ] && yaml-cli -d $key -i "$temp_yaml" -o "$temp_yaml"
+		else
+			# if new value is submitted and it differs from the existing one, update the yaml_param_name
+			[ "$oldvalue" != "$value" ] && yaml-cli -s $key "$value" -i "$temp_yaml" -o "$temp_yaml"
+		fi
+	done
+	IFS=$OIFS
 
-  # update config if differs
-  [ -n "$(diff -q $temp_yaml $mj_conf)" ] && cp -f $temp_yaml $mj_conf
+	# update config if differs
+	[ -n "$(diff -q $temp_yaml $mj_conf)" ] && cp -f $temp_yaml $mj_conf
 
-  # clean up
-  rm $temp_yaml
+	# clean up
+	rm $temp_yaml
 
-  # reload majestic
-  killall -1 majestic
+	# reload majestic
+	killall -1 majestic
 
-  redirect_to "$HTTP_REFERER"
+	redirect_to "$HTTP_REFERER"
 fi
 %>
 <%in p/header.cgi %>
@@ -83,21 +83,23 @@ fi
 <ul class="nav nav-underline small mb-4 d-none d-lg-flex">
 <%
 mj=$(echo "$mj" | sed "s/ /_/g")
-for _line in $mj; do
-  _parameter=${_line%%|*};
-  _param_name=${_parameter#.};
-  _param_domain=${_param_name%.*}
-  if [ "$_parameter_domain_old" != "$_param_domain" ]; then
-    # hide certain domains for certain familier
-    [ -n "$(eval echo "\$mj_hide_${_param_domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
-    # show certain domains only for certain vendors
-    [ -n "$(eval echo "\$mj_show_${_param_domain}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${_param_domain}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
-    _parameter_domain_old="$_param_domain"
-    _css="class=\"nav-link\""; [ "$_param_domain" = "$only" ] && _css="class=\"nav-link active\" aria-current=\"true\""
-    echo "<li class=\"nav-item\"><a ${_css} href=\"majestic-settings.cgi?tab=${_param_domain}\">$(eval echo \$tT_mj_${_param_domain})</a></li>"
-  fi
+cpd="" # cached parameter domain
+for line in $mj; do    # line
+	p=${line%%|*}; # parameter
+	pn=${p#.};     # parameter name
+	pd=${pn%.*}    # parameter domain
+	if [ "$cpd" != "$pd" ]; then
+		# hide certain domains for certain familier
+		[ -n "$(eval echo "\$mj_hide_${pd}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+		# show certain domains only for certain vendors
+		[ -n "$(eval echo "\$mj_show_${pd}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${pd}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
+		cpd="$pd"
+		c="class=\"nav-link\""
+		[ "$pd" = "$only" ] && c="class=\"nav-link active\" aria-current=\"true\""
+		echo "<li class=\"nav-item\"><a ${c} href=\"majestic-settings.cgi?tab=${pd}\">$(eval echo \$tT_mj_${pd})</a></li>"
+	fi
 done
-unset _css; unset _param_domain; unset _line; unset _param_name; unset _parameter_domain_old; unset _parameter;
+unset c; unset pd; unset line; unset pn; unset cpd; unset p;
 %>
 </ul>
 
@@ -108,67 +110,82 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
 <%
 config=""
 _mj2="$(echo "$mj" | sed "s/ /_/g" | grep -E "^\.$only")"
-for line in $_mj2; do
-                                    # line: .isp.exposure|Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
-  yaml_param_name=${line%%|*}       # => .isp.exposure
-  _param_name=${yaml_param_name#.}  # => isp.exposure
-  _param_name=${_param_name//./_}   # => isp_exposure
-  _param_name=${_param_name//-/_}   # => isp_exposure
-  domain=${_param_name%%_*}         # => isp
+for line in $_mj2; do                # line: .isp.exposure|Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
+	yaml_param_name=${line%%|*}  # => .isp.exposure
+	pn=${yaml_param_name#.}      # => isp.exposure
+	pn=${pn//./_}                # => isp_exposure
+	pn=${pn//-/_}                # => isp_exposure
+	domain=${pn%%_*}             # => isp
 
-  # hide certain domains if blacklisted
-  [ -n "$(eval echo "\$mj_hide_${domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
-  # hide certain parameters if blacklisted
-  [ -n "$(eval echo "\$mj_hide_${_param_name}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
-  [ -n "$(eval echo "\$mj_hide_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
-  # show certain domains only if whitelisted
-  [ -n "$(eval echo "\$mj_show_${domain}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${domain}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
-  # show certain parameters only if whitelisted
-  [ -n "$(eval echo "\$mj_show_${_param_name}")" ] && [ -z "$(eval echo "\$mj_show_${_param_name}" | sed -n "/\b${soc_family}\b/p")" ] && continue
-  [ -n "$(eval echo "\$mj_show_${_param_name}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${_param_name}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
-  # show certain parameters only in debug mode
-  [ -n "$(echo "$mj_hide_unless_debug" | sed -n "/\b${_param_name}\b/p")" ] && [ "0$debug" -lt "1" ] && continue
-  # hide certain parameters for specific vendor
-  [ -n "$(eval echo "\$mj_hide_vendor_${soc_vendor}" | sed -n "/\b${_param_name}\b/p")" ] && continue
+	# hide certain domains if blacklisted
+	[ -n "$(eval echo "\$mj_hide_${domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+	# hide certain parameters if blacklisted
+	[ -n "$(eval echo "\$mj_hide_${pn}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
+	[ -n "$(eval echo "\$mj_hide_${pn}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+	# show certain domains only if whitelisted
+	[ -n "$(eval echo "\$mj_show_${domain}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${domain}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
+	# show certain parameters only if whitelisted
+	[ -n "$(eval echo "\$mj_show_${pn}")" ] && [ -z "$(eval echo "\$mj_show_${pn}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+	[ -n "$(eval echo "\$mj_show_${pn}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${pn}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
+	# show certain parameters only in debug mode
+	[ -n "$(echo "$mj_hide_unless_debug" | sed -n "/\b${pn}\b/p")" ] && [ "0$debug" -lt "1" ] && continue
+	# hide certain parameters for specific vendor
+	[ -n "$(eval echo "\$mj_hide_vendor_${soc_vendor}" | sed -n "/\b${pn}\b/p")" ] && continue
 
-  form_field_name=mj_${_param_name} # => mj_isp_exposure
-  line=${line#*|}                   # line: Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
-  label_text=${line%%|*}            # => Sensor_exposure_time
-  label_text=${label_text//_/ }     # => Sensor exposure time
-  line=${line#*|}                   # line: &micro;s|range|auto,1-500000|auto|From_1_to_500000.
-  units=${line%%|*}                 # => &micro;s
-  line=${line#*|}                   # line: range|auto,1-500000|auto|From_1_to_500000.
-  form_field_type=${line%%|*}       # => range
-  line=${line#*|}                   # line: auto,1-500000|auto|From_1_to_500000.
-  options=${line%%|*}               # => auto,1-500000
-  line=${line#*|}                   # line: auto|From_1_to_500000.
-  placeholder=${line%%|*}           # => auto
-  line=${line#*|}                   # line: From_1_to_500000.
-  hint=$line                        # => From_1_to_500000.
-  hint=${hint//_/ }                 # => From 1 to 500000.
+	form_field_name=mj_${pn}       # => mj_isp_exposure
+	line=${line#*|}                # line: Sensor_exposure_time|&micro;s|range|auto,1-500000|auto|From_1_to_500000.
+	label_text=${line%%|*}         # => Sensor_exposure_time
+	label_text=${label_text//_/ }  # => Sensor exposure time
+	line=${line#*|}                # line: &micro;s|range|auto,1-500000|auto|From_1_to_500000.
+	units=${line%%|*}              # => &micro;s
+	line=${line#*|}                # line: range|auto,1-500000|auto|From_1_to_500000.
+	form_field_type=${line%%|*}    # => range
+	line=${line#*|}                # line: auto,1-500000|auto|From_1_to_500000.
+	options=${line%%|*}            # => auto,1-500000
+	line=${line#*|}                # line: auto|From_1_to_500000.
+	placeholder=${line%%|*}        # => auto
+	line=${line#*|}                # line: From_1_to_500000.
+	hint=$line                     # => From_1_to_500000.
+	hint=${hint//_/ }              # => From 1 to 500000.
 
-  value="$(yaml-cli -g "$yaml_param_name")"
-# FIXME: this is not how it should be done. Instead, Majestic should be reporting its true values.
-# [ -z "$value" ] && value="$placeholder"
+	value="$(yaml-cli -g "$yaml_param_name")"
+	# FIXME: this is not how it should be done. Instead, Majestic should be reporting its true values.
+	# [ -z "$value" ] && value="$placeholder"
 
-  # assign yaml_param_name's value to a variable with yaml_param_name's form_field_name for form fields values
-  eval "$form_field_name=\"\$value\""
+	# assign yaml_param_name's value to a variable with yaml_param_name's form_field_name for form fields values
+	eval "$form_field_name=\"\$value\""
 
-  # hide some params in config
-  if [ "mj_netip_password_plain" != "$form_field_name" ]; then
-    config="${config}\n$(eval echo ${yaml_param_name}: \"\$$form_field_name\")"
-  fi
+	# hide some params in config
+	if [ "mj_netip_password_plain" != "$form_field_name" ]; then
+		config="${config}\n$(eval echo ${yaml_param_name}: \"\$$form_field_name\")"
+	fi
 
-  case "$form_field_type" in
-    boolean)  field_switch   "$form_field_name" "$label_text" "$hint" "$options";;
-    hidden)   field_hidden   "$form_field_name" "$label_text" "$hint";;
-    number)   field_number   "$form_field_name" "$label_text" "$options" "$hint";;
-    password) field_password "$form_field_name" "$label_text" "$hint";;
-    range)    field_range    "$form_field_name" "$label_text" "$options" "$hint";;
-    select)   field_select   "$form_field_name" "$label_text" "$options" "$hint";;
-    string)   field_text     "$form_field_name" "$label_text" "$hint" "$placeholder";;
-    *) echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>";;
-  esac
+	case "$form_field_type" in
+		boolean)
+			field_switch "$form_field_name" "$label_text" "$hint" "$options"
+			;;
+		hidden)
+			field_hidden "$form_field_name" "$label_text" "$hint"
+			;;
+		number)
+			field_number "$form_field_name" "$label_text" "$options" "$hint"
+			;;
+		password)
+			field_password "$form_field_name" "$label_text" "$hint"
+			;;
+		range)
+			field_range "$form_field_name" "$label_text" "$options" "$hint"
+			;;
+		select)
+			field_select "$form_field_name" "$label_text" "$options" "$hint"
+			;;
+		string)
+			field_text "$form_field_name" "$label_text" "$hint" "$placeholder"
+			;;
+		*)
+			echo "<span class=\"text-danger\">UNKNOWN FIELD TYPE ${form_field_type} FOR ${_name} WITH LABEL ${label_text}</span>"
+			;;
+	esac
 done
 %>
       <% button_submit %>

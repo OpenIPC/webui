@@ -5,9 +5,9 @@ config_file=/etc/majestic.yaml
 config_file_fw=/rom/etc/majestic.yaml
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  case "$POST_action" in
-    backup)
-      echo "HTTP/1.0 200 OK
+	case "$POST_action" in
+		backup)
+			echo "HTTP/1.0 200 OK
 Date: $(time_http)
 Server: $SERVER_SOFTWARE
 Content-type: text/plain
@@ -16,12 +16,12 @@ Content-Length: $(stat -c%s $config_file)
 Cache-Control: no-store
 Pragma: no-cache
 "
-      cat $config_file
-      ;;
-    patch)
-      patch_file=/tmp/majestic.patch
-      diff $config_file_fw $config_file >$patch_file
-      echo "HTTP/1.0 200 OK
+			cat $config_file
+			;;
+		patch)
+			patch_file=/tmp/majestic.patch
+			diff $config_file_fw $config_file >$patch_file
+			echo "HTTP/1.0 200 OK
 Date: $(time_http)
 Server: $SERVER_SOFTWARE
 Content-type: text/plain
@@ -30,30 +30,30 @@ Content-Length: $(stat -c%s $patch_file)
 Cache-Control: no-store
 Pragma: no-cache
 "
-      cat $patch_file
-      rm $patch_file
-      ;;
-    reset)
-      /usr/sbin/sysreset.sh -m
-      redirect_back
-      ;;
-    restore)
-      magicnum="23206d616a6573746963"
-      file="$POST_mj_restore_file"
-      file_name="$POST_mj_restore_file_name"
-      file_path="$POST_mj_restore_file_path"
-      error=""
-      [ -z "$file_name" ] && error="No file found! Did you forget to upload?"
-      [ ! -r "$file" ] && error="Cannot read uploded file!"
-      [ "$(stat -c%s $file)" -gt "$maxsize" ] && error="Uploded file is too large! $(stat -c%s $file) > ${maxsize}."
-      #[ "$magicnum" -ne "$(xxd -p -l 10 $file)" ] && error="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 10 $file) != $magicnum"
-      if [ -z "$error" ]; then
-        # yaml-cli -i $POST_upfile -o /tmp/majestic.yaml # FIXME: sanitize
-        mv $file_path /etc/majestic.yaml
-        redirect_to $SCRIPT_NAME
-      fi
-      ;;
-  esac
+			cat $patch_file
+			rm $patch_file
+			;;
+		reset)
+			/usr/sbin/sysreset.sh -m
+			redirect_back
+			;;
+		restore)
+			magicnum="23206d616a6573746963"
+			file="$POST_mj_restore_file"
+			file_name="$POST_mj_restore_file_name"
+			file_path="$POST_mj_restore_file_path"
+			error=""
+			[ -z "$file_name" ] && error="No file found! Did you forget to upload?"
+			[ ! -r "$file" ] && error="Cannot read uploded file!"
+			[ "$(stat -c%s $file)" -gt "$maxsize" ] && error="Uploded file is too large! $(stat -c%s $file) > ${maxsize}."
+			#[ "$magicnum" -ne "$(xxd -p -l 10 $file)" ] && error="File magic number does not match. Did you upload a wrong file? $(xxd -p -l 10 $file) != $magicnum"
+			if [ -z "$error" ]; then
+				# yaml-cli -i $POST_upfile -o /tmp/majestic.yaml # FIXME: sanitize
+				mv $file_path /etc/majestic.yaml
+				redirect_to $SCRIPT_NAME
+			fi
+			;;
+	esac
 fi
 %>
 

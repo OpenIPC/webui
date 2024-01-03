@@ -1,7 +1,8 @@
 #!/bin/sh
 
 plugin="mqtt"
-source /usr/sbin/common-plugins
+
+. /usr/sbin/common-plugins
 
 show_help() {
 	echo "Usage: $0 [-t topic] [-m message] [-s] [-v] [-h]
@@ -16,25 +17,59 @@ show_help() {
 }
 
 # override config values with command line arguments
-while getopts m:st:vh flag; do
-	case ${flag} in
-	m) mqtt_message=${OPTARG} ;;
-	r) mqtt_use_heif="true" ;;
-	s) mqtt_send_snap="true" ;;
-	t) mqtt_topic=${OPTARG} ;;
-	v) verbose="true" ;;
-	h) show_help ;;
+while getopts m:rst:vh flag; do
+	case "$flag" in
+		m)
+			mqtt_message=$OPTARG
+			;;
+		r)
+			mqtt_use_heif="true"
+			;;
+		s)
+			mqtt_send_snap="true"
+			;;
+		t)
+			mqtt_topic=$OPTARG
+			;;
+		v)
+			verbose="true"
+			;;
+		h|*)
+			show_help
+			;;
 	esac
 done
 
-[ "false" = "$mqtt_enabled" ] && log "Sending to MQTT broker is disabled." && exit 10
+if [ "false" = "$mqtt_enabled" ]; then
+	log "Sending to MQTT broker is disabled."
+	exit 10
+fi
 
 # validate mandatory values
-[ -z "$mqtt_host" ] && log "MQTT broker host not found in config" && exit 11
-[ -z "$mqtt_port" ] && log "MQTT broker port not found in config" && exit 12
-[ -z "$mqtt_topic" ] && log "MQTT topic not found" && exit 13
-[ -z "$mqtt_message" ] && log "MQTT message template not found" && exit 14
-[ "true" = "$mqtt_send_snap" ] && [ -z "$mqtt_snap_topic" ] && log "MQTT topic for sending snapshot not found in config" && exit 15
+if [ -z "$mqtt_host" ]; then
+	log "MQTT broker host not found in config"
+	exit 11
+fi
+
+if [ -z "$mqtt_port" ]; then
+	log "MQTT broker port not found in config"
+	exit 12
+fi
+
+if [ -z "$mqtt_topic" ]; then
+	log "MQTT topic not found"
+	exit 13
+fi
+
+if [ -z "$mqtt_message" ]; then
+	log "MQTT message template not found"
+	exit 14
+fi
+
+if [ "true" = "$mqtt_send_snap" ] && [ -z "$mqtt_snap_topic" ]; then
+	log "MQTT topic for sending snapshot not found in config"
+	exit 15
+fi
 
 # assign default values if not set
 [ -z "$mqtt_client_id" ] && mqtt_client_id="${network_hostname}"
@@ -53,7 +88,7 @@ command="${command} -i ${mqtt_client_id}"
 
 # SOCK5 proxy, if needed
 if [ "true" = "$mqtt_socks5_enabled" ]; then
-	source /etc/webui/socks5.conf
+	. /etc/webui/socks5.conf
 	socks_opts="--proxy socks5h://${socks5_login}:${socks5_password}@${socks5_host}:${socks5_port}"
 fi
 command="${command} ${socks_opts}"
@@ -61,7 +96,7 @@ command="${command} ${socks_opts}"
 # send text message
 command1="${command} -t ${mqtt_topic} -m \"${mqtt_message}\""
 log "$command1"
-eval "$command1" >>$LOG_FILE 2>&1
+eval "$command1" >>"$LOG_FILE" 2>&1
 
 # send file
 if [ "true" = "$mqtt_send_snap" ]; then
@@ -73,15 +108,21 @@ if [ "true" = "$mqtt_send_snap" ]; then
 		snapshot4cron.sh
 	fi
 	exitcode=$?
-	[ $exitcode -ne 0 ] && log "Cannot get a snapshot. Exit code: $exitcode" && exit 2
+	if [ $exitcode -ne 0 ]; then
+		log "Cannot get a snapshot. Exit code: $exitcode"
+		exit 2
+	fi
 	snapshot=/tmp/snapshot4cron.jpg
-	[ ! -f "$snapshot" ] && log "Cannot find a snapshot" && exit 3
+	if [ ! -f "$snapshot" ]; then
+		log "Cannot find a snapshot"
+		exit 3
+	fi
 	mqtt_file=$snapshot
 	command2="${command} -t ${mqtt_snap_topic} -f \"${mqtt_file}\""
 	log "$command2"
-	eval "$command2" >>$LOG_FILE 2>&1
+	eval "$command2" >>"$LOG_FILE" 2>&1
 fi
 
-[ "true" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat "$LOG_FILE"
 
 exit 0

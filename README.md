@@ -1,9 +1,9 @@
 ![OpenIPC logo][logo]
 
-microbe-web
-===========
+Web UI
+======
 
-Microbe is a web interface for [OpenIPC Firmware][openipcfw],
+Web UI is a web interface for [OpenIPC Firmware][openipcfw],
 and is available on port 85 of your camera.
 
 Web interface uses system credentials for access. Default username is _root_,
@@ -60,7 +60,7 @@ Thank you.
 [openipcfw]: https://github.com/OpenIPC/firmware
 [haserl]: http://haserl.sourceforge.net/
 [iso639]: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
-[wiki]: https://github.com/OpenIPC/firmware/wiki/microbe-web
+[wiki]: https://github.com/OpenIPC/firmware/wiki/webui
 [telegram]: https://openipc.org/#telegram-chat-groups
 [oc]: https://opencollective.com/openipc/contribute/backer-14335/checkout
 [pp]: https://www.paypal.com/donate/?hosted_button_id=C6F7UJLA58MBS

@@ -1,7 +1,8 @@
 #!/bin/sh
 
 plugin="email"
-source /usr/sbin/common-plugins
+
+. /usr/sbin/common-plugins
 
 show_help() {
 	echo "Usage: $0 [-f address] [-t address] [-s subject] [-b body] [-v] [-h]
@@ -17,15 +18,29 @@ show_help() {
 }
 
 # override config values with command line arguments
-while getopts f:t:s:b:vh flag; do
-	case ${flag} in
-	b) email_body=${OPTARG} ;;
-	f) email_from_address=${OPTARG} ;;
-	r) email_use_heif="true" ;;
-	s) email_subject=${OPTARG} ;;
-	t) email_to_address=${OPTARG} ;;
-	v) verbose="true" ;;
-	h) show_help ;;
+while getopts b:f:rs:t:vh flag; do
+	case "$flag" in
+		b)
+			email_body=$OPTARG
+			;;
+		f)
+			email_from_address=$OPTARG
+			;;
+		r)
+			email_use_heif="true"
+			;;
+		s)
+			email_subject=$OPTARG
+			;;
+		t)
+			email_to_address=$OPTARG
+			;;
+		v)
+			verbose="true"
+			;;
+		h|*)
+			show_help
+			;;
 	esac
 done
 
@@ -91,9 +106,9 @@ else
 fi
 
 log "$command"
-eval "$command" >>$LOG_FILE 2>&1
+eval "$command" >>"$LOG_FILE" 2>&1
 
-[ "true" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat "$LOG_FILE"
 
 [ -f ${email_file} ] && rm -f ${email_file}
 

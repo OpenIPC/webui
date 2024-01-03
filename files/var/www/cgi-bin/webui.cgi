@@ -2,15 +2,15 @@
 <%in p/common.cgi %>
 <%
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  case "$POST_action" in
-  init)
-    update_caminfo
-    redirect_back
-    ;;
-  *)
-    redirect_to $SCRIPT_NAME "danger" "UNKNOWN ACTION: $POST_action"
-    ;;
-  esac
+	case "$POST_action" in
+		init)
+			update_caminfo
+			redirect_back
+			;;
+		*)
+			redirect_to $SCRIPT_NAME "danger" "UNKNOWN ACTION: $POST_action"
+			;;
+	esac
 fi
 
 page_title="Web Interface"
@@ -25,8 +25,8 @@ web_branch="master"
     <h3>Version</h3>
     <dl class="list small">
       <dt>Installed</dt><dd><%= $ui_version %></dd>
-      <dt>Stable</dt><dd id="microbe-web-master-ver"></dd>
-      <dt>Unstable</dt><dd id="microbe-web-dev-ver"></dd>
+      <dt>Stable</dt><dd id="webui-master-ver"></dd>
+      <dt>Unstable</dt><dd id="webui-dev-ver"></dd>
     </dl>
   </div>
   <div class="col">
@@ -54,8 +54,8 @@ const GH_URL="https://github.com/OpenIPC/";
 const GH_API="https://api.github.com/repos/OpenIPC/";
 
 function checkUpdates() {
-  queryBranch('microbe-web', 'master');
-  queryBranch('microbe-web', 'dev');
+  queryBranch('webui', 'master');
+  queryBranch('webui', 'dev');
 }
 
 function queryBranch(repo, branch) {

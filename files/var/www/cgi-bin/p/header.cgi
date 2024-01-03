@@ -1,10 +1,34 @@
 #!/usr/bin/haserl
 Content-type: text/html; charset=UTF-8
-Date: <%= $(TZ=GMT0 date +'%a, %d %b %Y %T %Z') %>
+Date: <%= $(time_http) %>
 Server: <%= $SERVER_SOFTWARE %>
 Cache-Control: no-store
 Pragma: no-cache
-
+<%
+majestic_menu() {
+	local l # line
+	local c # css class
+	local p # parameter
+	local pd # parameter domain
+	local pn # parameter name
+	local cpd # cached parameter domain
+	mj=$(echo "$mj" | sed "s/ /_/g")
+	for l in $mj; do
+		p=${l%%|*}
+		pn=${p#.}
+		pd=${pn%.*}
+		if [ "$cpd" != "$pd" ]; then
+			# hide certain domains if not supported
+			[ -n "$(eval echo "\$mj_hide_${pd}" | sed -n "/\b${soc_family}\b/p")" ] && continue
+			[ -n "$(eval echo "\$mj_show_${pd}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${pd}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
+			cpd="$pd"
+			c="class=\"dropdown-item\""
+			[ "$pd" = "$only" ] && c="class=\"dropdown-item active\" aria-current=\"true\""
+			echo "<li><a ${c} href=\"majestic-settings.cgi?tab=${pd}\">$(eval echo \$tT_mj_${pd})</a></li>"
+		fi
+	done
+}
+%>
 <!DOCTYPE html>
 <html lang="<%= ${locale:=en} %>" data-bs-theme="<%= ${webui_theme:=light} %>">
 <head>
@@ -30,18 +54,21 @@ Pragma: no-cache
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownInformation" role="button">Information</a>
             <ul aria-labelledby="dropdownInformation" class="dropdown-menu">
               <li><a class="dropdown-item" href="status.cgi">Overview</a></li>
-              <li><a class="dropdown-item" href="info-cron.cgi">Cron config</a></li>
-              <li><a class="dropdown-item" href="info-dmesg.cgi">Diagnostic messages</a></li>
-              <li><a class="dropdown-item" href="info-httpd.cgi">HTTPd environment</a></li>
-              <li><a class="dropdown-item" href="info-modules.cgi">Modules</a></li>
-              <% if [ -e /proc/umap ]; then %>
+              <li><a class="dropdown-item" href="info-cron.cgi">Cron Configuration</a></li>
+              <li><a class="dropdown-item" href="info-httpd.cgi">HTTPd Environment</a></li>
+              <li><a class="dropdown-item" href="info-top.cgi">Top Processes</a></li>
+              <li><a class="dropdown-item" href="info-overlay.cgi">Overlay Partition</a></li>
+            <% if [ -e /proc/umap ]; then %>
               <li><a class="dropdown-item" href="info-proc-umap.cgi">Information from /proc/umap</a></li>
-              <% fi %>
-              <li><a class="dropdown-item" href="info-ipctool.cgi">IPC Tool</a></li>
-              <li><a class="dropdown-item" href="info-netstat.cgi">Network stats</a></li>
-              <li><a class="dropdown-item" href="info-top.cgi">Top processes</a></li>
-              <li><a class="dropdown-item" href="info-log.cgi">Log read</a></li>
-              <li><a class="dropdown-item" href="info-overlay.cgi">Overlay partition</a></li>
+            <% fi %>
+            <% if [ "$debug" -gt 0 -a "$soc_vendor" = "ingenic" ]; then %>
+              <li><a class="dropdown-item" href="info-imp.cgi">IMP Control</a></li>
+            <% fi %>
+              <li><a class="dropdown-item" href="info-netstat.cgi">Output of netstat</a></li>
+              <li><a class="dropdown-item" href="info-modules.cgi">Output of lsmod</a></li>
+              <li><a class="dropdown-item" href="info-ipctool.cgi">Output of ipctool</a></li>
+              <li><a class="dropdown-item" href="info-dmesg.cgi">Output of dmesg</a></li>
+              <li><a class="dropdown-item" href="info-log.cgi">Output of logread</a></li>
             </ul>
           </li>
           <li class="nav-item dropdown">
@@ -69,23 +96,7 @@ Pragma: no-cache
           <li class="nav-item dropdown">
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownMajestic" role="button">Majestic</a>
             <ul aria-labelledby="dropdownMajestic" class="dropdown-menu">
-<%
-mj=$(echo "$mj" | sed "s/ /_/g")
-for _line in $mj; do
-  _parameter=${_line%%|*};
-  _param_name=${_parameter#.};
-  _param_domain=${_param_name%.*}
-  if [ "$_parameter_domain_old" != "$_param_domain" ]; then
-    # hide certain domains if not supported
-    [ -n "$(eval echo "\$mj_hide_${_param_domain}" | sed -n "/\b${soc_family}\b/p")" ] && continue
-    [ -n "$(eval echo "\$mj_show_${_param_domain}_vendor")" ] && [ -z "$(eval echo "\$mj_show_${_param_domain}_vendor" | sed -n "/\b${soc_vendor}\b/p")" ] && continue
-    _parameter_domain_old="$_param_domain"
-    _css="class=\"dropdown-item\""; [ "$_param_domain" = "$only" ] && _css="class=\"dropdown-item active\" aria-current=\"true\""
-    echo "<li><a ${_css} href=\"majestic-settings.cgi?tab=${_param_domain}\">$(eval echo \$tT_mj_${_param_domain})</a></li>"
-  fi
-done
-unset _css; unset _param_domain; unset _line; unset _param_name; unset _parameter_domain_old; unset _parameter;
-%>
+              <% majestic_menu %>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="info-majestic.cgi">Majestic Config</a></li>
               <li><a class="dropdown-item" href="majestic-endpoints.cgi">Majestic Endpoints</a></li>
@@ -128,9 +139,10 @@ unset _css; unset _param_domain; unset _line; unset _param_name; unset _paramete
           <div id="pb-memory" class="progress my-1" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar"></div></div>
           <div id="pb-overlay" class="progress my-1" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar"></div></div>
         </div>
-        <div class="col-md-7 mb-2">
+        <div class="col-md-6 mb-2">
           <%= $(signature) %>
         </div>
+        <div class="col-1" id="daynight_value"></div>
         <div class="col-md-4 col-lg-3 mb-2 text-end">
           <div id="time-now"></div>
           <div id="soc-temp"></div>

@@ -12,43 +12,43 @@ config_file="${ui_config_dir}/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  # parse values from parameters
-  for _p in $params; do
-    eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-    sanitize "${plugin}_${_p}"
-  done; unset _p
+	# parse values from parameters
+	for p in $params; do
+		eval ${plugin}_${p}=\$POST_${plugin}_${p}
+		sanitize "${plugin}_${p}"
+	done; unset p
 
-  ### Validation
-  if [ "true" = "$openwall_enabled" ]; then
-    [ "$openwall_interval" -lt "15" ] && flash_append "danger" "Keep interval at 15 minutes or longer." && error=11
-  fi
+	### Validation
+	if [ "true" = "$openwall_enabled" ]; then
+		[ "$openwall_interval" -lt "15" ] && set_error_flag "Keep interval at 15 minutes or longer."
+	fi
 
-  if [ -z "$error" ]; then
-    # create temp config file
-    :>$tmp_file
-    for _p in $params; do
-      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
-    done; unset _p
-    mv $tmp_file $config_file
+	if [ -z "$error" ]; then
+		# create temp config file
+		:>$tmp_file
+		for p in $params; do
+			echo "${plugin}_${p}=\"$(eval echo \$${plugin}_${p})\"" >>$tmp_file
+		done; unset p
+		mv $tmp_file $config_file
 
-    # Disable/enable cron job
-    cp /etc/crontabs/root /tmp/crontabs.tmp
-    sed -i /send2openwall\.sh/d /tmp/crontabs.tmp
-    [ "true" = "$openwall_enabled" ] &&
-      echo "*/${openwall_interval} * * * * /usr/sbin/send2openwall.sh" >>/tmp/crontabs.tmp
-    mv /tmp/crontabs.tmp /etc/crontabs/root
+		# Disable/enable cron job
+		cp /etc/crontabs/root /tmp/crontabs.tmp
+		sed -i /send2openwall\.sh/d /tmp/crontabs.tmp
+		[ "true" = "$openwall_enabled" ] &&
+		echo "*/${openwall_interval} * * * * /usr/sbin/send2openwall.sh" >>/tmp/crontabs.tmp
+		mv /tmp/crontabs.tmp /etc/crontabs/root
 
-    update_caminfo
-    redirect_back "success" "${plugin_name} config updated."
-  fi
+		update_caminfo
+		redirect_back "success" "${plugin_name} config updated."
+	  fi
 
-  redirect_to $SCRIPT_NAME
+	redirect_to $SCRIPT_NAME
 else
-  include $config_file
+	include $config_file
 
-  # Default values
-  [ -z "$openwall_interval" ] && openwall_interval="15"
-  [ -z "$openwall_use_heif" ] && openwall_use_heif="false"
+	# Default values
+	[ -z "$openwall_interval" ] && openwall_interval="15"
+	[ -z "$openwall_use_heif" ] && openwall_use_heif="false"
 fi
 %>
 <%in p/header.cgi %>

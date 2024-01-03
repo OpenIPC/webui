@@ -4,49 +4,49 @@
 page_title="SSH key"
 
 function readKey() {
-  [ -n "$(fw_printenv -n key_${1})" ] && alert "$(fw_printenv -n key_${1})" "secondary" "style=\"overflow-wrap: anywhere;\""
+	[ -n "$(fw_printenv -n key_${1})" ] && alert "$(fw_printenv -n key_${1})" "secondary" "style=\"overflow-wrap: anywhere;\""
 }
 
 function saveKey() {
-  if [ -n "$(fw_printenv key_${1})" ]; then
-    flash_save "danger" "${1} key already in backup. You need to delete it before saving a new key."
-  else
-    fw_setenv key_${1} $(dropbearconvert dropbear openssh /etc/dropbear/dropbear_${1}_host_key - 2>/dev/null | base64 | tr -d '\n')
-  fi
+	if [ -n "$(fw_printenv key_${1})" ]; then
+		flash_save "danger" "${1} key already in backup. You need to delete it before saving a new key."
+	else
+		fw_setenv key_${1} $(dropbearconvert dropbear openssh /etc/dropbear/dropbear_${1}_host_key - 2>/dev/null | base64 | tr -d '\n')
+	fi
 }
 
 function restoreKey() {
-  if [ -z "$(fw_printenv key_${1})" ]; then
-    flash_save "danger" "${1} key is not in the environment."
-  else
-    fw_printenv -n key_${1} | base64 -d | dropbearconvert openssh dropbear - /etc/dropbear/dropbear_${1}_host_key
-    flash_save "success" "${1} key restored from environment."
-  fi
+	if [ -z "$(fw_printenv key_${1})" ]; then
+		flash_save "danger" "${1} key is not in the environment."
+	else
+		fw_printenv -n key_${1} | base64 -d | dropbearconvert openssh dropbear - /etc/dropbear/dropbear_${1}_host_key
+		flash_save "success" "${1} key restored from environment."
+	fi
 }
 
 function deleteKey() {
-  if [ -z "$(fw_printenv key_${1})" ]; then
-    flash_save "danger" "${1} Cannot find saved SSH key."
-  else
-    fw_setenv key_${1}
-    flash_save "success" "${1} key deleted from environment."
-  fi
+	if [ -z "$(fw_printenv key_${1})" ]; then
+		flash_save "danger" "${1} Cannot find saved SSH key."
+	else
+		fw_setenv key_${1}
+		flash_save "success" "${1} key deleted from environment."
+	fi
 }
 
 case "$POST_action" in
-  backup)
-    saveKey "ed25519"
-    redirect_back
-    ;;
-  restore)
-    restoreKey "ed25519"
-    redirect_back
-    ;;
-  delete)
-    deleteKey "ed25519"
-    redirect_back
-    ;;
-  *)
+	backup)
+		saveKey "ed25519"
+		redirect_back
+		;;
+	restore)
+		restoreKey "ed25519"
+		redirect_back
+		;;
+	delete)
+		deleteKey "ed25519"
+		redirect_back
+		;;
+	*)
 %>
 <%in p/header.cgi %>
 

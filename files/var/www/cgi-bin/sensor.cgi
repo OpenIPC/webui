@@ -4,50 +4,50 @@
 page_title="Sensor Driver and Config"
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  error=""
+	error=""
 
-  if [ -n "$POST_sensor_driver_file" ]; then
-    type="driver"
-    magicnum="7f454c460101"
-    file="$POST_sensor_driver_file"
-    file_name="$POST_sensor_driver_file_name"
-    file_path="$POST_sensor_driver_file_path"
+	if [ -n "$POST_sensor_driver_file" ]; then
+		type="driver"
+		file="$POST_sensor_driver_file"
+		file_name="$POST_sensor_driver_file_name"
+		file_path="$POST_sensor_driver_file_path"
 
-    if [ -z "$file_name" ]; then
-      error="No file found! Did you forget to upload?"
-    elif [ "$magicnum" != $(xxd -p -l 6 $file) ]; then
-      error="File magic number does not match. Did you upload a wrong file?"
-    elif [ -f "/usr/lib/sensors/${file_name}" ]; then
-      error="File already exists!"
-    fi
-  fi
+		if [ -z "$file_name" ]; then
+			error="No file found! Did you forget to upload?"
+		elif [ "hisilicon" = "$soc_vendor" ] && [ "7f454c460101" != $(xxd -p -l 6 $file) ]; then
+			error="File magic number does not match. Did you upload a wrong file?"
+		elif [ -f "/usr/lib/sensors/${file_name}" ]; then
+			error="File already exists!"
+		fi
+	fi
 
-  if [ -n "$POST_sensor_config_file" ]; then
-    type="config"
-    file="$POST_sensor_config_file"
-    file_name="$POST_sensor_config_file_name"
-    file_path="$POST_sensor_config_file_path"
-    if [ -z "$file_name" ]; then
-      error="No file found! Did you forget to upload?"
-    elif [ -n $(grep "\[sensor\]" $file) ]; then
-      error="File magic number does not match. Did you upload a wrong file?"
-    elif [ -f "/etc/sensors/${file_name}" ]; then
-      error="File already exists!"
-    fi
-  fi
+	if [ -n "$POST_sensor_config_file" ]; then
+		type="config"
+		file="$POST_sensor_config_file"
+		file_name="$POST_sensor_config_file_name"
+		file_path="$POST_sensor_config_file_path"
 
-  if [ -z "$error" ]; then
-    case "$type" in
-    driver)
-      mv "$file_path" "/usr/lib/sensors/${file_name}"
-      redirect_to $SCRIPT_NAME "success" "Sensor driver uploaded."
-      ;;
-    config)
-      mv "$file_path" "/etc/sensors/${file_name}"
-      redirect_to $SCRIPT_NAME "success" "Sensor config uploaded."
-      ;;
-    esac
-  fi
+		if [ -z "$file_name" ]; then
+			error="No file found! Did you forget to upload?"
+		elif [ "hisilicon" = "$soc_vendor" ] && [ -n $(grep "\[sensor\]" $file) ]; then
+			error="File magic number does not match. Did you upload a wrong file?"
+		elif [ -f "/etc/sensors/${file_name}" ]; then
+			error="File already exists!"
+		fi
+	fi
+
+	if [ -z "$error" ]; then
+		case "$type" in
+			driver)
+				mv "$file_path" "/usr/lib/sensors/${file_name}"
+				redirect_to $SCRIPT_NAME "success" "Sensor driver uploaded."
+				;;
+			config)
+				mv "$file_path" "/etc/sensors/${file_name}"
+				redirect_to $SCRIPT_NAME "success" "Sensor config uploaded."
+				;;
+		esac
+	fi
 fi
 %>
 <%in p/header.cgi %>

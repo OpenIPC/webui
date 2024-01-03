@@ -6,77 +6,80 @@ page_title="Network settings"
 params="address dhcp dns_1 dns_2 gateway hostname netmask interface wifi_device wifi_ssid wifi_password"
 tmp_file=/tmp/${plugin}.conf
 
-profiles="$(grep -r '$1..=' /etc/wireless | cut -d '"' -f 4 | sort | grep -e ${soc} -e generic)"
-wlandev="$(fw_printenv -n wlandev)"
-wlanssid="$(fw_printenv -n wlanssid)"
-wlanpass="$(fw_printenv -n wlanpass)"
+network_wifi_device="$(fw_printenv -n wlandev)"
+network_wifi_ssid="$(fw_printenv -n wlanssid)"
+network_wifi_password="$(fw_printenv -n wlanpass)"
+
+profiles="$(echo unknown-device && grep -r '$1..=' /etc/wireless | cut -d '"' -f 4 | sort | grep -e ${soc} -e ${soc_family} -e generic)"
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  case "$POST_action" in
-    changemac)
-      if echo "$POST_mac_address" | grep -Eiq '^([0-9a-f]{2}[:-]){5}([0-9a-f]{2})$'; then
-        fw_setenv ethaddr $POST_mac_address
-        update_caminfo
-        redirect_to "reboot.cgi"
-      else
-        redirect_back "warning" "${POST_mac_address} is as invalid MAC address."
-      fi
-      ;;
-    reset)
-      /usr/sbin/sysreset.sh -n
-      redirect_back
-      ;;
-    update)
-      # parse values from parameters
-      for _p in $params; do
-        eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-        sanitize "${plugin}_${_p}"
-      done; unset _p
+	case "$POST_action" in
+		changemac)
+			if echo "$POST_mac_address" | grep -Eiq '^([0-9a-f]{2}[:-]){5}([0-9a-f]{2})$'; then
+				fw_setenv ethaddr $POST_mac_address
+				update_caminfo
+				redirect_to "reboot.cgi"
+			else
+				redirect_back "warning" "${POST_mac_address} is as invalid MAC address."
+			fi
+			;;
+		reset)
+			/usr/sbin/sysreset.sh -n
+			redirect_back
+			;;
+		update)
+			# parse values from parameters
+			for p in $params; do
+				eval ${plugin}_${p}=\$POST_${plugin}_${p}
+				sanitize "${plugin}_${p}"
+			done; unset p
 
-      [ -z "$network_interface" ] && flash_append "danger" "Default network interface cannot be empty." && error=1
+			network_interface=$(echo $network_interfaces | cut -d' ' -f1)
 
-      if [ "false" = "$network_dhcp" ]; then
-        network_mode="static"
-        [ -z "$network_address" ] && flash_append "danger" "IP address cannot be empty." && error=1
-        [ -z "$network_netmask" ] && flash_append "danger" "Networking mask cannot be empty." && error=1
-      else
-        network_mode="dhcp"
-      fi
+			[ -z "$network_interface" ] && set_error_flag "Default network interface cannot be empty."
 
-      if [ "wlan0" = "$network_interface" ]; then
-        [ -z "$network_wifi_device" ] && flash_append "danger" "WLAN Device cannot be empty." && error=1
-        [ -z "$network_wifi_ssid" ] && flash_append "danger" "WLAN SSID cannot be empty." && error=1
-        [ -z "$network_wifi_password" ] && flash_append "danger" "WLAN Password cannot be empty." && error=1
-      fi
+			if [ "wlan0" = "$network_interface" ]; then
+				[ -z "$network_wifi_device" ] && set_error_flag "WLAN Device cannot be empty."
+				[ -z "$network_wifi_ssid" ] && set_error_flag"WLAN SSID cannot be empty."
+				[ -z "$network_wifi_password" ] && set_error_flag "WLAN Password cannot be empty."
+			fi
 
-      if [ -z "$error" ]; then
-        command="setnetiface.sh"
-        command="${command} -i $network_interface"
-        command="${command} -m $network_mode"
-        command="${command} -h $network_hostname"
+			if [ "false" = "$network_dhcp" ]; then
+				network_mode="static"
+				[ -z "$network_address" ] && set_error_flag "IP address cannot be empty."
+				[ -z "$network_netmask" ] && set_error_flag "Networking mask cannot be empty."
+			else
+				network_mode="dhcp"
+			fi
 
-        if [ "wlan0" = "$network_interface" ]; then
-          command="${command} -r $network_wifi_device"
-          command="${command} -s $network_wifi_ssid"
-          command="${command} -p $network_wifi_password"
-        fi
+			if [ -z "$error" ]; then
+				command="setnetiface.sh"
+				command="${command} -i $network_interface"
+				command="${command} -m $network_mode"
+				command="${command} -h $network_hostname"
 
-        if [ "dhcp" != "$network_mode" ]; then
-          command="${command} -a $network_address"
-          command="${command} -n $network_netmask"
-          [ -n "$network_gateway" ] && command="${command} -g $network_gateway"
-          [ -n "$network_dns_1" ] && command="${command} -d $network_dns_1"
-          [ -n "$network_dns_2" ] && command="${command},${network_dns_2}"
-        fi
+				if [ "wlan0" = "$network_interface" ]; then
+					command="${command} -r $network_wifi_device"
+					command="${command} -s $network_wifi_ssid"
+					command="${command} -p $network_wifi_password"
+				fi
 
-        echo "$command" >>/tmp/webui.log
-        eval "$command" >/dev/null 2>&1
+				if [ "dhcp" != "$network_mode" ]; then
+					command="${command} -a $network_address"
+					command="${command} -n $network_netmask"
+					[ -n "$network_gateway" ] && command="${command} -g $network_gateway"
+					[ -n "$network_dns_1" ] && command="${command} -d $network_dns_1"
+					[ -n "$network_dns_2" ] && command="${command},${network_dns_2}"
+				fi
 
-        update_caminfo
-        redirect_back "success" "Network settings updated."
-      fi
-      ;;
-  esac
+				echo "$command" >>/tmp/webui.log
+				eval "$command" >/dev/null 2>&1
+
+				update_caminfo
+				redirect_back "success" "Network settings updated."
+			fi
+			;;
+	esac
 fi
 %>
 <%in p/header.cgi %>
@@ -88,8 +91,8 @@ fi
       <% field_text "network_hostname" "Hostname" %>
       <% field_select "network_interface" "Network interface" "eth0 wlan0" %>
       <% field_select "network_wifi_device" "WLAN Device" "$profiles" %>
-      <% field_text "network_wifi_ssid" "WLAN SSID" "" "$wlanssid" %>
-      <% field_text "network_wifi_password" "WLAN Password" "" "$wlanpass" %>
+      <% field_text "network_wifi_ssid" "WLAN SSID" %>
+      <% field_text "network_wifi_password" "WLAN Password" %>
 
       <% field_switch "network_dhcp" "Use DHCP" %>
       <% field_text "network_address" "IP Address" %>
@@ -144,7 +147,6 @@ fi
 
   $('#network_interface').addEventListener('change', toggleIface);
   $('#network_dhcp[type=checkbox]').addEventListener('change', toggleDhcp);
-  $('#network_wifi_device').value = "<%= $wlandev %>";
 
   toggleIface();
   toggleDhcp();

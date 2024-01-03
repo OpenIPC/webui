@@ -1,7 +1,8 @@
 #!/bin/sh
 
 plugin="openwall"
-source /usr/sbin/common-plugins
+
+. /usr/sbin/common-plugins
 
 show_help() {
 	echo "Usage: $0 [-v] [-h] [-f]
@@ -21,26 +22,34 @@ fw_version=$(grep "OPENIPC_VERSION" /etc/os-release | cut -d= -f2 | tr -d /\"/)
 network_hostname=$(hostname -s)
 network_default_interface=$(ip r | sed -nE '/default/s/.+dev (\w+).+?/\1/p' | head -n 1)
 [ -z "$network_default_interface" ] && network_default_interface=$(ip r | sed -nE 's/.+dev (\w+).+?/\1/p' | head -n 1)
-network_macaddr=$(cat /sys/class/net/${network_default_interface}/address)
+network_macaddr=$(cat "/sys/class/net/${network_default_interface}/address")
 
 sensor=$(ipcinfo --short-sensor)
 [ -z "$sensor" ] && sensor=$(fw_printenv -n sensor | cut -d_ -f1)
 
 #sensor_config=$(yaml-cli -g .isp.sensorConfig)
 soc=$(ipcinfo --chip-name)
-[ "sigmastar" = $(ipcinfo -v) ] && soc=$(fw_printenv -n soc)
+[ "sigmastar" = "$(ipcinfo -v)" ] && soc=$(fw_printenv -n soc)
 
 soc_temperature=$(ipcinfo --temp)
-streamer=$(basename $(ipcinfo --streamer))
+streamer=$(basename "$(ipcinfo --streamer)")
 uptime=$(uptime | sed -r 's/^.+ up ([^,]+), .+$/\1/')
 
 # override config values with command line arguments
-while getopts fvh flag; do
-	case ${flag} in
-	f) force="true" ;;
-	r) use_heif="true" ;;
-	v) verbose="true" ;;
-	h) show_help ;;
+while getopts frvh flag; do
+	case "$flag" in
+		f)
+			force="true"
+			;;
+		r)
+			use_heif="true"
+			;;
+		v)
+			verbose="true"
+			;;
+		h|*)
+			show_help
+			;;
 	esac
 done
 
@@ -69,7 +78,7 @@ command="${command} --max-time ${curl_timeout}"
 
 # SOCK5 proxy, if needed
 if [ "true" = "$openwall_socks5_enabled" ]; then
-	source /etc/webui/socks5.conf
+	. /etc/webui/socks5.conf
 	command="${command} --socks5-hostname ${socks5_host}:${socks5_port}"
 	command="${command} --proxy-user ${socks5_login}:${socks5_password}"
 fi
@@ -89,8 +98,8 @@ command="${command} -F 'uptime=${uptime}'"
 command="${command} -F 'file=@${snapshot}'"
 
 log "$command"
-eval "$command" >>$LOG_FILE 2>&1
+eval "$command" >>"$LOG_FILE" 2>&1
 
-[ "true" = "$verbose" ] && cat $LOG_FILE
+[ "true" = "$verbose" ] && cat "$LOG_FILE"
 
 exit 0

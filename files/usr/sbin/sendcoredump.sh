@@ -6,33 +6,42 @@ core_file=dump.core
 info_file=info.txt
 
 LOG_FILE=/root/coredump.log
-:>$LOG_FILE
+:>"$LOG_FILE"
+
+log() {
+	local txt
+	txt="$(date +"%F %T") [${PID}] ${1}"
+	echo "$txt" >>"$LOG_FILE"
+	[ "1" != "$quiet" ] && echo "$txt"
+}
 
 log "Majectic crashed"
 
-log() {
-	local txt="$(date +"%F %T") [${PID}] ${1}"
-	echo "$txt" >>$LOG_FILE
-	[ "1" != "$quiet" ] && echo "$txt"
-	unset txt
-}
+if [ ! -f "$config_file" ]; then
+	log "Config file ${config_file} not found."
+	exit 1
+fi
+. $config_file
 
-[ ! -f "$config_file" ] && log "Config file ${config_file} not found." && exit 1
-source "$config_file"
+if [ ! -f "$admin_file" ]; then
+	log "Admin config file ${admin_file} not found."
+	exit 2
+fi
+. $admin_file
 
-[ ! -f "$admin_file" ] && log "Admin config file ${admin_file} not found." && exit 2
-source "$admin_file"
-
-[ "true" != "$coredump_enabled" ] && log "Core dump not enabled." && exit 3
+if [ "true" != "$coredump_enabled" ]; then
+	log "Core dump not enabled."
+	exit 3
+fi
 
 log "Stopping watchdog"
 rmmod wdt
 log "done"
 
-cd /tmp
+cd /tmp || return
 
 log "Dumping core"
-cat /dev/stdin >$core_file
+cat /dev/stdin >"$core_file"
 log "done"
 
 bundle_name=$(ifconfig -a | grep HWaddr | sed s/.*HWaddr// | sed "s/[: ]//g" | uniq)-$(date +"%Y%m%d-%H%M%S").tgz
@@ -46,7 +55,7 @@ mac=$(ipcinfo --xm-mac)
 os=$(cat /etc/os-release)
 mj=$(majestic -v)
 
-:>$info_file
+:>"$info_file"
 echo "
 Date: $(TZ=GMT0 date)
 Name: ${admin_name}
@@ -77,19 +86,22 @@ rm "$core_file" "$info_file" majestic.yaml
 
 if [ "true" = "$coredump_send2devs" ]; then
 	log "Sending to S3 bucket"
-	curl --silent --verbose "https://majdumps.s3.eu-north-1.amazonaws.com/${bundle_name}" --upload-file "$bundle_name" >>$LOG_FILE
+	curl --silent --verbose "https://majdumps.s3.eu-north-1.amazonaws.com/${bundle_name}" \
+		--upload-file "$bundle_name" >>"$LOG_FILE"
 	log "done"
 fi
 
 if [ "true" = "$coredump_send2tftp" ]; then
 	log "Sending to TFTP server"
-	tftp -p -l "$bundle_name" $coredump_tftphost >>$LOG_FILE
+	tftp -p -l "$bundle_name" $coredump_tftphost >>"$LOG_FILE"
 	log "done"
 fi
 
 if [ "true" = "$coredump_send2ftp" ]; then
 	log "Sending to FTP server"
-	curl --silent --verbose "ftp://${coredump_ftphost}/${coredump_ftppath}/" --upload-file "$bundle_name" --user "${coredump_ftpuser}:${coredump_ftppass}" --ftp-create-dirs >>$LOG_FILE
+	curl --silent --verbose "ftp://${coredump_ftphost}/${coredump_ftppath}/" \
+		--upload-file "$bundle_name" --user "${coredump_ftpuser}:${coredump_ftppass}" \
+		--ftp-create-dirs >>"$LOG_FILE"
 	log "done"
 fi
 
@@ -103,7 +115,7 @@ else
 	rm "$bundle_name"
 fi
 
-[ "1" = "$verbose" ] && cat $LOG_FILE
+[ "1" = "$verbose" ] && cat "$LOG_FILE"
 
 log "All done. Rebooting..."
 umount -a -t nfs -l

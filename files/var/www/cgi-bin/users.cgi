@@ -8,41 +8,41 @@ page_title="Users"
 conf_file=/tmp/passwd
 
 if [ -n "$POST_action" ] && [ "$POST_action" = "create" ]; then
-  user_name="$POST_user_name"
-  user_name_new="$POST_user_name_new"
-  user_password="$POST_user_password"
-  user_full_name="$POST_user_full_name"
-  user_home="$POST_user_home"
-  user_shell="$POST_user_shell"
-  user_group="$POST_user_group"
+	user_name="$POST_user_name"
+	user_name_new="$POST_user_name_new"
+	user_password="$POST_user_password"
+	user_full_name="$POST_user_full_name"
+	user_home="$POST_user_home"
+	user_shell="$POST_user_shell"
+	user_group="$POST_user_group"
 
-  [ -n "$user_name_new" ] && user_name=$user_name_new
+	[ -n "$user_name_new" ] && user_name=$user_name_new
 
-  [ -z "$user_name" ] && flash_append "danger" "User name cannot be empty." && error=1
-  [ -z "$user_password" ] && flash_append "danger" "User password cannot be empty." && error=1
+	[ -z "$user_name" ] && set_error_flag "User name cannot be empty."
+	[ -z "$user_password" ] && set_error_flag "User password cannot be empty."
 
-  if [ -z "$error" ]; then
-    if grep -q "^${user_name}:" /etc/passwd; then
-      flash_append "warning" "User ${user_name} found."
-    else
-      adduser ${user_name} -h ${user_home:-/dev/null} -s ${user_shell:-/bin/false} -G ${user_group:-users} -D -g "${user_full_name}"
-      if [ $? -eq 0 ]; then
-        flash_append "success" "User ${user_name} created."
-      else
-        flash_append "danger" "Failed to create user ${user_name}." && error=1
-      fi
-    fi
+	if [ -z "$error" ]; then
+		if grep -q "^${user_name}:" /etc/passwd; then
+			flash_append "warning" "User ${user_name} found."
+		else
+			adduser ${user_name} -h ${user_home:-/dev/null} -s ${user_shell:-/bin/false} -G ${user_group:-users} -D -g "${user_full_name}"
+			if [ $? -eq 0 ]; then
+				flash_append "success" "User ${user_name} created."
+			else
+				set_error_flag "Failed to create user ${user_name}."
+			fi
+		fi
 
-    if [ -z "$error" ]; then
-      result=$(echo "${user_name}:${user_password}" | chpasswd 2>&1)
-      if [ $? -eq 0 ]; then
-        flash_append "success" "Password for ${user_name} set."
-        redirect_back
-      else
-        flash_append "danger" "$result"
-      fi
-    fi
-  fi
+		if [ -z "$error" ]; then
+			result=$(echo "${user_name}:${user_password}" | chpasswd 2>&1)
+			if [ $? -eq 0 ]; then
+				flash_append "success" "Password for ${user_name} set."
+				redirect_back
+			else
+				flash_append "danger" "$result"
+			fi
+		fi
+	fi
 fi
 
 users=$(awk 'BEGIN { FS = ":" } ; { if ($3 > 1000) print $1 }' /etc/passwd)

@@ -6,8 +6,9 @@ plugin_name="Telegram Bot"
 page_title="Telegram Bot"
 
 params="enabled token"
-for i in 0 1 2 3 4 5 6 7 8 9; do
-  params="${params} command_${i} description_${i} script_${i}"
+seq=$(seq 0 9)
+for i in $seq; do
+	params="${params} command_${i} description_${i} script_${i}"
 done
 
 tmp_file=/tmp/${plugin}.conf
@@ -16,44 +17,40 @@ config_file="${ui_config_dir}/${plugin}.conf"
 [ ! -f "$config_file" ] && touch $config_file
 
 if [ "POST" = "$REQUEST_METHOD" ]; then
-  # parse values from parameters
-  for _p in $params; do
-    eval ${plugin}_${_p}=\$POST_${plugin}_${_p}
-    sanitize "${plugin}_${_p}"
-  done; unset _p
+	# parse values from parameters
+	for p in $params; do
+		eval ${plugin}_${p}=\$POST_${plugin}_${p}
+		sanitize "${plugin}_${p}"
+	done; unset p
 
-  ### Validation
-  if [ "true" = "$telegrambot_enabled" ]; then
-    [ -z "$telegrambot_token" ] &&
-      flash_append "danger" "Telegram token cannot be empty." &&
-      error=11
-  fi
+	### Validation
+	if [ "true" = "$telegrambot_enabled" ]; then
+		[ -z "$telegrambot_token" ] && set_error_flag "Telegram token cannot be empty."
+	fi
 
-  if [ -z "$error" ]; then
-    # create temp config file
-    :>$tmp_file
-    for _p in $params; do
-      echo "${plugin}_${_p}=\"$(eval echo \$${plugin}_${_p})\"" >>$tmp_file
-    done; unset _p
-    mv $tmp_file $config_file
+	if [ -z "$error" ]; then
+		# create temp config file
+		:>$tmp_file
+		for p in $params; do
+			echo "${plugin}_${p}=\"$(eval echo \$${plugin}_${p})\"" >>$tmp_file
+		done; unset p
+		mv $tmp_file $config_file
 
-    update_caminfo
+		update_caminfo
+		/etc/init.d/S93telegrambot restart >/dev/null
+		redirect_back "success" "${plugin_name} config updated."
+	fi
 
-    /etc/init.d/S93telegrambot restart >/dev/null
-
-    redirect_back "success" "${plugin_name} config updated."
-  fi
-
-  redirect_to $SCRIPT_NAME
+	redirect_to $SCRIPT_NAME
 else
-  include $config_file
+	include $config_file
 
-  for _p in $params; do
-    sanitize4web "${plugin}_${_p}"
-  done; unset _p
+	for p in $params; do
+		sanitize4web "${plugin}_${p}"
+	done; unset p
 
-  # Default values
-  [ -z "$telegrambot_caption" ] && telegrambot_caption="%hostname, %datetime"
+	# Default values
+	[ -z "$telegrambot_caption" ] && telegrambot_caption="%hostname, %datetime"
 fi
 %>
 <%in p/header.cgi %>
@@ -73,7 +70,7 @@ fi
       <div class="bot-commands mb-4">
         <h5>Bot Commands</h5>
         <p class="hint mb-3">Use $chat_id variable for the active chat ID.</p>
-        <% for i in 0 1 2 3 4 5 6 7 8 9; do %>
+        <% for i in $seq; do %>
         <div class="row g-1 mb-3 mb-lg-1">
           <div class="col-4 col-lg-2">
             <input type="text" id="telegrambot_command_<%= $i %>" name="telegrambot_command_<%= $i %>"

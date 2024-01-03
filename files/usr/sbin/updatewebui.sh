@@ -41,11 +41,11 @@ while getopts b:c:fhv flag; do
 done
 
 if [ -n "$branch" ]; then
-	url="https://github.com/OpenIPC/microbe-web/archive/refs/heads/${branch}.zip"
-	bundle_dir="microbe-web-${branch}"
+	url="https://github.com/OpenIPC/webui/archive/refs/heads/${branch}.zip"
+	bundle_dir="webui-${branch}"
 elif [ -n "$commit" ]; then
-	url="https://github.com/OpenIPC/microbe-web/archive/${commit}.zip"
-	bundle_dir="microbe-web-${commit}"
+	url="https://github.com/OpenIPC/webui/archive/${commit}.zip"
+	bundle_dir="webui-${commit}"
 else
 	echo_c 31 "branch: ${branch}, commit: ${commit}"
 	echo_c 33 "You need to specify either a branch or a commit hash!"

@@ -144,7 +144,7 @@ majestic_menu() {
         </div>
         <div class="col-1" id="daynight_value"></div>
         <div class="col-md-4 col-lg-3 mb-2 text-end">
-          <div id="time-now"></div>
+          <div><a href="/cgi-bin/time-config.cgi" id="time-now" class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover"></a></div>
           <div id="soc-temp"></div>
         </div>
       </div>

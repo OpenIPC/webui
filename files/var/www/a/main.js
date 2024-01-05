@@ -54,6 +54,9 @@ function heartbeat() {
              if (json.daynight_value !== -1) {
                  $('#daynight_value').textContent = '☀️ ' + json.daynight_value;
              }
+             if (typeof(json.uptime) !== 'undefined' && json.uptime !== '') {
+                 $('#uptime').textContent = 'Uptime:️ ' + json.uptime;
+             }
          })
          .then(setTimeout(heartbeat, 1000));
 }

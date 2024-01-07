@@ -55,7 +55,7 @@ function heartbeat() {
                  $('#daynight_value').textContent = '☀️ ' + json.daynight_value;
              }
          })
-         .then(setTimeout(heartbeat, 1000));
+         .then(setTimeout(heartbeat, 3000));
 }
 
 (function () {

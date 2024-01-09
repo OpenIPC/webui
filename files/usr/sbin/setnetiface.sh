@@ -183,7 +183,7 @@ if [ "static" = "$network_mode" ]; then
 	if [ -n "$network_nameservers" ]; then
 		echo -n "    pre-up echo -e \"" >>"$tmp_config_file"
 		for dns in ${network_nameservers//,/ }; do
-			printf "nameserver %s\n" "$dns" >>"$tmp_config_file"
+			echo -n "nameserver ${dns}\n" >>"$tmp_config_file"
 		done; unset dns
 		echo "\" >/tmp/resolv.conf" >>"$tmp_config_file"
 	fi

@@ -12,7 +12,7 @@ fi
 
 if [ ! -z $(pidof majestic) ]; then
 	daynight_value=$(timeout .5 wget -q -O - http://127.0.0.1/metrics?value=isp_again)
-	if [ -z ] "$daynight_value" ]; then
+	if [ -z "$daynight_value" ]; then
 		daynight_value=-1
 	fi
 fi

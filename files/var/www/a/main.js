@@ -51,7 +51,7 @@ function heartbeat() {
              if (json.overlay_used !== '') {
                  setProgressBar('#pb-overlay', json.overlay_used, 'Overlay Usage');
              }
-             if (json.daynight_value !== -1) {
+             if (json.daynight_value !== '-1') {
                  $('#daynight_value').textContent = '☀️ ' + json.daynight_value;
              }
              if (typeof(json.uptime) !== 'undefined' && json.uptime !== '') {

@@ -2,7 +2,14 @@
 </main>
 <footer class="x-small">
 <div class="container pt-3">
+<div class="row">
+<div class="col col-2">
+<p id="uptime" class="text-secondary"></p>
+</div>
+<div class="col col-10">
 <p class="text-end">Powered by <a href="https://github.com/OpenIPC/webui">Web UI</a>, a part of <a href="https://openipc.org/">OpenIPC project</a>.</p>
+</div>
+</div>
 </div>
 </footer>
 

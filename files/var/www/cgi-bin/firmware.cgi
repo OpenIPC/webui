@@ -7,19 +7,19 @@ if [ -n "$network_gateway" ]; then
 		# Ingenic firmware does not correspond to SoC model
 		t10*)
 			url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t10-lite-nor.tgz"
-			 ;;
+			;;
 		t20*)
 			url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t20-lite-nor.tgz"
-			 ;;
+			;;
 		t21*)
 			url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t21-lite-nor.tgz"
-			 ;;
+			;;
 		t31*)
 			url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t31-line-nor.tgz"
-			 ;;
+			;;
 		*)
 			url="https://github.com/OpenIPC/firmware/releases/download/latest/openipc.${soc}-${flash_type}-${fw_variant}.tgz"
-			 ;;
+			;;
 	esac
 	fw_date=$(date -D "%a, %d %b %Y %T GMT" +"2.4.%m.%d" --date "$(curl -ILs "$url" | grep Last-Modified | cut -d' ' -f2-)")
 else

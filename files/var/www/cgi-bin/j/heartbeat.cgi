@@ -10,31 +10,22 @@ else
 	soc_temp=""
 fi
 
-if pidof majestic; then
-	daynight_value=$(timeout .5 wget -q -O - http://127.0.0.1/metrics?value=isp_again)
-	if [ -z "$daynight_value" ]; then
-		daynight_value=-1
-	fi
-fi
-
-if [ -z "$daynight_value" ]; then
-	case "$vendor" in
-		ingenic)
-			daynight_value=$(imp-control.sh gettotalgain)
-			;;
-		sigmastar)
-			if [ -e /sys/devices/virtual/mstar/sar/channel ]; then
-				echo 2 >/sys/devices/virtual/mstar/sar/channel
-				daynight_value=$(cat /sys/devices/virtual/mstar/sar/value)
-			else
-				daynight_value=-1
-			fi
-			;;
-		*)
+case "$vendor" in
+	ingenic)
+		daynight_value=$(imp-control.sh gettotalgain)
+		;;
+	sigmastar)
+		if fw_printenv wlandev | grep -q foscam; then
+			echo 2 >/sys/devices/virtual/mstar/sar/channel
+			daynight_value=$(cat /sys/devices/virtual/mstar/sar/value)
+		else
 			daynight_value=-1
-			;;
-	esac
-fi
+		fi
+		;;
+	*)
+		daynight_value=-1
+		;;
+esac
 
 mem_total=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 mem_free=$(awk '/MemFree/ {print $2}' /proc/meminfo)

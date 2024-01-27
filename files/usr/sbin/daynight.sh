@@ -29,6 +29,12 @@ switch_to_night() {
 # determine luminance of the scene
 reversed=0
 case "$vendor" in
+	goke)
+ 		value=$(wget -q -O - http://127.0.0.1/metrics/isp | awk '/^isp_again/ {print $2}')
+ 		;;
+ 	hisilicon)
+  		value=$(wget -q -O - http://127.0.0.1/metrics/isp | awk '/^isp_again/ {print $2}')
+  		;;
 	ingenic)
 		value=$(imp-control.sh gettotalgain)
 		reversed=1

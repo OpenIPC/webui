@@ -36,16 +36,20 @@ case "$vendor" in
   		value=$(wget -q -O - http://127.0.0.1/metrics/isp | awk '/^isp_again/ {print $2}')
   		;;
 	ingenic)
+ 		# For Ingenic we need to check whether the imp-control system is used or not
+ 		# value=$(wget -q -O - http://127.0.0.1/metrics/isp | awk '/^isp_again/ {print $2}')
 		value=$(imp-control.sh gettotalgain)
 		reversed=1
 		;;
 	sigmastar)
+ 		value=$(wget -q -O - http://127.0.0.1/metrics/isp | awk '/^isp_again/ {print $2}')
+   		# Below is an alternative way to obtain data from the hardware light sensor
 		# GPIO78, PAD_SAR_GPIO0 -> channel 0
 		# GPIO79, PAD_SAR_GPIO1 -> channel 1
 		# GPIO80, PAD_SAR_GPIO2 -> channel 2
 		# GPIO81, PAD_SAR_GPIO3 -> channel 3
-		echo 2 >/sys/devices/virtual/mstar/sar/channel
-		value=$(cat /sys/devices/virtual/mstar/sar/value)
+		# echo 2 >/sys/devices/virtual/mstar/sar/channel
+		# value=$(cat /sys/devices/virtual/mstar/sar/value)
 		;;
 	*)
 		echo "vendor is not supported"

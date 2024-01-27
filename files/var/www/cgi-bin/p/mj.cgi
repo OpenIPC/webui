@@ -60,6 +60,8 @@ mj="
 .nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|0,255,1|65|
 .nightMode.colorToGray|Set black/white night mode||boolean|true,false|false|
 .nightMode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1,1000,1|300|
+.nightMode.minThreshold|Min threshold for day mode||number|1,100000,1|2000|
+.nightMode.maxThreshold|Max threshold for night mode||number|1,100000,1|8000|
 .records.enabled|Enable saving records||boolean|true,false|false|
 .records.path|Template for saving video records||string||/mnt/mmc/%Y/%m/%d/%H.mp4|Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format.
 .records.maxUsage|Limit of available space usage|%|range|1,100,1|95|

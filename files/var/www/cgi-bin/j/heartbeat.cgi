@@ -11,7 +11,15 @@ else
 fi
 
 case "$vendor" in
+	goke)
+		daynight_value=$(wget -q -O - http://127.0.0.1/metrics/isp | awk '/^isp_again/ {print $2}')
+		;;
+	hisilicon)
+		daynight_value=$(wget -q -O - http://127.0.0.1/metrics/isp | awk '/^isp_again/ {print $2}')
+		;;
 	ingenic)
+		# For Ingenic we need to check whether the imp-control system is used or not
+		# daynight_value=$(wget -q -O - http://127.0.0.1/metrics/isp | awk '/^isp_again/ {print $2}')
 		daynight_value=$(imp-control.sh gettotalgain)
 		;;
 	sigmastar)
@@ -19,7 +27,7 @@ case "$vendor" in
 			echo 2 >/sys/devices/virtual/mstar/sar/channel
 			daynight_value=$(cat /sys/devices/virtual/mstar/sar/value)
 		else
-			daynight_value=-1
+			daynight_value=$(wget -q -O - http://127.0.0.1/metrics/isp | awk '/^isp_again/ {print $2}')
 		fi
 		;;
 	*)

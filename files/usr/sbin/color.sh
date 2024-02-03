@@ -5,14 +5,30 @@
 
 MODE_FILE=/tmp/colormode.txt
 
+vendor=$(ipcinfo --vendor)
+
 switch_to_color() {
-	curl http://127.0.0.1/night/off
+	case "$vendor" in
+		ingenic)
+			/usr/sbin/imp-control.sh ispmode 0
+			;;
+		*)
+			curl http://127.0.0.1/night/off
+			;;
+	esac
 	echo "Switched to full-color mode"
 	echo "day" >$MODE_FILE
 }
 
 switch_to_monochrome() {
-	curl http://127.0.0.1/night/on
+	case "$vendor" in
+		ingenic)
+			/usr/sbin/imp-control.sh ispmode 1
+			;;
+		*)
+			curl http://127.0.0.1/night/on
+			;;
+	esac
 	echo "Switched to monochrome mode"
 	echo "night" >$MODE_FILE
 }

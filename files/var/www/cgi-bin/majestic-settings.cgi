@@ -31,28 +31,6 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 
 		value="$(echo $form_field_name | cut -d= -f2)"
 
-		# normalization
-		# (that's why we can't have nice things)
-		case "$key" in
-			.image.rotate)
-				[ "0" = "$value" ] && value="none"
-				;;
-			.isp.antiFlicker)
-				[ "50Hz" = "$value" ] && value="50"
-				[ "60Hz" = "$value" ] && value="60"
-				;;
-			.motionDetect.visualize)
-				[ "true" = "$value" ] && yaml-cli -s ".osd.enabled" "true" -i $temp_yaml
-				;;
-			.osd.enabled)
-				[ "false" = "$value" ] && yaml-cli -s ".motionDetect.visualize" "false" -i $temp_yaml
-				;;
-			.system.webAdmin)
-				[ "true" = "$value" ] && value="enabled"
-				[ "false" = "$value" ] && value="disabled"
-				;;
-		esac
-
 		# read existing value
 		oldvalue=$(yaml-cli -g "$key" -i $temp_yaml)
 

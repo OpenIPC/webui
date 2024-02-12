@@ -16,7 +16,8 @@ mj_retired="
 # select options: value2,value2,value3...
 mj="
 .system.logLevel|Severity of logging||select|ERROR,WARN,INFO,DEBUG,TRACE|TRACE|Used for syslog messages.
-.system.webAdmin|Serve Web Admin via Majestic||boolean|enabled,disabled|disabled|Experimental! Disable on camera with public access.
+.system.webAdmin|Serve Web Admin via Majestic||boolean|true,false|false|Experimental! Disable on camera with public access.
+.system.plugins|Enable Majestic plugins||boolean|true,false|false|Experimental
 .system.staticDir|Home directory for static files||string||/var/www/html|
 .system.webPort|Port for HTTP access||number|1,65535,1|80|
 .system.httpsPort|Port for HTTPS access||number|1,65535,1|443|

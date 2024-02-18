@@ -16,8 +16,8 @@ mj_retired="
 # select options: value2,value2,value3...
 mj="
 .system.logLevel|Severity of logging||select|ERROR,WARN,INFO,DEBUG,TRACE|TRACE|Used for syslog messages.
-.system.webAdmin|Serve Web Admin via Majestic||boolean|true,false|false|Experimental! Disable on camera with public access.
-.system.plugins|Enable Majestic plugins||boolean|true,false|false|Experimental
+.system.webAdmin|Serve Web Admin via Majestic||boolean|true,false|false|
+.system.plugins|Enable Majestic plugins||boolean|true,false|false|Experimental.
 .system.staticDir|Home directory for static files||string||/var/www/html|
 .system.webPort|Port for HTTP access||number|1,65535,1|80|
 .system.httpsPort|Port for HTTPS access||number|1,65535,1|443|
@@ -29,7 +29,7 @@ mj="
 .isp.slowShutter|Slow shutter||select|disabled,low,medium,high|low|Automatic frame rate reduction mode.
 .isp.antiFlicker|Anti-flicker||select|disabled,50,60|disabled|Usually, the utility frequency in your grid line.
 .isp.blkCnt|Block count||number|1,32,1|4|Use 4 for small memory systems, 10+ for performant SoCs.
-.isp.exposure|Sensor exposure time||range|30,100,1,auto|auto|In milliseconds.
+.isp.exposure|Sensor exposure time||range|30,100,1|50|In milliseconds.
 .isp.aGain|Sensor analog gain||number|1,10000,1|1|Useable range: 1-128
 .isp.dGain|Sensor digital gain||number|1,10000,1|1|
 .isp.ispGain|ISP gain||number|1,10000,1|1|
@@ -39,11 +39,11 @@ mj="
 .isp.iqProfile|Path to PQTools binary profile||string|||
 .image.mirror|Flip image horizontally||boolean|true,false|false|
 .image.flip|Flip image vertically||boolean|true,false|false|
-.image.rotate|Rotate image clockwise, °||select|0,90,270|0|
-.image.contrast|Image contrast|%|range|1,100,1,auto|auto|
+.image.rotate|Rotate image clockwise||select|0,90,270|0|
+.image.contrast|Image contrast|%|range|1,100,1|50|
 .image.hue|Image hue|%|range|1,100,1|50|
 .image.saturation|Image saturation|%|range|1,100,1|50|
-.image.luminance|Image luminance|%|range|1,100,1,auto|auto|
+.image.luminance|Image luminance|%|range|1,100,1|50|
 .osd.enabled|Enable On-Screen Display (OSD)||boolean|true,false|false|
 .osd.font|Path to font file used in OSD||string||/usr/share/fonts/truetype/UbuntuMono-Regular.ttf|
 .osd.template|OSD template||string||%a %e %B %Y %H:%M:%S %Z|Supports <a href=\"https://man7.org/linux/man-pages/man3/strftime.3.html \" target=\"_blank\">strftime()</a> format.
@@ -96,7 +96,7 @@ mj="
 .mjpeg.fps|Video framerate|fps|number|1,30,1|5|
 .mjpeg.bitrate|Video bitrate|kbps|number|1,4096,1|1024|
 .audio.enabled|Enable audio||boolean|true,false|false|
-.audio.volume|Audio volume level|%|range|1,100,1,auto|auto|
+.audio.volume|Audio volume level|%|range|1,100,1|50|
 .audio.srate|Audio sampling rate|kHz|number|1,96000,1|8000|
 .audio.codec|Codec for RTSP and MP4 encoding||select|mp3,opus,aac,pcm,alaw,ulaw|opus|
 .audio.device|Audio card||string||hw:2|

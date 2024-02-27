@@ -651,6 +651,9 @@ sanitize() {
 	eval $n=$(echo \${$n//\\\"/\\\\\\\"})
 	# escape varialbles
 	eval $n=$(echo \${$n//\$/\\\\\$})
+	# escape partnersis
+	eval $n=$(echo \${$n//\\\(/\\\\\\\(})
+	eval $n=$(echo \${$n//\\\)/\\\\\\\)})
 }
 
 sanitize4web() {

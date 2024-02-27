@@ -191,7 +191,7 @@ fi
 
 if [ "wlan0" = "$network_interface" ]; then
 	tmp_env_file=$(mktemp)
-	printf "wlandev %s\nwlanssid %s\nwlanpass %s" "$network_device" "$network_ssid" "$network_password" >"$tmp_env_file"
+	printf "wlandev %s\nwlanssid %s\nwlanpass %s\n" "$network_device" "$network_ssid" "$network_password" >"$tmp_env_file"
 	fw_setenv -s "$tmp_env_file"
 
 	printf "$TEMPLATE_WIRELESS" $network_ssid $network_password >>"$tmp_config_file"

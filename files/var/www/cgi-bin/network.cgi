@@ -34,7 +34,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 				sanitize "${plugin}_${p}"
 			done; unset p
 
-			network_interface=$(echo $network_interfaces | cut -d' ' -f1)
+			#network_interface=$(echo $network_interfaces | cut -d' ' -f1)
 
 			[ -z "$network_interface" ] && set_error_flag "Default network interface cannot be empty."
 

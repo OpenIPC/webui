@@ -2,7 +2,7 @@
 <%in p/common.cgi %>
 <%
 page_title="Erasing overlay"
-c="/usr/sbin/sysupgrade.sh -n"
+c="/usr/sbin/sysupgrade -n"
 reboot="true"
 %>
 <%in p/header.cgi %>

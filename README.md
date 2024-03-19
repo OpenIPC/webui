@@ -36,7 +36,7 @@ You can improve existing code and send us patches. You can add new features
 missing from our code.
 
 Remember that you write for embedded linux thus please keep
-your code as small and opimized as possible. Avoid using extra libraries like
+your code as small and optimized as possible. Avoid using extra libraries like
 jQuery, pure JavaScript is quite enough. Use valid HTML5 code. Avoid using
 deprecated tags and attributes.
 

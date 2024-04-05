@@ -51,16 +51,16 @@ mj="
 .osd.posX|Horizontal position of OSD|px|number|-2000,2000,2|-100|
 .osd.posY|Vertical position of OSD|px|number|-2000,2000,2|-100|
 .osd.privacyMasks|Privacy masks|px|string||0x0x234x640,2124x0x468x1300|Coordinates of masked areas separated by commas.
-.nightMode.enabled|Enable night mode||boolean|true,false|false|
-.nightMode.irSensorPin|GPIO pin of signal from Light sensor||number|0,255,1|62|
-.nightMode.irSensorPinInvert|Light sensor signal is inverted||boolean|true,false|false|
-.nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|0,255,1|1|
-.nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|0,255,1|2|
-.nightMode.irCutSingleInvert|IRcut filter polarity is inverted||boolean|true,false|false|
-.nightMode.dncDelay|Delay before toggling Day/Night mode||range|1,60,1|20|
-.nightMode.backlightPin|GPIO pin to turn on night mode illumination||number|0,255,1|65|
 .nightMode.colorToGray|Set black/white night mode||boolean|true,false|false|
-.nightMode.drcOverride|Dynamic Range Compression (DRC) in night mode||number|1,1000,1|300|
+.nightMode.irCutPin1|GPIO pin1 of signal for IRcut filter||number|0,255,1|1|
+.nightMode.irCutSingleInvert|IRcut filter polarity is inverted||boolean|true,false|false|
+.nightMode.irCutPin2|GPIO pin2 of signal for IRcut filter||number|0,255,1|2|
+.nightMode.lightMonitor|Enable light monitor||boolean|true,false|false|
+.nightMode.irSensorPin|GPIO pin for light sensor||number|0,255,1|62|
+.nightMode.irSensorInvert|Light sensor is inverted||boolean|true,false|false|
+.nightMode.backlightPin|GPIO pin for camera light||number|0,255,1|65|
+.nightMode.monitorDelay|Delay before toggling Day/Night mode||range|1,60,1|20|
+.nightMode.overrideDrc|Dynamic Range Compression (DRC) in night mode||number|1,1000,1|300|
 .nightMode.minThreshold|Min threshold for day mode||number|1,100000,1|2000|
 .nightMode.maxThreshold|Max threshold for night mode||number|1,100000,1|8000|
 .records.enabled|Enable saving records||boolean|true,false|false|

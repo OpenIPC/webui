@@ -75,7 +75,6 @@ majestic_menu() {
             <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownUpdates" role="button">Updates</a>
             <ul aria-labelledby="dropdownUpdates" class="dropdown-menu">
               <li><a class="dropdown-item" href="firmware.cgi">Firmware</a></li>
-              <li><a class="dropdown-item" href="webui.cgi">Web Interface</a></li>
             </ul>
           </li>
           <li class="nav-item dropdown">

@@ -6,18 +6,18 @@ plugin_name="Virtual Tunnel"
 page_title="Virtual tunnel"
 service_file=/etc/init.d/S98vtun
 conf_file=/tmp/vtund.conf
+env_host=$(fw_printenv -n vtund)
 
 if [ -n "$POST_action" ] && [ "$POST_action" = "reset" ]; then
 	killall tunnel
 	killall vtund
 	rm $conf_file
-	rm $service_file
+	fw_setenv vtund ""
 	redirect_to "$SCRIPT_NAME" "danger" "Tunnel is down"
 fi
 
 if [ -n "$POST_vtun_host" ]; then
-	echo -e "#!/bin/sh\n\ntunnel $POST_vtun_host\n" >$service_file
-	chmod +x $service_file
+	fw_setenv vtund "$POST_vtun_host"
 	$service_file
 	redirect_to "$SCRIPT_NAME" "success" "Tunnel is up"
 fi
@@ -41,7 +41,7 @@ fi
 
     <h3>Settings</h3>
     <form action="<%= $SCRIPT_NAME %>" method="post">
-    <% if [ -f "$service_file" ]; then %>
+    <% if [ ! -z "$env_host" ]; then %>
       <% field_hidden "action" "reset" %>
       <% button_submit "Reset configuration" %>
     <% else %>
@@ -53,7 +53,7 @@ fi
   <div class="col col-lg-8">
     <h3>Configuration files</h3>
 <%
-[ -f "$service_file" ] && ex "cat $service_file"
+[ ! -z "$env_host" ] && ex "echo $env_host"
 [ -f "$conf_file" ] && ex "cat $conf_file"
 ex "ps | grep tunnel"
 ex "ps | grep vtund"

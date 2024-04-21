@@ -6,18 +6,18 @@ plugin_name="Virtual Tunnel"
 page_title="Virtual tunnel"
 service_file=/etc/init.d/S98vtun
 conf_file=/tmp/vtund.conf
-env_host=$(fw_printenv -n vtund)
+env_host=$(fw_printenv -n vtun)
 
 if [ -n "$POST_action" ] && [ "$POST_action" = "reset" ]; then
 	killall tunnel
 	killall vtund
 	rm $conf_file
-	fw_setenv vtund ""
+	fw_setenv vtun
 	redirect_to "$SCRIPT_NAME" "danger" "Tunnel is down"
 fi
 
 if [ -n "$POST_vtun_host" ]; then
-	fw_setenv vtund "$POST_vtun_host"
+	fw_setenv vtun "$POST_vtun_host"
 	$service_file
 	redirect_to "$SCRIPT_NAME" "success" "Tunnel is up"
 fi

@@ -4,7 +4,7 @@
 plugin="motion"
 plugin_name="Motion guard"
 page_title="Motion guard"
-params="enabled sensitivity send2email send2ftp send2mqtt send2telegram send2webhook send2yadisk playonspeaker throttle"
+params="enabled sensitivity send2email send2ftp send2mqtt send2telegram send2webhook send2ntfy send2yadisk playonspeaker throttle"
 
 [ -n "$(echo "$mj_hide_motionDetect" | sed -n "/\b${soc_family}\b/p")" ] && redirect_to "/" "danger" "Motion detection is not supported on your camera."
 
@@ -29,6 +29,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 			[ "false" = "$motion_send2webhook" ] && \
 			[ "false" = "$motion_send2yadisk" ] && \
 			[ "false" = "$motion_playonspeaker" ] && \
+			[ "false" = "$motion_send2ntfy" ] && \
 			set_error_flag "You need to select at least one method of notification"
 	fi
 
@@ -71,6 +72,9 @@ fi
         </li>
         <li class="list-group-item send2mqtt">
           <% field_checkbox "motion_send2mqtt" "Send to MQTT" "<a href=\"plugin-send2mqtt.cgi\">Configure sending to MQTT</a>" %>
+        </li>
+        <li class="list-group-item send2ntfy"">
+          <% field_checkbox "motion_send2ntfy" "Send to NTFY" "<a href=\"plugin-send2ntfy.cgi\">Configure NTFY message</a>" %>
         </li>
         <li class="list-group-item send2telegram">
           <% field_checkbox "motion_send2telegram" "Send to Telegram" "<a href=\"plugin-send2telegram.cgi\">Configure sending to Telegram</a>" %>

@@ -4,7 +4,7 @@
 plugin="ntfy"
 plugin_name="Send to NTFY"
 page_title="Send to NTFY"
-params="enabled attach_snapshot msg_title msg_body msg_priority url port topic username password"
+params="enabled attach_snapshot msg_title msg_body msg_priority url username password"
 
 tmp_file=/tmp/${plugin}.conf
 
@@ -24,8 +24,6 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 	### Validation
 	if [ "true" = "$ntfy_enabled" ]; then
 		[ -z "$ntfy_url"    ] && set_error_flag "Server URL cannot be empty."
-		[ -z "$ntfy_port" ] && set_error_flag "Server port cannot be empty."
-		[ -z "$ntfy_topic"    ] && set_error_flag "NTFY topic name cannot be empty."
 	fi
 
 	if [ -z "$error" ]; then
@@ -46,7 +44,6 @@ else
 
 	# Default values
 	[ -z "$ntfy_attach_snapshot" ] && ntfy_attach_snapshot="true"
-	[ -z "$ntfy_port" ] && ntfy_port="80"
 	[ -z "$ntfy_msg_title" ] && ntfy_msg_title="OpenIPC Notify"
 	[ -z "$ntfy_msg_body" ] && ntfy_msg_body="Motion detected!\n Is it friend or foe?"
         [ -z "$ntfy_msg_priority" ] && ntfy_msg_priority="default"
@@ -58,16 +55,14 @@ fi
   <% field_switch "ntfy_enabled" "Enable sending notification" %>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
     <div class="col">
-      <% field_text "ntfy_url" "NTFY server URL (IP or domain)" "example: http://192.168.1.10 or https://ntfy.sh"%>
-      <% field_number "ntfy_port" "Server port" %>
-      <% field_text "ntfy_topic" "Topic" %>
+      <% field_text "ntfy_url" "NTFY server URL (IP or domain) and topic" "example: http://192.168.1.10:3000/test or https://ntfy.sh/test"%>
       <% field_select "ntfy_msg_priority" "Priority" "min low default high urgent" %>
       <% field_text "ntfy_username" "NTFY username" %>
       <% field_password "ntfy_password" "NTFY password" %>
     </div>
     <div class="col">
       <% field_text "ntfy_msg_title" "Title" %>
-      <% field_textarea "ntfy_msg_body" "Message text" "Line breaks will be replaced with whitespace. Use \n instead" %>
+      <% field_text "ntfy_msg_body" "Message text" "Use \n for line breaks" %>
       <% field_switch "ntfy_attach_snapshot" "Attach snapshot" %>
     </div>
     <div class="col">
@@ -78,4 +73,9 @@ fi
   <% button_submit %>
 </form>
 
+<h2>Test</h2>
+  <p>Send a test message to check parameters.</p>
+  <a href="dl2.cgi?log=send2ntfy" class="btn btn-primary">Test Now</a>
+
 <%in p/footer.cgi %>
+

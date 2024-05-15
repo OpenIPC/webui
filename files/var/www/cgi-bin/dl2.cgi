@@ -13,6 +13,9 @@ case "$log" in
 	netstat)
 		netstat -a >$file
 		 ;;
+	send2ntfy)
+		send2ntfy.sh -b "If you see this, then your config works" -i false -v >$file
+		;;
 	*)
 		echo "Unknown file."
 		exit 1

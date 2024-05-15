@@ -5,31 +5,33 @@ plugin="ntfy"
 . /usr/sbin/common-plugins
 
 show_help() {
-	echo "Usage: $0 [-s server_url] [-p port] [-t topic] [-s subject] [-b body] [-u user -l login] [-v] [-h]
-  -d server   Domain URL or IP of server
-  -p port     Server port
-  -t topic    NTFY message topic
-  -s subject  Subject or title of notification
-  -b body     notification body
-  -u user
-  -l login
-  -v          Verbose output.
-  -h          Show this help.
+	echo "Usage: $0 [-s server_url] [-p priority] [-t title] [-b body] [-u user -l login] [-i bool] [-v] [-h]
+  By default the saved values will be used unless specified
+  OPT  Name     Description					Saved Value
+  -s   server   URL or IP of server (including port and topic)	$ntfy_url
+  -p   priority (min low default high max)			$ntfy_msg_priority
+  -t   title    title for notification				$ntfy_msg_title
+  -b   body     notification body				$ntfy_msg_body
+  -u   user							$ntfy_username
+  -l   login							$ntfy_password
+  -i   image    attach image (true/false)			$ntfy_attach_snapshot
+  -v            Verbose output.
+  -h            Show this help.
 "
 	exit 0
 }
 
 # override config values with command line arguments
-while getopts s:p:t:s:b:u:l:vh flag; do
+while getopts s:p:t:b:u:l:i:vh flag; do
 	case "$flag" in
-		d)
+		s)
 			ntfy_url=$OPTARG
 			;;
 		p)
-			ntfy_port=$OPTARG
+			ntfy_msg_priority=$OPTARG
 			;;
 		t)
-			ntfy_topic=$OPTARG
+			ntfy_msg_title=$OPTARG
 			;;
 		u)
 			ntfy_user=$OPTARG
@@ -37,11 +39,11 @@ while getopts s:p:t:s:b:u:l:vh flag; do
 		l)
 			ntfy_password=$OPTARG
 			;;
-		s)
-			ntfy_msg_title=$OPTARG
-			;;
 		b)
 			ntfy_msg_body=$OPTARG
+			;;
+		i)
+			ntfy_attach_snapshot=$OPTARG
 			;;
 		v)
 			verbose="true"
@@ -56,8 +58,6 @@ done
 
 # validate mandatory values
 [ -z "$ntfy_url" ] && log "NTFY url not found in config" && exit 11
-[ -z "$ntfy_port" ] && log "NTFY port not found in config" && exit 12
-[ -z "$ntfy_topic" ] && log "NTFY topic not found in config" && exit 13
 
 # assign default values if not set
 [ -z "$ntfy_msg_body" ] && ntfy_msg_body="test message"
@@ -82,11 +82,13 @@ if [ "true" == "$ntfy_attach_snapshot" ]; then
 	command="${command} -T ${snapshot} -H \"Filename: snapshot.jpg\""
 fi
 
-command="${command} ${ntfy_url}:${ntfy_port}/${ntfy_topic}"
+command="${command} ${ntfy_url}"
 
 log "$command"
-eval "$command" >>"$LOG_FILE" 2>&1
+logcontent=$(eval "$command" 2>&1 )
+echo "$logcontent" >>"$LOG_FILE"
 
-[ "true" = "$verbose" ] && cat "$LOG_FILE"
+[ "true" = "$verbose" ] && echo "$command"\n"$logcontent"
 
 exit 0
+

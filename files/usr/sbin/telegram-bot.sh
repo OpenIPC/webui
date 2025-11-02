@@ -222,48 +222,63 @@ while [ true ]; do
 					chat_type=$(jsonfilter -i ${data_file} -e "$.result[@.update_id=$update_id].*.chat.type")
 					message_id=$(jsonfilter -i ${data_file} -e "$.result[@.update_id=$update_id].*.message_id")
 					message_text=$(jsonfilter -i ${data_file} -e "$.result[@.update_id=$update_id].*.text")
+					# Respond if the request comes from home chat only.
+					from_name=$(jsonfilter -i ${data_file} -e "$.result[@.update_id=$update_id].*.from.first_name")
+					from_id=$(jsonfilter -i ${data_file} -e "$.result[@.update_id=$update_id].*.from.id")
+					chat_name=$(jsonfilter -i ${data_file} -e "$.result[@.update_id=$update_id].*.chat.first_name")
+					[ -z "$chat_name" ] && chat_name=$(jsonfilter -i ${data_file} -e "$.result[@.update_id=$update_id].*.chat.title")
+					# For debug purposes only
+					#logger "$(hostname) $(basename "$0") $message_text - Chat ID: $chat_id [$chat_name], HOME chat: $telegrambot_chat, from $from_name [$from_id]"
+					if [ "$chat_id" != "$telegrambot_chat" ]; then
+						if [ -z "$telegrambot_chat" ]; then
+							send_message "$chat_id" "Chat no set" "$message_id"
+							logger "$(basename "$0") $message_text - Chat ID: $chat_id [$chat_name] HOME CHAT NOT SET! from: $from_name [$from_id]"
+						fi						
+						send_message "$chat_id" "This is a private bot!" "$message_id"
+						logger "$(hostname) $(basename "$0") $message_text - Chat ID: $chat_id [$chat_name] !!!WRONG CHAT! HOME chat: $telegrambot_chat, from: $from_name [$from_id]"
+						leave_chat "$chat_id"
+					else
+						# Available entity types:
+						# - mention (@username)
+						# - hashtag (#hashtag)
+						# - cashtag ($USD)
+						# - bot_command (/start@jobs_bot)
+						# - url (https://telegram.org)
+						# - email (do-not-reply@telegram.org)
+						# - phone_number (+1-212-555-0123)
+						# - bold (bold text)
+						# - italic (italic text)
+						# - underline (underlined text)
+						# - strikethrough (strikethrough text)
+						# - spoiler (spoiler message)
+						# - code (monowidth string)
+						# - pre (monowidth block)
+						# - text_link (for clickable text URLs)
+						# - text_mention” (for users without usernames)
+						# - custom_emoji (for inline custom emoji stickers)
 
-					# Available entity types:
-					# - mention (@username)
-					# - hashtag (#hashtag)
-					# - cashtag ($USD)
-					# - bot_command (/start@jobs_bot)
-					# - url (https://telegram.org)
-					# - email (do-not-reply@telegram.org)
-					# - phone_number (+1-212-555-0123)
-					# - bold (bold text)
-					# - italic (italic text)
-					# - underline (underlined text)
-					# - strikethrough (strikethrough text)
-					# - spoiler (spoiler message)
-					# - code (monowidth string)
-					# - pre (monowidth block)
-					# - text_link (for clickable text URLs)
-					# - text_mention” (for users without usernames)
-					# - custom_emoji (for inline custom emoji stickers)
+						message_type=$(jsonfilter -s "${entity}" -e "$.type")
+						if [ "bot_command" = "$message_type" ]; then
+							_o=$(jsonfilter -s "${entity}" -e "$.offset")
+							_l=$(jsonfilter -s "${entity}" -e "$.length")
+							bot_command="${message_text:$_o:$_l}"
+							log "BOT COMMAND: ${bot_command}" 31
+							unset _l; unset _o
 
-					message_type=$(jsonfilter -s "${entity}" -e "$.type")
-					if [ "bot_command" = "$message_type" ]; then
-						_o=$(jsonfilter -s "${entity}" -e "$.offset")
-						_l=$(jsonfilter -s "${entity}" -e "$.length")
-						bot_command="${message_text:$_o:$_l}"
-						log "BOT COMMAND: ${bot_command}" 31
-						unset _l; unset _o
-
-						# split command by '@' to $command and $mention
-						mention=${bot_command##*@}
-						if [ "$bot_command" = "$mention" ]; then
-							log "Command ${bot_command} is global."
-							unset mention
-						else
-							bot_command=${bot_command%%@*}
-							if [ -n "$mention" ] && [ "$ME" != "@${mention}" ]; then
-								log "Command ${bot_command} is not for ${ME} but for ${mention}."
+							# split command by '@' to $command and $mention
+							mention=${bot_command##*@}
+							if [ "$bot_command" = "$mention" ]; then
+								log "Command ${bot_command} is global."
 								unset mention
-								unset bot_command
+							else
+								bot_command=${bot_command%%@*}
+								if [ -n "$mention" ] && [ "$ME" != "@${mention}" ]; then
+									log "Command ${bot_command} is not for ${ME} but for ${mention}."
+									unset mention
+									unset bot_command
+								fi
 							fi
 						fi
-					fi
 				done
 				IFS=$IFS_ORIG
 

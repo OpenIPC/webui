@@ -5,7 +5,7 @@ plugin="telegrambot"
 plugin_name="Telegram Bot"
 page_title="Telegram Bot"
 
-params="enabled token"
+params="enabled token chat"
 seq=$(seq 0 9)
 for i in $seq; do
 	params="${params} command_${i} description_${i} script_${i}"
@@ -27,6 +27,7 @@ if [ "POST" = "$REQUEST_METHOD" ]; then
 	if [ "true" = "$telegrambot_enabled" ]; then
 		[ -z "$telegrambot_token" ] && set_error_flag "Telegram token cannot be empty."
 	fi
+	[ -z "$telegrambot_chat" ] && set_error_flag "Telegram chat id cannot be empty."
 
 	if [ -z "$error" ]; then
 		# create temp config file
@@ -67,6 +68,10 @@ fi
           <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#helpModal">Help</button>
         </span>
       </div>
+	  <div class="input-group mb-4">
+		<input type="text" id="telegrambot_chat" name="telegrambot_chat" value="<%= $telegrambot_chat %>"
+          class="form-control" placeholder="Your home chat" aria-label="Your Telegram Bot home chat ID.">
+	  </div>
       <div class="bot-commands mb-4">
         <h5>Bot Commands</h5>
         <p class="hint mb-3">Use $chat_id variable for the active chat ID.</p>
